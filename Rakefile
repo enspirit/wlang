@@ -19,11 +19,11 @@ end
 
 desc "Generates rdoc documentation"
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include( "README", "INSTALL", "TODO", "CHANGELOG", 
+  rdoc.rdoc_files.include( "README", "INSTALL", "TODO", "CHANGELOG", "LICENCE",
                            "CONTRIBUTE", "BUGS", "lib/" )
   rdoc.main     = "README"
   rdoc.rdoc_dir = "doc/html"
-  rdoc.title    = "WLang Documentation"
+  rdoc.title    = "RevZero Documentation"
   rdoc.template = "doc/template/horo"
   rdoc.options << "-S" << "-N" << "-p" << "-H"
 end

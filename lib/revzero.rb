@@ -1,3 +1,3 @@
 module RevZero
-  VERSION = "0.1.0".freeze
+  VERSION = "0.0.9".freeze
 end

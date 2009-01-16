@@ -4,7 +4,7 @@ require 'wlang/rule_set'
 require 'wlang/parser'
 
 #
-# Main module of the WLang /code generator/template engine/
+# Main module of the WLang /code generator/template engine.
 #
 module WLang
   
