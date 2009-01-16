@@ -63,11 +63,11 @@ p {
 .sectiontitle {
   margin-top: 1em;
   margin-bottom: 1em;
-  padding: 0.5em;
-  padding-left: 2em;
-  background: #005;
-  color: #FFF;
+  padding: 0.3em;
+  padding-left: 0em;
+  font-size: 120%;
   font-weight: bold;
+  border-bottom: 2px solid black;
 }
 
 .attr-rw {

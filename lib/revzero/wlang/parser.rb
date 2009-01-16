@@ -9,18 +9,19 @@ module WLang
 #
 # This class implements the parsing algorithm of wlang, recognizing special tags
 # and replacing them using installed rules. Dialects can be installed using 
-# add_dialect. Instanciating a template is done using instanciate.
+# add_dialect. Instanciating a template is done using instanciate. Methods parse 
+# and parse_xxx are callbacks for rules and should be be used by users themselve.
 #
-# Examples (more complete example can be found in the examples/ directory): 
-#   # we will create a simple dialect with a special tag:
-#   # - <tt>${...}</tt> which will uppercase its contents
-#   simpledialect = WLang::RuleSet.new
-#   simpledialect.add_rule '$' do |parser,offset|
-#      content, offset = parser.parse_dummy
-#      [content.upcase, offset] 
+# Examples (less trivial examples can be found in the examples/ directory): 
+#   # we will create a simple dialect with two simple tags:
+#   #   +{...} will uppercase its contents
+#   #   -{...} will downcase its contents
+#   parser = WLang::Parser.new
+#   parser.add_dialect(:simple) do
+#     add_text_rule '+' { |text| text.upcase   }
+#     add_text_rule '-' { |text| text.downcase }
 #   end
-#   parser = WLang::Parser.new.add_dialect(:simple, simpledialect)
-#   parser.instanciate('hello ${world}')   # prints 'hello WORLD'
+#   parser.instanciate('-{HELLO} +{world}')   # prints 'hello WORLD'
 #
 # == Detailed API
 class Parser
@@ -111,25 +112,66 @@ class Parser
       
   end # class ParserState
     
-  # Creates an parser instance with a given ruleset
-  def initialize(dialect)
+  #
+  # Creates an parser instance.
+  #
+  # If _dialect_ is specified, it will be considered as the default dialect of
+  # the parser. Otherwise, the first one installed using add_dialect will be
+  # considered so. 
+  #
+  def initialize(dialect=nil)
     raise(ArgumentError, "Symbol expected for dialect, #{dialect} received")\
-      unless Symbol===dialect
+      unless dialect.nil? or Symbol===dialect
     @dialects, @dialect, @stack, @source = {}, dialect, nil, nil
     add_dialect(:dummy, DUMMY_RULESET)
   end
 
-  # Adds a rule set for a given dialect
-  def add_dialect(dialect, ruleset)
+  #
+  # Adds a new dialect to the parser. 
+  #
+  # _dialect_ is required to be a Symbol instance. If specified, _ruleset_ must 
+  # be a RuleSet instance. If ommitted, an empty RuleSet will be created. If a 
+  # block is provided, it is executed by passing the _ruleset_ (or the newly
+  # created one) as block argument. This allows creating and installing dialects
+  # on the fly:
+  #
+  #    parser = WLang::Parser.new
+  #    parser.add_dialect(:simple) do |s|
+  #      s.add_text_rule '+' {|text| text.upcase   }
+  #      s.add_text_rule '-' {|text| text.downcase } 
+  #    end
+  # 
+  # If no default dialect has been installed at construction and it is the 
+  # first user invocation of the method, _dialect_ will be installed as the 
+  # default parser dialect. This method checks it's arguments and raises an
+  # ArgumentError if not valid.
+  #
+  def add_dialect(dialect, ruleset=nil)
     raise(ArgumentError, "Symbol expected for dialect, #{dialect} received")\
       unless Symbol===dialect
     raise(ArgumentError, "RuleSet expected for ruleset, #{ruleset} received")\
-      unless RuleSet===ruleset
+      unless ruleset.nil? or RuleSet===ruleset
+    if @dialects.size==1 then @dialect=dialect end
+    ruleset = RuleSet.new unless ruleset
     @dialects[dialect] = ruleset
+    yield ruleset if block_given?
   end
-  
-  # Parses some text
-  def parse(dialect, offset, buffer)
+
+  #  
+  # Lauches a parsing sub-session, using rules installed under _dialect_, 
+  # starting at _offset_ in the source template and using _buffer_ for 
+  # instanciation.
+  # 
+  # _dialect_ must be a Symbol instance and must be a known dialect for the 
+  # parser (previously installed with add_dialect). _offset_ must be an Integer.
+  # _buffer_ may be any object responding to <tt><<</tt>. This method checks
+  # its arguments and raises an ArgumentError when not valid.  
+  #
+  # Moreover, this method is provided as a callback for rules. It is not 
+  # intended to be used by users themselve and raises a ParseError if there is
+  # no enclosing call to instanciate.
+  #
+  def parse(dialect, offset, buffer="")
     raise(ArgumentError,"Symbol expected for dialect") unless Symbol===dialect
     raise(ArgumentError, "No such dialect #{dialect}") unless @dialects.has_key?(dialect)
     raise(ArgumentError,"Integer expected for offset") unless Integer===offset    
@@ -141,19 +183,39 @@ class Parser
     buffer_and_offset
   end
 
-  # Parses dummy dialect
-  def parse_dummy(offset, buffer) parse(:dummy, offset, buffer) end
+  #
+  # Lauches a parsing sub-session on the dummy dialect.
+  #
+  # The dummy dialect is always installed on the parser and contains no rule
+  # at all. Parsed text is guaranteed to be all template text between offset
+  # and the next non backslashed real occurence of '}' (by real, we mean that 
+  # '{' and '}' pairs are parsed without stopping on the last. 
+  #
+  # Moreover, this method is provided as a callback for rules. It is not 
+  # intended to be used by users themselve and raises a ParseError if there is
+  # no enclosing call to instanciate.
+  #
+  def parse_dummy(offset, buffer="") parse(:dummy, offset, buffer) end
   
   #
-  # Instanciates a given template, writing instanciation on _buffer_, which is
-  # expected to be any instance responding to <tt><<</tt>. Returns the buffer
-  # itself.
+  # Instanciates a given template, writing instanciation on a specified _buffer_
+  # (STDOUT by default). _template_ must be a String instance; _buffer_ is any
+  # object responding to <tt><<</tt>. If _dialect_ is specified, it is the 
+  # parsing dialect that will be used; otherwise the default parser dialect is
+  # used. This method returns the buffer.
   #
-  def instanciate(template, buffer=STDOUT)
+  # This method checks its arguments and raises an ArgumentError if incorrect.
+  # It raises a ParseError if the template does not respect the wlang abstract 
+  # grammar. It can also raise an ArgumentError if an installed dialect rule
+  # is not correctly implemented. 
+  #
+  def instanciate(template, buffer=STDOUT, dialect=nil)
     raise(ArgumentError,"String expected for template") unless String===template
     raise(ArgumentError,"Object.<< expected for buffer") unless buffer.respond_to?(:<<)    
+    raise(ArgumentError, "Symbol expected for dialect.") unless dialect==nil or Symbol===dialect
+    raise(ArgumentError, "No dialect previously installed") if dialect.nil? and @dialect.nil?
     @source, @stack = template, []
-    buf,offset = parse(@dialect, 0, buffer)
+    buf,offset = parse(dialect ? dialect : @dialect, 0, buffer)
     raise(ParseError,"Parse error at #{offset}: EOF expected, #{template[offset,1]} found.")\
       unless offset==template.length-1
     @source, @stack = nil, nil

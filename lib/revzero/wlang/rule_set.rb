@@ -2,19 +2,17 @@ require 'wlang/rule'
 module WLang
   
 #
-# Set of recognition rules associated with a given dialect.
-#
 # This class allows grouping matching rules together to build a given dialect.
-# Rules are always added with add_rule, which allows creating simple rules 
+# Rules are always added with add_rule, which also allows creating simple rules 
 # on the fly (that is, without subclassing Rule).
 #
 # Examples:
 #   # we will create a simple dialect with a special tag:
-#   # - <tt>${...}</tt> which will uppercase its contents
-#   simpledialect = RuleSet.new
-#   simpledialect.add_rule '$' do |parser,offset|
-#      content, offset = parser.parse_dummy
-#      [content.upcase, offset] 
+#   #   <tt>+{...}</tt> which will uppercase its contents
+#   upcaser = RuleSet.new
+#   upcaser.add_rule '+' do |parser,offset|
+#     parsed, offset = parser.parse_dummy(offset)
+#     [parsed.upcase, offset] 
 #   end 
 #
 # == Detailed API
@@ -26,19 +24,21 @@ class RuleSet
   def initialize() @rules, @pattern = {}, nil; end
 
   #  
-  # Adds a tag matching rule. If rule is a String and a block is given, a new
-  # Rule instance if created on the fly with _block_ as implementation 
-  # (see Rule#new). Otherwise rule is expected to be a Rule instance. 
-  # An ArgumentError is raised if arguments dont match one of these two cases. 
+  # Adds a tag matching rule to this rule set. _tag_ must be a String with the
+  # tag associated to the rule (without the '{', that is '$' for the tag ${...}
+  # for example. If rule is ommited and a block is given, a new Rule instance is 
+  # created on the fly with _block_ as implementation (see Rule#new). 
+  # Otherwise rule is expected to be a Rule instance. This method check its 
+  # arguments, raising an ArgumentError if incorrect. 
   #
-  def add_rule(rule, &block) 
-    if String===rule 
+  def add_rule(tag, rule=nil, &block) 
+    if rule.nil? 
       raise(ArgumentError,"Block required") unless block_given?
-      rule = Rule.new(rule, &block)
+      rule = Rule.new(&block)
     end
     raise(ArgumentError, "Rule expected") unless Rule===rule
-    @rules[rule.tag] = rule;  
-    @pattern=nil; 
+    @rules[tag] = rule  
+    @pattern = nil 
   end
 
   # Adds a really simple rule
