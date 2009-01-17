@@ -68,23 +68,18 @@ class Parser
         elsif match.length==1               # simple '{' or '}' here
           offset = match_at + match_length
           if match=='{'
-            #puts "\nMatching { when #{rules.inspect}" if @offset==0
             self.<<(match)  # simple '{' are always pushed
             # we push '{' in rules to recognize it's associated '}'
             # that must be pushed on buffer also
             rules << match   
-            #puts "[{] Now rules are #{rules.inspect}" if @offset==0
           else
-            #puts "\nMatching } when #{rules.inspect}" if @offset==0
             # end of my job if I can't pop a previous rule
             break if rules.empty?
             # otherwise, push '}' only if associated to a simple '{'
             self.<<(match) unless Rule===rules.pop
-            #puts "[}] Now rules are #{rules.inspect}" if @offset==0
           end
           
         elsif match[-1,1]=='{'              # opening special tag
-          #puts "\nMatching ..{ when #{rules.inspect}" if @offset==0
           # following line should never return nil as the matching pattern comes 
           # from the ruleset itself!
           rule = @ruleset[match[0..-2]]     
@@ -93,7 +88,6 @@ class Parser
           # lauch that rule, get it's replacement and my new offset
           replacement, offset = rule.start_tag(parser, match_at + match_length, text)
           
-          #puts "[..{] Now, rules are #{rules.inspect}" if @offset==0
           # push replacement
           self.<<(replacement) unless replacement.empty?
         end
@@ -102,7 +96,7 @@ class Parser
       
       # trailing data (end of text reached only if no match_at)
       unless match_at
-        raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.@buffer #{rules.inspect}")\
+        raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.")\
           unless rules.empty?
         self.<<(text[offset, 1+text.length-offset])
         offset = text.length
