@@ -1,15 +1,4 @@
-= What is Revision-Zero ?
-
-Revision-Zero is the Ruby library attached to Bernard Lambeau's blog (see http://www.revision-zero.org).
-You'll find here implementations of the ideas commented on that site. The documentation 
-here is self-contained, but having read the corresponding articles on the blog 
-certainly helps understanding the objectives of each tool, as well as its internal
-implementation (if you plan to extend them). You are also invited you to join the
-{redmine of Revision-Zero}[http://redmine.chefbe.net/projects/show/revision-zero-public]
-to report bugs, contribute to this project, ... Below is the list of development 
-bricks built so far. Click on each of them to learn more about them.
-
-== WLang
+= WLang
 WLang is a simple code generation/templating engine. The first post about it can
 be found at http://www.revision-zero.org/wlang. It's main aim is to help you creating
 web pages, sql queries, ruby code (that is, generating code in general) without 
