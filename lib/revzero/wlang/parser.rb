@@ -41,6 +41,10 @@ class Parser
     raise(ArgumentError, "Offset is mandatory") if offset.nil?
     raise(ArgumentError, "Dialect is mandatory") if dialect.nil?
     raise(ArgumentError, "Buffer is mandatory") if buffer.nil?
+    if String===dialect
+      dname, dialect = dialect, WLang::dialect(dialect)
+      raise(ArgumentError,"Unknown dialect #{dname}") if dialect.nil?
+    end
     @parent = parent
     @context = context
     @template = template
@@ -55,7 +59,7 @@ class Parser
   end
 
   # Parses the text
-  def do_parse
+  def instantiate
     # Main variables:
     # - offset: matching current position
     # - rules: handlers of '{' currently opened
@@ -112,6 +116,13 @@ class Parser
   end
   
   #
+  # Evaluates a ruby expression on the current context.
+  #
+  def evaluate(expression)
+    @context.evaluate(expression)
+  end
+  
+  #
   # Lauches a child parser at a given offset for a given dialect (same dialect
   # than self if dialect is nil).
   #
@@ -124,22 +135,11 @@ class Parser
     elsif not(Dialect===dialect)
       raise(ParseError,"Unknown modulation dialect: #{dialect}")
     end
-    Parser.new(self, @context, @template, offset, dialect, buffer).do_parse 
+    Parser.new(self, @context, @template, offset, dialect, buffer).instantiate 
   end
-  
-  # Encodes a given text using an encoder
-  def encode(src, encoder, options=nil)
-    if String===encoder
-      ename, encoder = encoder, WLang::encoder(encoder)
-      raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
-    elsif not(Proc===encoder)
-      raise(ParseError,"Unknown encoder: #{encoder}")
-    end
-    encoder.call(src, options)
-  end
-  
+    
   # Checks if a given offset is a block
-  def has_block(offset)
+  def has_block?(offset)
     @template[offset,2]=='}{'
   end
   
@@ -147,6 +147,22 @@ class Parser
   def parse_block(offset, dialect=nil, buffer="")
     raise(ParseError,"Block expected at #{offset}") unless has_block?(offset)
     parse(offset+2, dialect, buffer)
+  end
+  
+  # Encodes a given text using an encoder
+  def encode(src, encoder, options=nil)
+    if String===encoder
+      if encoder.include?("/")
+        ename, encoder = encoder, WLang::encoder(encoder)
+        raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
+      else
+        ename, encoder = encoder, @dialect.find_encoder(encoder)
+        raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
+      end
+    elsif not(Proc===encoder)
+      raise(ParseError,"Unknown encoder: #{encoder}")
+    end
+    encoder.call(src, options)
   end
   
 end # class Parser

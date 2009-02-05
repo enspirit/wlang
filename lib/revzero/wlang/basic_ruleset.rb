@@ -45,7 +45,7 @@ class RuleSet
     def self.encoding(parser, offset)
       encoder, reached = parser.parse(offset, "wlang/active-string")
       result, reached = parser.parse_block(reached)
-      result = parser.encode(text, encoder)
+      result = parser.encode(result, encoder)
       [result, reached]
     end
       

@@ -1,7 +1,6 @@
 require 'stringio'
 require 'wlang/rule'
 require 'wlang/rule_set'
-require 'wlang/basic_ruleset'
 require 'wlang/encoders'
 require 'wlang/dialect'
 require 'wlang/parser'
@@ -34,25 +33,17 @@ module WLang
   end
 
 end
+require 'wlang/standard_dialects'
 
-WLang::dialect("ruby") do
-  encoders(WLang::Encoders::Ruby)end
+class String
 
-WLang::dialect("wlang") do
-  
-  # Dummy dialect, no tag at all
-  dialect("dummy") do |d|
+  #
+  # Instanciates the string as a wlang template using
+  # a context object and a dialect.
+  #
+  def wlang(context=nil, dialect="wlang/active-string") 
+    WLang::Parser.instantiator(self, dialect, context).instantiate[0]
   end
-  
-  # wlang/active-string dialect
-  dialect("active-string") do |d|
-    rules(WLang::RuleSet::Basic)
-  end
-  
-  # wlang/ruby dialect
-  dialect("ruby") do |d|
-    rules(WLang::RuleSet::Basic)
-    rules(WLang::RuleSet::Ruby)
-  end
-  
+    
 end
+

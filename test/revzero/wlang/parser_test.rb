@@ -7,29 +7,23 @@ class ParserTest < Test::Unit::TestCase
   # Installs some dialects on wlang
   def setup
     # wlang dialect, empty by default
-    WLang::dialect "wlang" do 
-      # wlang/dummy, without any rule
-      dialect "dummy" do end
-      
-      # wlang/plain-text with RuleSet::Basic and RuleSet::PlainText  
-      dialect "plain-text" do
-        rule '+' do |parser,offset|
-          parsed, reached = parser.parse(offset)
-          [parsed.upcase, reached]
-        end
-        rule '-' do |parser,offset|
-          parsed, reached = parser.parse(offset)
-          [parsed.downcase, reached]
-        end
+    WLang::dialect "example" do 
+      rule '+' do |parser,offset|
+        parsed, reached = parser.parse(offset)
+        [parsed.upcase, reached]
+      end
+      rule '-' do |parser,offset|
+        parsed, reached = parser.parse(offset)
+        [parsed.downcase, reached]
       end
     end
   end
   
   # Asserts the result of an instanciation
   def assert_instanciation_equal(expected, template, msg=nil)
-    dialect = WLang::dialect("wlang/plain-text")
+    dialect = WLang::dialect("example")
     parser = Parser.instantiator(template, dialect)
-    assert_equal(expected, parser.do_parse()[0])
+    assert_equal(expected, parser.instantiate()[0])
   end
   
   def test_parser_accepts_whole_tag

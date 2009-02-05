@@ -25,8 +25,8 @@ class Context
     # Tries to convert found value to a given variable
     def method_missing(symbol, *args)
       varname = symbol.to_s
-      if has_variable?(varname) 
-        get_variable(varname)
+      if @hash.has_key?(varname) 
+        @hash[varname]
       elsif @parent
         @parent.method_missing(symbol, *args)
       else

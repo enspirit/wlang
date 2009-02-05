@@ -1,30 +1,10 @@
 require 'test/unit'
 require 'wlang'
+
 module WLang
 
 class WLangTest < Test::Unit::TestCase
   
-  # Installs some dialects on wlang
-  def setup
-    WLang::dialect "plain-text" do 
-      require 'wlang/plain_text_dialect'
-      encoders WLang::Encoders::PlainText
-    end
-    
-    # wlang dialect, empty by default
-    WLang::dialect "wlang" do 
-      # wlang/dummy, without any rule
-      dialect "dummy" do end
-      
-      # wlang/plain-text with RuleSet::Basic and RuleSet::PlainText  
-      dialect "plain-text" do
-        require 'wlang/plain_text_dialect'
-        rules WLang::RuleSet::Basic
-        rules WLang::RuleSet::PlainText
-      end
-    end
-  end
-
   # Tests that dialects are recognized  
   def test_dialect
     assert_not_nil(WLang::dialect("plain-text"))
@@ -62,6 +42,13 @@ class WLangTest < Test::Unit::TestCase
     assert_equal(3, "wlang/sql/sybase".split('/').length)
     assert_equal(["wlang","sql","sybase"], "wlang/sql/sybase".split('/'))
     assert_equal(["sql","sybase"], "wlang/sql/sybase".split('/')[1..-1])
+  end
+  
+  # Tests contribution on the String class
+  def test_wlang_on_string
+    expected = "HELLO blambeau !!"
+    result = "^{plain-text/upcase}{hello} ${name} !!".wlang("name" => "blambeau")
+    assert_equal(expected, result);
   end
   
 end # class WLangTest

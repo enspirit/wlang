@@ -63,6 +63,19 @@ class Dialect
       end
     end
   end
+  
+  # Finds a encoder in dialect tree
+  def find_encoder(name)
+    raise(ArgumentError, "Invalid (relative) encoder name #{name}") unless String===name
+    raise(ArgumentError, "Invalid (relative) encoder name #{name}") if name.include?("/")
+    if @encoders.has_encoder?(name)
+      @encoders.get_encoder(name)
+    elsif @parent
+      @parent.find_encoder(name)
+    else
+      nil
+    end
+  end
       
   # Delegated to Encoders#add_encoders
   def encoders(mod, pairs=nil)
