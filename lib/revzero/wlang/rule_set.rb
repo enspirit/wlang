@@ -41,12 +41,16 @@ class RuleSet
     @pattern = nil 
   end
 
-  # Adds a really simple rule
-  def add_text_rule(tag, &block)
-    add_rule(tag) do |parser,offset|
-      parsed, offset = parser.parse_dummy(offset, "")
-      parsed = yield parsed
-      [parsed, offset]
+  #
+  # Add rules defined in a given RuleSet module.
+  #
+  def add_rules(mod, pairs=nil)
+    raise(ArgumentError,"Module expected") unless Module===mod
+    pairs = mod::DEFAULT_RULESET if pairs.nil?
+    pairs.each_pair do |symbol,method|
+      meth = mod.method(method)
+      raise(ArgumentError,"No such method: #{method}") if meth.nil?
+      add_rule(symbol, &meth.to_proc)
     end
   end
   

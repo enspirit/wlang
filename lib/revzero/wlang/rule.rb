@@ -10,7 +10,7 @@ module WLang
 # Example:
 #    # Rule subclassing can be avoided by providing a block to new
 #    # The following rule job is to upcase the text inside +{...} tags:
-#    rule = Rule.new do |parser,offset,template|
+#    rule = Rule.new do |parser,offset|
 #      parsed, offset = parser.parse_dummy(offset)
 #      [parsed.upcase, offset]
 #    end
@@ -27,49 +27,6 @@ module WLang
 # == Detailed API
 class Rule
 
-  #
-  # Factory methods for commonly used rules 
-  #
-  class << self
-
-    # Returns a reusable upcase rule. Content of the tag will be parsed with
-    # the dummy dialect and returned upcased.
-    def UPCASE() 
-      @upcase ||= Rule.new do |parser,offset|
-        parsed, offset = parser.parse_dummy(offset)
-        [parsed.upcase, offset]
-      end
-    end
-        
-    # Returns a reusable downcase rule. Content of the tag will be parsed with
-    # the dummy dialect and returned downcased.
-    def DOWNCASE() 
-      @downcase ||= Rule.new do |parser,offset|
-        parsed, offset = parser.parse_dummy(offset)
-        [parsed.downcase, offset]
-      end
-    end
-        
-    # Returns a reusable backquote rule. Content of the tag will be parsed with
-    # the dummy dialect. Simple quotes will be replaced by \' 
-    def BACKQUOTE() 
-      @backquote ||= Rule.new do |parser,offset|
-        parsed, offset = parser.parse_dummy(offset)
-        [parsed.gsub("'","\\\\'"), offset]
-      end
-    end
-        
-    # Returns a reusable backdoublequote rule. Content of the tag will be parsed 
-    # with the dummy dialect. Double quotes will be replaced by \" 
-    def BACKDOUBLEQUOTE() 
-      @backdoublequote ||= Rule.new do |parser,offset|
-        parsed, offset = parser.parse_dummy(offset)
-        [parsed.gsub('"','\"'), offset]
-      end
-    end
-        
-  end
-    
   #
   # Creates a new rule, associated to _tag_. If no block is given, the invocation
   # of new MUST be made on a subclass overriding start_tag. Otherwise, the block
@@ -94,11 +51,10 @@ class Rule
   # - parser: WLang parser currently parsing the text.
   # - offset: offset reached in the text, corresponding to the first character
   #   of the first block associated with the matching tag.
-  # - template: template being instanciated
   #
-  def start_tag(parser, offset, template)
-    raise NotImplementedError unless @block
-    @block.call(parser, offset, template)
+  def start_tag(parser, offset)
+    raise(NotImplementedError) unless @block
+    @block.call(parser, offset)
   end
 
 end # class Rule

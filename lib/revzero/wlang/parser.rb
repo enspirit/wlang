@@ -2,6 +2,7 @@ require 'stringio'
 require 'wlang/rule'
 require 'wlang/rule_set'
 require 'wlang/errors'
+require 'wlang/parser_context'
 module WLang
 
 #
@@ -26,196 +27,127 @@ module WLang
 # == Detailed API
 class Parser
 
-  # A dummy rule set, parsing text as itself
-  DUMMY_RULESET = RuleSet.new
-    
-  # Call stack element
-  class ParserState
-    attr_reader :offset, :ruleset, :rule, :buffer 
-    
-    # Initializes a stack element with an active tag set and buffer
-    def initialize(offset, ruleset, buffer)
-      @offset, @ruleset, @buffer = offset, ruleset, buffer
-    end
-    
-    # Pushes a given string on the output buffer
-    def <<(str)
-      #puts "Pushing |#{str}| on #{@buffer.class}"
-      @buffer << str
-    end
+  # Factors an instantiator
+  def self.instantiator(template, dialect, context={}, buffer="")
+    Parser.new(nil, Parser::Context.new(context), template, 0, dialect, buffer)
+  end
+  
+  # Current parsed template
+  attr_reader :template
+  
+  # Initializes a parser element
+  def initialize(parent, context, template, offset, dialect, buffer)
+    raise(ArgumentError, "Template is mandatory") if template.nil?
+    raise(ArgumentError, "Offset is mandatory") if offset.nil?
+    raise(ArgumentError, "Dialect is mandatory") if dialect.nil?
+    raise(ArgumentError, "Buffer is mandatory") if buffer.nil?
+    @parent = parent
+    @context = context
+    @template = template
+    @offset = offset
+    @dialect = dialect
+    @buffer = buffer
+  end
+  
+  # Pushes a given string on the output buffer
+  def <<(str)
+    @buffer << str
+  end
 
-    # Returns the current pattern in use 
-    def pattern() @ruleset.pattern end
-        
-    # Parses the text
-    def parse(parser, text)
-      # Main variables:
-      # - offset: matching current position
-      # - rules: handlers of '{' currently opened
-      offset, rules = @offset, []
+  # Parses the text
+  def do_parse
+    # Main variables:
+    # - offset: matching current position
+    # - rules: handlers of '{' currently opened
+    offset, pattern, rules = @offset, @dialect.pattern, []
+    
+    # we start matching everything in the ruleset
+    while match_at=@template.index(pattern,offset)
+      match, match_length = $~[0], $~[0].length
       
-      # we start matching everything in the ruleset
-      while match_at=text.index(pattern,offset)
-        match, match_length = $~[0], $~[0].length
+      # puts pre_match (we can't use $~.pre_match !)
+      self.<<(@template[offset, match_at-offset]) if match_at>0
+      
+      if @template[match_at,1]=='\\'           # escaping sequence
+        self.<<(match[1..-1])
+        offset = match_at + match_length
         
-        # puts pre_match (we can't use $~.pre_match !)
-        self.<<(text[offset, match_at-offset]) if match_at>0
-        
-        if text[match_at,1]=='\\'           # escaping sequence
-          self.<<(match[1..-1])
-          offset = match_at + match_length
-          
-        elsif match.length==1               # simple '{' or '}' here
-          offset = match_at + match_length
-          if match=='{'
-            self.<<(match)  # simple '{' are always pushed
-            # we push '{' in rules to recognize it's associated '}'
-            # that must be pushed on buffer also
-            rules << match   
-          else
-            # end of my job if I can't pop a previous rule
-            break if rules.empty?
-            # otherwise, push '}' only if associated to a simple '{'
-            self.<<(match) unless Rule===rules.pop
-          end
-          
-        elsif match[-1,1]=='{'              # opening special tag
-          # following line should never return nil as the matching pattern comes 
-          # from the ruleset itself!
-          rule = @ruleset[match[0..-2]]     
-          rules << rule
-          
-          # lauch that rule, get it's replacement and my new offset
-          replacement, offset = rule.start_tag(parser, match_at + match_length, text)
-          
-          # push replacement
-          self.<<(replacement) unless replacement.empty?
+      elsif match.length==1               # simple '{' or '}' here
+        offset = match_at + match_length
+        if match=='{'
+          self.<<(match)  # simple '{' are always pushed
+          # we push '{' in rules to recognize it's associated '}'
+          # that must be pushed on buffer also
+          rules << match   
+        else
+          # end of my job if I can't pop a previous rule
+          break if rules.empty?
+          # otherwise, push '}' only if associated to a simple '{'
+          self.<<(match) unless Rule===rules.pop
         end
         
-      end  # while match_at=...
-      
-      # trailing data (end of text reached only if no match_at)
-      unless match_at
-        raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.")\
-          unless rules.empty?
-        self.<<(text[offset, 1+text.length-offset])
-        offset = text.length
+      elsif match[-1,1]=='{'              # opening special tag
+        # following line should never return nil as the matching pattern comes 
+        # from the ruleset itself!
+        rule = @dialect.ruleset[match[0..-2]]     
+        rules << rule
+        
+        # lauch that rule, get it's replacement and my new offset
+        replacement, offset = rule.start_tag(self, match_at + match_length)
+        
+        # push replacement
+        self.<<(replacement) unless replacement.empty?
       end
-      [@buffer, offset-1]
-    end
       
-  end # class ParserState
+    end  # while match_at=...
     
-  #
-  # Creates an parser instance.
-  #
-  # If _dialect_ is specified, it will be considered as the default dialect of
-  # the parser. Otherwise, the first one installed using add_dialect will be
-  # considered so. 
-  #
-  def initialize(dialect=nil)
-    raise(ArgumentError, "Symbol expected for dialect, #{dialect} received")\
-      unless dialect.nil? or Symbol===dialect
-    @dialects, @dialect, @stack, @source = {}, dialect, nil, nil
-    add_dialect(:dummy, DUMMY_RULESET)
+    # trailing data (end of @template reached only if no match_at)
+    unless match_at
+      raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.")\
+        unless rules.empty?
+      self.<<(@template[offset, 1+@template.length-offset])
+      offset = @template.length
+    end
+    [@buffer, offset-1]
   end
-
-  #
-  # Adds a new dialect to the parser. 
-  #
-  # _dialect_ is required to be a Symbol instance. If specified, _ruleset_ must 
-  # be a RuleSet instance. If ommitted, an empty RuleSet will be created. If a 
-  # block is provided, it is executed by passing the _ruleset_ (or the newly
-  # created one) as block argument. This allows creating and installing dialects
-  # on the fly:
-  #
-  #    parser = WLang::Parser.new
-  #    parser.add_dialect(:simple) do |s|
-  #      s.add_text_rule '+' {|text| text.upcase   }
-  #      s.add_text_rule '-' {|text| text.downcase } 
-  #    end
-  # 
-  # If no default dialect has been installed at construction and it is the 
-  # first user invocation of the method, _dialect_ will be installed as the 
-  # default parser dialect. This method checks it's arguments and raises an
-  # ArgumentError if not valid.
-  #
-  def add_dialect(dialect, ruleset=nil)
-    raise(ArgumentError, "Symbol expected for dialect, #{dialect} received")\
-      unless Symbol===dialect
-    raise(ArgumentError, "RuleSet expected for ruleset, #{ruleset} received")\
-      unless ruleset.nil? or RuleSet===ruleset
-    if @dialects.size==1 then @dialect=dialect end
-    ruleset = RuleSet.new unless ruleset
-    @dialects[dialect] = ruleset
-    yield ruleset if block_given?
-  end
-
-  #  
-  # Lauches a parsing sub-session, using rules installed under _dialect_, 
-  # starting at _offset_ in the source template and using _buffer_ for 
-  # instanciation.
-  # 
-  # _dialect_ must be a Symbol instance and must be a known dialect for the 
-  # parser (previously installed with add_dialect). _offset_ must be an Integer.
-  # _buffer_ may be any object responding to <tt><<</tt>. This method checks
-  # its arguments and raises an ArgumentError when not valid.  
-  #
-  # Moreover, this method is provided as a callback for rules. It is not 
-  # intended to be used by users themselve and raises a ParseError if there is
-  # no enclosing call to instanciate.
-  #
-  def parse(dialect, offset, buffer="")
-    raise(ArgumentError,"Symbol expected for dialect") unless Symbol===dialect
-    raise(ArgumentError, "No such dialect #{dialect}") unless @dialects.has_key?(dialect)
-    raise(ArgumentError,"Integer expected for offset") unless Integer===offset    
-    raise(ArgumentError,"Object.<< expected for buffer") unless buffer.respond_to?(:<<)    
-    raise(ParseError,"Illegal state, no source installed") unless @source
-    @stack << ParserState.new(offset,@dialects[dialect],buffer)
-    buffer_and_offset = @stack[-1].parse(self,@source)
-    @stack.pop
-    buffer_and_offset
-  end
-
-  #
-  # Lauches a parsing sub-session on the dummy dialect.
-  #
-  # The dummy dialect is always installed on the parser and contains no rule
-  # at all. Parsed text is guaranteed to be all template text between offset
-  # and the next non backslashed real occurence of '}' (by real, we mean that 
-  # '{' and '}' pairs are parsed without stopping on the last. 
-  #
-  # Moreover, this method is provided as a callback for rules. It is not 
-  # intended to be used by users themselve and raises a ParseError if there is
-  # no enclosing call to instanciate.
-  #
-  def parse_dummy(offset, buffer="") parse(:dummy, offset, buffer) end
   
   #
-  # Instanciates a given template, writing instanciation on a specified _buffer_
-  # (STDOUT by default). _template_ must be a String instance; _buffer_ is any
-  # object responding to <tt><<</tt>. If _dialect_ is specified, it is the 
-  # parsing dialect that will be used; otherwise the default parser dialect is
-  # used. This method returns the buffer.
+  # Lauches a child parser at a given offset for a given dialect (same dialect
+  # than self if dialect is nil).
   #
-  # This method checks its arguments and raises an ArgumentError if incorrect.
-  # It raises a ParseError if the template does not respect the wlang abstract 
-  # grammar. It can also raise an ArgumentError if an installed dialect rule
-  # is not correctly implemented. 
-  #
-  def instanciate(template, buffer=STDOUT, dialect=nil)
-    raise(ArgumentError,"String expected for template") unless String===template
-    raise(ArgumentError,"Object.<< expected for buffer") unless buffer.respond_to?(:<<)    
-    raise(ArgumentError, "Symbol expected for dialect.") unless dialect==nil or Symbol===dialect
-    raise(ArgumentError, "No dialect previously installed") if dialect.nil? and @dialect.nil?
-    @source, @stack = template, []
-    buf,offset = parse(dialect ? dialect : @dialect, 0, buffer)
-    raise(ParseError,"Parse error at #{offset}: EOF expected, #{template[offset,1]} found.")\
-      unless offset==template.length-1
-    @source, @stack = nil, nil
-    buffer
+  def parse(offset, dialect=nil, buffer="")
+    if dialect.nil?
+      dialect = @dialect
+    elsif String===dialect
+      dname, dialect = dialect, WLang::dialect(dialect)
+      raise(ParseError,"Unknown modulation dialect: #{dname}") if dialect.nil?
+    elsif not(Dialect===dialect)
+      raise(ParseError,"Unknown modulation dialect: #{dialect}")
+    end
+    Parser.new(self, @context, @template, offset, dialect, buffer).do_parse 
   end
-      
+  
+  # Encodes a given text using an encoder
+  def encode(src, encoder, options=nil)
+    if String===encoder
+      ename, encoder = encoder, WLang::encoder(encoder)
+      raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
+    elsif not(Proc===encoder)
+      raise(ParseError,"Unknown encoder: #{encoder}")
+    end
+    encoder.call(src, options)
+  end
+  
+  # Checks if a given offset is a block
+  def has_block(offset)
+    @template[offset,2]=='}{'
+  end
+  
+  # Parses a given block
+  def parse_block(offset, dialect=nil, buffer="")
+    raise(ParseError,"Block expected at #{offset}") unless has_block?(offset)
+    parse(offset+2, dialect, buffer)
+  end
+  
 end # class Parser
-
 end # module WLang
