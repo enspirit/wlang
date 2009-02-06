@@ -148,6 +148,8 @@ class Parser
   
   # Encodes a given text using an encoder
   def encode(src, encoder, options=nil)
+    options = {} unless options
+    options['_encoder_'] = encoder
     if String===encoder
       if encoder.include?("/")
         ename, encoder = encoder, WLang::encoder(encoder)
@@ -160,6 +162,16 @@ class Parser
       raise(ParseError,"Unknown encoder: #{encoder}")
     end
     encoder.call(src, options)
+  end
+  
+  # Pushes a new context
+  def context_push(context)
+    @context.push(context)
+  end
+  
+  # Pops the current context
+  def context_pop
+    @context.pop
   end
   
   private_class_method :new

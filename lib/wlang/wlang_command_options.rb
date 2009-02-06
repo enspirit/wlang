@@ -10,36 +10,34 @@ class Options
   # Source template file
   attr_reader :template_file
   
+  # Template dialect
+  attr_reader :template_dialect
+      
+  # Which brace kind used in template (:braces, :brackes, :parentheses)
+  attr_reader :template_brace
+  
   # Context file
   attr_reader :context_file
+
+  # Context object
+  attr_reader :context_object
   
+  # Context kind [:yaml, :ruby, :dsl]  
+  attr_reader :context_kind
+
+  # Name of the context
+  attr_reader :context_name
+    
   # Output file
   attr_reader :output_file
 
-  # Source dialect
-  attr_reader :source_dialect
-      
   # Verbose mode?
   attr_reader :verbosity
   
   # Initializes the options with default values
   def initialize
     @verbosity = 0
-    @brace = 'brace'
-  end
-  
-  # Returns kind of braces
-  def template_brace
-    case @brace
-    when "brace", "braces", "{"
-      return :braces
-    when "brackets", "bracket", "["
-      return :brackets
-    when "parentheses", "parenthesis", "("
-      return :parentheses
-    else
-      raise "Unknown brace kind #{brace}"
-    end
+    @template_brace = :braces
   end
   
   #
@@ -64,7 +62,7 @@ class Options
       
       opt.on("-d", "--dialect=DIALECT", 
              "Interpret source template as a given wlang dialect") do |value|
-        @source_dialect = value
+        @template_dialect = value
       end
       
       opt.on("-o", "--output=OUTPUT",
@@ -74,7 +72,27 @@ class Options
       
       opt.on("--brace=BRACE", ["brace", "parenthesis", "bracket"],
              "Block delimiters used by the template file") do |value|
-        @brace = value         
+         # handle template brace
+         case value
+           when "brace", "braces", "{"
+             @template_brace = :braces
+           when "brackets", "bracket", "["
+             @template_brace = :brackets
+           when "parentheses", "parenthesis", "("
+             @template_brace = :parentheses
+           else
+             raise "Unknown brace kind #{brace}"
+         end
+      end
+      
+      opt.on("--context-name",
+             "Name of the context object") do |value|
+        @context_name = value         
+      end
+      
+      opt.on("--context-kind", ["yaml", "ruby", "dsl"],
+             "Kind of context object") do |value|
+        @context_kind = value         
       end
       
       opt.on("--verbose", "-v",
@@ -97,37 +115,64 @@ class Options
       
       opt.separator nil
     end   
-    rest = opts.parse!(argv)
     
-    unless rest.length==2
+    # handle arguments    
+    rest = opts.parse!(argv)
+    if rest.length<1 or rest.length>2
       puts opts
       exit
     end
     
+    # handle template file
     @template_file = rest[0]
-    @context_file = rest[1]
-    
-    install
-    self
-  end
-  
-  # Installs options, raising an error if something is invalid
-  def install
     raise("File '#{@template_file}' not readable")\
       unless File.file?(@template_file) and File.readable?(@template_file)
-    raise("File '#{@context_file}' not readable")\
-      unless File.file?(@context_file) and File.readable?(@context_file)
 
-    unless @source_dialect
+    # handle context file
+    if rest.length==2
+      @context_file = rest[1]
+      raise("File '#{@context_file}' not readable")\
+        unless File.file?(@context_file) and File.readable?(@context_file)
+    end
+    
+    # handle template dialect
+    unless @template_dialect
       extname = File.extname(@template_file)
-      @source_dialect = WLang::FILE_EXTENSIONS[extname]
+      @template_dialect = WLang::FILE_EXTENSIONS[extname]
       raise("No known dialect for file extension '#{extname}'\n"\
             "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", "))\
-        if @source_dialect.nil?
+        if @template_dialect.nil?
     end
+    
+    # handle context kind
+    if @context_file and not(@context_kind)
+      extname = File.extname(@context_file)
+      case extname
+        when ".rb", ".ruby"
+          @context_kind = :ruby
+        when ".yaml"
+          @context_kind = :yaml
+      else
+        raise "Unable to infer context kind for extension #{extname}"
+      end
+    end
+
+    # handle context object
+    if @context_file
+      case @context_kind
+        when :yaml
+          require "yaml"
+          @context_object = YAML.load(File.open(@context_file))
+        when :ruby, :dsl
+          @context_object = Kernel.eval(File.read(@context_file))
+        else
+          raise "Unknown context kind #{@context_kind}"
+      end
+    end
+        
+    return self
   end
   
-  private :install
 end # class Options  
 
 end # class WLangCommand

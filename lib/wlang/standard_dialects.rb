@@ -1,5 +1,7 @@
 require "wlang/basic_ruleset"
 require "wlang/encoding_ruleset"
+require "wlang/imperative_ruleset"
+require "wlang/buffering_ruleset"
 module WLang
   
   #
@@ -17,14 +19,25 @@ module WLang
     
     # plain-text dialect
     WLang::dialect("plain-text") do
-      require "wlang/plain_text_dialect"
-      encoders WLang::Encoders::PlainText 
+      ruby_require("wlang/plain_text_dialect") do
+        encoders WLang::Encoders::PlainText 
+      end
     end
     
     # ruby dialect
     WLang::dialect("ruby", ".rb", ".ruby") do
-      require "wlang/ruby_dialect"
-      encoders WLang::Encoders::Ruby
+      ruby_require "wlang/ruby_dialect" do
+        encoders WLang::Encoders::Ruby
+      end
+    end
+    
+    # ruby dialect
+    WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
+      dialect("coderay") do
+        ruby_require("coderay", "wlang/coderay_dialect") do
+          encoders WLang::Encoders::CodeRay
+        end
+      end
     end
     
     # wlang dialects
@@ -41,20 +54,25 @@ module WLang
       
       # wlang/ruby dialect
       dialect("ruby", ".wrb", ".wruby") do
-        require "wlang/ruby_dialect"
-        encoders WLang::Encoders::Ruby
-        rules WLang::RuleSet::Basic
-        rules WLang::RuleSet::Encoding
-        rules WLang::RuleSet::Ruby
+        ruby_require "wlang/ruby_dialect" do
+          encoders WLang::Encoders::Ruby
+          rules WLang::RuleSet::Basic
+          rules WLang::RuleSet::Encoding
+          rules WLang::RuleSet::Imperative
+          rules WLang::RuleSet::Ruby
+        end
       end
       
       # wlang/ruby dialect
       dialect("xhtml", ".wtpl", ".whtml") do
-        require "wlang/xhtml_dialect"
-        encoders WLang::Encoders::XHtml
-        rules WLang::RuleSet::Basic
-        rules WLang::RuleSet::Encoding
-        rules WLang::RuleSet::XHtml
+        ruby_require "wlang/xhtml_dialect" do
+          encoders WLang::Encoders::XHtml
+          rules WLang::RuleSet::Basic
+          rules WLang::RuleSet::Encoding
+          rules WLang::RuleSet::Imperative
+          rules WLang::RuleSet::Buffering
+          rules WLang::RuleSet::XHtml
+        end
       end
       
     end

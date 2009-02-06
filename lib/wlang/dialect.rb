@@ -16,6 +16,9 @@ class Dialect
       @dialect = dialect
     end
     
+    # Handles a require in ruby
+    def ruby_require(*src) end
+    
     # Builds a sub-dialect
     def dialect(name, *extensions, &block)
       child = Dialect.new(name, @dialect, &block)
@@ -55,6 +58,15 @@ class Dialect
     # Initializes vis a real dialect instance
     def initialize(dialect)
       @dialect = dialect
+    end
+    
+    # Handles a require in ruby
+    def ruby_require(*src) 
+      src.each do |s|
+        require "rubygems" unless "wlang"==s[0,5]
+        require s
+      end
+      yield if block_given?
     end
     
     # Builds a sub-dialect

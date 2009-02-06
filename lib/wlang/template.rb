@@ -19,6 +19,9 @@ class Template
   # Block symbols
   attr_reader :block_symbols
   
+  # Attached file source
+  attr_accessor :source_file
+  
   #
   # Creates a template instance.
   #
@@ -33,6 +36,17 @@ class Template
     @dialect = dialect
     @context = WLang::Parser::Context.new(context)  
     @block_symbols = block_symbols
+  end
+  
+  # Resolved a relative uri
+  def file_resolve(uri, exists=false)
+    raise("Unable to resolve #{uri}, this template is not attached to a file")\
+      unless @source_file
+    target = File.join(File.dirname(@source_file), uri)
+    if exists and not(File.exists?(target))
+      raise "File '#{uri}' does not exists"
+    end
+    target
   end
   
   # Returns template's source text

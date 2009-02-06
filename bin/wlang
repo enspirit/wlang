@@ -11,12 +11,14 @@ require 'wlang/wlang_command'
 begin
   r = WLang::WLangCommand.new
   r.run ARGV
-rescue Interrupt
+rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"
+  raise e
 rescue OptionParser::ParseError => e
   $stderr.puts e.message
+  raise e
 rescue => e
   $stderr.puts e.message
-  exit 1
+  raise e
 end

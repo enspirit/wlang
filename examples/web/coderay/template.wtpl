@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>WLang is able to use coderay highlighting library</title>
+    <style type="text/css">
+      !{coderay_stylesheet}
+    </style>
+  </head>
+  <body>
+    *{['java','ruby','yaml'] as lang}{
+      ^{xhtml/coderay/${lang}}{<<{example.${lang}}}
+    }
+  </body>
+</html>

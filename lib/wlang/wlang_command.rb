@@ -23,15 +23,21 @@ class WLangCommand
       buffer = File.new(options.output_file, "w")
     end
     
-    source = File.readlines(options.template_file).join
-    dialect = options.source_dialect
+    source = File.read(options.template_file)
+    dialect = options.template_dialect
     braces = options.template_brace
-    template = WLang::Template.new(source, dialect, nil, braces)
+    context = options.context_object
+    unless options.context_name.nil?
+      context = {options.context_name => context}
+    end
+    template = WLang::Template.new(source, dialect, context, braces)
+    template.source_file = options.template_file
     
     if options.verbosity>1
       puts "Instantiating #{options.template_file}"
       puts "Using dialect #{dialect} : #{dialect.class}"
       puts "Block delimiters are " << Template::BLOCK_SYMBOLS[braces].inspect
+      puts "Context is " << context.inspect
     end
     
     template.instantiate(buffer)
