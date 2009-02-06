@@ -93,8 +93,8 @@ class Dialect
   end
 
   # Returns the pattern to use (delagated to RuleSet#pattern)
-  def pattern
-    @ruleset.pattern
+  def pattern(block_symbols)
+    @ruleset.pattern(block_symbols)
   end
   
   # Factors and return a given dialect

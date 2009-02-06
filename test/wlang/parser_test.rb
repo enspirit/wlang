@@ -21,8 +21,8 @@ class ParserTest < Test::Unit::TestCase
   
   # Asserts the result of an instanciation
   def assert_instanciation_equal(expected, template, msg=nil)
-    dialect = WLang::dialect("example")
-    parser = Parser.instantiator(template, dialect)
+    template = Template.new(template, "example")
+    parser = Parser.instantiator(template)
     assert_equal(expected, parser.instantiate()[0])
   end
   

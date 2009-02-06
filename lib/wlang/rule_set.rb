@@ -60,7 +60,7 @@ class RuleSet
   # as well as '{' and '}' aware. This pattern is used by WLang::Parser and is
   # not intended to be used by users themselve.
   # 
-  def pattern() @pattern ||= build_pattern; end
+  def pattern(block_symbols) @pattern ||= build_pattern(block_symbols); end
 
   #
   # Returns the Rule associated with a given tag, _nil_ if no such rule.
@@ -71,7 +71,9 @@ class RuleSet
   protected
   
   # Internal implementation of pattern
-  def build_pattern
+  def build_pattern(block_symbols)
+    start, stop = WLang::Template::BLOCK_SYMBOLS[block_symbols]
+    start, stop = Regexp.escape(start), Regexp.escape(stop)
     s = '([\\\\]{0,2}('
     i=0
     @rules.each_key do |tag|
@@ -79,7 +81,8 @@ class RuleSet
       s << '(' << Regexp.escape(tag) << ')'
       i += 1
     end
-    s << ')\{)|[\\\\]{0,2}\{|[\\\\]{0,2}\}'
+    s << ")#{start})|[\\\\]{0,2}#{start}|[\\\\]{0,2}#{stop}"
+    puts "Pattern is #{s}"
     Regexp.new(s)
   end
   

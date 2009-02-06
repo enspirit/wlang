@@ -2,6 +2,7 @@ require 'stringio'
 require 'wlang/rule'
 require 'wlang/rule_set'
 require 'wlang/errors'
+require 'wlang/template'
 require 'wlang/parser_context'
 module WLang
 
@@ -28,28 +29,23 @@ module WLang
 class Parser
 
   # Factors an instantiator
-  def self.instantiator(template, dialect, context={}, buffer="")
-    Parser.new(nil, Parser::Context.new(context), template, 0, dialect, buffer)
+  def self.instantiator(template, buffer="")
+    Parser.send(:new, nil, template, 0, buffer)
   end
   
   # Current parsed template
   attr_reader :template
   
   # Initializes a parser element
-  def initialize(parent, context, template, offset, dialect, buffer)
-    raise(ArgumentError, "Template is mandatory") if template.nil?
-    raise(ArgumentError, "Offset is mandatory") if offset.nil?
-    raise(ArgumentError, "Dialect is mandatory") if dialect.nil?
-    raise(ArgumentError, "Buffer is mandatory") if buffer.nil?
-    if String===dialect
-      dname, dialect = dialect, WLang::dialect(dialect)
-      raise(ArgumentError,"Unknown dialect #{dname}") if dialect.nil?
-    end
+  def initialize(parent, template, offset, buffer)
+    raise(ArgumentError, "Template is mandatory") unless WLang::Template===template
+    raise(ArgumentError, "Offset is mandatory") unless Integer===offset
+    raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
     @parent = parent
-    @context = context
     @template = template
+    @context = template.context
     @offset = offset
-    @dialect = dialect
+    @dialect = template.dialect
     @buffer = buffer
   end
   
@@ -63,16 +59,17 @@ class Parser
     # Main variables:
     # - offset: matching current position
     # - rules: handlers of '{' currently opened
-    offset, pattern, rules = @offset, @dialect.pattern, []
+    offset, pattern, rules = @offset, @dialect.pattern(@template.block_symbols), []
+    @source_text = template.source_text
     
     # we start matching everything in the ruleset
-    while match_at=@template.index(pattern,offset)
+    while match_at=@source_text.index(pattern,offset)
       match, match_length = $~[0], $~[0].length
       
       # puts pre_match (we can't use $~.pre_match !)
-      self.<<(@template[offset, match_at-offset]) if match_at>0
+      self.<<(@source_text[offset, match_at-offset]) if match_at>0
       
-      if @template[match_at,1]=='\\'           # escaping sequence
+      if @source_text[match_at,1]=='\\'           # escaping sequence
         self.<<(match[1..-1])
         offset = match_at + match_length
         
@@ -109,8 +106,8 @@ class Parser
     unless match_at
       raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.")\
         unless rules.empty?
-      self.<<(@template[offset, 1+@template.length-offset])
-      offset = @template.length
+      self.<<(@source_text[offset, 1+@source_text.length-offset])
+      offset = @source_text.length
     end
     [@buffer, offset-1]
   end
@@ -135,12 +132,12 @@ class Parser
     elsif not(Dialect===dialect)
       raise(ParseError,"Unknown modulation dialect: #{dialect}")
     end
-    Parser.new(self, @context, @template, offset, dialect, buffer).instantiate 
+    Parser.send(:new, self, @template, offset, buffer).instantiate 
   end
     
   # Checks if a given offset is a block
   def has_block?(offset)
-    @template[offset,2]=='}{'
+    @source_text[offset,2]=='}{'
   end
   
   # Parses a given block
@@ -165,5 +162,6 @@ class Parser
     encoder.call(src, options)
   end
   
+  private_class_method :new
 end # class Parser
 end # module WLang
