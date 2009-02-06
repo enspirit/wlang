@@ -19,12 +19,19 @@ module WLang
   # Regular expression for encoder names
   ENCODER_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
   
+  # File extensions to dialect mappings
+  FILE_EXTENSIONS = {}
+  
   # Main dialect
-  @dialect = Dialect.new("")
+  @dialect = Dialect.new("", nil)
   
   # Installs a dialect
-  def self.dialect(name, &block)
-    @dialect.dialect(name, &block)
+  def self.dialect(name, *extensions, &block)
+    if block_given?
+      Dialect::DSL.new(@dialect).dialect(name, *extensions, &block)
+    else
+      @dialect.dialect(name)
+    end
   end
   
   # Returns an encoder

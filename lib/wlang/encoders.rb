@@ -61,5 +61,10 @@ class Encoders
     end
   end
 
+  # Returns encoder names
+  def to_s
+    @encoders.keys.join(", ")
+  end
+  
 end # class EncoderSet
 end # module WLang

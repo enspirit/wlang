@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+#
+#  WLang: Code generation/Templating engine tool
+#        (see lib/wlang/wlang.rb for more information)
+#
+#  Copyright (c) 2009 University of Louvain, Bernard & Louis Lambeau
+#  Released under a MIT or Ruby licence
+#
+require 'wlang/wlang_command'
+
+begin
+  r = WLang::WLangCommand.new
+  r.run ARGV
+rescue Interrupt
+  $stderr.puts
+  $stderr.puts "Interrupted"
+rescue OptionParser::ParseError => e
+  $stderr.puts e.message
+rescue => e
+  $stderr.puts e.message
+  exit 1
+end

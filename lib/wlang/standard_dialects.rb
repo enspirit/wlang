@@ -17,14 +17,14 @@ module WLang
     
     # plain-text dialect
     WLang::dialect("plain-text") do
-      require("wlang/plain_text_dialect")
-      encoders(WLang::Encoders::PlainText) 
+      require "wlang/plain_text_dialect"
+      encoders WLang::Encoders::PlainText 
     end
     
     # ruby dialect
-    WLang::dialect("ruby") do
+    WLang::dialect("ruby", ".rb", ".ruby") do
       require "wlang/ruby_dialect"
-      encoders(WLang::Encoders::Ruby)
+      encoders WLang::Encoders::Ruby
     end
     
     # wlang dialects
@@ -36,16 +36,25 @@ module WLang
       
       # wlang/active-string dialect
       dialect("active-string") do
-        rules(WLang::RuleSet::Basic)
+        rules WLang::RuleSet::Basic
       end
       
       # wlang/ruby dialect
-      dialect("ruby") do
+      dialect("ruby", ".wrb", ".wruby") do
         require "wlang/ruby_dialect"
-        encoders(WLang::Encoders::Ruby)
-        rules(WLang::RuleSet::Basic)
-        rules(WLang::RuleSet::Encoding)
-        rules(WLang::RuleSet::Ruby)
+        encoders WLang::Encoders::Ruby
+        rules WLang::RuleSet::Basic
+        rules WLang::RuleSet::Encoding
+        rules WLang::RuleSet::Ruby
+      end
+      
+      # wlang/ruby dialect
+      dialect("xhtml", ".wtpl", ".whtml") do
+        require "wlang/xhtml_dialect"
+        encoders WLang::Encoders::XHtml
+        rules WLang::RuleSet::Basic
+        rules WLang::RuleSet::Encoding
+        rules WLang::RuleSet::XHtml
       end
       
     end

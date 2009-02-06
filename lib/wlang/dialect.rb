@@ -8,38 +8,154 @@ module WLang
 class Dialect
   attr_reader :name, :ruleset
   
+  # Domain specific language
+  class DSL
+    
+    # Initializes vis a real dialect instance
+    def initialize(dialect)
+      @dialect = dialect
+    end
+    
+    # Builds a sub-dialect
+    def dialect(name, *extensions, &block)
+      child = Dialect.new(name, @dialect, &block)
+      extensions.each do |ext|
+        ext = ('.' << ext) unless ext[0,1]=='.'
+        WLang::FILE_EXTENSIONS[ext] = child.qualified_name
+      end
+      @dialect.add_child_dialect(name, child)
+    end
+    
+    # Adds an encoder whose code is provided by a block
+    def encoder(name, &block) end
+    
+    # Adds encoders from a given Ruby module
+    def encoders(mod, pairs=nil) end
+      
+    # Adds a rule whose code is provided by a block 
+    def rule(symbol, &block) end
+    
+    # Adds rules from a given Ruby module
+    def rules(mod, pairs=nil) end
+      
+    # File extension that should be considered as being of this dialect
+    def extensions(*args)
+      args.each do |ext|
+        ext = ('.' << ext) unless ext[0,1]=='.'
+        WLang::FILE_EXTENSIONS[ext] = @dialect.qualified_name
+      end
+    end
+    alias :extension :extensions 
+    
+  end # class DSL
+  
+  # Domain specific language for loading
+  class LoadDSL
+    
+    # Initializes vis a real dialect instance
+    def initialize(dialect)
+      @dialect = dialect
+    end
+    
+    # Builds a sub-dialect
+    def dialect(name, *extensions, &block) end
+    
+    # Adds an encoder whose code is provided by a block
+    def encoder(name, &block) 
+      @dialect.add_encoder(name, &block)
+    end
+    
+    # Adds encoders from a given Ruby module
+    def encoders(mod, pairs=nil) 
+      @dialect.add_encoders(mod, pairs)
+    end
+      
+    # Adds a rule whose code is provided by a block 
+    def rule(symbol, &block) 
+      @dialect.add_rule(symbol, &block)
+    end
+    
+    # Adds rules from a given Ruby module
+    def rules(mod, pairs=nil) 
+      @dialect.add_rules(mod, pairs)
+    end
+      
+    # File extension that should be considered as being of this dialect
+    def extensions(*args) end
+    alias :extension :extensions 
+    
+  end # class DSL
+  
   # Creates an empty target language.
-  def initialize(name, parent=nil)
+  def initialize(name, parent, &builder)
     @name, @parent = name, parent 
+    @builder, @built = builder, builder.nil?
     @dialects = {}
     @encoders = Encoders.new
     @ruleset = RuleSet.new
+    DSL.new(self).instance_eval(&builder) unless builder.nil?
+  end
+  
+  ### Lazy load installation ###################################################
+  
+  # Install the dialect
+  def install
+    unless is_built?
+      LoadDSL.new(self).instance_eval(&@builder)
+      @built = true
+    end
+    self
   end
 
-  # Adds a sub dialect
-  def dialect(name, &block)
+  # Checks if the dialect is already built
+  def is_built?
+    return @built
+  end
+  
+  # Adds a child dialect
+  def add_child_dialect(name, child)
+    @dialects[name] = child
+  end
+  
+  # Adds an encoder
+  def add_encoder(name, &block)
+    @encoders.add_encoder(name, &block)
+  end
+  
+  # Adds encoders from a Ruby module
+  def add_encoders(mod, pairs)
+    @encoders.add_encoders(mod, pairs)
+  end
+  
+  # Adds a rule
+  def add_rule(name, &block)
+    @ruleset.add_rule(name, &block)
+  end
+  
+  # Adds rules from a Ruby module
+  def add_rules(mod, pairs)
+    @ruleset.add_rules(mod, pairs)
+  end
+  
+  ### Query API ################################################################
+  
+  # Returns a given child dialect
+  def dialect(name)
     if String===name
       raise(ArgumentError, "Invalid dialect name #{name}") unless WLang::DIALECT_NAME_REGEXP =~ name
       name = name.split('/')
     elsif not(Array===name)
       raise(ArgumentError,"Invalid dialect name #{name}")
     end
-    if block_given?
-      # sub-dialect installation
-      raise(ArgumentError,"Unsupported composite dialect name on installation")\
-        unless name.length == 1
-      @dialects[name[0]] = block
-      return self
+    child_name = name[0]
+    child_dialect = @dialects[child_name]
+    if child_dialect.nil?
+      return nil
+    elsif name.length==1
+      return child_dialect.install
     else
-      child_name = name[0]
-      child_dialect = factor_dialect(child_name)
-      if child_dialect.nil?
-        return nil
-      elsif name.length==1
-        return child_dialect
-      else
-        return child_dialect.dialect(name[1..-1]) 
-      end
+      child_dialect.install
+      return child_dialect.dialect(name[1..-1]) 
     end
   end
   
@@ -55,7 +171,7 @@ class Dialect
       return @encoders.get_encoder(name[0])
     else
       child_name = name[0]
-      child_dialect = factor_dialect(child_name)
+      child_dialect = dialect(child_name)
       if child_dialect.nil?
         return nil
       else
@@ -77,38 +193,24 @@ class Dialect
     end
   end
       
-  # Delegated to Encoders#add_encoders
-  def encoders(mod, pairs=nil)
-    @encoders.add_encoders(mod, pairs)
-  end
-
-  # Delegated to RuleSet#add_rules
-  def rules(mod, pairs=nil)
-    @ruleset.add_rules(mod, pairs)
-  end
-  
-  # Adds a rule for a given symbol
-  def rule(symbol, &block)
-    @ruleset.add_rule(symbol, &block)
-  end
-
   # Returns the pattern to use (delagated to RuleSet#pattern)
   def pattern(block_symbols)
     @ruleset.pattern(block_symbols)
   end
   
-  # Factors and return a given dialect
-  def factor_dialect(name)
-    dialect = @dialects[name]
-    if Proc===dialect
-      block, dialect = dialect, Dialect.new(name, self)
-      dialect.instance_eval &block
-      @dialects[name] = dialect
-    end
-    return dialect
+  ### Classical API ############################################################
+  
+  # Returns dialect qualified name
+  def qualified_name
+    parentname = @parent.nil? ? "" : @parent.to_s
+    return ""==parentname ? @name : parentname + '/' + @name 
   end
-        
-  private :factor_dialect
+  
+  # Returns a string representation   
+  def to_s
+    qualified_name
+  end
+   
 end # class Dialect
     
 end #module WLang  

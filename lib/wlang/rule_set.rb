@@ -82,7 +82,6 @@ class RuleSet
       i += 1
     end
     s << ")#{start})|[\\\\]{0,2}#{start}|[\\\\]{0,2}#{stop}"
-    puts "Pattern is #{s}"
     Regexp.new(s)
   end
   
