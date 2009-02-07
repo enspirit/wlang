@@ -1,2 +1,6 @@
-== 0.0.9
+== 0.0.7
+* WLang architecture extended and consolidated (see redmine's issues {32}[https://redmine.chefbe.net/issues/32] 
+  and {46}[https://redmine.chefbe.net/issues/46].
+
+== 0.0.1
 * WLang base architecture implemented.

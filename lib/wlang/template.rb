@@ -71,7 +71,7 @@ class Template
     unless context.nil?
       @context.pop
     end
-    instantiated[0]
+    buffer
   end
   
 end # class Template

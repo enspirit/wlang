@@ -1,20 +1,34 @@
 module WLang
 class RuleSet
   
-  # Basic ruleset
+  #
+  # Basic ruleset, commonly included by any wlang dialect (but some tags, like
+  # <tt>${...}</tt> may be overriden). This ruleset is often installed conjointly
+  # with WLang::RuleSet::Encoding which provides interresting overridings of 
+  # <tt>${...}</tt> and <tt>+{...}</tt>. This ruleset provides the following tags 
+  # and associated rules:
+  #
+  # [!{wlang/ruby}] (*execution*) Instanciates #1, looking for a ruby expression. Evaluates it, 
+  #                 looking for any object. Invokes to_s on it and returns the 
+  #                 result as replacement value.
+  # [%{wlang/active-string}{...}] (*modulation*) Instanciates #1, looking for a dialect qualified 
+  #                               name. Instantiates #2 according to the rules defined 
+  #                               by that dialect and returns the #2's instantiation as 
+  #                               replacement value.
+  # [^{wlang/active-string}{...}] (*encoding*) Instanciates #1, looking for an encoder qualified name. 
+  #                               Instanciates #2 in the current dialect. 
+  #                               Encode #2's instantiation using encoder found in (#1) 
+  #                               and returns the encoded string as replacement value.
+  # [${wlang/ruby}]               (*injection*) Same semantics as execution so far.
+  # [+{wlang/ruby}]               (*inclusion*) Same semantics as execution so far.
+  #
   module Basic
     
     # Default mapping between tag symbols and methods
     DEFAULT_RULESET = {'!' => :execution, '%' => :modulation, '^' => :encoding,
                        '+' => :inclusion, '$' => :injection}
     
-    #
-    # Execution as <tt>!{wlang/hosted}</tt>
-    #
-    # Instanciates #1, looking for an expression in the hosting language. 
-    # Evaluates it, looking for any object. Invokes to_s on it and returns the 
-    # result.
-    #
+    # Rule implementation of <tt>!{wlang/ruby}</tt>.
     def self.execution(parser, offset)
       expression, reached = parser.parse(offset, "wlang/ruby")
       value = parser.evaluate(expression)
@@ -22,26 +36,14 @@ class RuleSet
       [result, reached]
     end
     
-    #
-    # Language modulation as <tt>%{wlang/hosted}{...}</tt>.
-    #
-    # Instanciates #1, looking for a wlang language name. Instantiates #2 
-    # according to the rules defined by that language (#1) and returns the 
-    # result.
-    #
+    # Rule implementation of <tt>%{wlang/active-string}{...}</tt>.
     def self.modulation(parser, offset)
       dialect, reached = parser.parse(offset, "wlang/active-string")
       result, reached = parser.parse_block(reached, dialect)
       [result, reached]
     end
     
-    #
-    # Encoding as <tt>^{wlang/actstring}{...}</tt>
-    #
-    # Instanciates #1, looking for an encoder name. Instanciates #2 in the 
-    # current wlang language, passes result to the found encoder (#1) and 
-    # returns the encoded string.
-    # 
+    # Rule implementation of <tt>^{wlang/active-string}{...}</tt>
     def self.encoding(parser, offset)
       encoder, reached = parser.parse(offset, "wlang/active-string")
       result, reached = parser.parse_block(reached)
@@ -49,21 +51,13 @@ class RuleSet
       [result, reached]
     end
       
-    # 
-    # Inclusion as <tt>+{wlang/hosted}</tt>
-    #
-    # By default, has same semantics as execution.
-    #
-    def self.inclusion(parser, offset)
+    # Rule implementation of <tt>${wlang/ruby}</tt>
+    def self.injection(parser, offset)
       execution(parser, offset)
     end
     
-    # 
-    # Injection as <tt>${wlang/hosted}</tt>
-    #
-    # By default, has same semantics as execution.
-    #
-    def self.injection(parser, offset)
+    # Rule implementation of <tt>+{wlang/ruby}</tt>
+    def self.inclusion(parser, offset)
       execution(parser, offset)
     end
     

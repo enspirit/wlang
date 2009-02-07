@@ -1,6 +1,12 @@
 require 'coderay'
-  
-# Defines encoders of the plain-text dialect
+
+#
+# Allows coderay highlighter to be used as encoder. When using standard dialects,
+# these encoders are installed under <tt>xhtml/coderay/ruby</tt>, 
+# <tt>xhtml/coderay/html</tt>, etc. qualified names. 
+#
+# Available languages are: java, ruby, html, yaml.   
+#
 module WLang::Encoders::CodeRay
 
   # Default encoders  
