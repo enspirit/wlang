@@ -9,6 +9,10 @@
       *{prefs using each_pair as key, value}{
       <tr><td>${key}</td><td>${value}</td></tr>
       }
+      +{h1}
+      ${h1}
+      &;{+{h1}}
+      &{+{h1}}
     </table>
   </body>
 </html>

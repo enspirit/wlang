@@ -1,33 +1,24 @@
-module WLang
+require 'cgi'
 
-class Encoders
+# Defines encoders of the whtml dialect
+module WLang::Encoders::XHtml
   
-  # Defines encoders of the plain-text dialect
-  module XHtml
+  # Default encoders  
+  DEFAULT_ENCODERS = {"main-encoding"     => :entities_encoding, 
+                      "entities-encoding" => :entities_encoding}
   
-    # Default encoders  
-    DEFAULT_ENCODERS = {"main-encoding"     => :entities_encoding, 
-                        "entities-encoding" => :entities_encoding}
-    
-    # Upcase encoding
-    def self.entities_encoding(src, options); 
-      src
-    end
-    
-  end # module PlainText  
+  # Upcase encoding
+  def self.entities_encoding(src, options); 
+    CGI::escapeHTML(src)
+  end
+  
+end # module WLang::Encoders::XHtml  
 
-end # class Encoders
 
-class RuleSet
-  
-  # Defines rulset of the plain-text dialect
-  module XHtml
+# Defines rulset of the wlang/xhtml dialect
+module WLang::RuleSet::XHtml
     
-    # Default mapping between tag symbols and methods
-    DEFAULT_RULESET = {}
-    
-  end # module PlainText
+  # Default mapping between tag symbols and methods
+  DEFAULT_RULESET = {}
   
-end # class RuleSet
-
-end # module WLang
+end # module WLang::RuleSet::XHtml

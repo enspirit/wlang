@@ -5,3 +5,4 @@ prefs:
   background: dark
   foreground: cyan
   timeout: 30
+h1: <h1>This is a h1 header</h1>

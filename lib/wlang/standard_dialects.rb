@@ -33,10 +33,20 @@ module WLang
     
     # ruby dialect
     WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
+      ruby_require "cgi", "wlang/xhtml_dialect" do
+        encoders WLang::Encoders::XHtml
+      end
       dialect("coderay") do
         ruby_require("coderay", "wlang/coderay_dialect") do
           encoders WLang::Encoders::CodeRay
         end
+      end
+    end
+    
+    # rdoc dialect
+    WLang::dialect("rdoc") do
+      ruby_require "rdoc", "wlang/rdoc_dialect" do
+        encoders WLang::Encoders::RDoc
       end
     end
     
@@ -65,7 +75,7 @@ module WLang
       
       # wlang/ruby dialect
       dialect("xhtml", ".wtpl", ".whtml") do
-        ruby_require "wlang/xhtml_dialect" do
+        ruby_require "cgi", "wlang/xhtml_dialect" do
           encoders WLang::Encoders::XHtml
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding

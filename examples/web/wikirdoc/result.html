@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>Using rdoc and wlang together</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>Contents of the rdoc file.</td>
+        <td><textarea cols="80" rows="25">= Example of using RDoc with _wlang_
+
+This file is a simple rdoc example, that will be converted using rdoc and 
+embedded inside an html template.
+
+== Here is a subtitle
+
+And here a paragraph with *some* different _examples_ of what can be made with
+rdoc:
+- for example
+- a list of
+- bullets</textarea></td>
+      </tr>
+      <tr>
+        <td>Visual result of the .rdoc to .html transformation.</td>
+        <td><h1>Example of using RDoc with <em>wlang</em></h1>
+<p>
+This file is a simple rdoc example, that will be converted using rdoc and
+embedded inside an html template.
+</p>
+<h2>Here is a subtitle</h2>
+<p>
+And here a paragraph with <b>some</b> different <em>examples</em> of what
+can be made with rdoc:
+</p>
+<ul>
+<li>for example
+
+</li>
+<li>a list of
+
+</li>
+<li>bullets
+
+</li>
+</ul>
+</td>
+      </tr>
+      <tr>
+        <td>HTML result of the .rdoc to .html transformation.</td>
+        <td>&lt;h1&gt;Example of using RDoc with &lt;em&gt;wlang&lt;/em&gt;&lt;/h1&gt;
+&lt;p&gt;
+This file is a simple rdoc example, that will be converted using rdoc and
+embedded inside an html template.
+&lt;/p&gt;
+&lt;h2&gt;Here is a subtitle&lt;/h2&gt;
+&lt;p&gt;
+And here a paragraph with &lt;b&gt;some&lt;/b&gt; different &lt;em&gt;examples&lt;/em&gt; of what
+can be made with rdoc:
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;for example
+
+&lt;/li&gt;
+&lt;li&gt;a list of
+
+&lt;/li&gt;
+&lt;li&gt;bullets
+
+&lt;/li&gt;
+&lt;/ul&gt;
+</td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+= Example of using RDoc with _wlang_
+
+This file is a simple rdoc example, that will be converted using rdoc and 
+embedded inside an html template.
+
+== Here is a subtitle
+
+And here a paragraph with *some* different _examples_ of what can be made with
+rdoc:
+- for example
+- a list of
+- bullets

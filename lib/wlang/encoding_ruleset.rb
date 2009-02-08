@@ -33,7 +33,7 @@ module Encoding
     [result, reached]
   end
   
-  # Double-quoting as <tt>&'{...}</tt>
+  # Double-quoting as <tt>&"{...}</tt>
   def self.double_quoting(parser, offset)
     parsed, reached = parser.parse(offset)
     result = parser.encode(parsed, "double-quoting")
