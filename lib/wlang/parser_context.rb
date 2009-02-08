@@ -15,6 +15,7 @@ class Context
   # Hash scoping mechanism
   class HashScope
     include Scope
+    attr_reader :hash
     
     # Decorates a hash as a scope
     def initialize(hash={})

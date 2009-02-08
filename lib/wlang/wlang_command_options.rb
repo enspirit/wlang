@@ -50,7 +50,7 @@ class Options
       opt.release = nil
       opt.summary_indent = ' ' * 4
       banner = <<-EOF
-        # Usage #{opt.program_name} [options] template context
+        # Usage #{opt.program_name} [options] template context-file
         
         # Template is parsed as a wlang dialect (based on its extension by default) and 
         # instanciated through a given context file.
@@ -85,12 +85,12 @@ class Options
          end
       end
       
-      opt.on("--context-name",
+      opt.on("--context-name=NAME",
              "Name of the context object") do |value|
         @context_name = value         
       end
       
-      opt.on("--context-kind", ["yaml", "ruby", "dsl"],
+      opt.on("--context-kind=KIND", ["yaml", "ruby", "dsl"],
              "Kind of context object") do |value|
         @context_kind = value         
       end

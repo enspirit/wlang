@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>${title}</title>
+  </head>
+  <body>
+    <h1>Here are the people</h1>
+    <table>
+      *{db.tv_PERSONS as people}{
+        <tr>
+          *{people using each_pair as k, v}{
+            <td>${k}</td>
+            <td>${v}</td>
+          }
+        </tr>
+      }
+    </table>
+  </body>
+</html>
