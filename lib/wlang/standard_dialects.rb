@@ -2,6 +2,7 @@ require "wlang/basic_ruleset"
 require "wlang/encoding_ruleset"
 require "wlang/imperative_ruleset"
 require "wlang/buffering_ruleset"
+require "wlang/context_ruleset"
 module WLang
   
   #
@@ -69,6 +70,7 @@ module WLang
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding
           rules WLang::RuleSet::Imperative
+          rules WLang::RuleSet::Context
           rules WLang::RuleSet::Ruby
         end
       end
@@ -81,6 +83,7 @@ module WLang
           rules WLang::RuleSet::Encoding
           rules WLang::RuleSet::Imperative
           rules WLang::RuleSet::Buffering
+          rules WLang::RuleSet::Context
           rules WLang::RuleSet::XHtml
         end
       end

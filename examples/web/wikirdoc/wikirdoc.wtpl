@@ -1,3 +1,4 @@
+.={text}{<<{example.rdoc}}
 <html>
   <head>
     <title>Using rdoc and wlang together</title>
@@ -6,15 +7,15 @@
     <table>
       <tr>
         <td>Contents of the rdoc file.</td>
-        <td><textarea cols="80" rows="25">&{<<{example.rdoc}}</textarea></td>
+        <td><textarea cols="80" rows="25">${text}</textarea></td>
       </tr>
       <tr>
         <td>Visual result of the .rdoc to .html transformation.</td>
-        <td>^{rdoc/div}{<<{example.rdoc}}</td>
+        <td>^{rdoc/div}{+{text}}</td>
       </tr>
       <tr>
         <td>HTML result of the .rdoc to .html transformation.</td>
-        <td>&{^{rdoc/div}{<<{example.rdoc}}}</td>
+        <td>&{^{rdoc/div}{+{text}}}</td>
       </tr>
     </table>
   </body>

@@ -73,7 +73,7 @@ class Context
   end
   
   # Adds a variable in the current scope
-  def [](key, value)
+  def []=(key, value)
     @current_scope[key] = value
   end
   

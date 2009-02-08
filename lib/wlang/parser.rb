@@ -164,6 +164,17 @@ class Parser
     encoder.call(src, options)
   end
   
+  # Raises a ParseError
+  def syntax_error(offset)
+    text = self.parse(offset, "wlang/dummy", "")
+    raise ParseError, "Parse error at #{offset} on '#{text}'"
+  end
+
+  # Puts a key/value pair in the current context
+  def context_define(key, value)
+    @context[key] = value
+  end
+    
   # Pushes a new context
   def context_push(context)
     @context.push(context)
