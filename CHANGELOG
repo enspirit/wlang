@@ -1,6 +1,92 @@
-== 0.0.7
-* WLang architecture extended and consolidated (see redmine's issues {32}[https://redmine.chefbe.net/issues/32] 
-  and {46}[https://redmine.chefbe.net/issues/46].
 
-== 0.0.1
-* WLang base architecture implemented.
+==== r31 (blambeau)
+* [wlang] 
+* Adds Encoder class to void symetry problems between rules and encoders.
+* Encoders renamed as EncoderSet, to be symetric with RuleSet.
+* Documentation much improved.
+* WLang specification automatically generated in Rakefile using ... wlang itself ;-)
+
+==== r30 (blambeau)
+* [revprop] Refactoring of ruby source files, to get simpler project structure to code.
+
+==== r26 (blambeau)
+* SQLMe and RMatch moved in sandbox as not being mature projects.
+* Database example in wlang removed (because using sqlme which is not mature)
+
+==== r22 (blambeau)
+* Proof of concept: iterating database records. 
+
+==== r20 (blambeau)
+* Adds a context ruleset with a first implementation of .={...}
+
+==== r19 (blambeau)
+* Adds rdoc encoder with a wikirdoc sample.
+* Implements xhtml/entities-encoding using CGI::escapeHTML
+* Dialect modules/files refactored to be more syntax friendly.
+
+==== r18 (blambeau)
+* String extensions moved inside ruby_extensions.rb
+* Documentation much improved.
+* README and CHANGELOG adapted.
+
+==== r17 (blambeau)
+* CodeRay example slighlty modified.
+
+==== r16 (blambeau)
+* Imperative and Buffering rulesets started.
+* CodeRay dialect created.
+* Examples slightly extended.
+* Template has the ability to know its source file and to resolve basic URIs.
+
+==== r15 (blambeau)
+* Provides lazy load of dialects (need to provide a require_gem and require_file instead of Ruby's require)
+* Provides wlang commandline tool with basic options
+* examples directory started.
+* wlang/xhtml dialect started.
+
+==== r13 (blambeau)
+* Introduces a Template abstraction which encapsulates references to dialect and context.
+* Template is also "block_symbols" aware and RuleSet.pattern takes that
+* argument, allowing ${} as well as $() and $[] syntax (only one syntax allowed
+* for a given template).
+
+==== r12 (blambeau)
+* Continues issue #49 inside wlang itself (removes revzero main folder)
+
+==== r11 (blambeau)
+* Resolves issue #49.
+* Only sandbox is left on repository root, llambeau will be asked to switch it to a better location.
+
+==== r10 (blambeau)
+* Implements EncodingRuleSet from wlang_semantics document (see issue #46)
+* Adds relative encoder usage in Parser#encode
+* Provides Ruby dialect base implementation.
+* Provides StandardDialects file/class.
+
+==== r9 (blambeau)
+* ParserState becomes Parser, which is stateful.
+* Encoders vs. Rules difference implemented according to wlang semantics (see issue #46)
+* Follows the wlang semantics of issue #46, not complete however.
+* Provides a basic parser context for evaluations.
+* Homework (issue) #32 is closed by this revision.
+
+==== r8 (blambeau)
+* Provides a basic test on the WLang::Parser. See Home Work 2009/01 on redmine.
+
+==== r7 (blambeau)
+* Documentation improved, GPL/Ruby licence added.
+
+==== r6 (blambeau)
+* Documentation and API improved.
+* Horo template and Rakefile slightly modified.
+
+==== r3 (blambeau)
+* Ignores eclipse files and generated documentation.
+
+==== r2 (blambeau)
+* Initial revision of RevZero tools.
+* This revision contains a first wlang implementation, not rigourously tested so
+* far.
+
+==== r1 (blambeau)
+* Initial repository layout.

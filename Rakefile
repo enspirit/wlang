@@ -32,3 +32,23 @@ desc "Generates the specification file"
 task :spec => [:rdoc] do |t|
   Kernel.exec("ruby -Ilib bin/wlang --output doc/html/files/specification.html doc/specification/specification.wtpl doc/specification/specification.yml")
 end
+
+desc "Converts SVN log to a CHANGELOG file"
+task :cl do |t|
+  File.open('CHANGELOG', 'w') do |output|
+    Kernel.open("|svn log") do |io|
+      io.each do |line|
+        case line
+        when /^\-+$/
+          next
+        when /^(r\d+) \| ([a-z_]+)/
+          output << "\n==== #{$1} (#{$2})\n"
+        when /^$/
+          output << ""
+        else
+          output << "* #{line}"
+        end
+      end
+    end
+  end
+end
