@@ -35,6 +35,7 @@ end
 
 desc "Converts SVN log to a CHANGELOG file"
 task :cl do |t|
+  Kernel.exec("svn up")
   File.open('CHANGELOG', 'w') do |output|
     Kernel.open("|svn log") do |io|
       io.each do |line|

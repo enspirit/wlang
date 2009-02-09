@@ -1,4 +1,8 @@
 
+==== r33 (blambeau)
+* A simple 'cl' task that generates a CHANGELOG form the SVN.
+* Using it: rake cl && rake rerdoc
+
 ==== r31 (blambeau)
 * [wlang] 
 * Adds Encoder class to void symetry problems between rules and encoders.

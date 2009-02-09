@@ -11,6 +11,8 @@ web pages, etc.
 - For the current cheatsheet/specification see link://files/specification.html
 - For terminology and a quick overview of _wlang_ for generating code, read on.
 - If you want to learn _wlang_ quickly, see the example directory.
+- If you want a killer example (but simple) see the way the specification.html file
+  is generated in doc/specification directory. 
 - If you want to know which dialects are available (that is, in which target languages 
   you can generate code), see WLang::StandardDialects.
 - If you want to create your own wlang dialect, see WLang::Dialect::DSL

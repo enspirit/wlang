@@ -38,9 +38,9 @@
         </tr>
         *{rspec as rule}{
           <tr>
-            <td class="signature"><tt>${rule["signature"]}</tt></td>
-            <td class="name">${rule["name"]}</td>
-            <td class="definition">^{rdoc/div}{+{rule["definition"]}}</td>
+            <td class="signature"><tt>${rule/signature}</tt></td>
+            <td class="name">${rule/name}</td>
+            <td class="definition">^{rdoc/div}{+{rule/definition}}</td>
           </tr>
         }
       </table>

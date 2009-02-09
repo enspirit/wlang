@@ -18,6 +18,7 @@ class WLang::Parser::Context
   
   # Hash scoping mechanism
   class HashScope < Scope 
+    attr_reader :__hash
     
     # Decorates a hash as a scope.
     def initialize(hash={})
@@ -37,6 +38,11 @@ class WLang::Parser::Context
       end
     end
     
+    # Returns underlying object
+    def __underlying
+      return @__hash
+    end
+    
     # See Scope#__evaluate
     def __evaluate(expr)
       self.instance_eval(expr)
@@ -45,6 +51,15 @@ class WLang::Parser::Context
     # See Scope#__define
     def __define(key, value); 
       @__hash[key]=value; 
+    end
+    
+    def /(symb)
+      s = symb.to_s
+      if  @__hash.has_key?(s)
+        return WLang::Parser::Context.to_scope(@__hash[s])
+      else 
+        return nil
+      end
     end
     
   end # class HashScope
@@ -57,12 +72,23 @@ class WLang::Parser::Context
   
   # Evaluates a ruby expression on the current context.
   def evaluate(expression)
-    @current_scope.__evaluate(expression)
+    if /[a-z]+(\/[a-z]+)+/ =~ expression
+      begin
+        expression = ("self/" + expression).gsub(/\//,"/:")
+        expr = @current_scope.__evaluate(expression)
+        expr = expr.__underlying if Scope===expr
+        return expr
+      rescue => ex
+        return nil
+      end
+    else
+      @current_scope.__evaluate(expression)  
+    end
   end
   
   # Pushes a new scope instance.
   def push(who={})
-    who = to_scope(who)
+    who = WLang::Parser::Context.to_scope(who)
     who.__parent = @current_scope
     @current_scope = who
   end
@@ -80,11 +106,11 @@ class WLang::Parser::Context
   end
   
   # Converts a given instance to a Scope.
-  def to_scope(who)
+  def self.to_scope(who)
     return who if Scope===who
     return who.to_wlang_scope if who.respond_to?(:to_wlang_scope)
     return HashScope.new(who) if Hash===who
-    raise(ArgumentError,"Unable to convert #{who} to a scope")
+    return who
   end
   
 end # class Context
