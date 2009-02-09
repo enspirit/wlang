@@ -1,10 +1,22 @@
 
+==== r37 (blambeau)
+* Documentation/Specification much improved.
+* Specification now contains examples.
+* Provides a test that check that any example in the specification is correct.
+* Provides basic sql and sql/sybase dialects.
+
+==== r35 (blambeau)
+* Simple change in the specification YAML file as well as the template, which is much more user friendly now.
+
+==== r34 (blambeau)
+* Adds killer example (the way specification is generated) link in README.
+* Experimental support of ${something/with/sub/keys} as we had in w@w.
+
 ==== r33 (blambeau)
 * A simple 'cl' task that generates a CHANGELOG form the SVN.
 * Using it: rake cl && rake rerdoc
 
 ==== r31 (blambeau)
-* [wlang] 
 * Adds Encoder class to void symetry problems between rules and encoders.
 * Encoders renamed as EncoderSet, to be symetric with RuleSet.
 * Documentation much improved.
