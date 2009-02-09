@@ -1,6 +1,6 @@
 require 'test/unit'
 require "wlang"
-require 'wlang/imperative_ruleset'
+require 'wlang/rulesets/imperative_ruleset'
 module WLang
   
 # Tests the Imperative rule set

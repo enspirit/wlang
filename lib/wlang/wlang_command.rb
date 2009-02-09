@@ -1,6 +1,6 @@
 require 'wlang'
 require 'wlang/wlang_command_options'
-require 'wlang/standard_dialects'
+require 'wlang/dialects/standard_dialects'
 module WLang
   
 #

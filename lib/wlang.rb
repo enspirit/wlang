@@ -113,4 +113,4 @@ module WLang
   end
   
 end
-require 'wlang/standard_dialects'
+require 'wlang/dialects/standard_dialects'

@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'wlang'
-require 'wlang/context_ruleset'
+require 'wlang/rulesets/context_ruleset'
 module WLang
 
 # Tests the Scoping ruleset

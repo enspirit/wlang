@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'wlang'
-require 'wlang/standard_dialects'
+require 'wlang/dialects/standard_dialects'
 module WLang
 
 # Tests the rubyy dialect

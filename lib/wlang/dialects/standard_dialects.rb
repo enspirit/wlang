@@ -1,8 +1,8 @@
-require "wlang/basic_ruleset"
-require "wlang/encoding_ruleset"
-require "wlang/imperative_ruleset"
-require "wlang/buffering_ruleset"
-require "wlang/context_ruleset"
+require "wlang/rulesets/basic_ruleset"
+require "wlang/rulesets/encoding_ruleset"
+require "wlang/rulesets/imperative_ruleset"
+require "wlang/rulesets/buffering_ruleset"
+require "wlang/rulesets/context_ruleset"
 module WLang
   
   #
@@ -20,25 +20,25 @@ module WLang
     
     # plain-text dialect
     WLang::dialect("plain-text") do
-      ruby_require("wlang/plain_text_dialect") do
+      ruby_require("wlang/dialects/plain_text_dialect") do
         encoders WLang::Encoders::PlainText 
       end
     end
     
     # ruby dialect
     WLang::dialect("ruby", ".rb", ".ruby") do
-      ruby_require "wlang/ruby_dialect" do
+      ruby_require "wlang/dialects/ruby_dialect" do
         encoders WLang::Encoders::Ruby
       end
     end
     
     # ruby dialect
     WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
-      ruby_require "cgi", "wlang/xhtml_dialect" do
+      ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
         encoders WLang::Encoders::XHtml
       end
       dialect("coderay") do
-        ruby_require("coderay", "wlang/coderay_dialect") do
+        ruby_require("coderay", "wlang/dialects/coderay_dialect") do
           encoders WLang::Encoders::CodeRay
         end
       end
@@ -46,7 +46,7 @@ module WLang
     
     # rdoc dialect
     WLang::dialect("rdoc") do
-      ruby_require "rdoc", "wlang/rdoc_dialect" do
+      ruby_require "rdoc", "wlang/dialects/rdoc_dialect" do
         encoders WLang::Encoders::RDoc
       end
     end
@@ -65,7 +65,7 @@ module WLang
       
       # wlang/ruby dialect
       dialect("ruby", ".wrb", ".wruby") do
-        ruby_require "wlang/ruby_dialect" do
+        ruby_require "wlang/dialects/ruby_dialect" do
           encoders WLang::Encoders::Ruby
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding
@@ -77,7 +77,7 @@ module WLang
       
       # wlang/ruby dialect
       dialect("xhtml", ".wtpl", ".whtml") do
-        ruby_require "cgi", "wlang/xhtml_dialect" do
+        ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
           encoders WLang::Encoders::XHtml
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding
