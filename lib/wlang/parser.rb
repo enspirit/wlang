@@ -3,32 +3,22 @@ require 'wlang/rule'
 require 'wlang/rule_set'
 require 'wlang/errors'
 require 'wlang/template'
-require 'wlang/parser_context'
 module WLang
 
 #
 # Parser for wlang templates.
 #
 # This class implements the parsing algorithm of wlang, recognizing special tags
-# and replacing them using installed rules. Dialects can be installed using 
-# add_dialect. Instanciating a template is done using instanciate. Methods parse 
-# and parse_xxx are callbacks for rules and should be be used by users themselve.
+# and replacing them using installed rules. Instanciating a template is done 
+# using instanciate. All other methods (parse, parse_block, has_block?) and the 
+# like are callbacks for rules and should not be used by users themselve.
 #
-# Examples (less trivial examples can be found in the examples/ directory): 
-#   # we will create a simple dialect with two simple tags:
-#   #   +{...} will uppercase its contents
-#   #   -{...} will downcase its contents
-#   parser = WLang::Parser.new
-#   parser.add_dialect(:simple) do
-#     add_text_rule '+' { |text| text.upcase   }
-#     add_text_rule '-' { |text| text.downcase }
-#   end
-#   parser.instanciate('-{HELLO} +{world}')   # prints 'hello WORLD'
+# Obtaining a parser MUST be made through Parser.instantiator (new is private).
 #
 # == Detailed API
 class Parser
 
-  # Factors an instantiator
+  # Factors a parser instance for a given template and an output buffer. 
   def self.instantiator(template, buffer="")
     Parser.send(:new, nil, template, 0, buffer)
   end
@@ -36,7 +26,12 @@ class Parser
   # Current parsed template
   attr_reader :template
   
-  # Initializes a parser element
+  #
+  # Initializes a parser instance. _parent_ is the Parser instance of the higher
+  # parsing stage. _template_ is the current instantiated template, _offset_ is
+  # where the parsing must start in the template and _buffer_ is the output buffer
+  # where the instantiation result must be pushed.
+  #
   def initialize(parent, template, offset, buffer)
     raise(ArgumentError, "Template is mandatory") unless WLang::Template===template
     raise(ArgumentError, "Offset is mandatory") unless Integer===offset
@@ -113,15 +108,17 @@ class Parser
   end
   
   #
-  # Evaluates a ruby expression on the current context.
+  # Evaluates a ruby expression on the current context. 
+  # See WLang::Parser::Context#evaluate.
   #
   def evaluate(expression)
     @context.evaluate(expression)
   end
   
   #
-  # Lauches a child parser at a given offset for a given dialect (same dialect
-  # than self if dialect is nil).
+  # Launches a child parser for instantiation at a given _offset_ in given 
+  # _dialect_ (same dialect than self if dialect is nil) and with an output 
+  # _buffer_.
   #
   def parse(offset, dialect=nil, buffer="")
     if dialect.nil?
@@ -134,19 +131,33 @@ class Parser
     end
     Parser.send(:new, self, @template, offset, buffer).instantiate 
   end
-    
-  # Checks if a given offset is a block
+  
+  # 
+  # Checks if a given offset is a starting block. For easy implementation of rules
+  # the check applied here is that text starting at _offset_ in the template is precisely
+  # '}{' (the reason for that is that instantiate, parse, parse_block always stop 
+  # parsing on a '}')
+  #
   def has_block?(offset)
     @source_text[offset,2]=='}{'
   end
   
-  # Parses a given block
+  #
+  # Parses a given block starting at a given _offset_, expressed in a given 
+  # _dialect_ and using an output _buffer_. This method raises a ParseError if
+  # there is no block at the offset. It implies that we are on a '}{', see 
+  # has_block? for details. Rules may thus force mandatory block parsing without 
+  # having to check anything. Optional blocks must be handled by rules themselve.
+  #
   def parse_block(offset, dialect=nil, buffer="")
     raise(ParseError,"Block expected at #{offset}") unless has_block?(offset)
     parse(offset+2, dialect, buffer)
   end
   
-  # Encodes a given text using an encoder
+  #
+  # Encodes a given text using an encoder, that may be a qualified name or an
+  # Encoder instance.
+  #
   def encode(src, encoder, options=nil)
     options = {} unless options
     options['_encoder_'] = encoder
@@ -158,29 +169,39 @@ class Parser
         ename, encoder = encoder, @dialect.find_encoder(encoder)
         raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
       end
-    elsif not(Proc===encoder)
+    elsif not(Encoder===encoder)
       raise(ParseError,"Unknown encoder: #{encoder}")
     end
-    encoder.call(src, options)
+    encoder.encode(src, options)
   end
   
-  # Raises a ParseError
+  #
+  # Raises a ParseError at a given offset.
+  #
   def syntax_error(offset)
     text = self.parse(offset, "wlang/dummy", "")
     raise ParseError, "Parse error at #{offset} on '#{text}'"
   end
 
-  # Puts a key/value pair in the current context
+  #
+  # Puts a key/value pair in the current context. See Parser::Context::define
+  # for details.
+  #
   def context_define(key, value)
-    @context[key] = value
+    @context.define(key,value)
   end
-    
-  # Pushes a new context
+
+  #    
+  # Pushes a new scope on the current context stack. See Parser::Context::push
+  # for details.
+  #
   def context_push(context)
     @context.push(context)
   end
-  
-  # Pops the current context
+
+  #  
+  # Pops the top scope of the context stack. See Parser::Context::pop for details.
+  #
   def context_pop
     @context.pop
   end

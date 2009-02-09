@@ -11,7 +11,7 @@ module WLang
 #   #   <tt>+{...}</tt> which will uppercase its contents
 #   upcaser = RuleSet.new
 #   upcaser.add_rule '+' do |parser,offset|
-#     parsed, offset = parser.parse_dummy(offset)
+#     parsed, offset = parser.parse(offset)
 #     [parsed.upcase, offset] 
 #   end 
 #
@@ -67,10 +67,11 @@ class RuleSet
   #
   def [](tag) @rules[tag];  end
   
+    
   ### protected section ######################################################
   protected
   
-  # Internal implementation of pattern
+  # Internal implementation of pattern.
   def build_pattern(block_symbols)
     start, stop = WLang::Template::BLOCK_SYMBOLS[block_symbols]
     start, stop = Regexp.escape(start), Regexp.escape(stop)

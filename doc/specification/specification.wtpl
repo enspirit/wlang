@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>${title}</title>
+    <style>
+      body {
+        font-family: arial, verdana, sans-serif;
+        width: 1024px; 
+        margin: auto; 
+        margin-top: 20px;
+      }
+      h2 {
+        border-bottom: 1px solid black;
+      }
+      table {
+        font-size: 12px;
+        border-collapse: collapse; 
+        border: 1px solid black;
+      }
+      table th { background: green; color: white; }
+      table th, table td { padding: 4px; }
+      table td { border-bottom: 1px dashed black; }
+      th.signature, td.signature { width: 250px; }
+      th.name, td.name { width: 150px; }
+      th.definition, td.definition { width: 600px; }
+    </style>
+  </head>
+  <body>
+    <h1>WLang specification (version ${version})</h1>
+    ^{rdoc/div}{+{what}}
+    <h2>Standard rulesets</h2>
+    *{rulesets using each_pair as rname, rspec}{
+      <h3>${rname}</h3>
+      <table class="ruleset">
+        <tr>
+          <th class="signature">signature</th>
+          <th class="name">name</th>
+          <th class="definition">definition</th>
+        </tr>
+        *{rspec as rule}{
+          <tr>
+            <td class="signature"><tt>${rule["signature"]}</tt></td>
+            <td class="name">${rule["name"]}</td>
+            <td class="definition">^{rdoc/div}{+{rule["definition"]}}</td>
+          </tr>
+        }
+      </table>
+    }
+  </body>
+</html>

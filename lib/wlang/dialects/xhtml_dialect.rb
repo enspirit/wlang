@@ -1,7 +1,7 @@
 require 'cgi'
 
 # Defines encoders of the whtml dialect
-module WLang::Encoders::XHtml
+module WLang::EncoderSet::XHtml
   
   # Default encoders  
   DEFAULT_ENCODERS = {"main-encoding"     => :entities_encoding, 
@@ -12,7 +12,7 @@ module WLang::Encoders::XHtml
     CGI::escapeHTML(src)
   end
   
-end # module WLang::Encoders::XHtml  
+end # module WLang::EncoderSet::XHtml  
 
 
 # Defines rulset of the wlang/xhtml dialect

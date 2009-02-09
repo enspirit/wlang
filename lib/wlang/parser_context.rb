@@ -1,49 +1,55 @@
-module WLang
-class Parser
-  
+require 'wlang/basic_object'
+
 #
-# Parsing context.
+# Execution context of the Parser for <tt>!{wlang/hosted}</tt> and associated 
+# tags. The execution context defines the semantics of executed code in those 
+# tags as well as utilities to handle semantical scoping.
 #
-class Context
+# TODO: define context and scoping semantics more precisely and extend the 
+# documentation
+#
+class WLang::Parser::Context 
   
   # Common methods of scope instances
-  module Scope
-    attr_accessor :parent
+  class Scope < WLang::BasicObject
+    attr_accessor :__parent
     
   end # module Scope
   
   # Hash scoping mechanism
-  class HashScope
-    include Scope
-    attr_reader :hash
+  class HashScope < Scope 
     
-    # Decorates a hash as a scope
+    # Decorates a hash as a scope.
     def initialize(hash={})
-      @hash = hash
-      @parent = nil
+      @__hash = hash
+      @__parent = nil
     end
     
-    # Tries to convert found value to a given variable
+    # Tries to convert found value to a given variable.
     def method_missing(symbol, *args)
       varname = symbol.to_s
-      if @hash.has_key?(varname) 
-        @hash[varname]
-      elsif @parent
-        @parent.method_missing(symbol, *args)
+      if @__hash.has_key?(varname) 
+        @__hash[varname]
+      elsif @__parent
+        @__parent.method_missing(symbol, *args)
       else
         nil
       end
     end
     
-    # Delegated to hash
-    def [](key); @hash[key]; end
+    # See Scope#__evaluate
+    def __evaluate(expr)
+      self.instance_eval(expr)
+    end
     
-    # Delegated to hash
-    def []=(key, value); @hash[key]=value; end
+    # See Scope#__define
+    def __define(key, value); 
+      @__hash[key]=value; 
+    end
     
   end # class HashScope
   
-  # Creates an empty context
+  # Creates an empty context on an init scope object.
   def initialize(init=nil)
     @current_scope = HashScope.new
     push(init) unless init.nil?
@@ -51,34 +57,34 @@ class Context
   
   # Evaluates a ruby expression on the current context.
   def evaluate(expression)
-    @current_scope.instance_eval(expression)
+    @current_scope.__evaluate(expression)
   end
   
-  # Pushes a new scope instance
+  # Pushes a new scope instance.
   def push(who={})
-    if Hash===who
-      push HashScope.new(who)
-    elsif who.is_a?(Scope)
-      who.parent = @current_scope
-      @current_scope = who
-    else 
-      raise(ArgumentError,"Unable to convert #{who} to a scope")
-    end
+    who = to_scope(who)
+    who.__parent = @current_scope
+    @current_scope = who
   end
   
-  # Pops the last added scope
+  # Pops the last added scope.
   def pop
-    parent = @current_scope.parent
+    parent = @current_scope.__parent
     raise "Bad scope usage, nothing to pop" if parent.nil?
     @current_scope = parent
   end
   
-  # Adds a variable in the current scope
-  def []=(key, value)
-    @current_scope[key] = value
+  # Defines a variable/value mapping in the current scope.
+  def define(key, value)
+    @current_scope.__define(key,value)
+  end
+  
+  # Converts a given instance to a Scope.
+  def to_scope(who)
+    return who if Scope===who
+    return who.to_wlang_scope if who.respond_to?(:to_wlang_scope)
+    return HashScope.new(who) if Hash===who
+    raise(ArgumentError,"Unable to convert #{who} to a scope")
   end
   
 end # class Context
-  
-end # class Parser
-end # module WLang

@@ -150,7 +150,7 @@ class Options
       case extname
         when ".rb", ".ruby"
           @context_kind = :ruby
-        when ".yaml"
+        when ".yaml", ".yml"
           @context_kind = :yaml
       else
         raise "Unable to infer context kind for extension #{extname}"

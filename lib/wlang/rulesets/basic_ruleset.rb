@@ -5,9 +5,9 @@
 # <tt>${...}</tt> and <tt>+{...}</tt>. This ruleset provides the following tags 
 # and associated rules:
 #
-# [!{wlang/ruby}] (*execution*) Instanciates #1, looking for a ruby expression. Evaluates it, 
-#                 looking for any object. Invokes to_s on it and returns the 
-#                 result as replacement value.
+# [!{wlang/ruby}] (*execution*) Instanciates #1, looking for a ruby expression. 
+#                 Evaluates it, looking for any object. Invokes to_s on it and 
+#                 returns the result as replacement value.
 # [%{wlang/active-string}{...}] (*modulation*) Instanciates #1, looking for a dialect qualified 
 #                               name. Instantiates #2 according to the rules defined 
 #                               by that dialect and returns the #2's instantiation as 

@@ -1,5 +1,5 @@
 # Defines encoders of the plain-text dialect
-module WLang::Encoders::PlainText
+module WLang::EncoderSet::PlainText
 
   # Default encoders  
   DEFAULT_ENCODERS = {"upcase" => :upcase, 
@@ -15,7 +15,7 @@ module WLang::Encoders::PlainText
   # Capitalize encoding
   def self.capitalize(src, options); src.capitalize; end
   
-end # module WLang::Encoders::PlainText  
+end # module WLang::EncoderSet::PlainText
 
 # Defines rulset of the plain-text dialect
 module WLang::RuleSet::PlainText
@@ -28,7 +28,7 @@ module WLang::RuleSet::PlainText
     expression, reached = parser.parse(offset, "wlang/ruby")
     value = parser.evaluate(expression)
     value = value.nil? ? "" : value.to_s
-    result = EncoderSet::PlainText.upcase(value)
+    result = WLang::EncoderSet::PlainText.upcase(value)
     [result, reached]
   end
   

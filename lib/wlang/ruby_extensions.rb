@@ -18,3 +18,4 @@ class String
   alias :wlang :wlang_instanciate
     
 end
+

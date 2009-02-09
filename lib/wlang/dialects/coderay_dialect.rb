@@ -7,7 +7,7 @@ require 'coderay'
 #
 # Available languages are: java, ruby, html, yaml.   
 #
-module WLang::Encoders::CodeRay
+module WLang::EncoderSet::CodeRay
 
   # Default encoders  
   DEFAULT_ENCODERS = {"java" => :coderay, "ruby" => :coderay, "html" => :coderay, 
@@ -27,4 +27,4 @@ module WLang::Encoders::CodeRay
     return highlighted
   end
   
-end # module PlainText  
+end # module WLang::EncoderSet::CodeRay  

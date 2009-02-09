@@ -21,25 +21,25 @@ module WLang
     # plain-text dialect
     WLang::dialect("plain-text") do
       ruby_require("wlang/dialects/plain_text_dialect") do
-        encoders WLang::Encoders::PlainText 
+        encoders WLang::EncoderSet::PlainText 
       end
     end
     
     # ruby dialect
     WLang::dialect("ruby", ".rb", ".ruby") do
       ruby_require "wlang/dialects/ruby_dialect" do
-        encoders WLang::Encoders::Ruby
+        encoders WLang::EncoderSet::Ruby
       end
     end
     
     # ruby dialect
     WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
       ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
-        encoders WLang::Encoders::XHtml
+        encoders WLang::EncoderSet::XHtml
       end
       dialect("coderay") do
         ruby_require("coderay", "wlang/dialects/coderay_dialect") do
-          encoders WLang::Encoders::CodeRay
+          encoders WLang::EncoderSet::CodeRay
         end
       end
     end
@@ -47,7 +47,7 @@ module WLang
     # rdoc dialect
     WLang::dialect("rdoc") do
       ruby_require "rdoc", "wlang/dialects/rdoc_dialect" do
-        encoders WLang::Encoders::RDoc
+        encoders WLang::EncoderSet::RDoc
       end
     end
     
@@ -66,7 +66,7 @@ module WLang
       # wlang/ruby dialect
       dialect("ruby", ".wrb", ".wruby") do
         ruby_require "wlang/dialects/ruby_dialect" do
-          encoders WLang::Encoders::Ruby
+          encoders WLang::EncoderSet::Ruby
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding
           rules WLang::RuleSet::Imperative
@@ -78,7 +78,7 @@ module WLang
       # wlang/ruby dialect
       dialect("xhtml", ".wtpl", ".whtml") do
         ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
-          encoders WLang::Encoders::XHtml
+          encoders WLang::EncoderSet::XHtml
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Encoding
           rules WLang::RuleSet::Imperative

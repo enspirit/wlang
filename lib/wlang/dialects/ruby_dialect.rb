@@ -1,5 +1,5 @@
 # Encoders for ruby
-module WLang::Encoders::Ruby
+module WLang::EncoderSet::Ruby
   
   # Default encoders  
   DEFAULT_ENCODERS = {"single-quoting" => :single_quoting, 
@@ -15,9 +15,7 @@ module WLang::Encoders::Ruby
   # Capitalize encoding
   def self.regex_escaping(src, options); Regexp.escape(src); end
   
-end # module WLang::Encoders::Ruby  
-
-
+end # module WLang::EncoderSet::Ruby  
 
 # Defines rulset of the wlang/ruby dialect
 module WLang::RuleSet::Ruby

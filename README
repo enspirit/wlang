@@ -8,6 +8,7 @@ proposes standard instantiations of this engine for common tasks such as creatin
 web pages, etc.    
 
 == Roadmap
+- For the current cheatsheet/specification see link://files/specification.html
 - For terminology and a quick overview of _wlang_ for generating code, read on.
 - If you want to learn _wlang_ quickly, see the example directory.
 - If you want to know which dialects are available (that is, in which target languages 

@@ -1,18 +1,18 @@
 module WLang
 
 #
-# A WLang rule is designed to perform a replacement job when the special tag 
-# associated with it is found in a template. Rules are always installed on a 
-# RuleSet (using RuleSet#add_rule), which is itself installed as a dialect on 
-# the wlang Parser (using Parser#add_dialect). Note that the methods mentionned
-# both provides DRY shortcuts, allowing not using this class directly.
+# A Rule is designed to perform a replacement job when the special tag associated 
+# with it is found in a Template. Rules are always installed on a RuleSet (using 
+# RuleSet#add_rule), which is itself installed on a Dialect. Note that the method 
+# mentionned previously provides a DRY shortcut, allowing not using this class 
+# directly.
 #  
 # Example:
 #    # Rule subclassing can be avoided by providing a block to new
 #    # The following rule job is to upcase the text inside +{...} tags:
 #    rule = Rule.new do |parser,offset|
-#      parsed, offset = parser.parse_dummy(offset)
-#      [parsed.upcase, offset]
+#      parsed, reached = parser.parse(offset)
+#      [parsed.upcase, reached]
 #    end
 #
 # Creating a a new rule can be made in two ways: by subclassing this class and
@@ -28,13 +28,17 @@ module WLang
 class Rule
 
   #
-  # Creates a new rule, associated to _tag_. If no block is given, the invocation
-  # of new MUST be made on a subclass overriding start_tag. Otherwise, the block
-  # is considered as the effective implementation of start_tag and will be called
-  # with the same arguments. 
+  # Creates a new rule. If no block is given, the invocation of new MUST be made 
+  # on a subclass overriding start_tag. Otherwise, the block is considered as the 
+  # effective stateless implementation of start_tag and will be called with the 
+  # same arguments. 
   #
   def initialize(&block) 
-    @block = block 
+    unless block.nil?
+      raise(ArgumentError, "Expected a rule block of arity 2")\
+        unless block.arity==2
+    end
+    @block = block
   end
   
   #

@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rdoc/markup/to_html'
 
 # Provides the rdoc encoder
-module WLang::Encoders::RDoc
+module WLang::EncoderSet::RDoc
   
   # Default encoders  
   DEFAULT_ENCODERS = {"html" => :rdoc_encoding, "div" => :rdoc_encoding}
@@ -12,5 +12,5 @@ module WLang::Encoders::RDoc
     RDoc::Markup::ToHtml.new.convert(src) 
   end
   
-end # WLang::Encoders::RDoc
+end # WLang::EncoderSet::RDoc
     

@@ -2,9 +2,12 @@ require 'wlang/ruby_extensions'
 require 'stringio'
 require 'wlang/rule'
 require 'wlang/rule_set'
-require 'wlang/encoders'
+require 'wlang/encoder_set'
 require 'wlang/dialect'
+require 'wlang/dialect_dsl'
+require 'wlang/dialect_loader'
 require 'wlang/parser'
+require 'wlang/parser_context'
 
 #
 # Main module of the _wlang_ code generator/template engine, providing a facade 
@@ -17,18 +20,28 @@ module WLang
   VERSION = "0.0.7".freeze
   
   #
+  # Regular expression for dialect names.
+  #
+  DIALECT_NAME_REGEXP = /^([-a-z]+)*$/
+  
+  #
   # Regular expression for dialect qualified names. Dialect qualified names are 
   # '/' seperated names, where a name is [-a-z]+. 
   # Examples: wlang/xhtml/uri, wlang/plain-text, ...
   #
-  DIALECT_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
+  QUALIFIED_DIALECT_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
 
+  #
+  # Regular expression for encoder names.
+  #
+  ENCODER_NAME_REGEXP = /^([-a-z]+)*$/
+  
   #  
   # Regular expression for encoder qualified names. Encoder qualified names are 
   # '/' seperated names, where a name is [-a-z]+. 
   # Examples: xhtml/entities-encoding, sql/single-quoting, ...
   #
-  ENCODER_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
+  QUALIFIED_ENCODER_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
   
   #
   # Provides installed {file extensions => dialect} mappings. File extensions 
@@ -60,8 +73,7 @@ module WLang
     if block_given?
       raise "Unsupported qualified names in dialect installation"\
         unless name.index('/').nil?
-      Dialect::DSL.new(@dialect).dialect(name, *extensions, &block)
-      nil
+      Dialect::DSL.new(@dialect).dialect(name, *extensions, &block).build!
     else
       @dialect.dialect(name)
     end

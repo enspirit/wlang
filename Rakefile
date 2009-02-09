@@ -8,7 +8,7 @@ lib     = File.join(dir, "lib", "wlang.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
 task :default => [:all]
-task :all => [:test, :rerdoc]
+task :all => [:test, :rerdoc, :spec]
 
 desc "Lauches all tests"
 Rake::TestTask.new do |test|
@@ -26,4 +26,9 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title    = "WLang Documentation"
   rdoc.template = "doc/template/horo"
   rdoc.options << "-S" << "-N" << "-p" << "-H"
+end
+
+desc "Generates the specification file"
+task :spec => [:rdoc] do |t|
+  Kernel.exec("ruby -Ilib bin/wlang --output doc/html/files/specification.html doc/specification/specification.wtpl doc/specification/specification.yml")
 end

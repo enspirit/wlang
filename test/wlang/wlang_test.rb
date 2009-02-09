@@ -29,14 +29,14 @@ class WLangTest < Test::Unit::TestCase
   
   # Tests the regular expression for dialect names
   def test_dialect_name_regexp
-    assert_not_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang")
-    assert_not_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang/plain-text")
-    assert_not_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang/xhtml")
-    assert_not_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang/sql")
-    assert_not_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang/sql/sybase")
-    assert_nil(WLang::DIALECT_NAME_REGEXP =~ "WLang")
-    assert_nil(WLang::DIALECT_NAME_REGEXP =~ "WLang/sql")
-    assert_nil(WLang::DIALECT_NAME_REGEXP =~ "wlang/sql/ sybase")
+    assert_not_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang")
+    assert_not_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang/plain-text")
+    assert_not_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang/xhtml")
+    assert_not_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang/sql")
+    assert_not_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang/sql/sybase")
+    assert_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "WLang")
+    assert_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "WLang/sql")
+    assert_nil(WLang::QUALIFIED_DIALECT_NAME_REGEXP =~ "wlang/sql/ sybase")
   end
   
   # Tests some classical uses of dialect names
