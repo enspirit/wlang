@@ -4,9 +4,7 @@ class RuleSet
 # Basic ruleset
 module Imperative
 
-  #
   # Regular expression for #1 in <tt>*{wlang/hosted}{...}</tt>
-  # EACH_REGEXP = /^([^\s]+)(\s+(using\s+([_a-z]+))?(\s+(as\s+([a-z]+(,\s+[a-z]+)*)))?)?$/
   EACH_REGEXP = /^([^\s]+)((\s+(using\s+([_a-z]+)))?(\s+(as\s+([a-z]+(,\s+[a-z]+)*)))?)?$/
   #               1       23   4        5           6   7     8
   #               1       2                         3   4     5

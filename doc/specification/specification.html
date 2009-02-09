@@ -11,6 +11,7 @@
       h2 {
         border-bottom: 1px solid black;
       }
+      h3 { margin-bottom: 5px; }
       table {
         font-size: 12px;
         border-collapse: collapse; 
@@ -32,41 +33,6 @@ a <em>templating engine</em>
 </p>
 
     <h2>Standard rulesets</h2>
-    
-      <h3>Imperative</h3>
-      <table class="ruleset">
-        <tr>
-          <th class="signature">signature</th>
-          <th class="name">name</th>
-          <th class="definition">definition</th>
-        </tr>
-        
-          <tr>
-            <td class="signature"><tt>?{wlang/hosted}{...}{...}</tt></td>
-            <td class="name">conditional</td>
-            <td class="definition"><p>
-<b>(third block is optional)</b> Instanciates #1, looking for an expression
-in the hosting language. Evaluates it, looking for a boolean value
-(according to boolean semantics of the hosting language). If true,
-instanciates #2, otherwise instanciates #3 if present.
-</p>
-</td>
-          </tr>
-        
-          <tr>
-            <td class="signature"><tt>*{wlang/hosted}{...}{...}</tt></td>
-            <td class="name">enumeration</td>
-            <td class="definition"><p>
-<b>(third block is optional)</b> Instanciates #1, looking for an expression
-in the hosting language. Evaluates it, looking for an enumerable. Iterates
-all its elements, instanciating #2 for each of them (the iterated value is
-set under name x in the scope). If #3 is present, it is instanciated
-between elements.
-</p>
-</td>
-          </tr>
-        
-      </table>
     
       <h3>Basic</h3>
       <table class="ruleset">
@@ -122,26 +88,6 @@ Same semantics as execution so far.
             <td class="name">inclusion</td>
             <td class="definition"><p>
 Same semantics as execution so far.
-</p>
-</td>
-          </tr>
-        
-      </table>
-    
-      <h3>Buffering</h3>
-      <table class="ruleset">
-        <tr>
-          <th class="signature">signature</th>
-          <th class="name">name</th>
-          <th class="definition">definition</th>
-        </tr>
-        
-          <tr>
-            <td class="signature"><tt>&lt;&lt;{wlang/uri}</tt></td>
-            <td class="name">input</td>
-            <td class="definition"><p>
-Instanciates #1, looking for an uri. Returns the text content of the found
-uri (#1).
 </p>
 </td>
           </tr>
@@ -215,6 +161,61 @@ uri (#1).
             <td class="name">double-quoted</td>
             <td class="definition"><p>
 <tt>&quot;&amp;&quot;{+{#1}}</tt>
+</p>
+</td>
+          </tr>
+        
+      </table>
+    
+      <h3>Imperative</h3>
+      <table class="ruleset">
+        <tr>
+          <th class="signature">signature</th>
+          <th class="name">name</th>
+          <th class="definition">definition</th>
+        </tr>
+        
+          <tr>
+            <td class="signature"><tt>?{wlang/hosted}{...}{...}</tt></td>
+            <td class="name">conditional</td>
+            <td class="definition"><p>
+<b>(third block is optional)</b> Instanciates #1, looking for an expression
+in the hosting language. Evaluates it, looking for a boolean value
+(according to boolean semantics of the hosting language). If true,
+instanciates #2, otherwise instanciates #3 if present.
+</p>
+</td>
+          </tr>
+        
+          <tr>
+            <td class="signature"><tt>*{wlang/hosted}{...}{...}</tt></td>
+            <td class="name">enumeration</td>
+            <td class="definition"><p>
+<b>(third block is optional)</b> Instanciates #1, looking for an expression
+in the hosting language. Evaluates it, looking for an enumerable. Iterates
+all its elements, instanciating #2 for each of them (the iterated value is
+set under name x in the scope). If #3 is present, it is instanciated
+between elements.
+</p>
+</td>
+          </tr>
+        
+      </table>
+    
+      <h3>Buffering</h3>
+      <table class="ruleset">
+        <tr>
+          <th class="signature">signature</th>
+          <th class="name">name</th>
+          <th class="definition">definition</th>
+        </tr>
+        
+          <tr>
+            <td class="signature"><tt>&lt;&lt;{wlang/uri}</tt></td>
+            <td class="name">input</td>
+            <td class="definition"><p>
+Instanciates #1, looking for an uri. Returns the text content of the found
+uri (#1).
 </p>
 </td>
           </tr>
