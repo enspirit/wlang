@@ -1,10 +1,9 @@
 require 'test/unit'
 require 'wlang'
 require 'wlang/rulesets/context_ruleset'
-module WLang
 
 # Tests the Scoping ruleset
-class ContextRuleSetTest < Test::Unit::TestCase
+class WLang::ContextRuleSetTest < Test::Unit::TestCase
 
   # Tests the define decoder
   def test_decode_define
@@ -21,5 +20,4 @@ class ContextRuleSetTest < Test::Unit::TestCase
     end
   end
     
-end # class ScopingRuleSetTest
-end # module WLang
+end # class WLang::ScopingRuleSetTest

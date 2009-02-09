@@ -1,8 +1,10 @@
-module WLang
-class RuleSet
-  
-# Basic ruleset
-module Imperative
+#
+# Imperative ruleset, providing special tags to iterate and instanciate 
+# conditionaly. 
+#
+# For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
+#
+module WLang::RuleSet::Imperative
 
   # Regular expression for #1 in <tt>*{wlang/hosted}{...}</tt>
   EACH_REGEXP = /^([^\s]+)((\s+(using\s+([_a-z]+)))?(\s+(as\s+([a-z]+(,\s+[a-z]+)*)))?)?$/
@@ -121,6 +123,3 @@ module Imperative
   end
       
 end  # module Imperative
-  
-end # class RuleSet
-end # module WLang

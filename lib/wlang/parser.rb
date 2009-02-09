@@ -20,7 +20,7 @@ class Parser
 
   # Factors a parser instance for a given template and an output buffer. 
   def self.instantiator(template, buffer="")
-    Parser.send(:new, nil, template, 0, buffer)
+    Parser.send(:new, nil, template, nil, 0, buffer)
   end
   
   # Current parsed template
@@ -32,15 +32,16 @@ class Parser
   # where the parsing must start in the template and _buffer_ is the output buffer
   # where the instantiation result must be pushed.
   #
-  def initialize(parent, template, offset, buffer)
+  def initialize(parent, template, dialect, offset, buffer)
     raise(ArgumentError, "Template is mandatory") unless WLang::Template===template
     raise(ArgumentError, "Offset is mandatory") unless Integer===offset
     raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
+    dialect = template.dialect if dialect.nil?
     @parent = parent
     @template = template
     @context = template.context
     @offset = offset
-    @dialect = template.dialect
+    @dialect = dialect
     @buffer = buffer
   end
   
@@ -129,7 +130,7 @@ class Parser
     elsif not(Dialect===dialect)
       raise(ParseError,"Unknown modulation dialect: #{dialect}")
     end
-    Parser.send(:new, self, @template, offset, buffer).instantiate 
+    Parser.send(:new, self, @template, dialect, offset, buffer).instantiate 
   end
   
   # 

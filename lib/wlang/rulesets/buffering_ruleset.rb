@@ -1,10 +1,8 @@
 #
 # Buffering ruleset, providing special tags to load/instantiate accessible files
-# and outputting instantiation results in other files. This ruleset provides the
-# following tags and associated rules: 
+# and outputting instantiation results in other files. 
 #
-# [<<{wlang/uri}] (*input*) Instanciates #1, looking for an URI. Opens it and 
-#                 returns its contents as replacement value.
+# For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
 #
 module WLang::RuleSet::Buffering
   

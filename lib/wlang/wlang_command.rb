@@ -4,7 +4,7 @@ require 'wlang/dialects/standard_dialects'
 module WLang
   
 #
-# Provides the _wlang_ commandline tool.
+# Provides the _wlang_ commandline tool. See 'wlang --help' for documentation.
 #
 class WLangCommand
   

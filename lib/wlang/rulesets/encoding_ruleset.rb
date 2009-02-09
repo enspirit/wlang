@@ -1,10 +1,10 @@
-module WLang
-class RuleSet
-
 #
-# Implementation of the standard Encoding RuleSet
+# Encoding RuleSet, commonly installed in any wlang dialect. Note that this 
+# ruleset overrides <tt>${...}</tt> implemented in WLang::RuleSet::Basic.
 #
-module Encoding
+# For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
+#
+module WLang::RuleSet::Encoding
   
   # Default mapping between tag symbols and methods
   DEFAULT_RULESET = {'&' => :main_encoding, '&;' => :entities_encoding, 
@@ -65,6 +65,3 @@ module Encoding
   end
   
 end # module Encoding
-    
-end # module RuleSet
-end # module WLang

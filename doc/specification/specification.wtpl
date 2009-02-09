@@ -1,28 +1,42 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>${title}</title>
-    <style>
+    <style type="text/css">
       body {
         font-family: arial, verdana, sans-serif;
+        font-size: 14px;
         width: 1024px; 
         margin: auto; 
         margin-top: 20px;
       }
+      p {margin: 0px;}
       h2 {
         border-bottom: 1px solid black;
       }
       h3 { margin-bottom: 5px; }
+      h4 { margin-bottom: 3px; float: left; margin-top: 0px; }
       table {
         font-size: 12px;
         border-collapse: collapse; 
         border: 1px solid black;
       }
-      table th { background: green; color: white; }
-      table th, table td { padding: 4px; }
-      table td { border-bottom: 1px dashed black; }
+
+      table.ruleset th { background: green; color: white; }
+      table.ruleset th, table.ruleset td { padding: 4px; }
+      table.ruleset td { border-bottom: 1px dashed black; }
       th.signature, td.signature { width: 250px; }
       th.name, td.name { width: 150px; }
       th.definition, td.definition { width: 600px; }
+
+      table.examples { float: right; }
+      table.examples th { background: #A00000; color: white; border-bottom: 1px solid black; }
+      table.examples th, table.examples td { padding: 4px; }
+      table.examples td { border-bottom: 1px dashed black; }
+      th.dialect, td.dialect { width: 150px; }
+      th.expression, td.expression { width: 350px; }
+      th.replacement, td.replacement { width: 350px; }
     </style>
   </head>
   <body>
@@ -40,11 +54,37 @@
         *{ruleset/rules as rule}{
           <tr>
             <td class="signature"><tt>${rule/signature}</tt></td>
-            <td class="name">${rule/name}</td>
+            <td class="name">+{rule/name}</td>
             <td class="definition">^{rdoc/div}{+{rule/definition}}</td>
           </tr>
         }
       </table>
+      
+      ?{ruleset/examples}{
+        <br/>
+        <h4>Examples:</h4>
+        <table class="examples">
+          <tr>
+            <th>dialect</th>
+            <th>wlang expression</th>
+            <th>replacement value</th>
+          </tr>
+          *{ruleset/examples as example}{
+            <tr>
+              <td class="dialect">
+                <tt>${example[0]}</tt>
+              </td>
+              <td class="expression">
+                <tt>${example[1]}</tt>
+              </td>
+              <td class="replacement">
+                <tt>${example[2]}</tt>
+              </td>
+            </tr>
+          }
+        </table>
+        <div style="clear: both;"></div>
+      }
     }
   </body>
 </html>

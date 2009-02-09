@@ -1,6 +1,8 @@
 #
 # Provides a ruleset for managing the context/scoping during instantitation.
 #
+# For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
+#
 module WLang::RuleSet::Context
   
   # Define regular expression

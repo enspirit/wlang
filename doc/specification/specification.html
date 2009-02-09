@@ -1,28 +1,43 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>WLang specification</title>
-    <style>
+    <style type="text/css">
       body {
         font-family: arial, verdana, sans-serif;
+        font-size: 14px;
         width: 1024px; 
         margin: auto; 
         margin-top: 20px;
       }
+      p {margin: 0px;}
       h2 {
         border-bottom: 1px solid black;
       }
       h3 { margin-bottom: 5px; }
+      h4 { margin-bottom: 3px; float: left; margin-top: 0px; }
       table {
         font-size: 12px;
         border-collapse: collapse; 
         border: 1px solid black;
       }
-      table th { background: green; color: white; }
-      table th, table td { padding: 4px; }
-      table td { border-bottom: 1px dashed black; }
+      table th { font-weight: normal; }
+
+      table.ruleset th { background: green; color: white; }
+      table.ruleset th, table.ruleset td { padding: 4px; }
+      table.ruleset td { border-bottom: 1px dashed black; }
       th.signature, td.signature { width: 250px; }
       th.name, td.name { width: 150px; }
       th.definition, td.definition { width: 600px; }
+
+      table.examples { float: right; }
+      table.examples th { background: yellow; color: black; border-bottom: 1px solid black; }
+      table.examples th, table.examples td { padding: 4px; }
+      table.examples td { border-bottom: 1px dashed black; }
+      th.dialect, td.dialect { width: 150px; }
+      th.expression, td.expression { width: 350px; }
+      th.replacement, td.replacement { width: 350px; }
     </style>
   </head>
   <body>
@@ -46,8 +61,10 @@ a <em>templating engine</em>
             <td class="signature"><tt>!{wlang/hosted}</tt></td>
             <td class="name">execution</td>
             <td class="definition"><p>
-Instanciates #1, looking for a ruby expression. Evaluates it, looking for
-any object. Invokes to_s on it and returns the result as replacement value.
+Instanciates #1, looking for an expression of the hosting language.
+Evaluates it, looking for any object. Converts it to a string (using to_s
+for example if Ruby is the hosting language) and returns the result as
+replacement value.
 </p>
 </td>
           </tr>
@@ -93,6 +110,68 @@ Same semantics as execution so far.
           </tr>
         
       </table>
+      
+      
+        <br/>
+        <h4>Examples:</h4>
+        <table class="examples">
+          <tr>
+            <th>dialect</th>
+            <th>wlang expression</th>
+            <th>replacement value</th>
+          </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/active-string</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello !{name}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello O'Neil</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/active-string</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello %{wlang/dummy}{!{name}}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello !{name}</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/dummy</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello %{wlang/dummy}{!{name}}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello %{wlang/dummy}{!{name}}</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/active-string</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello ^{plain-text/upcase}{!{name}}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello O'NEIL</tt>
+              </td>
+            </tr>
+          
+        </table>
+        <div style="clear: both;"></div>
+      
     
       <h3>Encoding</h3>
       <table class="ruleset">
@@ -106,7 +185,7 @@ Same semantics as execution so far.
             <td class="signature"><tt>&amp;{...}</tt></td>
             <td class="name">main-encoding</td>
             <td class="definition"><p>
-<tt>^{+{@parser.current_dialect}/main-encoding}{#2}</tt>
+<tt>^{+{@parser.current_dialect}/main-encoding}{#1}</tt>
 </p>
 </td>
           </tr>
@@ -115,7 +194,7 @@ Same semantics as execution so far.
             <td class="signature"><tt>&amp;;{...}</tt></td>
             <td class="name">entities-encoding</td>
             <td class="definition"><p>
-<tt>^{+{@parser.current_dialect}/entities-encoding}{#2}</tt>
+<tt>^{+{@parser.current_dialect}/entities-encoding}{#1}</tt>
 </p>
 </td>
           </tr>
@@ -124,7 +203,7 @@ Same semantics as execution so far.
             <td class="signature"><tt>&amp;'{...}</tt></td>
             <td class="name">single-quoting</td>
             <td class="definition"><p>
-<tt>^{+{@parser.current_dialect}/single-quoting}{#2}</tt>
+<tt>^{+{@parser.current_dialect}/single-quoting}{#1}</tt>
 </p>
 </td>
           </tr>
@@ -133,7 +212,7 @@ Same semantics as execution so far.
             <td class="signature"><tt>&amp;&quot;{...}</tt></td>
             <td class="name">double-quoting</td>
             <td class="definition"><p>
-<tt>^{+{@parser.current_dialect}/double-quoting}{#2}</tt>
+<tt>^{+{@parser.current_dialect}/double-quoting}{#1}</tt>
 </p>
 </td>
           </tr>
@@ -151,7 +230,7 @@ Same semantics as execution so far.
             <td class="signature"><tt>'{wlang/hosted}</tt></td>
             <td class="name">single-quoted</td>
             <td class="definition"><p>
-<tt>'&amp;'{+{#1}}</tt>
+<tt>'&amp;'{+{#1}}</tt> (first single quote is kept in the result)
 </p>
 </td>
           </tr>
@@ -160,12 +239,123 @@ Same semantics as execution so far.
             <td class="signature"><tt>&quot;{wlang/hosted}</tt></td>
             <td class="name">double-quoted</td>
             <td class="definition"><p>
-<tt>&quot;&amp;&quot;{+{#1}}</tt>
+<tt>&quot;&amp;&quot;{+{#1}}</tt> (first double quote is kept in the
+result)
 </p>
 </td>
           </tr>
         
       </table>
+      
+      
+        <br/>
+        <h4>Examples:</h4>
+        <table class="examples">
+          <tr>
+            <th>dialect</th>
+            <th>wlang expression</th>
+            <th>replacement value</th>
+          </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/xhtml</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello &amp;{name}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello name</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/xhtml</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello &amp;{&lt;script&gt;}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello &amp;lt;script&amp;gt;</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/xhtml</tt>
+              </td>
+              <td class="expression">
+                <tt>Hello &amp;;{&lt;script&gt;}</tt>
+              </td>
+              <td class="replacement">
+                <tt>Hello &amp;lt;script&amp;gt;</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/ruby</tt>
+              </td>
+              <td class="expression">
+                <tt>puts 'Hello &amp;'{name}'</tt>
+              </td>
+              <td class="replacement">
+                <tt>puts 'Hello name'</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/ruby</tt>
+              </td>
+              <td class="expression">
+                <tt>puts 'Hello &amp;'{!{name}}'</tt>
+              </td>
+              <td class="replacement">
+                <tt>puts 'Hello O\'Neil'</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/ruby</tt>
+              </td>
+              <td class="expression">
+                <tt>puts 'Hello ' &lt;&lt; '{name}'</tt>
+              </td>
+              <td class="replacement">
+                <tt>puts 'Hello ' &lt;&lt; 'O\'Neil'</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/sql</tt>
+              </td>
+              <td class="expression">
+                <tt>... WHERE name='{name}'</tt>
+              </td>
+              <td class="replacement">
+                <tt>... WHERE name='O\'Neil'</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/sql/sybase</tt>
+              </td>
+              <td class="expression">
+                <tt>... WHERE name='{name}'</tt>
+              </td>
+              <td class="replacement">
+                <tt>... WHERE name='O''Neil'</tt>
+              </td>
+            </tr>
+          
+        </table>
+        <div style="clear: both;"></div>
+      
     
       <h3>Imperative</h3>
       <table class="ruleset">
@@ -188,7 +378,7 @@ instanciates #2, otherwise instanciates #3 if present.
           </tr>
         
           <tr>
-            <td class="signature"><tt>*{wlang/hosted}{...}{...}</tt></td>
+            <td class="signature"><tt>*{wlang/hosted as x}{...}{...}</tt></td>
             <td class="name">enumeration</td>
             <td class="definition"><p>
 <b>(third block is optional)</b> Instanciates #1, looking for an expression
@@ -201,6 +391,68 @@ between elements.
           </tr>
         
       </table>
+      
+      
+        <br/>
+        <h4>Examples:</h4>
+        <table class="examples">
+          <tr>
+            <th>dialect</th>
+            <th>wlang expression</th>
+            <th>replacement value</th>
+          </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/*</tt>
+              </td>
+              <td class="expression">
+                <tt>?{true}{then}{else}</tt>
+              </td>
+              <td class="replacement">
+                <tt>then</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/*</tt>
+              </td>
+              <td class="expression">
+                <tt>?{/th/ =~ &quot;not tat&quot;}{then}{else}</tt>
+              </td>
+              <td class="replacement">
+                <tt>else</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/*</tt>
+              </td>
+              <td class="expression">
+                <tt>?{authors.include? &quot;blambeau&quot;}{yes}{no}</tt>
+              </td>
+              <td class="replacement">
+                <tt>yes</tt>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="dialect">
+                <tt>wlang/*</tt>
+              </td>
+              <td class="expression">
+                <tt>[*{authors as a}{&quot;{a}&quot;}{, }]</tt>
+              </td>
+              <td class="replacement">
+                <tt>[&quot;blambeau&quot;, &quot;llambeau&quot;, &quot;ancailliau&quot;]</tt>
+              </td>
+            </tr>
+          
+        </table>
+        <div style="clear: both;"></div>
+      
     
       <h3>Buffering</h3>
       <table class="ruleset">
@@ -221,6 +473,8 @@ uri (#1).
           </tr>
         
       </table>
+      
+      
     
   </body>
 </html>

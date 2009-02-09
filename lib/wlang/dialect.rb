@@ -179,6 +179,7 @@ class Dialect
     # last name in qualified?
     if name.length==1
       # delegate to encoders
+      return nil if @encoders.nil?
       return @encoders.get_encoder(name[0])
     else
       # find sub dialect, and delegate
@@ -207,6 +208,7 @@ class Dialect
   
   # See RuleSet#pattern.
   def pattern(block_symbols)
+    return RuleSet.new.pattern(block_symbols) if @ruleset.nil?
     @ruleset.pattern(block_symbols)
   end
   

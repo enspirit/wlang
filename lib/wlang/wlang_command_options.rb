@@ -41,7 +41,7 @@ class Options
   end
   
   #
-  # Parses commandline options provided as an array os Strings.
+  # Parses commandline options provided as an array of Strings.
   #
   def parse(argv)
     opts = OptionParser.new do |opt|
@@ -71,7 +71,7 @@ class Options
       end
       
       opt.on("--brace=BRACE", ["brace", "parenthesis", "bracket"],
-             "Block delimiters used by the template file") do |value|
+             "Block delimiters used by the template file (braces, brackets, parentheses)") do |value|
          # handle template brace
          case value
            when "brace", "braces", "{"
@@ -91,7 +91,7 @@ class Options
       end
       
       opt.on("--context-kind=KIND", ["yaml", "ruby", "dsl"],
-             "Kind of context object") do |value|
+             "Kind of context object (yaml, ruby, dsl)") do |value|
         @context_kind = value         
       end
       

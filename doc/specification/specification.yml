@@ -1,17 +1,25 @@
 --- 
 title: WLang specification
 version: 0.0.7
-what: WLang is a a reusable and extensible <em>code generator</em>, also known as a <em>templating engine</em>
+what: |-
+  WLang is a a reusable and extensible <em>code generator</em>, also known as a 
+  <em>templating engine</em>.
 rulesets: 
   - name: Basic 
+    examples:
+      - ["wlang/active-string", "Hello !{name}",                       "Hello O'Neil"]
+      - ["wlang/active-string", "Hello %{wlang/dummy}{!{name}}",       "Hello !{name}"]
+      - ["wlang/dummy",         "Hello %{wlang/dummy}{!{name}}",       "Hello %{wlang/dummy}{!{name}}"]
+      - ["wlang/active-string", "Hello ^{plain-text/upcase}{!{name}}", "Hello O'NEIL"]
     rules:
       # !{wlang/hosted}
       - name:      "execution"
         symbol:    "!"
         signature: "!{wlang/hosted}"
         definition: |-
-          Instanciates #1, looking for a ruby expression. Evaluates it, looking for 
-          any object. Invokes to_s on it and returns the result as replacement value.
+          Instanciates #1, looking for an expression of the hosting language. Evaluates it, 
+          looking for any object. Converts it to a string (using to_s for example if Ruby is
+          the hosting language) and returns the result as replacement value.
       
       # %{wlang/active-string}{...}
       - name:      "modulation"
@@ -43,30 +51,39 @@ rulesets:
         definition: Same semantics as execution so far.
 
   - name: Encoding
+    examples:
+      - ["wlang/xhtml", "Hello &{name}",                       "Hello name"]
+      - ["wlang/xhtml", "Hello &{<script>}",                   "Hello &lt;script&gt;"]
+      - ["wlang/xhtml", "Hello &;{<script>}",                  "Hello &lt;script&gt;"]
+      - ["wlang/ruby",  "puts 'Hello &'{name}'",               "puts 'Hello name'"]
+      - ["wlang/ruby",  "puts 'Hello &'{!{name}}'",            "puts 'Hello O\'Neil'"]
+      - ["wlang/ruby",  "puts 'Hello ' << '{name}'",           "puts 'Hello ' << 'O\'Neil'"]
+      - ["wlang/sql",   "... WHERE name='{name}'",             "... WHERE name='O\'Neil'"]
+      - ["wlang/sql/sybase",  "... WHERE name='{name}'",       "... WHERE name='O''Neil'"]
     rules:
       # &{...}
       - name:       "main-encoding"
         symbol:     "&"
         signature:  "&{...}"
-        definition: "<tt>^{+{@parser.current_dialect}/main-encoding}{#2}</tt>"
+        definition: "<tt>^{+{@parser.current_dialect}/main-encoding}{#1}</tt>"
     
       # &;{...}
       - name:       "entities-encoding"
         symbol:     "&;"
         signature:  "&;{...}"
-        definition: "<tt>^{+{@parser.current_dialect}/entities-encoding}{#2}</tt>"
+        definition: "<tt>^{+{@parser.current_dialect}/entities-encoding}{#1}</tt>"
     
       # &'{...}
       - name:       "single-quoting"
         symbol:     "&'"
         signature:  "&'{...}"
-        definition: "<tt>^{+{@parser.current_dialect}/single-quoting}{#2}</tt>"
+        definition: "<tt>^{+{@parser.current_dialect}/single-quoting}{#1}</tt>"
     
       # &;{...}
       - name:       "double-quoting"
         symbol:     '&"'
         signature:  '&"{...}'
-        definition: "<tt>^{+{@parser.current_dialect}/double-quoting}{#2}</tt>"
+        definition: "<tt>^{+{@parser.current_dialect}/double-quoting}{#1}</tt>"
     
       # ${wlang/hosted}
       - name:      "injection"
@@ -78,36 +95,42 @@ rulesets:
       - name:      "single-quoted"
         symbol:    "'"
         signature: "'{wlang/hosted}"
-        definition: "<tt>'&'{+{#1}}</tt>"
+        definition: |-
+          <tt>'&'{+{#1}}</tt> (first single quote is kept in the result)
     
       # "{wlang/hosted}
       - name:      "double-quoted"
         symbol:    '"'
         signature: '"{wlang/hosted}'
-        definition: '<tt>"&"{+{#1}}</tt>'
+        definition: |-
+          <tt>"&"{+{#1}}</tt> (first double quote is kept in the result)
         
   - name: Imperative
+    examples:
+      - ["wlang/*", '?{true}{then}{else}',                         'then']
+      - ["wlang/*", '?{/th/ =~ "not tat"}{then}{else}',            'else']
+      - ["wlang/*", '?{authors.include? "blambeau"}{yes}{no}',    'yes']
+      - ["wlang/*", '[*{authors as a}{"{a}"}{, }]', '["blambeau", "llambeau", "ancailliau"]']
     rules:
       # ?{wlang/hosted}{...}{...}
-      - name:      "conditional"
+      - name:      "conditional<br/>(third block is optional)"
         symbol:    "?"
         signature: "?{wlang/hosted}{...}{...}"
         definition: |-
-          <b>(third block is optional)</b> Instanciates #1, looking for an expression 
-          in the hosting language. Evaluates it, looking for a boolean value (according 
-          to boolean semantics of the hosting language). If true, instanciates #2, 
-          otherwise instanciates #3 if present.
+          Instanciates #1, looking for an expression in the hosting language. 
+          Evaluates it, looking for a boolean value (according to boolean semantics 
+          of the hosting language). If true, instanciates #2, otherwise instanciates 
+          #3 if present.
     
-      # *{wlang/hosted}{...}{...}
-      - name:      "enumeration"
+      # *{wlang/hosted as x}{...}{...}
+      - name:      "enumeration<br/>(third block is optional)"
         symbol:    "*"
-        signature: "*{wlang/hosted}{...}{...}"
+        signature: "*{wlang/hosted as x}{...}{...}"
         definition: |-
-          <b>(third block is optional)</b> Instanciates #1, looking for an expression in 
-          the hosting language. Evaluates it, looking for an enumerable. Iterates 
-          all its elements, instanciating #2 for each of them (the iterated value is 
-          set under name x in the scope). If #3 is present, it is instanciated between
-          elements.
+          Instanciates #1, looking for an expression in the hosting language. Evaluates 
+          it, looking for an enumerable. Iterates all its elements, instanciating #2 for 
+          each of them (the iterated value is set under name x in the scope). If #3 is 
+          present, it is instanciated between elements.
 
   - name: Buffering
     rules:

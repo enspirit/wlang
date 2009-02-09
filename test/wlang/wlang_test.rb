@@ -55,6 +55,26 @@ class WLangTest < Test::Unit::TestCase
     result = "^{plain-text/upcase}{hello} ${name} !!".wlang("name" => "blambeau")
     assert_equal(expected, result);
   end
+
+  # Tests that parsing something with %{wlang/dummy}{...} does not interpret 
+  # anything.  
+  def test_wlang_dummy_does_not_interpret_anything
+    template = "${name}"
+    assert_equal("${name}", WLang::instantiate(template, nil, "wlang/dummy"))
+    
+    template = "%{wlang/dummy}{${name}}"
+    assert_equal("${name}", WLang::instantiate(template, nil, "wlang/xhtml"))
+
+#    assert_raise do 
+#      template = "!{raise('raised')}"
+#      WLang::instantiate(template, nil, "wlang/xhtml")
+#    end
+    assert_nothing_raised do 
+      template = "%{wlang/dummy}{!{raise 'Not raised'}}"
+      WLang::instantiate(template, nil, "wlang/xhtml")
+    end
+  end
+
   
 end # class WLangTest
   
