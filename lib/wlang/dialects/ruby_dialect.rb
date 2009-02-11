@@ -7,7 +7,9 @@ module WLang::EncoderSet::Ruby
                       "regex-escaping" => :regex_escaping}
   
   # Upcase encoding
-  def self.single_quoting(src, options); src.gsub("'","\\\\'"); end
+  def self.single_quoting(src, options); 
+    src.gsub(/([^\\])'/,%q{\1\\\'}); 
+  end
   
   # Downcase encoding
   def self.double_quoting(src, options); src.gsub('"','\"'); end
