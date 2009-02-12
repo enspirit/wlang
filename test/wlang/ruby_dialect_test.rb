@@ -13,16 +13,16 @@ class RubyDialectTest < Test::Unit::TestCase
   
   # Tests on template in HERE documents above 
   def test_on_template 
-    $context = {name => "O'Neil"}
+    $context = {"name" => "O'Neil"}
     $template = get_file_contents('ruby_template.wrb')
     $expected = get_file_contents('ruby_expected.rb')
     result =  $template.wlang($context, "wlang/ruby")
-#    puts "\n--template--"
-#    puts $template
-#    puts "\n--expected--"
-#    puts $expected
-#    puts "\n--result--"
-#    puts result
+    puts "\n--template--"
+    puts $template
+    puts "\n--expected--"
+    puts $expected
+    puts "\n--result--"
+    puts result
     assert_equal($expected,result)
   end
   
