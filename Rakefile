@@ -7,8 +7,22 @@ dir     = File.dirname(__FILE__)
 lib     = File.join(dir, "lib", "wlang.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
+gemspec = Gem::Specification.new do |s|
+  s.name = 'wlang'
+  s.version = version
+  s.summary = "WLang code generator"
+  s.description = %{Simple and powerful code generator and template engine.}
+  s.files = Dir['lib/**/*.rb'] + Dir['test/**/*.rb'] + Dir['bin/*']
+  s.require_path = 'lib'
+  s.has_rdoc = true
+  s.extra_rdoc_files = Dir['[A-Z]*']
+  s.author = "Bernard Lambeau"
+  s.email = "blambeau@chefbe.net"
+  s.homepage = "https://redmine.chefbe.net/projects/revision-zero-public/"
+end
+
 task :default => [:all]
-task :all => [:test, :rerdoc, :spec]
+task :all => [:test, :rerdoc, :spec, :package]
 
 desc "Lauches all tests"
 Rake::TestTask.new do |test|
@@ -51,4 +65,8 @@ task :cl do |t|
       end
     end
   end
+end
+
+Rake::GemPackageTask.new(gemspec) do |pkg|
+	pkg.need_tar = true
 end
