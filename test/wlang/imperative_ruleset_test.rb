@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'test/unit/testcase'
 require "wlang"
 require 'wlang/rulesets/imperative_ruleset'
 module WLang

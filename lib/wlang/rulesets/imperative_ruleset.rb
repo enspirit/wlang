@@ -117,6 +117,11 @@ module WLang::RuleSet::Imperative
       end
       
       theend = block3 unless theend
+      unless theend
+        # no enumeration at all (empty array)
+        parsed, theend = parser.parse_block(reached, "wlang/dummy")
+        parsed, theend = parser.parse_block(reached, "wlang/dummy") if parser.has_block?(theend)
+      end
       [buffer, theend]
     end
     

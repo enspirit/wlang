@@ -1,0 +1,5 @@
+= Test report (_wlang_ example)
+
+This example shows how _wlang_ can be used to perform 'report-centric' tests.
+
+To execute it: wlang --output examples/test_report/test_report.html --context-name data examples/test_report/test_report.wtpl examples/test_report/test_report.rb 

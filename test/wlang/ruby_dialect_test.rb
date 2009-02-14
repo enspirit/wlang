@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'test/unit/testcase'
 require 'wlang'
 require 'wlang/dialects/standard_dialects'
 module WLang

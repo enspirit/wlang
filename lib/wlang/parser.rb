@@ -92,6 +92,7 @@ class Parser
         # lauch that rule, get it's replacement and my new offset
         replacement, offset = rule.start_tag(self, match_at + match_length)
         raise "Bad implementation of rule #{match[0..-2]}" if replacement.nil?
+        raise "Bad implementation of rule #{match[0..-2]}" if offset.nil?
         
         # push replacement
         self.<<(replacement) unless replacement.empty?

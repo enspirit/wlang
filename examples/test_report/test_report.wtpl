@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Using wlang for tet reporting</title>
+    <style type="text/css">
+      body {
+        font-family: arial, verdana, sans-serif;
+        font-size: 14px;
+        width: 1024px; 
+        margin: auto; 
+        margin-top: 20px;
+      }
+      h1 {font-size: 18px;}
+      h2 {font-size: 14px;}
+      p {margin: 0px;}
+      table {
+        font-size: 12px;
+        border-collapse: collapse; 
+      }
+      table td { padding: 2px; }
+      table.suite td.raef { width: 100px; }
+      table.suite td.name { width: 850px; }
+      table.suite tr.passed td { border: 2px solid green; }
+      table.suite tr.failed td { border: 2px solid red;   }
+      table.fails { margin-top: 5px; }
+      table.fails tr td.kind { border: none; border-top: 1px dashed black; width: 50px; }
+      table.fails tr td.location { border: none; border-top: 1px dashed black; width: 400px; }
+      table.fails tr td.message  { border: none; border-top: 1px dashed black; width: 400px; }
+    </style>
+  </head>
+  <body>
+    *{data.test_suites as suite}{
+      <h1>Test report for test suite: ${suite}</h1>
+      <table class="suite">
+        *{suite.tests as test}{
+          ={test.makerun as result}
+          <tr class="?{result.passed?}{passed}{failed}">
+            <td class="raef">RAEF: [${result.run_count},${result.assertion_count},${result.error_count},${result.failure_count}]</td>
+            <td class="name">
+	            ?{result.error_count>0 or result.failure_count>0}{
+	                <b style="color: red;">${test.name}</b><br/>
+	                <table class="fails">
+		                *{result.errors as err}{
+		                  <tr>
+		                    <td class="kind">error</td>
+		                    <td class="location">${err.exception.backtrace[0]}</td>
+		                    <td class="message">${err.exception.message}</td>
+		                  </tr>
+		                }
+		                *{result.failures as fail}{
+		                  <tr>
+		                    <td class="kind">failure</td>
+		                    <td class="location">${fail.location}</td>
+		                    <td class="message">${fail.message}</td>
+		                  </tr>
+		                }
+		            </table>
+			     }{
+			       ${test.name}
+			     }
+            </td>
+          </tr>
+        }
+      </table>
+    }
+  </body>   
+</html>

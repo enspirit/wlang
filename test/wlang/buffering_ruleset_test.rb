@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'test/unit/testcase'
 require 'wlang'
 require 'wlang/test_utils.rb'
 require 'wlang/rulesets/buffering_ruleset'
