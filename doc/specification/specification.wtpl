@@ -26,9 +26,9 @@
       table.ruleset th { background: green; color: white; }
       table.ruleset th, table.ruleset td { padding: 4px; }
       table.ruleset td { border-bottom: 1px dashed black; }
-      th.signature, td.signature { width: 250px; }
-      th.name, td.name { width: 150px; }
-      th.definition, td.definition { width: 600px; }
+      th.signature, td.signature { width: 300px; }
+      th.name, td.name { width: 120px; }
+      th.definition, td.definition { width: 580px; }
 
       table.examples { float: right; }
       table.examples th { background: #A00000; color: white; border-bottom: 1px solid black; }

@@ -8,7 +8,9 @@ class WLang::SpecificationExamplesTest < Test::Unit::TestCase
   
   # Tests all examples in the specification
   def test_all_examples
-    context = {"name" => "O'Neil", "authors" => ["blambeau", "llambeau", "ancailliau"]}
+    context = {"name" => "O'Neil",
+               "author" => "blambeau",
+               "authors" => ["blambeau", "llambeau", "ancailliau"]}
     spec_file = File.join(File.dirname(__FILE__),"../../doc/specification/specification.yml")
     spec = YAML.load(File.open(spec_file))
     spec["rulesets"].each do |ruleset|
@@ -17,7 +19,7 @@ class WLang::SpecificationExamplesTest < Test::Unit::TestCase
         dialect, expr, expected = example
         dialect = "wlang/ruby" if dialect=="wlang/*"
         puts "assuming #{dialect} on #{expr}, gives #{expected}"
-        assert_equal(expected, WLang::instantiate(expr, context, dialect))
+        assert_equal(expected, WLang::instantiate(expr, context.dup, dialect))
       end
     end
   end

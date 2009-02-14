@@ -19,18 +19,27 @@ module WLang
   # Current version of WLang
   VERSION = "0.0.7".freeze
   
+  # Reusable string for building dialect name based regexps  
+  DIALECT_NAME_REGEXP_STR = "[-a-z]+"
+  
   #
   # Regular expression for dialect names.
   #
   DIALECT_NAME_REGEXP = /^([-a-z]+)*$/
+  
+  # Reusable string for building dialect name based regexps  
+  QUALIFIED_DIALECT_NAME_REGEXP_STR = "[-a-z]+([\/][-a-z]+)*"
   
   #
   # Regular expression for dialect qualified names. Dialect qualified names are 
   # '/' seperated names, where a name is [-a-z]+. 
   # Examples: wlang/xhtml/uri, wlang/plain-text, ...
   #
-  QUALIFIED_DIALECT_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
+  QUALIFIED_DIALECT_NAME_REGEXP = /^[-a-z]+([\/][-a-z]+)*$/
 
+  # Reusable string for building encoder name based regexps  
+  ENCODER_NAME_REGEXP_STR = "[-a-z]+"
+  
   #
   # Regular expression for encoder names.
   #
@@ -42,6 +51,9 @@ module WLang
   # Examples: xhtml/entities-encoding, sql/single-quoting, ...
   #
   QUALIFIED_ENCODER_NAME_REGEXP = /^([-a-z]+)([\/][-a-z]+)*$/
+  
+  # Reusable string for building qualified encoder name based regexps  
+  QUALIFIED_ENCODER_NAME_REGEXP_STR = "[-a-z]+([\/][-a-z]+)*"
   
   #
   # Provides installed {file extensions => dialect} mappings. File extensions 
