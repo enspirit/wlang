@@ -28,7 +28,6 @@ module WLang
       else 
         lines = [template]
       end
-      puts lines.inspect
       line, column = lines.length, lines.last.length
       return [line, column]
     end
