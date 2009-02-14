@@ -13,8 +13,20 @@ class WLang::Dialect::Loader
   # See WLang::Dialect::DSL#ruby_require
   def ruby_require(*src) 
     src.each do |s|
-      require "rubygems" unless "wlang"==s[0,5]
-      require s
+      begin
+        require "rubygems" unless "wlang"==s[0,5]
+      rescue Exception => ex
+        STDERR.puts "= Error, wlang depends on 'rubygems'\n"\
+                    "= Please install it (methods differs from system, in debian : 'apt-get install rubygems')\n"
+        exit -1
+      end
+      begin
+        require s
+      rescue Exception => ex
+        STDERR.puts "= Error in dialect '#{@dialect}'\n"\
+                    "= This dialect depends on gem or file '#{s}' (try: 'gem install #{s}')\n"
+        exit -1
+      end
     end
     yield if block_given?
   end
