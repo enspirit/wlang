@@ -160,7 +160,7 @@ rulesets:
       # #={wlang/active-string}{...}{...}
       - name:      "block-assignment<br/>(third block is optional)"
         symbol:    "="
-        signature: "#={wlang/active-string as x}{...}{...}"
+        signature: "#={wlang/active-string}{...}{...}"
         definition: |-
           Instantiates #1, looking for a variable name (say 'x'). Instantiates #2 in the current 
           dialect. Without third block, expands the current scope with 'x' being bound to #2's 
