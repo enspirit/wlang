@@ -100,8 +100,7 @@ class Parser
     
     # trailing data (end of @template reached only if no match_at)
     unless match_at
-      raise(ParseError, "ParseError at #{offset}, '}' expected, EOF found.")\
-        unless rules.empty?
+      unexpected_eof(@source_text.length, '}') unless rules.empty?
       self.<<(@source_text[offset, 1+@source_text.length-offset])
       offset = @source_text.length
     end
@@ -151,7 +150,7 @@ class Parser
   # having to check anything. Optional blocks must be handled by rules themselve.
   #
   def parse_block(offset, dialect=nil, buffer="")
-    raise(ParseError,"Block expected at #{offset}") unless has_block?(offset)
+    block_missing_error(offset+2) unless has_block?(offset)
     parse(offset+2, dialect, buffer)
   end
   
@@ -183,7 +182,22 @@ class Parser
     text = self.parse(offset, "wlang/dummy", "")
     raise ParseError, "Parse error at #{offset} on '#{text}'"
   end
-
+  
+  #
+  # Raises a ParseError at a given offset for a missing block
+  #
+  def block_missing_error(offset)
+    raise ParseError.new("Block expected", offset, @source_text)
+  end
+  
+  #
+  # Raises a ParseError at a given offset for a unexpected EOF
+  # specif. the expected character when EOF found
+  #
+  def unexpected_eof(offset, expected)
+    raise ParseError.new("'#{expected}' expected, EOF found.", offset, @source_text)
+  end
+  
   #
   # Puts a key/value pair in the current context. See Parser::Context::define
   # for details.
