@@ -17,14 +17,16 @@ class WLang::Dialect::Loader
         require "rubygems" unless "wlang"==s[0,5]
       rescue Exception => ex
         STDERR.puts "= Error, wlang depends on 'rubygems'\n"\
-                    "= Please install it (methods differs from system, in debian : 'apt-get install rubygems')\n"
+                    "= Please install it (methods differs from system, in debian : 'apt-get install rubygems')\n"\
+                    "= Exception raised : '#{ex.message}'"
         exit -1
       end
       begin
         require s
       rescue Exception => ex
         STDERR.puts "= Error in dialect '#{@dialect}'\n"\
-                    "= This dialect depends on gem or file '#{s}' (try: 'gem install #{s}')\n"
+                    "= This dialect depends on gem or file '#{s}' (try: 'gem install #{s}')\n"\
+                    "= Exception raised : '#{ex.message}'"
         exit -1
       end
     end
