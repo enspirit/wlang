@@ -136,12 +136,15 @@ rulesets:
 
   - name: Context
     examples:
-      - ["wlang/*", '={name as n}{Hello +{n}}',                     "Hello O'Neil"]
-      - ["wlang/*", '={name as n}Hello +{n}',                       "Hello O'Neil"]
+      - ["wlang/*", '={name as n}{Hello +{n}}',                      "Hello O'Neil"]
+      - ["wlang/*", '={name as n}Hello +{n}',                        "Hello O'Neil"]
+      - ["wlang/*", '#={name}{blambeau}{Hello +{name}} and +{name}', "Hello blambeau and O'Neil"]
+      - ["wlang/*", '#={name}{blambeau}Hello +{name} and +{name}',   "Hello blambeau and blambeau"]
       - ["wlang/*", '={author as name}{Hello +{name}} and +{name}', "Hello blambeau and O'Neil"]
       - ["wlang/*", '={author as name}Hello +{name} and +{name}',   "Hello blambeau and blambeau"]
-      - ["wlang/*", '%={hello}{Hello +{name}}{+{hello}}',           "Hello O'Neil"]
       - ["wlang/*", '%={wlang/dummy as hello}{Hello +{name}}{+{hello}}', "Hello +{name}"]
+      - ["wlang/*", '^={plain-text/upcase as name}{+{author}}{Hello +{name}} and +{name}', "Hello BLAMBEAU and O'Neil"]
+      - ["wlang/*", '^={plain-text/upcase as name}{+{author}}Hello +{name} and +{name}', "Hello BLAMBEAU and BLAMBEAU"]
       
     rules: 
       # ={wlang/hosted as x}{...}
@@ -154,6 +157,16 @@ rulesets:
             'x' being bound to evaluation result. Otherwise, branches the current scope for
             the second block instantiation only and bind 'x' the same way (i.e. x will not be 
             available outside the second block). Returns an empty string as replacement value.
+      # #={wlang/active-string}{...}{...}
+      - name:      "block-assignment<br/>(third block is optional)"
+        symbol:    "="
+        signature: "#={wlang/active-string as x}{...}{...}"
+        definition: |-
+          Instantiates #1, looking for a variable name (say 'x'). Instantiates #2 in the current 
+          dialect. Without third block, expands the current scope with 'x' being bound to #2's 
+          instantiation. Otherwise, branches the current scope for the third block instantiation 
+          only and binds 'x' the same way (i.e. x will not be available outside the third block). 
+          Returns an empty string as replacement value.
       # %={wlang/active-string as x}{...}{...}
       - name:      "modulo-assignment<br/>(second block is optional)"
         symbol:    "%="
@@ -162,12 +175,9 @@ rulesets:
             Instantiates #1, looking for a dialect qualified name. Instantiates #2 according 
             to the rules defined by that dialect. Without third block, expands the current 
             scope with 'x' being bound to #2's instantiation. Otherwise, branches the current 
-            scope for the third block instantiation only and bind 'x' the same way (i.e. x will 
+            scope for the third block instantiation only and binds 'x' the same way (i.e. x will 
             not be available outside the third block). Returns an empty string as replacement 
-            value.<br/>
-            This rule also accepts a variant allowing the dialect qualified name to be
-            omitted (first block contains the variable name only). In this case, the second block
-            is instantiated in the current dialect.
+            value.
       # ^={wlang/active-string as x}{...}{...}
       - name:      "encoding-assignment<br/>(second block is optional)"
         symbol:    "^="
@@ -176,7 +186,7 @@ rulesets:
             Instantiates #1, looking for an encoder qualified name. Instantiates #2 in 
             the current dialect. Encode #2's instantiation using encoder found in (#1).
             Without third block, expands the current scope with 'x' being bound to #2's encoding. 
-            Otherwise, branches the current scope for the third block instantiation only and bind 
+            Otherwise, branches the current scope for the third block instantiation only and binds 
             'x' the same way (i.e. x will not be available outside the third block). Returns an 
             empty string as replacement value.<br/>
 
