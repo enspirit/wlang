@@ -1,4 +1,4 @@
---- 
+---
 title: WLang specification
 version: 0.0.7
 what: |-
@@ -17,7 +17,7 @@ rulesets:
         symbol:    "!"
         signature: "!{wlang/hosted}"
         definition: |-
-          Instanciates #1, looking for an expression of the hosting language. Evaluates it, 
+          Instantiates #1, looking for an expression of the hosting language. Evaluates it, 
           looking for any object. Converts it to a string (using to_s for example if Ruby is
           the hosting language) and returns the result as replacement value.
       
@@ -26,7 +26,7 @@ rulesets:
         symbol:    "%"
         signature: "%{wlang/active-string}{...}"
         definition: |-
-          Instanciates #1, looking for a dialect qualified name. Instantiates #2 
+          Instantiates #1, looking for a dialect qualified name. Instantiates #2 
           according to the rules defined by that dialect and returns the #2's 
           instantiation as replacement value.
       
@@ -35,7 +35,7 @@ rulesets:
         symbol:    "^"
         signature: "^{wlang/active-string}{...}"
         definition: |-
-          Instanciates #1, looking for an encoder qualified name. Instanciates #2 in 
+          Instantiates #1, looking for an encoder qualified name. Instantiates #2 in 
           the current dialect. Encode #2's instantiation using encoder found in (#1)
       
       # ${wlang/hosted}
@@ -117,9 +117,9 @@ rulesets:
         symbol:    "?"
         signature: "?{wlang/hosted}{...}{...}"
         definition: |-
-          Instanciates #1, looking for an expression in the hosting language. 
+          Instantiates #1, looking for an expression in the hosting language. 
           Evaluates it, looking for a boolean value (according to boolean semantics 
-          of the hosting language). If true, instanciates #2, otherwise instanciates 
+          of the hosting language). If true, instantiates #2, otherwise instantiates 
           #3 if present.
     
       # *{wlang/hosted as x}{...}{...}
@@ -127,10 +127,10 @@ rulesets:
         symbol:    "*"
         signature: "*{wlang/hosted as x}{...}{...}"
         definition: |-
-          Instanciates #1, looking for an expression in the hosting language. Evaluates 
-          it, looking for an enumerable. Iterates all its elements, instanciating #2 for 
+          Instantiates #1, looking for an expression in the hosting language. Evaluates 
+          it, looking for an enumerable. Iterates all its elements, instantiating #2 for 
           each of them (the iterated value is set under name x in the scope). If #3 is 
-          present, it is instanciated between elements.
+          present, it is instantiated between elements.
 
   - name: Buffering
     rules:
@@ -139,7 +139,15 @@ rulesets:
         symbol:    "<<"
         signature: "<<{wlang/uri}"
         definition: |-
-          Instanciates #1, looking for an uri. Returns the text content of the found 
+          Instantiates #1, looking for an uri. Returns the text content of the found 
           uri (#1).
+      # >>{wlang/uri}
+      - name:      "output"
+        symbol:    "<<"
+        signature: "<<{wlang/uri}{...}"
+        definition: |-
+          Instantiates #1, looking for an uri. Instantiates #2 in the current dialect,
+          using file found in #1 as output buffer.
+          
     
     

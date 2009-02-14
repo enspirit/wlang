@@ -49,6 +49,11 @@ WLang::dialect("wlang") do
     rules WLang::RuleSet::Basic
   end
   
+  # wlang/uri dialect
+  dialect("uri") do
+    rules WLang::RuleSet::Basic
+  end
+  
   # wlang/ruby dialect
   dialect("ruby", ".wrb", ".wruby") do
     ruby_require "wlang/dialects/ruby_dialect" do
