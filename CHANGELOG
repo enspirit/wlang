@@ -1,4 +1,76 @@
 
+==== r69 (blambeau)
+* Forces only test under test/ folder to be executed by rake.
+
+==== r68 (blambeau)
+* All tests refactored to require 'test/unit/testcase' instead of 'test/unit'. Tests do not automatically ran when including the files!
+* Fixes a bug in *{...} when iterated collection is empty.
+* Provides a 'report-centric test' example.
+* Implements camel-case encoder in plain-text dialect.
+
+==== r67 (blambeau)
+* Fixes an error in the specification.
+
+==== r66 (blambeau)
+* Completes Context ruleset.
+* Replaces modulo-assignment variant by a block-assignment rule #{...}
+* Fixes an example bug.
+
+==== r65 (blambeau)
+* Provides implementation as well as specification of two rules in Context ruleset
+* RuleSet::Utils module started in order to have some reusable regular expressions.
+
+==== r64 (llambeau)
+* Moves basic example inside his own folder
+
+==== r63 (llambeau)
+* #58 : removes debug code in ParseError
+
+==== r62 (llambeau)
+* ParserError now contains informations about the line/column location of the error
+
+==== r61 (llambeau)
+* Issue #60 :
+* Fixes a warning about removal of :object_id method (only with ruby1.9)
+
+==== r60 (blambeau)
+* Adds wlang/uri dialect, which is the same as active-string for now.
+* Adds the >>{wlang/uri} in Buffering ruleset.
+* Buffering ruleset cleanly tested.
+* WLang::TestUtils for easier test creation.
+* SVN ignores pkg folder. 
+
+==== r59 (llambeau)
+* Add the original exception message in the information message
+
+==== r58 (llambeau)
+* Adds begin/rescue/end blocks to handle 'require' failures
+* Prints a user-friendly message to the stderr with missing-gem informations 
+* Ex:
+* = Error in dialect 'xhtml/coderay'
+* = This dialect depends on gem or file 'coderay' (try: 'gem install coderay')
+
+==== r57 (llambeau)
+* Fixes the gem building to include spec, doc, templates documents
+
+==== r56 (llambeau)
+* + Merges the Rakefile and gem-specification, use 'rake package' now to build
+*   the gem.
+* Remark: I can't produce the gem automatically, i don't know why... I
+* investigate
+
+==== r52 (llambeau)
+* + Adds gems specification for wlang.
+
+==== r51 (blambeau)
+* wlang, fixes a stupid bug in ruby dialect test.
+
+==== r45 (blambeau)
+* Adds some tests on the wlang/ruby dialect
+
+==== r38 (blambeau)
+* Fixes a bug in CHANGELOG generation.
+
 ==== r37 (blambeau)
 * Documentation/Specification much improved.
 * Specification now contains examples.
