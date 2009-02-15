@@ -24,4 +24,29 @@ class WLang::SpecificationExamplesTest < Test::Unit::TestCase
     end
   end
   
+  # Tests that what is said is valid.
+  def test_what_is_said_in_specification
+    WLang::dialect("specification") do
+      rules WLang::RuleSet::Basic
+      rules WLang::RuleSet::Imperative
+    end
+    tests = [
+      ["*{authors as who}{${who}}{, }", "blambeau, llambeau, ancailliau"],
+      ["*{authors as who}{${who}} {, }", "blambeaullambeauancailliau {, }"],
+      ["*{authors as who} {${who}}{, }", nil]
+    ]
+    context = {"authors" => ["blambeau", "llambeau", "ancailliau"]}
+      
+    tests.each do |test|
+      template, expected = test
+      if expected.nil?
+        assert_raise WLang::ParseError do
+          assert_equal(expected, template.wlang(context, "specification"))
+        end
+      else
+        assert_equal(expected, template.wlang(context, "specification"))
+      end
+    end
+  end
+  
 end

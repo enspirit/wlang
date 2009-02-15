@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>${title}</title>
+    <title>${title} (version ${version})</title>
     <style type="text/css">
       body {
         font-family: arial, verdana, sans-serif;
@@ -12,14 +12,16 @@
         margin-top: 20px;
       }
       .clear { clear: both; }
-      p { margin: 0px; margin-bottom: 10px;}
+      p { margin: 0px; margin-bottom: 10px; text-align: justify; }
       #title { float: left; margin: 10px 0px 20px 0px; }
       #tabs { float: right; margin: 15px 0px; }
-      #tabs li { cursor: pointer; margin-right: 0px; margin-left: 5px; display: inline; padding: 5px; border: 1px solid black; }
+      #tabs li { display: block; float: right; cursor: pointer; margin: 0px 0px 0px 5px; padding: 5px; border: 1px solid black; }
       #tabs li.focus { background-color: #A00000; color: white; }
       dl dt { margin-top: 10px; font-weight: bold; }
       div.header { border-bottom: 1px solid black; margin: 10px 0px; }
       h2 { float: left; margin: 0px; padding: 0px; }
+      ul { padding: 0px 0px 0px 25px; }
+      ul li { margin: 5px;}
       ul.links { float: right; margin: 0px; padding: 0px; }
       ul.links li { cursor: pointer; margin: 0px 0px 0px 10px; padding: 0px; padding-top: 5px; display: block; float: right; }
       ul.links li a, ul.links li a:visited { color: black; text-decoration: none; } 
@@ -65,13 +67,14 @@
 	//--></script>
   </head>
   <body>
-    <h1 id="title">WLang specification (version ${version})</h1>
+    <h1 id="title">${title} (version ${version})</h1>
     <ul id="tabs">
-      <li id="introfocus" class="focus" onclick="show('intro')">Introduction</li>
-      <li id="instantiationfocus" onclick="show('instantiation')">Instantiation</li>
-      <li id="rulesetsfocus" onclick="show('rulesets')">Rulesets</li>
-      <li id="dialectsfocus" onclick="show('dialects')">Dialects</li>
       <li id="symbolsfocus" onclick="show('symbols')">Tag symbols</li>
+      <li id="hostingfocus" onclick="show('hosting')">Hosting language</li>
+      <li id="dialectsfocus" onclick="show('dialects')">Dialects</li>
+      <li id="rulesetsfocus" onclick="show('rulesets')">Rulesets</li>
+      <li id="instantiationfocus" onclick="show('instantiation')">Instantiation</li>
+      <li id="introfocus" class="focus" onclick="show('intro')">Introduction</li>
     </ul>
     <div class="clear"></div>
     <div id="intro" style="display: block;">
@@ -155,6 +158,12 @@
     <div id="dialects" style="display: none;">
 	    <div class="header">
 	      <h2>Standard dialects</h2>
+	      <div class="clear"></div>
+	    </div>
+    </div>
+    <div id="hosting" style="display: none;">
+	    <div class="header">
+	      <h2>Hosting</h2>
 	      <div class="clear"></div>
 	    </div>
     </div>

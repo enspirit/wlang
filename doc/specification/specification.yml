@@ -1,5 +1,5 @@
 ---
-title: WLang specification
+title: WLang
 version: 0.0.7
 what: |-
   WLang is a a reusable and extensible <em>code generator</em>, also known as a 
@@ -24,7 +24,52 @@ grammar: |-
   <tt>title</tt> variable for the former and comma separated names of the <tt>authors</tt> for the second, assuming
   that <tt>authors</tt> is an array variable).
   
-  The only tricky thing in _wlang_ is the notion of dialect, which drives the  
+  The only tricky thing in _wlang_ is the notion of dialect, which drives the recognition of tags as well as 
+  their replacement during instantiation. Dialects are what makes _wlang_ really powerful: if instantiated as being 
+  written in the <tt>wlang/xhtml</tt> dialect, the template above will give the result mentionned previously.
+  In contrast, if written in <tt>wlang/dummy</tt> the template will be reproduced whitout any 
+  change (no replacement of tags at all). This behavior is not hardcoded; it results from the definition 
+  of wlang (standard) dialects: <tt>wlang/xhtml</tt> define special meanings for <tt>${...}</tt> and 
+  <tt>*{...}{...}{...}</tt> while <tt>wlang/dummy</tt> does not.
+   
+  A complete _wlang_ implementation already provides the standard dialects for common tasks: creating html pages, 
+  building SQL queries, generating code in Ruby or in another language, etc. Each of them installs special tags that 
+  are useful for the task 
+  at hand (a tag for back-quoting values is useful for SQL, but does not really makes sense for generating html for 
+  example).  Such an implementation also allows you to extend standard dialects, create your own by implementing 
+  specific tags and rules or by reusing existing ones. Lastlty the dialect in used during instantiation can be changed 
+  dynamically  (by using the <tt>%{dialect/qualified/name}{...}</tt> standard tag for example). The Ruby implementation
+  that we provide implements all these features.
+  
+  To learn more about standard dialects and reusable rules, read the 'Rulesets' and 'Dialects' pages of this 
+  specification.
+  
+  === About the (abstract) grammar
+  
+  The (abstract) _wlang_ grammar rules what forms a valid template. At first glance, this grammar does not depend on the
+  dialect that is used for instantiation. It is simple, but comes with some constraints that are explained below:
+  - block delimiters are '{' and '}' by default; _wlang_ can be configured to use '(' and ')' or '[' and ']' instead. 
+    However, block <u>delimiters are template-specific</u>: only one kind of delimiters can be used inside the same template.
+  - block delimiters <u>must always be paired</u>, even when not used for delimiting blocks. If an opening or closing delimiter 
+    is not paired, it must be escaped with a backslash, which will not be reproduced. If you want a backslash to appear before
+    a block delimiter in the instantiation result, use a double backslash.
+  - if a given tag has a special meaning in the current dialect and you don't want it to be replaced by _wlang_ you can escape
+    it with a backslash as well (the backslash will not be reproduced).
+  - some tags (precisely: some rules associated with tags) require multiple blocks (like <tt>*{...}{...}{...}</tt> in <tt>wlang/xhtml</tt> 
+    for example), some of them being optional as specified in the associated rule (in the example the third block is optional).
+    In such a case no character is allowed between the end of a block '}' and the start of the next one '{', not even spaces or
+    a carriage return. In other words, multiple blocks (that must be interpreted as such) must touch each others using '}{' precisely, 
+    as ilustrated below. If a block is mandatory but missing a parse error is raised by the _wlang_ implementation.
+        
+      *{authors as who}{${who}}{, }    ->    blambeau, llambeau, ancailliau
+      *{authors as who}{${who}} {, }   ->    blambeaullambeauancailliau {, }
+      *{authors as who} {${who}}{, }   ->    parse error 1:18, missing block 2 in *{...}{...}
+    
+  In addition to these constraints, dialects and the hosting language may impose restrictions on what can be put inside specific
+  blocks of tags/rules (for example, 'authors as who' is valid as first tag of <tt>*{...}{...}</tt> but not every string is of course). 
+  These constraints are not specific to the wlang grammar <em>per se</em> and are explained in the 'Rulesets', 'Dialects' and 'Hosting 
+  language' pages of this document. 
+   
 terminology:
   - term: template 
     definition: |-
@@ -89,7 +134,10 @@ terminology:
       provides the execution semantics.
   - term: hosting language
     definition: |-
-      language (or framework) that executes wlang. 
+      language (or framework) that executes wlang. More precisely, the hosting language
+      is the one that rules what is considered as an executable expression in tags that
+      relies on some execution semantics (like !{...} for example). See the 'Hosting language'
+      section to learn more.
     example: |-
       ruby
 rulesets: 
