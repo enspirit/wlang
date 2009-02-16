@@ -4,6 +4,15 @@ require "wlang/rulesets/imperative_ruleset"
 require "wlang/rulesets/buffering_ruleset"
 require "wlang/rulesets/context_ruleset"
   
+WLang::data_loader(".yml", ".yaml") do |file|
+  require "yaml"
+  YAML.load(File.open(file))
+end
+  
+WLang::data_loader(".rb", ".ruby", ".dsl") do |file|
+  Kernel.eval(File.read(file))
+end
+
 # plain-text dialect
 WLang::dialect("plain-text") do
   ruby_require("wlang/dialects/plain_text_dialect") do

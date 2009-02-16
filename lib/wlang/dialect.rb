@@ -197,6 +197,7 @@ class Dialect
   def find_encoder(name)
     raise(ArgumentError, "Invalid (relative) encoder name #{name}") unless String===name
     raise(ArgumentError, "Invalid (relative) encoder name #{name}") if name.include?("/")
+    return nil if @encoders.nil?
     if @encoders.has_encoder?(name)
       @encoders.get_encoder(name)
     elsif @parent

@@ -6,15 +6,13 @@ module WLang::EncoderSet::Ruby
                       "double-quoting" => :double_quoting, 
                       "regex-escaping" => :regex_escaping}
   
-  # Upcase encoding
-  def self.single_quoting(src, options); 
-    src.gsub(/([^\\])'/,%q{\1\\\'}); 
-  end
+  # Single-quoting encoding
+  def self.single_quoting(src, options); src.gsub(/([^\\])'/,%q{\1\\\'}); end
   
-  # Downcase encoding
+  # Double-quoting encoding
   def self.double_quoting(src, options); src.gsub('"','\"'); end
   
-  # Capitalize encoding
+  # Regexp-escaping encoding
   def self.regex_escaping(src, options); Regexp.escape(src); end
   
 end # module WLang::EncoderSet::Ruby  

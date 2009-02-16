@@ -56,12 +56,19 @@ module WLang
   QUALIFIED_ENCODER_NAME_REGEXP_STR = "[-a-z]+([\/][-a-z]+)*"
   
   #
-  # Provides installed {file extensions => dialect} mappings. File extensions 
+  # Provides installed {file extension => dialect} mappings. File extensions 
   # (keys) contain the first dot (like .wtpl, .whtml, ...). Dialects (values) are 
   # qualified names, not Dialect instances.
   #
   FILE_EXTENSIONS = {}
 
+  #
+  # Provides installed {file extension => data loader} mapping. File extensions 
+  # (keys) contain the first dot (like .wtpl, .whtml, ...). Data loades are 
+  # Proc instances that take a single |uri| argument.
+  #
+  DATA_EXTENSIONS = {}
+  
   #  
   # Main anonymous dialect. All installed dialects are children of this one, 
   # which is anonymous because it does not appear in qualified names.
@@ -89,6 +96,36 @@ module WLang
     else
       @dialect.dialect(name)
     end
+  end
+  
+  #
+  # Adds a data loader for file extensions.
+  #
+  def self.data_loader(*exts, &block)
+    raise(ArgumentError, "Block expected") unless block_given?
+    raise(ArgumentError, "Block of arity 1 expected") unless block.arity==1
+    exts.each do |ext|
+      DATA_EXTENSIONS[ext] = block
+    end
+  end
+  
+  #
+  # Loads data from a given URI. If _extension_ is omitted, tries to infer it
+  # from the uri, otherwise use it directly. Returns loaded data. 
+  #
+  def self.load_data(uri, extension=nil)
+    if extension.nil?
+      extension = File.extname(uri)
+      raise("Unable to infer data loader from #{uri}") if extension.nil?
+    end
+    loader = DATA_EXTENSIONS[extension]
+    raise("No data loader for #{extension}") if loader.nil?
+    loader.call(uri) 
+  end
+  
+  # Infers a dialect from a file extension
+  def self.infer_dialect(uri)
+    WLang::FILE_EXTENSIONS[File.extname(uri)]
   end
   
   #
@@ -133,6 +170,12 @@ module WLang
   def self.file_instantiate(file, context=nil, buffer="", dialect=nil, block_symbols=:braces)
     raise "File '#{file}' does not exists or is unreadable"\
       unless File.exists?(file) and File.readable?(file)
+    if dialect.nil?
+      dialect = infer_dialect(file) if dialect.nil?
+      raise("No known dialect for file extension '#{File.extname(file)}'\n"\
+            "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", "))\
+        if dialect.nil?
+    end
     WLang::Template.new(File.read(file), dialect, context, block_symbols).instantiate(buffer)
   end
   

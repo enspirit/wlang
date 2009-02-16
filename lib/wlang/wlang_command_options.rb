@@ -92,7 +92,7 @@ class Options
       
       opt.on("--context-kind=KIND", ["yaml", "ruby", "dsl"],
              "Kind of context object (yaml, ruby, dsl)") do |value|
-        @context_kind = value         
+        @context_kind = '.' + value         
       end
       
       opt.on("--verbose", "-v",
@@ -144,30 +144,9 @@ class Options
         if @template_dialect.nil?
     end
     
-    # handle context kind
-    if @context_file and not(@context_kind)
-      extname = File.extname(@context_file)
-      case extname
-        when ".rb", ".ruby"
-          @context_kind = :ruby
-        when ".yaml", ".yml"
-          @context_kind = :yaml
-      else
-        raise "Unable to infer context kind for extension #{extname}"
-      end
-    end
-
     # handle context object
     if @context_file
-      case @context_kind
-        when :yaml
-          require "yaml"
-          @context_object = YAML.load(File.open(@context_file))
-        when :ruby, :dsl
-          @context_object = Kernel.eval(File.read(@context_file))
-        else
-          raise "Unknown context kind #{@context_kind}"
-      end
+      @context_object = WLang::load_data(@context_file, @context_kind)
     end
         
     return self

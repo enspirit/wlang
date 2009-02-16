@@ -1,0 +1,56 @@
+WLang is a a reusable and extensible <em>code generator</em>, also known as a 
+<em>templating engine</em>. Motivation for it can be found at http://www.revision-zero.org/wlang.
+The current file is the reference of the tool.
+
+=== Topics
+
+[Short overview] Probably the first section to read! Basic usage of _wlang_ is explained here and
+                 pointers are given to continue your learning.
+[Rulesets] Standard rulesets are specified. As most of them are included in standard dialects, 
+           looking at standard rulesets is the quickest way to learn all of them at once.
+[Dialects] Standard dialects are described. This page also provides useful cheatsheets of 
+           available tags in standard dialects.
+[Hosting language] Somewhat more tricky but powerful. The notion of hosting language is explained
+                   more deeply. Implementing you own hosting language abstraction (advanced topic)
+                   sometimes leads to cleaner and cross-implementation templates.
+[Glossary] _wlang_ comes with a terminology, knowing it will make your reading easier.
+[Symbols] If you plan to create your own tags, it can be useful to know what is allowed and what is
+          not. This pages covers this topic.
+
+=== About this document
+
+This document is a simple .html file without external dependencies (embedded CSS and javascript).
+Thus it can be saved as a simple cheatsheet. It has been generated using _wlang_ itself
+using the following simple command:
+
+    wlang specification.wtpl
+
+The file 'specification.wtpl' is almost empty and other files next to it are all kept simple
+and written in the most appropriate format for the task at hand (YAML for structured parts, RDoc for
+text sections, sometimes YAML embedding short sentences writted in RDoc style, etc.). 
+One way to learn _wlang_ quickly is to download the source distribution and to look how this is made
+possible ;-) 
+
+Enjoy _wlang_ !
+
+=== Distribution
+
+- The reference implementation of _wlang_, implemented in Ruby, is freely available as a 'wlang' gem
+  (under Ruby or GPL v2 licence). <br/> Use <tt>'gem install wlang'</tt> to install it. For repository and 
+  bug tracker visit us at https://redmine.chefbe.net/projects/revision-zero-public. 
+- We don't have another implementation up to now. If you plan to start one in another language, let
+  us know!
+
+=== Authors
+
+_wlang_ has been initially designed by Bernard and Louis Lambeau during the implementation of w@w, yet another 
+web framework (proof of concept). They are also maintainers of the reference implementation.
+
+=== Credits
+
+This work is supported by the {department of computer science}[http://www.uclouvain.be/en-ingi.html] of the 
+{University of Louvain}[http://www.uclouvain.be/en-index.html] (EPL/INGI, Universite Catholique de Louvain, 
+UCL, Louvain-la-Neuve, Belgium).
+
+This work was also partially supported by the Regional Government of Wallonia (ReQuest project, RW Conv. 315592
+and GISELE project, RW Conv. 616425) and the MoVES project (PAI program of the Belgian government).

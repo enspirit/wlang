@@ -1,0 +1,52 @@
+body {
+  font-family: arial, verdana, sans-serif;
+  font-size: 14px;
+  width: 1024px; 
+  margin: auto; 
+  margin-top: 20px;
+}
+.clear { clear: both; }
+p { margin: 0px; margin-bottom: 10px; text-align: justify; }
+#title { float: left; margin: 10px 0px 20px 0px; }
+#tabs { float: right; margin: 15px 0px; }
+#tabs li { display: block; float: right; cursor: pointer; margin: 0px 0px 0px 5px; padding: 5px; border: 1px solid black; }
+#tabs li.focus { background-color: #A00000; color: white; }
+dl dt { margin-top: 10px; font-weight: bold; }
+div.header { border-bottom: 1px solid black; margin: 10px 0px; }
+h2 { float: left; margin: 0px; padding: 0px; }
+h3 { margin-top: 20px; margin-bottom: 10px; text-decoration: underline;}
+dl { padding-left: 35px; }
+ul { padding: 0px 0px 0px 25px; }
+ul li { margin: 5px;}
+ul.links { float: right; margin: 0px; padding: 0px; }
+ul.links li { cursor: pointer; margin: 0px 0px 0px 10px; padding: 0px; padding-top: 5px; display: block; float: right; }
+ul.links li a, ul.links li a:visited { color: black; text-decoration: none; } 
+ul.links li a:hover { color: #A00000; } 
+h3 { margin-bottom: 5px; }
+h4 { margin-bottom: 3px; float: left; margin-top: 0px; }
+table { border-collapse: collapse;  border: 1px solid black; }
+table th { font-size: 12px; }
+table th, table td { padding: 4px; }
+table.glossary { margin-top: 20px; }
+table.glossary th { background: green; color: white; border-bottom: 1px solid black; }
+table.glossary th.term { width: 100px; }
+table.glossary td { border-bottom: 1px dashed black; }
+table.symbols { font-size: 12px; margin-top: 20px; width: 100%; }
+table.symbols th { background: green; color: white; border-bottom: 1px solid black; }
+table.symbols th.name { width: 150px; }
+table.symbols th.symbol { width: 50px; }
+table.symbols th.meaning { width: 250px; }
+table.symbols td { border-bottom: 1px dashed black; }
+table.ruleset { font-size: 12px; }
+table.ruleset th { background: green; color: white; }
+table.ruleset td { border-bottom: 1px dashed black; }
+th.signature, td.signature { width: 300px; }
+th.name, td.name { width: 120px; }
+th.definition, td.definition { width: 580px; }
+table.examples { float: right; font-size: 12px; }
+table.examples th { background: #A00000; color: white; border-bottom: 1px solid black; }
+table.examples th, table.examples td { padding: 4px; }
+table.examples td { border-bottom: 1px dashed black; }
+th.dialect, td.dialect { width: 150px; }
+th.expression, td.expression { width: 350px; }
+th.replacement, td.replacement { width: 350px; }

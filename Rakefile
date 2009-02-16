@@ -31,7 +31,7 @@ end
 
 desc "Generates the specification file"
 task :spec => [:rdoc] do |t|
-  Kernel.exec("ruby -Ilib bin/wlang --output doc/html/files/specification.html doc/specification/specification.wtpl doc/specification/specification.yml")
+  Kernel.exec("ruby -Ilib bin/wlang --output doc/html/files/specification.html doc/specification/specification.wtpl")
 end
 
 desc "Converts SVN log to a CHANGELOG file"

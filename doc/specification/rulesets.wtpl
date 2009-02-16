@@ -1,0 +1,44 @@
+*{spec/rulesets as ruleset}{
+  <h3 id="${ruleset/name}">${ruleset/name}</h3>
+  ^{rdoc/div}{${ruleset/description}}
+  <table class="ruleset">
+    <tr>
+      <th class="signature">signature</th>
+      <th class="name">name</th>
+      <th class="definition">definition</th>
+    </tr>
+    *{ruleset/rules as rule}{
+      <tr>
+        <td class="signature"><tt>${rule/signature}</tt></td>
+        <td class="name">+{rule/name}</td>
+        <td class="definition">^{rdoc/nop}{+{rule/definition}}</td>
+      </tr>
+    }
+  </table>
+  
+  ?{ruleset/examples}{
+    <br/>
+    <h4>Examples:</h4>
+    <table class="examples">
+      <tr>
+        <th>dialect</th>
+        <th>wlang expression</th>
+        <th>replacement value</th>
+      </tr>
+      *{ruleset/examples as example}{
+        <tr>
+          <td class="dialect">
+            <tt>${example[0]}</tt>
+          </td>
+          <td class="expression">
+            <tt>${example[1]}</tt>
+          </td>
+          <td class="replacement">
+            <tt>${example[2]}</tt>
+          </td>
+        </tr>
+      }
+    </table>
+    <div style="clear: both;"></div>
+  }
+}

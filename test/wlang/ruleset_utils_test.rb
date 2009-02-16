@@ -125,5 +125,37 @@ class WLang::RuleSetUtilsTest < Test::Unit::TestCase
     end
   end
   
+  def test_URI_AS_regexp
+    assert_not_nil(RG_URI_AS =~ "file as f")
+    assert_not_nil(RG_URI_AS =~ "file.yaml as f")
+    assert_not_nil(RG_URI_AS =~ "folder/folder/file.ext as data")
+    assert_not_nil(RG_URI_AS =~ "http://folder/folder/file.ext as data")
+    assert_not_nil(RG_URI_AS =~ "http://folder/folder/as/file.ext as data")
+    assert_nil(RG_URI_AS =~ "name.upcase")
+    tests = [
+      [{:uri =>"file", :variable => "f"}, "file as f"],
+      [{:uri =>"file.yaml", :variable => "f"}, "file.yaml as f"],
+      [{:uri =>"folder/folder/file.ext", :variable => "data"}, "folder/folder/file.ext as data"],
+      [{:uri =>"http://folder/folder/file.ext", :variable => "data"}, "http://folder/folder/file.ext as data"],
+      [{:uri =>"http://folder/folder/as/file.ext", :variable => "data"}, "http://folder/folder/as/file.ext as data"],
+    ]
+    tests.each do |t|
+      expected, src = t
+      assert_equal(expected, WLang::RuleSet::Utils.decode_uri_as(src))
+    end
+  end
+  
+  def test_URI_WITH_regexp
+    tests = [
+      [{:uri =>"folder/file.yaml", :with => {"spec" => "spec"}}, "folder/file.yaml with spec: spec"],
+      [{:uri =>"folder/file.yaml", :with => {"spec" => "spec.reverse"}}, "folder/file.yaml with spec: spec.reverse"],
+      [{:uri =>"folder/file.yaml", :with => {"s" => "spec", "t" => "spec/rulesets", "xs" => "spec/uses"}}, 
+        "folder/file.yaml with s:spec, t:spec/rulesets, xs:spec/uses"],
+    ]
+    tests.each do |t|
+      expected, src = t
+      assert_equal(expected, WLang::RuleSet::Utils.decode_uri_with(src,nil))
+    end
+  end
      
 end

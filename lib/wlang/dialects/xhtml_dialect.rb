@@ -4,10 +4,19 @@ require 'cgi'
 module WLang::EncoderSet::XHtml
   
   # Default encoders  
-  DEFAULT_ENCODERS = {"main-encoding"     => :entities_encoding, 
+  DEFAULT_ENCODERS = {"main-encoding"     => :entities_encoding,
+                      "single-quoting"    => :single_quoting,
+                      "double-quoting"    => :double_quoting,
                       "entities-encoding" => :entities_encoding}
   
-  # Upcase encoding
+  
+  # Single-quoting encoding
+  def self.single_quoting(src, options); src.gsub(/([^\\])'/,%q{\1\\\'}); end
+  
+  # Double-quoting encoding
+  def self.double_quoting(src, options); src.gsub('"','\"'); end
+    
+  # Entities-encoding
   def self.entities_encoding(src, options); 
     CGI::escapeHTML(src)
   end

@@ -1,0 +1,16 @@
+<table class="symbols">
+  <tr>
+    <th class="name">name</th>
+    <th class="symbol">symbol</th>
+    <th class="meaning">meaning</th>
+    <th class="remark">remark</th>
+  </tr>
+  *{spec/symbols as s}{
+  <tr>
+	<td><em>${s/name}</em></td>
+	<td>${s/symbol}</td>
+	<td>${s/meaning}</td>
+	<td>${s/remark}</td>
+  </tr>
+}
+</table>
