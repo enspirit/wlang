@@ -6,9 +6,11 @@ what: |-
   <em>templating engine</em>. Motivation for it can be found at http://www.revision-zero.org/wlang.
   The current file provides its specification. Accepted tags, standard dialects and the like can be 
   accessed through the menu (top right). Below is the terminology used here.
-grammar: |-
+overview: |-
+  === Instantiation
+  
   The _wlang_ grammar used to write templates is generic and simple: every character stands for itself
-  (meaning that it will be reproduced as such when the template is instantiated) except <em>tags</em> (and
+  (meaning that it is reproduced exactly when the template is instantiated) except <em>tags</em> (and
   their associated <em>blocks</em>) that are replaced by the <em>replacement value</em> of the associated
   _rule_. Consider the following example:
       <html>
@@ -19,32 +21,37 @@ grammar: |-
           <h1>Hello *{authors as who}{${who}}{, } !</h1>
         </body>
       </html>
-  When instantiated, this template will produce exactly the same html file except for special tags <tt>${title}</tt>
-  and <tt>*{whos as who}{${who}}{, }</tt> that will be replaced by something else (typically the value of the 
-  <tt>title</tt> variable for the former and comma separated names of the <tt>authors</tt> for the second, assuming
-  that <tt>authors</tt> is an array variable).
+  Assume that we have some instantitation data through the following hash: 
+    {"title" => "Short overview of wlang", "authors" => ["blambeau", "llambeau", "ancailliau"]}
+  When instantiated this template will produce exactly the same html file except for special tags <tt>${title}</tt>
+  and <tt>*{whos as who}{${who}}{, }</tt> that will be replaced by <tt>'Short overview of wlang'</tt> and
+  <tt>'blambeau, llambeau, ancailliau'</tt>, respectively. Maybe surprisingly _wlang_ can also behave
+  really differently on the same template: replacing <tt>${title}</tt> but not <tt>*{..}</tt> or the  
+  converse, or not replacing anything, or replacing both tags but not <tt>${who}</tt>, etc. All of this
+  is possible in _wlang_. The magic relies under the notion of _dialect_, which you need to understand.
   
-  The only tricky thing in _wlang_ is the notion of dialect, which drives the recognition of tags as well as 
-  their replacement during instantiation. Dialects are what makes _wlang_ really powerful: if instantiated as being 
-  written in the <tt>wlang/xhtml</tt> dialect, the template above will give the result mentionned previously.
-  In contrast, if written in <tt>wlang/dummy</tt> the template will be reproduced whitout any 
-  change (no replacement of tags at all). This behavior is not hardcoded; it results from the definition 
-  of wlang (standard) dialects: <tt>wlang/xhtml</tt> define special meanings for <tt>${...}</tt> and 
-  <tt>*{...}{...}{...}</tt> while <tt>wlang/dummy</tt> does not.
+  === Dialects
+  
+  The notion of dialect drives the recognition of tags as well as their replacement during instantiation. 
+  Dialects are what makes _wlang_ really powerful: if instantiated as being written in the <tt>wlang/xhtml</tt> 
+  dialect, the template above will give the result mentionned previously. In contrast, if written in 
+  <tt>wlang/dummy</tt> the template will be reproduced whitout any change (no replacement of tags at all). 
+  This behavior is not hardcoded; it results from the definition of wlang (standard) dialects: <tt>wlang/xhtml</tt> 
+  define special meanings for <tt>${...}</tt> and <tt>*{...}{...}{...}</tt> while <tt>wlang/dummy</tt> does not.
    
   A complete _wlang_ implementation already provides the standard dialects for common tasks: creating html pages, 
   building SQL queries, generating code in Ruby or in another language, etc. Each of them installs special tags that 
   are useful for the task 
   at hand (a tag for back-quoting values is useful for SQL, but does not really makes sense for generating html for 
   example).  Such an implementation also allows you to extend standard dialects, create your own by implementing 
-  specific tags and rules or by reusing existing ones. Lastlty the dialect in used during instantiation can be changed 
-  dynamically  (by using the <tt>%{dialect/qualified/name}{...}</tt> standard tag for example). The Ruby implementation
-  that we provide implements all these features.
+  specific tags and rules or by reusing existing ones. Lastlty, the dialect in used during instantiation can be changed 
+  dynamically  (_explicitly_, by using the <tt>%{dialect/qualified/name}{...}</tt> standard tag and _implicitly_,
+  when rules parse their blocks).
   
   To learn more about standard dialects and reusable rules, read the 'Rulesets' and 'Dialects' pages of this 
-  specification.
+  documentation.
   
-  === About the (abstract) grammar
+  === Grammar
   
   The (abstract) _wlang_ grammar rules what forms a valid template. At first glance, this grammar does not depend on the
   dialect that is used for instantiation. It is simple, but comes with some constraints that are explained below:
@@ -59,14 +66,14 @@ grammar: |-
     for example), some of them being optional as specified in the associated rule (in the example the third block is optional).
     In such a case no character is allowed between the end of a block '}' and the start of the next one '{', not even spaces or
     a carriage return. In other words, multiple blocks (that must be interpreted as such) must touch each others using '}{' precisely, 
-    as ilustrated below. If a block is mandatory but missing a parse error is raised by the _wlang_ implementation.
+    as ilustrated below. If a non-optional block is missing a parse error is raised by the _wlang_ implementation.
         
       *{authors as who}{${who}}{, }    ->    blambeau, llambeau, ancailliau
       *{authors as who}{${who}} {, }   ->    blambeaullambeauancailliau {, }
       *{authors as who} {${who}}{, }   ->    parse error 1:18, missing block 2 in *{...}{...}
     
   In addition to these constraints, dialects and the hosting language may impose restrictions on what can be put inside specific
-  blocks of tags/rules (for example, 'authors as who' is valid as first tag of <tt>*{...}{...}</tt> but not every string is of course). 
+  blocks of tags/rules (for example, 'authors as who' is valid as first tag of <tt>*{...}{...}</tt> but not every string is, of course). 
   These constraints are not specific to the wlang grammar <em>per se</em> and are explained in the 'Rulesets', 'Dialects' and 'Hosting 
   language' pages of this document. 
    

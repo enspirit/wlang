@@ -73,7 +73,7 @@
       <li id="hostingfocus" onclick="show('hosting')">Hosting language</li>
       <li id="dialectsfocus" onclick="show('dialects')">Dialects</li>
       <li id="rulesetsfocus" onclick="show('rulesets')">Rulesets</li>
-      <li id="instantiationfocus" onclick="show('instantiation')">Instantiation</li>
+      <li id="overviewfocus" onclick="show('overview')">Short overview</li>
       <li id="introfocus" class="focus" onclick="show('intro')">Introduction</li>
     </ul>
     <div class="clear"></div>
@@ -98,12 +98,12 @@
         }
 		</table>
     </div>
-    <div id="instantiation" style="display: none;">
+    <div id="overview" style="display: none;">
 	    <div class="header">
-	      <h2>Instantiation</h2>
+	      <h2>Short overview</h2>
 	      <div class="clear"></div>
 	    </div>
-	    <p>^{rdoc/div}{+{grammar}}</p>
+	    <p>^{rdoc/div}{+{overview}}</p>
 	</div>
     <div id="rulesets" style="display: none;">
 	    <div class="header">
