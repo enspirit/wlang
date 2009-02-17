@@ -1,3 +1,23 @@
+^{rdoc/div}{
+Standard ruleset are designed to be reusable: including them in your own dialect is made
+easy by a typical _wlang_ implementation. Some of them are also included by standard dialects.
+
+=== How to read this cheatsheet?
+
+First of all, focus on the examples; they are written to let you learn _wlang_ quickly and 
+deeply. Some of them are a bit difficult to understand but they are representative of _wlang_
+powerfulness (don't be affraid: in practice, some constructions are never used). Don't forget
+that the <tt>wlang/dummy</tt> dialect does not recognize any tag. We also assume instantiation 
+data to be the following hash:
+  {"name"     =>  "O'Neil", 
+   "author"   =>  "blambeau"
+   "authors"  =>  ["blambeau", "llambeau", "ancailliau"]}
+
+Moreover, the dialect column in the examples can be important; _wlang_ behaves differently 
+in different dialects. When the dialect does not care, we use <tt>wlang/*</tt> which means
+'in any dialect that includes this ruleset'.
+
+}
 *{spec/rulesets as ruleset}{
   <h3 id="${ruleset/name}">${ruleset/name}</h3>
   ^{rdoc/div}{${ruleset/description}}

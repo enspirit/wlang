@@ -58,7 +58,7 @@ module WLang::RuleSet::Buffering
     uri, reached = parser.parse(offset, "wlang/uri")
     
     # decode expression
-    decoded = U.decode_uri_with(uri, parser)
+    decoded = U.decode_uri_with(uri, parser, true)
     parser.syntax_error(offset) if decoded.nil?
     
     file = parser.template.file_resolve(decoded[:uri], true)

@@ -11,13 +11,6 @@ sections:
   - id: rulesets
     name: Rulesets
     file: rulesets.wtpl
-    description: |-
-      Standard ruleset are designed to be reusable: including them in your own dialect is made
-      easy by a typical _wlang_ implementation. Some of them are also included by standard dialects.
-      In the examples below we assume intantiation data to be the following hash:
-        {"name"     =>  "O'Neil", 
-         "author"   =>  "blambeau"
-         "authors"  =>  ["blambeau", "llambeau", "ancailliau"]}
   - id: dialects
     name: Dialects
     file: dialects.wtpl
@@ -110,7 +103,7 @@ rulesets:
       - ["wlang/active-string", "Hello !{name}",                       "Hello O'Neil"]
       - ["wlang/active-string", "Hello %{wlang/dummy}{!{name}}",       "Hello !{name}"]
       - ["wlang/dummy",         "Hello %{wlang/dummy}{!{name}}",       "Hello %{wlang/dummy}{!{name}}"]
-      - ["wlang/active-string", "Hello ^{plain-text/upcase}{!{name}}", "Hello O'NEIL"]
+      - ["wlang/active-string", "Hello ^{plain-text/upcase}{${name}}", "Hello O'NEIL"]
     rules:
       # !{wlang/hosted}
       - name:      "execution"

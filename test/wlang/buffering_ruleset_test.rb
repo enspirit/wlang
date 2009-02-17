@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 require 'wlang/test_utils.rb'
 require 'wlang/rulesets/buffering_ruleset'
@@ -63,6 +63,14 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
     assert_equal("", template.instantiate())
     assert_equal("AN OUTPUT", File.read(output))
     File.delete(output) if File.exists?(output)
+  end
+  
+  # Tests that an included template can include other thinks
+  def test_inclusion_in_include_template_works
+    expected = "template3"
+    file = relative_file("buffering_template1.wtpl", __FILE__)
+    result = WLang::file_instantiate(file) 
+    assert_equal(expected, result)
   end
   
 end # class WLang::ScopingRuleSetTest

@@ -5,11 +5,20 @@ module WLang
       # Regexp string for 'user_variable'
       VAR = '[a-z_]+'
       
+      # Regular expression for 'user_variable'
+      RG_VAR = Regexp.new('^\s*(' + VAR + ')\s*$')
+      
       # Regexp string for expression in the hosting language
       EXPR = '.*?'
       
+      # Regular expression for expression in the hosting language
+      RG_EXPR = Regexp.new('^\s*(' + EXPR + ')\s*$')
+      
       # Regexp string for URI expresion
       URI = '[^\s]+'
+      
+      # Regular expression for expression in the hosting language
+      RG_URI = Regexp.new('^\s*(' + URI + ')\s*$')
       
       # Part of a with expression
       WITH_PART = '(' + VAR + ')' + '\s*:([^,]+)'
@@ -43,12 +52,6 @@ module WLang
       
       # Regular expression for 'qualified/encoder'
       RG_QENCODER = Regexp.new('^\s*(' + QENCODER + ')\s*$')
-      
-      # Regular expression for 'user_variable'
-      RG_VAR = Regexp.new('^\s*(' + VAR + ')\s*$')
-      
-      # Regular expression for expression in the hosting language
-      RG_EXPR = Regexp.new('^\s*(' + EXPR + ')\s*$')
       
       # Regexp string for 'qualified/dialect as var'
       QDIALECT_AS = '(' + QDIALECT + ')\s+as\s+(' + VAR + ')'
@@ -126,16 +129,22 @@ module WLang
       # Decodes a 'wlang/uri with ...'. Returns a hash
       # with :uri and :with keys (with being another hash), or nil if _str_ does
       # not match.
-      def self.decode_uri_with(str, parser=nil)
+      def self.decode_uri_with(str, parser=nil, optional=false)
         match = RG_URI_WITH.match(str)
-        return nil unless match
-        with_expr, with = match[3], {}
-        exprs = with_expr.split(/\s*,\s*/)
-        exprs.each do |expr|
-          RG_WITH_PART =~ expr
-          with[$1] = parser.nil? ? $2 : parser.evaluate($2)
+        if match.nil?
+          return nil unless optional
+          match = RG_URI.match(str)
+          return nil if match.nil?
+          return {:uri => match[1], :with => nil}
+        else
+          with_expr, with = match[3], {}
+          exprs = with_expr.split(/\s*,\s*/)
+          exprs.each do |expr|
+            RG_WITH_PART =~ expr
+            with[$1] = parser.nil? ? $2 : parser.evaluate($2)
+          end
+          {:uri => match[2], :with => with} 
         end
-        {:uri => match[2], :with => with} 
       end
   
     end

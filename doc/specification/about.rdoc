@@ -20,8 +20,9 @@ The current file is the reference of the tool.
 === About this document
 
 This document is a simple .html file without external dependencies (embedded CSS and javascript).
-Thus it can be saved as a simple cheatsheet. It has been generated using _wlang_ itself
-using the following simple command:
+As it contains several cheatsheets, you can simply save it on your harddisk without having to be
+online to browse the documentation. It has been generated using _wlang_ itself using the following
+command:
 
     wlang specification.wtpl
 
@@ -30,6 +31,10 @@ and written in the most appropriate format for the task at hand (YAML for struct
 text sections, sometimes YAML embedding short sentences writted in RDoc style, etc.). 
 One way to learn _wlang_ quickly is to download the source distribution and to look how this is made
 possible ;-) 
+
+This reference document is under a {Creative Commons Licence 2.0}[http://creativecommons.org/licenses/by/2.0/be/]
+contract. You can use it, redistribute it and modify it providing that you keep a reference to the
+original licensor (namely, the 'University of Louvain' or 'Bernard and Louis Lambeau').
 
 Enjoy _wlang_ !
 

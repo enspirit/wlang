@@ -74,7 +74,6 @@ class WLangTest < Test::Unit::TestCase
       WLang::instantiate(template, nil, "wlang/xhtml")
     end
   end
-
   
 end # class WLangTest
   

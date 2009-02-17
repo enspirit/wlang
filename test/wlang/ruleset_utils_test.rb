@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 require 'wlang/rulesets/ruleset_utils'
 
@@ -155,6 +155,19 @@ class WLang::RuleSetUtilsTest < Test::Unit::TestCase
     tests.each do |t|
       expected, src = t
       assert_equal(expected, WLang::RuleSet::Utils.decode_uri_with(src,nil))
+    end
+  end
+     
+  def test_URI_WITH_regexp_with_optional
+    tests = [
+      [{:uri =>"file.yaml", :with => nil}, "file.yaml"],
+      [{:uri =>"folder/file.yaml", :with => nil}, "folder/file.yaml"],
+      [{:uri =>"folder/folder/file.ext", :with => nil}, "folder/folder/file.ext"],
+      [{:uri =>"http://folder/folder/with/file.ext", :with => nil}, "http://folder/folder/with/file.ext"],
+    ]
+    tests.each do |t|
+      expected, src = t
+      assert_equal(expected, WLang::RuleSet::Utils.decode_uri_with(src,nil,true))
     end
   end
      

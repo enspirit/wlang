@@ -25,7 +25,6 @@
 		  <h2>${section/name}</h2>
 		  <div class="clear"></div>
 		</div>
-		?{section/description}{^{rdoc/div}{+{section/description}}}
 		?{/rdoc$/ =~ "{section/file}"}{
 		  ^{rdoc/div}{<<{+{section/file}}}
 		}{

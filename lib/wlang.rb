@@ -176,7 +176,9 @@ module WLang
             "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", "))\
         if dialect.nil?
     end
-    WLang::Template.new(File.read(file), dialect, context, block_symbols).instantiate(buffer)
+    t = WLang::Template.new(File.read(file), dialect, context, block_symbols)
+    t.source_file = file
+    t.instantiate(buffer)
   end
   
 end
