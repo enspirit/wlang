@@ -133,6 +133,17 @@ rulesets:
           the current dialect. Encode #2's instantiation using encoder found in (#1) and
           returns encoding as replacement value.
       
+      # %!{wlang/active-string using ... with ...}{...}
+      - name:      "recursive-application"
+        symbol:    "%!"
+        signature: "%!{wlang/active-string <using>? <with>?}{...}"
+        definition: |-
+          Instantiates #1, looking for a dialect qualified name. Instantiates #2 
+          in the current dialect. Instantiates #2's instantiation in the dialect found
+          in #1, using context installed by 'using ...' and 'with ...'. Returns this 
+          instantiation as replacement value (this really advanced rule allows 
+          metaprogramming).  
+      
       # ${wlang/hosted}
       - name:      "injection"
         symbol:    "$"
@@ -229,7 +240,7 @@ rulesets:
       # *{wlang/hosted as x}{...}{...}
       - name:      "enumeration<br/>(third block is optional)"
         symbol:    "*"
-        signature: "*{wlang/hosted as x}{...}{...}"
+        signature: "*{wlang/hosted <as x>?}{...}{...}"
         definition: |-
           Instantiates #1, looking for an expression in the hosting language. Evaluates 
           it, looking for an enumerable. Iterates all its elements, instantiating #2 for 
@@ -257,7 +268,7 @@ rulesets:
       # ={wlang/hosted as x}{...}
       - name:      "assignment<br/>(second block is optional)"
         symbol:    "="
-        signature: "={wlang/hosted as x}{...}"
+        signature: "={wlang/hosted <as x>}{...}"
         definition: |-
             Instantiates #1, looking for an expression in the hosting language. Evaluates 
             it, looking for any object. Without second block, expands the current scope with 
@@ -267,7 +278,7 @@ rulesets:
       # %={wlang/active-string as x}{...}{...}
       - name:      "modulo-assignment<br/>(third block is optional)"
         symbol:    "%="
-        signature: "%={wlang/active-string as x}{...}{...}"
+        signature: "%={wlang/active-string <as x>}{...}{...}"
         definition: |-
             Instantiates #1, looking for a dialect qualified name. Instantiates #2 according 
             to the rules defined by that dialect. Without third block, expands the current 
@@ -278,13 +289,13 @@ rulesets:
       # #={wlang/active-string}{...}{...}
       - name:      "block-assignment<br/>(third block is optional)"
         symbol:    "="
-        signature: "#={wlang/active-string}{...}{...}"
+        signature: "#={wlang/active-string <as x>}{...}{...}"
         definition: |-
           <tt>%={+{@parser.current_dialect} as #1}{#2}{#3}</tt>
       # ^={wlang/active-string as x}{...}{...}
       - name:      "encoding-assignment<br/>(third block is optional)"
         symbol:    "^="
-        signature: "^={wlang/active-string as x}{#2}{#3}"
+        signature: "^={wlang/active-string <as x>}{...}{...}"
         definition: |-
           <tt>%={+{@parser.current_dialect} as x}{^{#1}{#2}}{#3}</tt>
 
@@ -312,7 +323,7 @@ rulesets:
       # <<={wlang/uri as x}{...}
       - name:      "data-assignment"
         symbol:    "<<="
-        signature: "<<={wlang/uri as x}{...}"
+        signature: "<<={wlang/uri <as x>}{...}"
         definition: |-
           Instantiates #1, looking for an uri. Loads data provided by this uri, based on the
           file extension (typically .yml or .rb). Without second block, expands the current scope 
@@ -322,7 +333,7 @@ rulesets:
       # <<+{wlang/uri with ...}
       - name:      "input-inclusion"
         symbol:    "<<+"
-        signature: "<<+{wlang/uri with ...}"
+        signature: "<<+{wlang/uri <using>? <with>?}"
         definition: |-
           Instantiates #1, looking for an uri. Instantiates the _wlang_ template at this location
           (the dialect is infered from the file extension) in a fresh new scope built from the _with_
