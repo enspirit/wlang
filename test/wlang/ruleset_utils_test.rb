@@ -1,10 +1,42 @@
-require 'test/unit'
+require 'test/unit/testcase'
 require 'wlang'
 require 'wlang/rulesets/ruleset_utils'
 
 # Tests the ruleset utilities.
 class WLang::RuleSetUtilsTest < Test::Unit::TestCase
   include WLang::RuleSet::Utils
+  
+  # Tests decoding qdialects
+  def test_decode_qdialect()
+    tests = ["wlang", "xhtml", "\nxhtml  ", "plain-text", "wlang/plain-text", "  wlang/sql"]
+    tests.each do |t|
+      expected = {:qdialect => t.strip}
+      result = WLang::RuleSet::Utils.expr(:qdialect).decode(t) 
+      assert_equal(expected, result)
+    end
+  end
+  
+  # Tests decoding qdialects
+  def test_decode_qdialect_as()
+    tests = ["wlang as var", "xhtml as var", "\nxhtml   as var ", 
+             "plain-text as var", "wlang/plain-text\tas\tvar", "  wlang/sql as var"]
+    tests.each do |t|
+      /^\s*([^\s]+)\s+as\s+([^\s]+)\s*$/ =~ t
+      expected = {:qdialect => $1, :as => $2}
+      result = WLang::RuleSet::Utils.expr(:qdialect, ["as", :var]).decode(t) 
+      assert_equal(expected, result)
+    end
+  end
+  
+  # Tests decoding qdialects
+  def test_decode_qdialect_as_with_optional()
+    tests = ["wlang", "xhtml", "\nxhtml  ", "plain-text", "wlang/plain-text", "  wlang/sql"]
+    tests.each do |t|
+      expected = {:qdialect => t.strip, :as => nil}
+      result = WLang::RuleSet::Utils.expr(:qdialect, ["as", :var, false]).decode(t) 
+      assert_equal(expected, result)
+    end
+  end
   
   def test_DIALECT_regexp
     assert_not_nil(RG_DIALECT =~ "wlang")
@@ -148,6 +180,8 @@ class WLang::RuleSetUtilsTest < Test::Unit::TestCase
   def test_URI_WITH_regexp
     tests = [
       [{:uri =>"folder/file.yaml", :with => {"spec" => "spec"}}, "folder/file.yaml with spec: spec"],
+      [{:uri =>"folder/file.yaml", :with => {"a" => "a", "b" => "b"}}, 
+        "folder/file.yaml with   a    :a  , b : b"],
       [{:uri =>"folder/file.yaml", :with => {"spec" => "spec.reverse"}}, "folder/file.yaml with spec: spec.reverse"],
       [{:uri =>"folder/file.yaml", :with => {"s" => "spec", "t" => "spec/rulesets", "xs" => "spec/uses"}}, 
         "folder/file.yaml with s:spec, t:spec/rulesets, xs:spec/uses"],

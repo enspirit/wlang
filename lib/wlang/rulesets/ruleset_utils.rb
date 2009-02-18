@@ -2,53 +2,144 @@ module WLang
   class RuleSet
     module Utils
   
-      # Regexp string for 'user_variable'
-      VAR = '[a-z_]+'
+      # Regexp string for 'dialect'
+      DIALECT = '[-a-z]+'
       
-      # Regular expression for 'user_variable'
-      RG_VAR = Regexp.new('^\s*(' + VAR + ')\s*$')
+      # Regexp string for 'encoder'
+      ENCODER = '[-a-z]+'
+      
+      # Regexp string for 'qualified/dialect'
+      QDIALECT = DIALECT + '([\/]' + DIALECT + ')*'
+      
+      # Regexp string for 'qualified/encoder'
+      QENCODER = ENCODER + '([\/]' + ENCODER + ')*'
+      
+      # Regexp string for 'user_variable'
+      VAR = '[a-z][a-z0-9_]*'
       
       # Regexp string for expression in the hosting language
       EXPR = '.*?'
       
-      # Regular expression for expression in the hosting language
-      RG_EXPR = Regexp.new('^\s*(' + EXPR + ')\s*$')
-      
       # Regexp string for URI expresion
       URI = '[^\s]+'
+      
+      # Part of a with expression
+      WITH_PART = '(' + VAR + ')' + '\s*:\s*(' + EXPR + ')'
+      
+      # Regexp string for with expression
+      WITH = WITH_PART + '(\s*,\s*(' + WITH_PART + '))*'
+      
+      # Basic blocks for building expressions
+      BASIC_BLOCKS = {
+        :dialect   => {:str => DIALECT,   :groups => 0, :decoder => nil},
+        :encoder   => {:str => ENCODER,   :groups => 0, :decoder => nil},
+        :qdialect  => {:str => QDIALECT,  :groups => 1, :decoder => nil},
+        :qencoder  => {:str => QENCODER,  :groups => 1, :decoder => nil},
+        :var       => {:str => VAR,       :groups => 0, :decoder => nil},
+        :expr      => {:str => EXPR,      :groups => 0, :decoder => :decode_expr},
+        :uri       => {:str => URI,       :groups => 0, :decoder => nil},
+        :with      => {:str => WITH,      :groups => 6, :decoder => :decode_with}
+      }
+      
+      # Regular expressions of built expressions
+      REGEXPS = {}
+      
+      # Builds an expression 
+      def self.expr(*args)
+        expr = REGEXPS[args]
+        if expr.nil?
+          str, hash, count = '^\s*', {}, 0
+          args.each do |arg|
+            case arg
+            when Symbol
+              str << '(' << BASIC_BLOCKS[arg][:str] << ')'
+              hash[arg] = [(count+=1), BASIC_BLOCKS[arg][:decoder]]
+              count += BASIC_BLOCKS[arg][:groups]
+            when Array
+              keyword, what, mandatory = arg
+              mandatory = true if mandatory.nil?
+              unless mandatory
+                str << '('
+                count += 1
+              end
+              str << '\s+' << keyword << '\s+'
+              str << '(' << BASIC_BLOCKS[what][:str] << ')'
+              str << ')?' unless mandatory
+              hash[keyword.to_sym] = [(count+=1), BASIC_BLOCKS[what][:decoder]]
+              count += BASIC_BLOCKS[what][:groups]
+            else
+              raise ArgumentError, "Symbol or Array expected"
+            end
+          end
+          str << '\s*$'
+          expr = {:regexp  => Regexp.new(str), 
+                  :places  => hash}
+          def expr.decode(str, parser=nil)
+            matchdata = self[:regexp].match(str)
+            return nil if matchdata.nil?
+            decoded = {}
+            self[:places].each_pair do |k,v|
+              value = matchdata[v[0]]
+              value = Utils.send(v[1], value, parser)\
+                if v[1] and not(value.nil?)
+              decoded[k] = value
+            end
+            return decoded
+          end
+          REGEXPS[args] = expr   
+        end
+        expr
+      end
+      
+      # Decodes an expression using the parser
+      def self.decode_expr(expr, parser) 
+        return expr if parser.nil?
+        parser.evaluate(expr)
+      end
+        
+      # Regular expression for WITH
+      RG_WITH = Regexp.new('^' + WITH + '$')
+    
+      # Decodes a with expression
+      def self.decode_with(expr, parser, hash={})
+        matchdata = RG_WITH.match(expr)
+        return hash if matchdata.nil?
+        hash[matchdata[1]] = decode_expr(matchdata[2], parser)
+        decode_with(matchdata[4], parser, hash)
+      end
+      
+      # Builds a hash for 'using ... with ...' rules from a decoded expression
+      def self.context_from_using_and_with(decoded)
+        context = decoded[:using]
+        context = context.dup unless context.nil?
+        context = {} if context.nil?
+        context.merge!(decoded[:with]) unless decoded[:with].nil?
+        context  
+      end
+      
+      
+      ### DEPRECATED API ####################################################
+        
+      # Regular expression for 'user_variable'
+      RG_VAR = Regexp.new('^\s*(' + VAR + ')\s*$')
+      
+      # Regular expression for expression in the hosting language
+      RG_EXPR = Regexp.new('^\s*(' + EXPR + ')\s*$')
       
       # Regular expression for expression in the hosting language
       RG_URI = Regexp.new('^\s*(' + URI + ')\s*$')
       
       # Part of a with expression
-      WITH_PART = '(' + VAR + ')' + '\s*:([^,]+)'
-      
-      # Part of a with expression
       RG_WITH_PART = Regexp.new('(' + VAR + ')' + '\s*:\s*([^,]+)')
-      
-      # Regexp string for with expression
-      WITH = WITH_PART + '(\s*,\s*' + WITH_PART + ')*'
-        
-      # Regexp string for 'dialect'
-      DIALECT = WLang::DIALECT_NAME_REGEXP_STR
       
       # Regular expression for 'dialect'
       RG_DIALECT = Regexp.new('^\s*(' + DIALECT + ')\s*$')
       
-      # Regexp string for 'encoder'
-      ENCODER = WLang::ENCODER_NAME_REGEXP_STR
-      
       # Regular expression for 'encoder'
       RG_ENCODER = Regexp.new('^\s*(' + ENCODER + ')\s*$')
       
-      # Regexp string for 'qualified/dialect'
-      QDIALECT = WLang::QUALIFIED_DIALECT_NAME_REGEXP_STR
-      
       # Regular expression for 'qualified/dialect'
       RG_QDIALECT = Regexp.new('^\s*(' + QDIALECT + ')\s*$')
-      
-      # Regexp string for 'qualified/encoder'
-      QENCODER = WLang::QUALIFIED_ENCODER_NAME_REGEXP_STR
       
       # Regular expression for 'qualified/encoder'
       RG_QENCODER = Regexp.new('^\s*(' + QENCODER + ')\s*$')
@@ -82,7 +173,7 @@ module WLang
       
       # Regular expression for 'wlang/uri as var'
       RG_URI_AS = Regexp.new('^\s*(' + URI_AS + ')\s*$')
-
+  
       # Regespc string for 'wlang/uri with ...'
       URI_WITH = '(' + URI + ')\s+with\s+(' + WITH + ')'
             

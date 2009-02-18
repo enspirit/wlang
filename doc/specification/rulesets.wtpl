@@ -38,7 +38,7 @@ doing so (think at all blocks that expect an expression in the hosting language,
   *{files as f}{<<{+{f}}}
 
 }}
-
+<<={examples.rb as examples}
 *{spec/rulesets as ruleset}{
   <h3 id="${ruleset/name}">${ruleset/name}</h3>
   ^{rdoc/div}{${ruleset/description}}
@@ -75,7 +75,9 @@ doing so (think at all blocks that expect an expression in the hosting language,
             <tt>${example[1]}</tt>
           </td>
           <td class="replacement">
-            <tt>${example[2]}</tt>
+            #={dialect}{?{example[0] == "wlang/*"}{wlang/xhtml}{+{example[0]}}}{
+            <tt>%!{+{dialect} using examples}{+{example[1]}}</tt>
+            }
           </td>
         </tr>
       }

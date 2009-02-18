@@ -48,17 +48,22 @@ module WLang::RuleSet::Basic
     execution(parser, offset)
   end
   
-  # Rule implementation of <tt>+{wlang/ruby}</tt>
+  # Rule implementation of <tt>%!{wlang/ruby using ... with ...}</tt>
   def self.recursive_application(parser, offset)
     dialect, reached = parser.parse(offset, "wlang/active-string")
     text, reached = parser.parse_block(reached)
     
     # decode expression
-    decoded = U.decode_qdialect_with(dialect, parser, true)
+    decoded = U.expr(:qdialect, 
+                     ["using", :expr, false], 
+                     ["with",  :with, false]).decode(dialect, parser)
     parser.syntax_error(offset) if decoded.nil?
     
+    # build context
+    context = U.context_from_using_and_with(decoded)
+    
     # instanciate
-    instantiated = WLang::instantiate(text, decoded[:with], decoded[:dialect])
+    instantiated = WLang::instantiate(text, context, decoded[:qdialect])
     [instantiated, reached]
   end
   
