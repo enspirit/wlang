@@ -1,3 +1,5 @@
+require 'wlang/rulesets/ruleset_utils'
+
 #
 # Basic ruleset, commonly included by any wlang dialect (but some tags, like
 # <tt>${...}</tt> may be overriden). This ruleset is often installed conjointly
@@ -7,10 +9,11 @@
 # For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
 #
 module WLang::RuleSet::Basic
+  U=WLang::RuleSet::Utils
   
   # Default mapping between tag symbols and methods
   DEFAULT_RULESET = {'!' => :execution, '%' => :modulation, '^' => :encoding,
-                     '+' => :inclusion, '$' => :injection}
+                     '+' => :inclusion, '$' => :injection, '%!' => :recursive_application}
   
   # Rule implementation of <tt>!{wlang/ruby}</tt>.
   def self.execution(parser, offset)
@@ -43,6 +46,20 @@ module WLang::RuleSet::Basic
   # Rule implementation of <tt>+{wlang/ruby}</tt>
   def self.inclusion(parser, offset)
     execution(parser, offset)
+  end
+  
+  # Rule implementation of <tt>+{wlang/ruby}</tt>
+  def self.recursive_application(parser, offset)
+    dialect, reached = parser.parse(offset, "wlang/active-string")
+    text, reached = parser.parse_block(reached)
+    
+    # decode expression
+    decoded = U.decode_qdialect_with(dialect, parser, true)
+    parser.syntax_error(offset) if decoded.nil?
+    
+    # instanciate
+    instantiated = WLang::instantiate(text, decoded[:with], decoded[:dialect])
+    [instantiated, reached]
   end
   
 end  # module Basic

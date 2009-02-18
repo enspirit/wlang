@@ -23,6 +23,11 @@
 	  <div id="{section/id}" style="display: none;">
 	    <div class="header">
 		  <h2>${section/name}</h2>
+		  ?{section/links}{
+		    <ul class="links">
+		      *{+{section/links} as link}{<li><a href="#${link/name}">${link/name}</a></li>}
+		    </ul>
+		  }
 		  <div class="clear"></div>
 		</div>
 		?{/rdoc$/ =~ "{section/file}"}{

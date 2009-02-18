@@ -6,11 +6,12 @@ sections:
     name: About
     file: about.rdoc
   - id: overview
-    name: Short overview
+    name: Overview
     file: overview.rdoc
   - id: rulesets
     name: Rulesets
     file: rulesets.wtpl
+    links: 'spec["rulesets"].reverse'
   - id: dialects
     name: Dialects
     file: dialects.wtpl

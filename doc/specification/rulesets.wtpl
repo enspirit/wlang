@@ -1,4 +1,4 @@
-^{rdoc/div}{
+^{rdoc/div}{%{wlang/dummy}{
 Standard ruleset are designed to be reusable: including them in your own dialect is made
 easy by a typical _wlang_ implementation. Some of them are also included by standard dialects.
 
@@ -13,11 +13,32 @@ data to be the following hash:
    "author"   =>  "blambeau"
    "authors"  =>  ["blambeau", "llambeau", "ancailliau"]}
 
-Moreover, the dialect column in the examples can be important; _wlang_ behaves differently 
+Moreover, the dialect column in the examples is important; _wlang_ behaves differently 
 in different dialects. When the dialect does not care, we use <tt>wlang/*</tt> which means
 'in any dialect that includes this ruleset'.
 
-}
+Next, certain rule definitions are given as shortcuts for longer expressions, involving other tags.
+This is somewhat representative of _wlang_ usage, even if these rules are not actually implemented 
+this way (mainly for efficiency concerns). Once again, understanding shortcuts will help you 
+mastering wlang! In definitions (textual as well as shortcuts), we use #1, #2, and #3 to refer to 
+the content of the blocks. Those identifiers are not real _wlang_ constructs, but are only used here for 
+easier explanations (for those who know this kind of vocabulary: they are part of the meta-language,
+not the language <em>per se</em>).
+
+Lastly, dialect names that appear in rule signatures are to be interpreted as an implicit dialect 
+modulation: the corresponding block (often the first one) is not instantiated in the current dialect 
+but in the one specified by the signature. In contrast, when we use '...' it means that the 
+corresponding block is simply instantiated in the current dialect. Implicit dialect modulation is
+in fact natural: if a block expects an uri for example, the easiest way is to give
+it exactly: <tt><<{a/file/to/include.txt}</tt>. But you can even compute it using _wlang_, as illustrated
+by the example below. In complex situations you will probably be happy to use a dialect that helps you 
+doing so (think at all blocks that expect an expression in the hosting language, for example)!
+
+  # Concatenates all files of the 'files' array variable
+  *{files as f}{<<{+{f}}}
+
+}}
+
 *{spec/rulesets as ruleset}{
   <h3 id="${ruleset/name}">${ruleset/name}</h3>
   ^{rdoc/div}{${ruleset/description}}

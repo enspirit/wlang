@@ -59,6 +59,12 @@ module WLang
       # Regular expression for 'qualified/dialect as var'
       RG_QDIALECT_AS = Regexp.new('^\s*(' + QDIALECT_AS + ')\s*$')
       
+      # Regexp string for 'qualified/dialect with ...'
+      QDIALECT_WITH = '(' + QDIALECT + ')\s+as\s+(' + WITH + ')'
+      
+      # Regular expression for 'qualified/dialect with ...'
+      RG_QDIALECT_WITH = Regexp.new('^\s*(' + QDIALECT_WITH + ')\s*$')
+      
       # Regexp string for 'qualified/encoder as var'
       QENCODER_AS = '(' + QENCODER + ')\s+as\s+(' + VAR + ')'
       
@@ -147,6 +153,27 @@ module WLang
         end
       end
   
+      # Decodes a 'wlang/dialect with ...'. Returns a hash
+      # with :dialect and :with keys (with being another hash), 
+      # or nil if _str_ does not match.
+      def self.decode_qdialect_with(str, parser=nil, optional=false)
+        match = RG_QDIALECT_WITH.match(str)
+        if match.nil?
+          return nil unless optional
+          match = RG_QDIALECT.match(str)
+          return nil if match.nil?
+          return {:dialect => match[1], :with => nil}
+        else
+          with_expr, with = match[3], {}
+          exprs = with_expr.split(/\s*,\s*/)
+          exprs.each do |expr|
+            RG_WITH_PART =~ expr
+            with[$1] = parser.nil? ? $2 : parser.evaluate($2)
+          end
+          {:dialect => match[2], :with => with} 
+        end
+      end
+
     end
   end
 end
