@@ -32,6 +32,6 @@ module WLang
       return [line, column]
     end
     
-  end
+  end # class ParseError
   
 end # module WLang
