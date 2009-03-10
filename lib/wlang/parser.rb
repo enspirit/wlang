@@ -26,6 +26,12 @@ class Parser
   # Current parsed template
   attr_reader :template
   
+  # Current execution context
+  attr_reader :context
+  
+  # Current buffer
+  attr_reader :buffer
+  
   #
   # Initializes a parser instance. _parent_ is the Parser instance of the higher
   # parsing stage. _template_ is the current instantiated template, _offset_ is
