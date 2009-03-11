@@ -96,7 +96,7 @@ and associated terms.
        explicitly describes the number of blocks it expects, in which dialect they 
        are parsed and instantiated and the way the replacement value is computed.
        Example: <tt>^{wlang/active-string}{...}</tt> (also known as 'encoding') 
-       instanciates #1, looking for an encoder qualified name. Instanciates #2 in 
+       instantiates #1, looking for an encoder qualified name. Instantiates #2 in 
        the current dialect. Encode #2's instantiation using encoder found in (#1)
 [context] Some rules allow code to be executed in the <em>hosting language</em> (the 
           definition explicitly announce it by putting <tt>wlang/hosted</tt> in the corresponding

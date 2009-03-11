@@ -1,11 +1,10 @@
 require 'test/unit'
 require 'wlang'
-require 'wlang/intelligent_buffer'
 module WLang
 
   # Tests the IntelligentBuffer class
   class IntelligentBufferTest < Test::Unit::TestCase
-    include IntelligentBuffer::Utils
+    include IntelligentBuffer::Methods
     
     # Creates a buffer instance
     def buffer(str)
@@ -16,6 +15,7 @@ module WLang
       assert_equal(4, last_column('abc'))
       assert_equal(4, last_column("\nabc"))
       assert_equal(6, last_column("\nabc\nab cd"))
+      assert_equal(1, last_column("\n\n\n\n\n\n"))
     end
     
     def test_ismultiline?
@@ -26,10 +26,15 @@ module WLang
       assert_equal false, is_multiline?("abc\t")
     end
     
-    def test_STRIP_BLOCK_REGEXP
-      # check on non multiline
-      assert_nil 'abc' =~ STRIP_BLOCK_REGEXP
-      
+    def test_tabto
+      template = <<-EOF
+        def +{d}
+          contents of the method here
+          and also here
+        end
+      EOF
+      template = tabto(template, 0).strip
+      assert_equal("def +{d}\n  contents of the method here\n  and also here\nend", template)
       # check on normal multiline
       template = %Q{
         def +{d}
@@ -37,35 +42,9 @@ module WLang
           and also here
         end
       }
-      match2 = "        def +{d}\n          contents of the method here\n          and also here\n        end\n"
-      match = template.match(STRIP_BLOCK_REGEXP)
-      assert_equal "\n", match[1]
-      assert_equal match2, match[2]
-      assert_equal nil, match[3]
-      assert_equal "        ", match[4]
-      assert_equal "      ", match[5]
-      
-      # check that explicit carriage return are recognized
-      template = %Q{
-        
-        def +{d}
-          contents of the method here
-          and also here
-        end
-      }
-      match2 = "        \n        def +{d}\n          contents of the method here\n          and also here\n        end\n"
-      match = template.match(STRIP_BLOCK_REGEXP)
-      assert_equal match2, match[2]
-      
-      # check that no first carriage return is recognized as well
-      template = %Q{def +{d}
-          contents of the method here
-          and also here
-        end
-      }
-      match2 = "def +{d}\n          contents of the method here\n          and also here\n        end\n"
-      match = template.match(STRIP_BLOCK_REGEXP)
-      assert_equal match2, match[2]
+      stripped = strip_block(template)
+      expected = "    def +{d}\n      contents of the method here\n      and also here\n    end\n"
+      assert_equal(expected, tabto(stripped, 4))
     end
     
     def test_strip_block
@@ -79,18 +58,18 @@ module WLang
           and also here
         end
       }
-      expected = "def +{d}\n  contents of the method here\n  and also here\nend\n"
+      expected = "        def +{d}\n          contents of the method here\n          and also here\n        end\n"
       assert_equal(expected, strip_block(template))
 
       # check that explicit carriage return are recognized
       template = %Q{
-        
+
         def +{d}
           contents of the method here
           and also here
         end
       }
-      expected = "\ndef +{d}\n  contents of the method here\n  and also here\nend\n"
+      expected = "\n        def +{d}\n          contents of the method here\n          and also here\n        end\n"
       assert_equal(expected, strip_block(template))
 
       # check that no first carriage return is recognized as well
@@ -108,23 +87,19 @@ end
     def hello()
     end
   }
-      assert_equal("\ndef hello()\nend\n", strip_block(template))
+      assert_equal("\n    def hello()\n    end\n", strip_block(template))
+
+      # Tests on a missing end bug
+      mod = "module MyModule\n  10\n  20\n  30\n\nend"
+      assert_equal(mod, strip_block(mod))
     end
     
-    def test_realign
-      # check on non multiline
-      assert_equal 'abc', realign('abc', 10)
-      
-      # check on normal multiline
-      template = %Q{
-        def +{d}
-          contents of the method here
-          and also here
-        end
-      }
-      stripped = strip_block(template)
-      expected = "    def +{d}\n      contents of the method here\n      and also here\n    end\n"
-      assert_equal(expected, realign(stripped, 4))
+    def test_missing_end_bug_reason
+      buf = IntelligentBuffer.new
+      mod = "module MyModule\n  10\n  20\n  30\n\nend"
+      assert_equal(mod, strip_block(mod))
+      buf.<<(mod, true)
+      assert_equal(mod, buf.to_s)
     end
     
     def test_push
@@ -180,6 +155,40 @@ end
       assert_equal(expected, buf.to_s)
     end
     
-  end
-
+    def test_wlang_on_intelligent_buffer
+      template = <<-EOF
+        module +{name}
+          
+          *{defs as d}{
+            
+            def +{d}
+            end
+          }
+          
+        end
+      EOF
+      template = template.gsub(/ {8}/, '').strip
+      #puts template
+      context = {"name" => "MyModule", "defs" => ["hello", "strip", "toeol"]}
+      #puts template.wlang_instantiate(context, "wlang/ruby")
+    end
+    
+    def test_wlang_on_web_example
+      template = %q{
+        <table>
+          *{rows as r}{
+            <tr>
+              *{r as d}{
+                <td>+{d}</td>
+              }
+            </tr>
+          }
+        </table>
+      }.gsub(/^ {8}/, '').strip
+      #puts template
+      context = {"rows" => [[10, 11, 12], [20, 21, 22], [30, 31, 32]]}
+      #puts template.wlang_instantiate(context, "wlang/xhtml")
+    end    
+    
+  end # class IntelligentBufferTest
 end

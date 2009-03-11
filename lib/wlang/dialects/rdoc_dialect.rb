@@ -4,7 +4,7 @@ module WLang
   class EncoderSet
     
     # Provides the rdoc encoder
-    module RDoc
+    module RDocEncoders
   
       # Default encoders  
       DEFAULT_ENCODERS = {"html" => :rdoc_encoding, "div" => :rdoc_encoding, "nop" => :nop_encoding}

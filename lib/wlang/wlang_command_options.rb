@@ -53,7 +53,7 @@ module WLang
             # Usage #{opt.program_name} [options] template context-file
         
             # Template is parsed as a wlang dialect (based on its extension by default) and 
-            # instanciated through a given context file.
+            # instantiated through a given context file.
           EOF
           opt.banner = banner.gsub(/[ \t]+# /, "")
       

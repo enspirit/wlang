@@ -62,7 +62,7 @@ module WLang
     #
     # Instantiate the template, with an additional context and an output buffer.
     #
-    def instantiate(buffer="", context=nil)
+    def instantiate(buffer=nil, context=nil)
       unless context.nil? 
         @context.push(context)
       end
@@ -71,7 +71,7 @@ module WLang
       unless context.nil?
         @context.pop
       end
-      buffer
+      instantiated[0]
     end
   
   end # class Template

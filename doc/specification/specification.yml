@@ -77,7 +77,7 @@ glossary:
       are parsed and instantiated and the way the replacement value is computed.
     example: |-
       <tt>^{wlang/active-string}{...}</tt><br/>
-      Instanciates #1, looking for an encoder qualified name. Instanciates #2 in 
+      Instantiates #1, looking for an encoder qualified name. Instantiates #2 in 
       the current dialect. Encode #2's instantiation using encoder found in (#1)
       and return the result as replacement value.
   - term: context

@@ -19,7 +19,7 @@ class ParserTest < Test::Unit::TestCase
     end
   end
   
-  # Instanciate the given string as template
+  # Instantiate the given string as template
   def instantiate_str(str)
     Parser.instantiator(Template.new(str, "example")).instantiate()[0]
   end

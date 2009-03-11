@@ -40,7 +40,7 @@ module WLang
         puts "Context is " << context.inspect
       end
     
-      template.instantiate(buffer)
+      buffer << template.instantiate
     
       # Flush and close if needed
       if File===buffer

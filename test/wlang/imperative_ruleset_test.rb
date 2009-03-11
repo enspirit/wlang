@@ -59,7 +59,7 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
       ["?{yes}{${name}}", "blambeau"],
     ]
     tests.each do |test|
-      result = test[0].wlang_instanciate(context, "imperative-test")
+      result = test[0].wlang_instantiate(context, "imperative-test")
       assert_equal(test[1], result)
     end
   end
@@ -74,7 +74,7 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
       ["*{names using each_with_index as name, i}{${i}:${name}}{, }", "0:blambeau, 1:llambeau, 2:chl"]
     ]
     tests.each do |test|
-      result = test[0].wlang_instanciate(context, "imperative-test")
+      result = test[0].wlang_instantiate(context, "imperative-test")
       assert_equal(test[1], result)
     end
   end

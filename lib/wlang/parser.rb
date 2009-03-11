@@ -10,7 +10,7 @@ module WLang
   #
   # This class implements the parsing algorithm of wlang, recognizing special tags
   # and replacing them using installed rules. Instanciating a template is done 
-  # using instanciate. All other methods (parse, parse_block, has_block?) and the 
+  # using instantiate. All other methods (parse, parse_block, has_block?) and the 
   # like are callbacks for rules and should not be used by users themselve.
   #
   # Obtaining a parser MUST be made through Parser.instantiator (new is private).
@@ -19,7 +19,7 @@ module WLang
   class Parser
 
     # Factors a parser instance for a given template and an output buffer. 
-    def self.instantiator(template, buffer="")
+    def self.instantiator(template, buffer=nil)
       Parser.send(:new, nil, template, nil, 0, buffer)
     end
   
@@ -41,8 +41,9 @@ module WLang
     def initialize(parent, template, dialect, offset, buffer)
       raise(ArgumentError, "Template is mandatory") unless WLang::Template===template
       raise(ArgumentError, "Offset is mandatory") unless Integer===offset
-      raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
       dialect = template.dialect if dialect.nil?
+      buffer = dialect.factor_buffer if buffer.nil?
+      raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
       @parent = parent
       @template = template
       @context = template.context
@@ -50,10 +51,24 @@ module WLang
       @dialect = dialect
       @buffer = buffer
     end
+    
+    # Factors a specific buffer on the current dialect
+    def factor_buffer
+      @dialect.factor_buffer
+    end
+    
+    # Appends on a given buffer
+    def append_buffer(buffer, str, block)
+      if buffer.respond_to?(:wlang_append)
+        buffer.wlang_append(str, block)
+      else
+        buffer << str
+      end
+    end
   
     # Pushes a given string on the output buffer
-    def <<(str)
-      @buffer << str
+    def <<(str, block)
+      append_buffer(@buffer, str, block)
     end
 
     # Parses the text
@@ -69,16 +84,16 @@ module WLang
         match, match_length = $~[0], $~[0].length
       
         # puts pre_match (we can't use $~.pre_match !)
-        self.<<(@source_text[offset, match_at-offset]) if match_at>0
+        self.<<(@source_text[offset, match_at-offset], false) if match_at>0
       
         if @source_text[match_at,1]=='\\'           # escaping sequence
-          self.<<(match[1..-1])
+          self.<<(match[1..-1], false)
           offset = match_at + match_length
         
         elsif match.length==1               # simple '{' or '}' here
           offset = match_at + match_length
           if match=='{'
-            self.<<(match)  # simple '{' are always pushed
+            self.<<(match, false)  # simple '{' are always pushed
             # we push '{' in rules to recognize it's associated '}'
             # that must be pushed on buffer also
             rules << match   
@@ -86,7 +101,7 @@ module WLang
             # end of my job if I can't pop a previous rule
             break if rules.empty?
             # otherwise, push '}' only if associated to a simple '{'
-            self.<<(match) unless Rule===rules.pop
+            self.<<(match, false) unless Rule===rules.pop
           end
         
         elsif match[-1,1]=='{'              # opening special tag
@@ -101,7 +116,7 @@ module WLang
           raise "Bad implementation of rule #{match[0..-2]}" if offset.nil?
         
           # push replacement
-          self.<<(replacement) unless replacement.empty?
+          self.<<(replacement, true) unless replacement.empty?
         end
       
       end  # while match_at=...
@@ -109,7 +124,7 @@ module WLang
       # trailing data (end of @template reached only if no match_at)
       unless match_at
         unexpected_eof(@source_text.length, '}') unless rules.empty?
-        self.<<(@source_text[offset, 1+@source_text.length-offset])
+        self.<<(@source_text[offset, 1+@source_text.length-offset], false)
         offset = @source_text.length
       end
       [@buffer, offset-1]
@@ -128,7 +143,7 @@ module WLang
     # _dialect_ (same dialect than self if dialect is nil) and with an output 
     # _buffer_.
     #
-    def parse(offset, dialect=nil, buffer="")
+    def parse(offset, dialect=nil, buffer=nil)
       if dialect.nil?
         dialect = @dialect
       elsif String===dialect
@@ -157,7 +172,7 @@ module WLang
     # has_block? for details. Rules may thus force mandatory block parsing without 
     # having to check anything. Optional blocks must be handled by rules themselve.
     #
-    def parse_block(offset, dialect=nil, buffer="")
+    def parse_block(offset, dialect=nil, buffer=nil)
       block_missing_error(offset+2) unless has_block?(offset)
       parse(offset+2, dialect, buffer)
     end

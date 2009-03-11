@@ -42,7 +42,7 @@ end
 # rdoc dialect
 WLang::dialect("rdoc") do
   ruby_require "rdoc", "wlang/dialects/rdoc_dialect" do
-    encoders WLang::EncoderSet::RDoc
+    encoders WLang::EncoderSet::RDocEncoders
   end
 end
 

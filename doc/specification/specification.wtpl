@@ -7,9 +7,9 @@
     <style type="text/css">
       <<{specification.css}
     </style>
-	<script type="text/javascript" language="JavaScript"><!-- 
-	  <<{specification.js}
-	//--></script>
+	  <script type="text/javascript" language="JavaScript"><!-- 
+	    <<{specification.js}
+	  //--></script>
   </head>
   <body onload="show('about')">
     <h1 id="title">${spec/title} (version ${spec/version})</h1>

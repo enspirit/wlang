@@ -2,7 +2,7 @@ module WLang
   class RuleSet
 
     #
-    # Imperative ruleset, providing special tags to iterate and instanciate 
+    # Imperative ruleset, providing special tags to iterate and instantiate 
     # conditionaly. 
     #
     # For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
@@ -20,10 +20,10 @@ module WLang
       #
       # Conditional as <tt>?{wlang/hosted}{...}{...}</tt>
       #
-      # (third block is optional) Instanciates #1, looking for an expression in the 
+      # (third block is optional) Instantiates #1, looking for an expression in the 
       # hosting language. Evaluates it, looking for a boolean value (according to 
-      # boolean semantics of the hosting language). If true, instanciates #2, 
-      # otherwise instanciates #3 if present.
+      # boolean semantics of the hosting language). If true, instantiates #2, 
+      # otherwise instantiates #3 if present.
       #
       def self.conditional(parser, offset)
         expression, reached = parser.parse(offset, "wlang/ruby")
@@ -75,10 +75,10 @@ module WLang
       #
       # Enumeration as <tt>*{wlang/hosted using each as x}{...}{...}</tt>
       #
-      # (third block is optional) Instanciates #1, looking for an expression in the 
+      # (third block is optional) Instantiates #1, looking for an expression in the 
       # hosting language. Evaluates it, looking for an enumerable. Iterates all its 
       # elements, instanciating #2 for each of them (the iterated value is set under 
-      # name x in the scope). If #3 is present, it is instanciated between elements.
+      # name x in the scope). If #3 is present, it is instantiated between elements.
       #
       def self.enumeration(parser, offset)
         expression, reached = parser.parse(offset, "wlang/ruby")
@@ -99,7 +99,7 @@ module WLang
 
           # some variables
           iterator, names = hash[:iterator].to_sym, hash[:names]
-          buffer = ""
+          buffer = parser.factor_buffer
           block2, block3, theend = reached, nil, nil # *{}{block2}{block3}
           first = true
       
@@ -108,13 +108,13 @@ module WLang
             if not(first) and parser.has_block?(block3)
               # parse #3, positioned at reached after that
               parsed, theend = parser.parse_block(block3)
-              buffer << parsed 
+              parser.append_buffer(buffer, parsed, true)
             end
         
             # install arguments and parse block2, positioned at block3 
             parser.context_push(merge_each_args(names, args))
             parsed, block3 = parser.parse_block(block2)
-            buffer << parsed
+            parser.append_buffer(buffer, parsed, true)
             parser.context_pop
             first = false
           end

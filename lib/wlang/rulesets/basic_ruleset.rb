@@ -64,7 +64,7 @@ module WLang
         # build context
         context = U.context_from_using_and_with(decoded)
     
-        # instanciate
+        # instantiate
         instantiated = WLang::instantiate(text, context, decoded[:qdialect])
         [instantiated, reached]
       end

@@ -4,12 +4,28 @@ module WLang
   class IntelligentBuffer < String
     
     # Some string utilities
-    module Utils
+    module Methods
 
-      # Regular expression for stripping block (see strip_block)
-      STRIP_BLOCK_REGEXP =  /^([\t ]*\n)?(([\t ]*\n)*([\t ]*).*\n)([\t ]*)$/m
-      #                       1          23          4            5
-      
+      # Aligns _str_ at left offset _n_
+      # Credits: Treetop and Facets 2.0.2
+      def tabto(str, n)
+        if str =~ /^( *)\S/
+          indent(str, n - $1.length)
+        else
+          str
+        end
+      end
+
+      # Positive or negative indentation of _str_
+      # Credits: Treetop and Facets 2.0.2
+      def indent(str, n)
+        if n >= 0
+          str.gsub(/^/, ' ' * n)
+        else
+          str.gsub(/^ {0,#{-n}}/, "")
+        end
+      end
+
       # Checks if _str_ contains multiple lines
       def is_multiline?(str)
         str =~ /\n/ ? true : false
@@ -30,21 +46,15 @@ module WLang
       #     indented also\n
       #
       def strip_block(str)
-        return str unless is_multiline?(str)
-        match = str.match(STRIP_BLOCK_REGEXP)
-        return str unless match
-        space_count = match[4].length
-        match[2].gsub(Regexp.new("^[ \t]{#{space_count}}"), '')
+        match = str.match(/\A[\t ]*\n?/)
+        str = match.post_match if match
+        match = str.match(/\n[\t ]*\Z/)
+        str = (match.pre_match << "\n") if match
+        str
       end
       
-      # Realigns a multiline string to a specific offset
-      def realign(str, offset)
-        return str unless is_multiline?(str)
-        indent = ' '*(offset)
-        str.gsub(/^/, indent)
-      end
-    
       # Returns column number of a specific offset
+      # Credits: Treetop and Facets 2.0.2
       def column_of(str, index)
         return 1 if index == 0
         newline_index = str.rindex("\n", index - 1)
@@ -60,19 +70,24 @@ module WLang
         column_of(str, str.length)
       end
     
+      # Pushes a string, aligning it first
+      def <<(str, block=false)
+        if block and is_multiline?(str) and stripped = strip_block(str)
+          str = tabto(stripped, last_column(self)-1)
+          str = str.match(/\A[\t ]*/).post_match
+        end
+        super(str)
+      end
+    
+      # WLang explicit appending
+      def wlang_append(str, block)
+        self.<<(str, block)
+      end
+    
     end
     
     # Include utilities
-    include Utils
-    
-    # Pushes a string, aligning it first
-    def <<(str, block)
-      if block and is_multiline?(str) and stripped = strip_block(str)
-        str = realign(stripped, last_column(self)-1)
-        str = str.match(/^[\t ]*/).post_match
-      end
-      super(str)
-    end
+    include Methods
     
   end
   

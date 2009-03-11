@@ -8,6 +8,7 @@ require 'wlang/dialect_dsl'
 require 'wlang/dialect_loader'
 require 'wlang/parser'
 require 'wlang/parser_context'
+require 'wlang/intelligent_buffer'
 
 #
 # Main module of the _wlang_ code generator/template engine, providing a facade 
@@ -148,7 +149,7 @@ module WLang
   # Examples:
   #   WLang.instantiate "Hello ${who} !", {"who" => "Mr. Jones"}
   #   WLang.instantiate "SELECT * FROM people WHERE name='{name}'", {"who" => "Mr. O'Neil"}, "wlang/sql"
-  #   WLang.instanciate "Hello $(who) !", {"who" => "Mr. Jones"}, "wlang/active-string", :parentheses
+  #   WLang.instantiate "Hello $(who) !", {"who" => "Mr. Jones"}, "wlang/active-string", :parentheses
   #
   def self.instantiate(template, context=nil, dialect="wlang/active-string", block_symbols=:braces)
     WLang::Template.new(template, dialect, context, block_symbols).instantiate
@@ -167,7 +168,7 @@ module WLang
   #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}, STDOUT
   #   Wlang.file_instantiate "template.xxx", {"who" => "Mr. Jones"}, STDOUT, "wlang/xhtml"
   #
-  def self.file_instantiate(file, context=nil, buffer="", dialect=nil, block_symbols=:braces)
+  def self.file_instantiate(file, context=nil, buffer=nil, dialect=nil, block_symbols=:braces)
     raise "File '#{file}' does not exists or is unreadable"\
       unless File.exists?(file) and File.readable?(file)
     if dialect.nil?

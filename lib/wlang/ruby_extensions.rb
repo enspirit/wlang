@@ -9,13 +9,13 @@ class String
   end
   
   #
-  # Instanciates the string as a wlang template using
+  # Instantiates the string as a wlang template using
   # a context object and a dialect.
   #
-  def wlang_instanciate(context=nil, dialect="wlang/active-string", block_symbols=:braces)
+  def wlang_instantiate(context=nil, dialect="wlang/active-string", block_symbols=:braces)
     wlang_template(dialect, context, block_symbols).instantiate
   end
-  alias :wlang :wlang_instanciate
+  alias :wlang :wlang_instantiate
     
 end
 

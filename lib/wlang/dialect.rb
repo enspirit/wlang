@@ -215,6 +215,11 @@ module WLang
   
     ### Other utilities ##########################################################
   
+    # Factors a spacing friendly buffer for instantiation in this dialect
+    def factor_buffer
+      IntelligentBuffer.new
+    end
+  
     # Returns a string representation   
     def to_s
       qualified_name
