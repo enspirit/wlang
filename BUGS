@@ -1,0 +1,9 @@
+= List of Known Bugs
+
+Please refer to our {bug tracker}[https://redmine.chefbe.net/projects/revision-zero-public] to get the 
+latest version of known bugs.
+
+== Version 0.0.8
+
+- The intelligent output buffer has trailing carriage returns at end of loops.
+- The quoting encoders in Ruby dialect are probably not correct.

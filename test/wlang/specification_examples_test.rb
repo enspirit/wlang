@@ -18,7 +18,7 @@ class WLang::SpecificationExamplesTest < Test::Unit::TestCase
       ruleset["examples"].each do |example|
         dialect, expr, expected = example
         dialect = "wlang/ruby" if dialect=="wlang/*"
-        puts "assuming #{dialect} on #{expr}, gives #{expected}"
+        #puts "assuming #{dialect} on #{expr}, gives #{expected}"
         assert_equal(expected, WLang::instantiate(expr, context.dup, dialect))
       end
     end

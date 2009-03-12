@@ -23,20 +23,19 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include( "README", "INSTALL", "TODO", "CHANGELOG", "LICENCE",
                            "CONTRIBUTE", "BUGS", "lib/" )
   rdoc.main     = "README"
-  rdoc.rdoc_dir = "doc/html"
+  rdoc.rdoc_dir = "doc/api"
   rdoc.title    = "WLang Documentation"
-  rdoc.template = "doc/template/horo"
-  rdoc.options << "-S" << "-N" << "-p" << "-H"
 end
 
 desc "Generates the specification file"
-task :spec => [:rdoc] do |t|
-  Kernel.exec("ruby -Ilib bin/wlang --output doc/html/files/specification.html doc/specification/specification.wtpl")
+task :spec => :rdoc do |t|
+  Kernel.exec("ruby -Ilib bin/wlang --output doc/api/SPECIFICATION.html doc/specification/specification.wtpl")
 end
 
 desc "Converts SVN log to a CHANGELOG file"
 task :cl do |t|
   File.open('CHANGELOG', 'w') do |output|
+    output << "= ChangeLog"
     Kernel.open("|svn log") do |io|
       io.each do |line|
         case line
@@ -62,9 +61,14 @@ gemspec = Gem::Specification.new do |s|
   s.files = Dir['lib/**/*'] + Dir['test/**/*'] + Dir['bin/*'] + Dir['doc/template/*'] + Dir['doc/specification/*']
   s.require_path = 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = Dir['[A-Z]*']
+  s.extra_rdoc_files = ["README", "INSTALL", "TODO", "CHANGELOG", "LICENCE", "CONTRIBUTE", "BUGS"]
+  s.rdoc_options << '--title' << 'WLang - Code generator and Template engine' <<
+                    '--main' << 'README' <<
+                    '--line-numbers'  
+  s.bindir = "bin"
+  s.executables = ["wlang"]
   s.author = "Bernard Lambeau"
-  s.email = "blambeau@chefbe.net"
+  s.email = "blambeau@gmail.com"
   s.homepage = "https://redmine.chefbe.net/projects/revision-zero-public/"
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|

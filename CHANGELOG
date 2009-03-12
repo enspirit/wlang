@@ -1,3 +1,58 @@
+= ChangeLog
+==== r92 (blambeau)
+* Fixes a lot of bugs in IntelligentBuffer, which is not so intelligent so far.
+* Fixes a lot of instanciates -> instantiates
+* Adds tests inspired from anagram needs. 
+
+==== r91 (blambeau)
+* First implem of IntelligentBuffer with supporting test.
+
+==== r90 (blambeau)
+* Refactors whole files to adopt much strict ruby code conventions.
+
+==== r89 (blambeau)
+* Attribute readers for context and buffer in parser.
+
+==== r87 (blambeau)
+* Documents the recursive_application tag. 
+
+==== r86 (blambeau)
+* New utilities for rule implementation (those allowing as, with and using expressions).
+* Big deprecated API in RuleSet::Utils, please use expr(...).decode(str, parser) instead.
+* Recursive application %!{...} (aka modulo-bang) is written and basically tested.
+* The specification builds the examples herself (wlang really allows metaprogramming now)
+
+==== r85 (blambeau)
+* wlang
+* Tries to implement a recursive_application rule, harder that at first glance.
+* Continues documenting wlang.
+
+==== r75 (blambeau)
+* wlang
+* input_inclusion 'with ' is optional.
+* Fixes a bug with input_inclusion when included template uses the same tag. 
+* Adds a test for input_inclusion and underlying regexp.
+* Specification continued.
+
+==== r74 (blambeau)
+* Fixes #63, removes ACCENTS arrayuntil further investivation about ruby1.9
+
+==== r73 (blambeau)
+* Provides two new tags in the Buffering ruleset.
+* Implements a WITH expression in ruleset_utils.
+* Implements recognition of data files.
+* Splits specification in multiple files and continues documentation.
+
+==== r72 (blambeau)
+* Specification continued.
+
+==== r71 (blambeau)
+* Specification continued.
+
+==== r70 (blambeau)
+* Provides a rdoc/nop encoder.
+* Fixes a bug in parser.
+* Completes the specification.
 
 ==== r69 (blambeau)
 * Forces only test under test/ folder to be executed by rake.

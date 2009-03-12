@@ -36,7 +36,7 @@ module WLang
       }.gsub(/^ {8}/, '').strip
       result = template.wlang_instantiate({}, "anagram")
       assert IntelligentBuffer===result
-#      assert_equal("module MyModule\nend", result)
+      assert_equal("module MyModule\nend\n", result)
     end
     
     def test_missing_end_bug
@@ -51,9 +51,9 @@ module WLang
           block = block.tabto(block,0)
           parser.evaluate("matching_rules") << [match, block]
     
-          puts "Here is the block ==="
-          puts "#{block.gsub(/ /, '.').gsub(/\n/, "\\n\n")}"
-          puts "=== Here is the block"
+          # puts "Here is the block ==="
+          # puts "#{block.gsub(/ /, '.').gsub(/\n/, "\\n\n")}"
+          # puts "=== Here is the block"
     
           ["", reached]
         end
@@ -70,9 +70,9 @@ module WLang
           inst = found[1].wlang_instantiate(context, "anagram")
           
           inst2 = inst.gsub(/ /, '.').gsub(/\n/, "\\n\n")
-          puts "Here is the inst ==="
-          puts "#{inst2}"
-          puts "=== Here is the inst"
+          # puts "Here is the inst ==="
+          # puts "#{inst2}"
+          # puts "=== Here is the inst"
           
           found = [inst, reached]
         end
@@ -93,15 +93,18 @@ module WLang
       context = {'n' => [10, 20, 30], 'matching_rules' => []}
       result = template.wlang_instantiate(context, "anagram")
     
-      template = template.gsub(/ /, '.').gsub(/\n/, "\\n\n")
-      puts "Here is the template ==="
-      puts "#{template}"
-      puts "=== Here is the template"
+      # template = template.gsub(/ /, '.').gsub(/\n/, "\\n\n")
+      # puts "Here is the template ==="
+      # puts "#{template}"
+      # puts "=== Here is the template"
     
-      result = result.gsub(/ /, '.').gsub(/\n/, "\\n\n")
-      puts "Here is the result ==="
-      puts "#{result}"
-      puts "=== Here is the result"
+      # result = result.gsub(/ /, '.').gsub(/\n/, "\\n\n")
+      # puts "Here is the result ==="
+      # puts "#{result}"
+      # puts "=== Here is the result"
+      result = result.strip
+      expected = "module MyModule\n  10\n  \n  20\n  \n  30\n\nend"
+      assert_equal expected, result
     end
     
   end

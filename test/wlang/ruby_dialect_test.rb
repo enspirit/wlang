@@ -17,12 +17,12 @@ class RubyDialectTest < Test::Unit::TestCase
     $template = get_file_contents('ruby_template.wrb')
     $expected = get_file_contents('ruby_expected.rb')
     result =  $template.wlang($context, "wlang/ruby")
-    puts "\n--template--"
-    puts $template
-    puts "\n--expected--"
-    puts $expected
-    puts "\n--result--"
-    puts result
+    # puts "\n--template--"
+    # puts $template
+    # puts "\n--expected--"
+    # puts $expected
+    # puts "\n--result--"
+    # puts result
     assert_equal($expected,result)
   end
   

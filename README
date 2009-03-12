@@ -1,4 +1,4 @@
-== What is _wlang_ ?
+= What is _wlang_ ?
 _wlang_ is a simple, powerful, robust and secure <b>code generation</b>/<b>templating engine</b>
 (at least, authors hope so ;-) Motivation for it can be found at http://www.revision-zero.org/wlang. 
 It's main aim is to help you creating web pages, sql queries, ruby code (that is, generating code in 
@@ -9,14 +9,14 @@ web pages, etc.
 
 == Roadmap
 - For terminology and a quick overview of _wlang_ for generating code, read on.
-- For the current cheatsheet/specification see link://files/specification.html
+- For the current cheatsheet/specification see link://SPECIFICATION.html
 - If you want to learn _wlang_ quickly, see the example directory or read examples
-  in the {specification file}[link://files/specification.html] (if you understand 
+  in the {specification file}[link://SPECIFICATION.html] (if you understand 
   all examples in the specification file, then you probably master wlang.
 - If you want a killer example (but simple) see the way the specification.html file
   is generated in doc/specification directory
 - If you want to know which dialects are available (that is, in which target languages 
-  you can generate code), see link://files/specification.html or read 
+  you can generate code), see link://SPECIFICATION.html or read 
   the file lib/wlang/dialects/standard_dialects.rb in the source distribution.
 - If you want to create your own wlang dialect, see WLang::Dialect::DSL
 - If you think that your own dialect is of generic purpose and well-designed, if
@@ -92,7 +92,7 @@ and associated terms.
 [rule] Transformation semantics of a given <em>tag</em>. When wlang instantiates a
        template it simply replaces <em>wlang tags</em> by some <em>replacement value</em>
        (which is always a string). This value is computed by the rule attached to 
-       the tag. Rule definition (see {specification}[link://files/specification.html])
+       the tag. Rule definition (see {specification}[link://SPECIFICATION.html])
        explicitly describes the number of blocks it expects, in which dialect they 
        are parsed and instantiated and the way the replacement value is computed.
        Example: <tt>^{wlang/active-string}{...}</tt> (also known as 'encoding') 
