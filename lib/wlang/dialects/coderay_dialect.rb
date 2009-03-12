@@ -9,7 +9,7 @@ module WLang
     #
     # Available languages are: java, ruby, html, yaml.   
     #
-    module WLang::EncoderSet::CodeRay
+    module CodeRayEncoderSet
 
       # Default encoders  
       DEFAULT_ENCODERS = {"java" => :coderay, "ruby" => :coderay, "html" => :coderay, 

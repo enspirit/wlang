@@ -34,7 +34,7 @@ WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
   end
   dialect("coderay") do
     ruby_require("coderay", "wlang/dialects/coderay_dialect") do
-      encoders WLang::EncoderSet::CodeRay
+      encoders WLang::EncoderSet::CodeRayEncoderSet
     end
   end
 end
