@@ -1,4 +1,11 @@
 = ChangeLog
+==== r95 (blambeau)
+* wlang pre-tag 0.0.8
+* Changes the licence to MIT.
+* Enhances main documentation files.
+* Removes dependency to horo rdoc template in favor of darkfish.
+* Removes 'puts' in tests.
+
 ==== r92 (blambeau)
 * Fixes a lot of bugs in IntelligentBuffer, which is not so intelligent so far.
 * Fixes a lot of instanciates -> instantiates
