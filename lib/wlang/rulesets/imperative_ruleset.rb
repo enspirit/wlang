@@ -76,7 +76,7 @@ module WLang
     
         # evaluate 'wlang/hosted' sub-expression
         value = hash[:no_space]
-        if value.nil? or (value.respond_to?(:empty?) and value.empty?)
+        if value.nil?
           expression, reached = parser.parse_block(reached, "wlang/dummy")
           expression, reached = parser.parse_block(reached, "wlang/dummy") if parser.has_block?(reached)
           ["",reached]
@@ -106,6 +106,11 @@ module WLang
             parser.append_buffer(buffer, parsed, true)
             parser.context_pop
             first = false
+          end
+      
+          # Empty array special case
+          unless block3
+            parsed, block3 = parser.parse_block(block2, "wlang/dummy")
           end
       
           # Singleton array special case
