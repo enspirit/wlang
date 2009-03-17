@@ -67,7 +67,7 @@ module WLang
         expression, reached = parser.parse(offset, "wlang/ruby")
     
         # decode 'wlang/hosted using each as x' expression
-        hash = U.expr(:no_space,
+        hash = U.expr(:expr,
                       ["using", :var, false],
                       ["as", :multi_as, false]).decode(expression, parser)
         hash[:using] = "each" unless hash[:using]
@@ -75,7 +75,7 @@ module WLang
         parser.syntax_error(offset, "invalid loop expression '#{expression}'") if hash.nil?
     
         # evaluate 'wlang/hosted' sub-expression
-        value = hash[:no_space]
+        value = hash[:expr]
         if value.nil?
           expression, reached = parser.parse_block(reached, "wlang/dummy")
           expression, reached = parser.parse_block(reached, "wlang/dummy") if parser.has_block?(reached)

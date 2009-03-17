@@ -20,9 +20,6 @@ module WLang
       # Regexp string for expression in the hosting language
       EXPR = '.*?'
       
-      # Regexp string for expression in the hosting language
-      NO_SPACE = '[^\s]+'
-      
       # Regexp string for URI expresion
       URI = '[^\s]+'
       
@@ -42,7 +39,6 @@ module WLang
         :qdialect  => {:str => QDIALECT,  :groups => 1, :decoder => nil},
         :qencoder  => {:str => QENCODER,  :groups => 1, :decoder => nil},
         :var       => {:str => VAR,       :groups => 0, :decoder => nil},
-        :no_space  => {:str => NO_SPACE,  :groups => 0, :decoder => :decode_expr},
         :expr      => {:str => EXPR,      :groups => 0, :decoder => :decode_expr},
         :uri       => {:str => URI,       :groups => 0, :decoder => nil},
         :with      => {:str => WITH,      :groups => 6, :decoder => :decode_with},

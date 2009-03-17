@@ -17,21 +17,21 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
   
   # Tests the each regexp
   def test_decode_each
-    expr = WLang::RuleSet::Utils.expr(:no_space,
+    expr = WLang::RuleSet::Utils.expr(:expr,
                                       ["using", :var, false],
                                       ["as", :multi_as, false])
     hash = expr.decode("items")
-    assert_equal({:no_space => "items", :using => nil, :as => nil}, hash)
+    assert_equal({:expr => "items", :using => nil, :as => nil}, hash)
     hash = expr.decode("the_items")
-    assert_equal({:no_space => "the_items", :using => nil, :as => nil}, hash)
+    assert_equal({:expr => "the_items", :using => nil, :as => nil}, hash)
     hash = expr.decode("items using each_with_index")
-    assert_equal({:no_space => "items", :using => "each_with_index", :as => nil}, hash)
+    assert_equal({:expr => "items", :using => "each_with_index", :as => nil}, hash)
     hash = expr.decode("items as x")
-    assert_equal({:no_space => "items", :using => nil, :as => ["x"]}, hash)
+    assert_equal({:expr => "items", :using => nil, :as => ["x"]}, hash)
     hash = expr.decode("items using each_with_index as x, i")
-    assert_equal({:no_space => "items", :using => "each_with_index", :as => ["x", "i"]}, hash)
+    assert_equal({:expr => "items", :using => "each_with_index", :as => ["x", "i"]}, hash)
     hash = expr.decode("names using each_with_index as name, i")
-    assert_equal({:no_space => "names", :using => "each_with_index", :as => ["name", "i"]}, hash)
+    assert_equal({:expr => "names", :using => "each_with_index", :as => ["name", "i"]}, hash)
     text = "p.items.children   using   each_with_index     as  child,   i"
     assert_not_nil(expr.decode(text))
   end
