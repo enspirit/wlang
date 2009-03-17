@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require "wlang"
 require 'wlang/rulesets/imperative_ruleset'
 module WLang
@@ -17,18 +17,23 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
   
   # Tests the each regexp
   def test_decode_each
-    hash = WLang::RuleSet::Imperative.decode_each("items")
-    assert_equal({:iterated => "items", :iterator => "each", :names => []}, hash)
-    hash = WLang::RuleSet::Imperative.decode_each("the_items")
-    assert_equal({:iterated => "the_items", :iterator => "each", :names => []}, hash)
-    hash = WLang::RuleSet::Imperative.decode_each("items using each_with_index")
-    assert_equal({:iterated => "items", :iterator => "each_with_index", :names => []}, hash)
-    hash = WLang::RuleSet::Imperative.decode_each("items as x")
-    assert_equal({:iterated => "items", :iterator => "each", :names => ["x"]}, hash)
-    hash = WLang::RuleSet::Imperative.decode_each("items using each_with_index as x, i")
-    assert_equal({:iterated => "items", :iterator => "each_with_index", :names => ["x", "i"]}, hash)
+    expr = WLang::RuleSet::Utils.expr(:no_space,
+                                      ["using", :var, false],
+                                      ["as", :multi_as, false])
+    hash = expr.decode("items")
+    assert_equal({:no_space => "items", :using => nil, :as => nil}, hash)
+    hash = expr.decode("the_items")
+    assert_equal({:no_space => "the_items", :using => nil, :as => nil}, hash)
+    hash = expr.decode("items using each_with_index")
+    assert_equal({:no_space => "items", :using => "each_with_index", :as => nil}, hash)
+    hash = expr.decode("items as x")
+    assert_equal({:no_space => "items", :using => nil, :as => ["x"]}, hash)
+    hash = expr.decode("items using each_with_index as x, i")
+    assert_equal({:no_space => "items", :using => "each_with_index", :as => ["x", "i"]}, hash)
+    hash = expr.decode("names using each_with_index as name, i")
+    assert_equal({:no_space => "names", :using => "each_with_index", :as => ["name", "i"]}, hash)
     text = "p.items.children   using   each_with_index     as  child,   i"
-    assert_not_nil(WLang::RuleSet::Imperative.decode_each(text))
+    assert_not_nil(expr.decode(text))
   end
   
   # Tests merging args
@@ -66,12 +71,23 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
   
   # Tests the enumration
   def test_enumeration
-    context = {"names" => ["blambeau", "llambeau", "chl"]}
+    context = {"names" => ["blambeau", "llambeau", "chl"], 
+               "empty" => [], 
+               "one" => ["blambeau"],
+               "two" => ["blambeau", "llambeau"]}
     tests = [
       ['*{["blambeau","llambeau","chl"] as x}{${x}}{, }', "blambeau, llambeau, chl"],
       ["*{names as name}{${name}}", "blambeaullambeauchl"],
       ["*{names as name}{${name}}{, }", "blambeau, llambeau, chl"],
-      ["*{names using each_with_index as name, i}{${i}:${name}}{, }", "0:blambeau, 1:llambeau, 2:chl"]
+      ["*{names using each_with_index as name, i}{${i}:${name}}{, }", "0:blambeau, 1:llambeau, 2:chl"],
+      ["*{empty as e}{+{e}}", ""],
+      ["*{empty as e}{+{e}}{}", ""],
+      ["*{empty as e}{+{e}}{ }", ""],
+      ["*{one as e}{+{e}}", "blambeau"],
+      ["*{one as e}{+{e}}{}", "blambeau"],
+      ["*{one as e}{+{e}}{ }", "blambeau"],
+      ["*{two as t}{+{t}}", "blambeaullambeau"],
+      ["*{two as t}{+{t}}{ }", "blambeau llambeau"]
     ]
     tests.each do |test|
       result = test[0].wlang_instantiate(context, "imperative-test")

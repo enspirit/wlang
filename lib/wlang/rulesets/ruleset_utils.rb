@@ -20,6 +20,9 @@ module WLang
       # Regexp string for expression in the hosting language
       EXPR = '.*?'
       
+      # Regexp string for expression in the hosting language
+      NO_SPACE = '[^\s]+'
+      
       # Regexp string for URI expresion
       URI = '[^\s]+'
       
@@ -29,6 +32,9 @@ module WLang
       # Regexp string for with expression
       WITH = WITH_PART + '(\s*,\s*(' + WITH_PART + '))*'
       
+      # Regexp string for as expression
+      MULTI_AS = VAR + '(' + '\s*,\s*' + VAR + ')*'
+      
       # Basic blocks for building expressions
       BASIC_BLOCKS = {
         :dialect   => {:str => DIALECT,   :groups => 0, :decoder => nil},
@@ -36,44 +42,52 @@ module WLang
         :qdialect  => {:str => QDIALECT,  :groups => 1, :decoder => nil},
         :qencoder  => {:str => QENCODER,  :groups => 1, :decoder => nil},
         :var       => {:str => VAR,       :groups => 0, :decoder => nil},
+        :no_space  => {:str => NO_SPACE,  :groups => 0, :decoder => :decode_expr},
         :expr      => {:str => EXPR,      :groups => 0, :decoder => :decode_expr},
         :uri       => {:str => URI,       :groups => 0, :decoder => nil},
-        :with      => {:str => WITH,      :groups => 6, :decoder => :decode_with}
+        :with      => {:str => WITH,      :groups => 6, :decoder => :decode_with},
+        :multi_as  => {:str => MULTI_AS,  :groups => 1, :decoder => :decode_multi_as}      
       }
       
       # Regular expressions of built expressions
       REGEXPS = {}
       
-      # Builds an expression 
+      # Builds an expression.
       def self.expr(*args)
         expr = REGEXPS[args]
         if expr.nil?
+          # 1) we simply create an equivalent regular expression in _str_
           str, hash, count = '^\s*', {}, 0
           args.each do |arg|
             case arg
-            when Symbol
-              str << '(' << BASIC_BLOCKS[arg][:str] << ')'
-              hash[arg] = [(count+=1), BASIC_BLOCKS[arg][:decoder]]
-              count += BASIC_BLOCKS[arg][:groups]
-            when Array
-              keyword, what, mandatory = arg
-              mandatory = true if mandatory.nil?
-              unless mandatory
-                str << '('
-                count += 1
-              end
-              str << '\s+' << keyword << '\s+'
-              str << '(' << BASIC_BLOCKS[what][:str] << ')'
-              str << ')?' unless mandatory
-              hash[keyword.to_sym] = [(count+=1), BASIC_BLOCKS[what][:decoder]]
-              count += BASIC_BLOCKS[what][:groups]
-            else
-              raise ArgumentError, "Symbol or Array expected"
+              when Symbol
+                raise ArgumentError, "No reusable RuleSet::Utils block called #{arg}"\
+                  unless BASIC_BLOCKS[arg]
+                str << '(' << BASIC_BLOCKS[arg][:str] << ')'
+                hash[arg] = [(count+=1), BASIC_BLOCKS[arg][:decoder]]
+                count += BASIC_BLOCKS[arg][:groups]
+              when Array
+                keyword, what, mandatory = arg
+                raise ArgumentError, "No reusable RuleSet::Utils block called #{what}"\
+                  unless BASIC_BLOCKS[what]
+                mandatory = true if mandatory.nil?
+                unless mandatory
+                  str << '('
+                  count += 1
+                end
+                str << '\s+' << keyword << '\s+'
+                str << '(' << BASIC_BLOCKS[what][:str] << ')'
+                str << ')?' unless mandatory
+                hash[keyword.to_sym] = [(count+=1), BASIC_BLOCKS[what][:decoder]]
+                count += BASIC_BLOCKS[what][:groups]
+              else
+                raise ArgumentError, "Symbol or Array expected"
             end
           end
           str << '\s*$'
-          expr = {:regexp  => Regexp.new(str), 
-                  :places  => hash}
+          
+          # here is the expression, on which we put a decode method
+          expr = {:regexp  => Regexp.new(str), :places  => hash}
           def expr.decode(str, parser=nil)
             matchdata = self[:regexp].match(str)
             return nil if matchdata.nil?
@@ -86,6 +100,8 @@ module WLang
             end
             return decoded
           end
+          
+          # and we save it!
           REGEXPS[args] = expr   
         end
         expr
@@ -106,6 +122,11 @@ module WLang
         return hash if matchdata.nil?
         hash[matchdata[1]] = decode_expr(matchdata[2], parser)
         decode_with(matchdata[4], parser, hash)
+      end
+      
+      # Decodes a multi as expression
+      def self.decode_multi_as(expr, parser)
+        expr.split(/\s*,\s*/)
       end
       
       # Builds a hash for 'using ... with ...' rules from a decoded expression

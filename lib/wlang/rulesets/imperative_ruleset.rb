@@ -8,6 +8,7 @@ module WLang
     # For an overview of this ruleset, see the wlang {specification file}[link://files/specification.html].
     #
     module Imperative
+      U=WLang::RuleSet::Utils
 
       # Regular expression for #1 in <tt>*{wlang/hosted}{...}</tt>
       EACH_REGEXP = /^([^\s]+)((\s+(using\s+([_a-z]+)))?(\s+(as\s+([a-z]+(,\s+[a-z]+)*)))?)?$/
@@ -55,24 +56,6 @@ module WLang
       end
   
       #
-      # Decodes the first block of a <tt>*{wlang/hosted}{...}</tt> and returns a 
-      # Hash containing following keys: :iterated, :iterator, :names. Returns nil
-      # if the expression is not correct.
-      # 
-      def self.decode_each(text)
-        match = EACH_REGEXP.match(text)
-        return nil unless match
-        hash = {:iterated => match[1], :iterator => "each", :names => []}
-        unless match[5].nil?
-          hash[:iterator] = match[5]
-        end
-        unless match[8].nil?
-          hash[:names] = match[8].split(/,\s+/)
-        end
-        return hash
-      end
-  
-      #
       # Enumeration as <tt>*{wlang/hosted using each as x}{...}{...}</tt>
       #
       # (third block is optional) Instantiates #1, looking for an expression in the 
@@ -84,23 +67,29 @@ module WLang
         expression, reached = parser.parse(offset, "wlang/ruby")
     
         # decode 'wlang/hosted using each as x' expression
-        hash = decode_each(expression)
-        raise "Invalid loop expression '#{expression}'" if hash.nil?
+        hash = U.expr(:no_space,
+                      ["using", :var, false],
+                      ["as", :multi_as, false]).decode(expression, parser)
+        hash[:using] = "each" unless hash[:using]
+        hash[:as] = [] unless hash[:as]
+        parser.syntax_error(offset, "invalid loop expression '#{expression}'") if hash.nil?
     
         # evaluate 'wlang/hosted' sub-expression
-        value = parser.evaluate(hash[:iterated])
-        if value.nil?
+        value = hash[:no_space]
+        if value.nil? or (value.respond_to?(:empty?) and value.empty?)
           expression, reached = parser.parse_block(reached, "wlang/dummy")
           expression, reached = parser.parse_block(reached, "wlang/dummy") if parser.has_block?(reached)
           ["",reached]
         else
-          raise "Enumerated value #{value} does not respond to #{hash[:iterator]}"\
-            unless value.respond_to?(hash[:iterator])
+          raise "Enumerated value #{value} does not respond to #{hash[:using]}"\
+            unless value.respond_to?(hash[:using])
 
           # some variables
-          iterator, names = hash[:iterator].to_sym, hash[:names]
+          iterator, names = hash[:using].to_sym, hash[:as]
           buffer = parser.factor_buffer
-          block2, block3, theend = reached, nil, nil # *{}{block2}{block3}
+          
+          # wlang start index of each block
+          block2, block3, theend = reached, nil, nil # *{}{block2}{block3}theend
           first = true
       
           # iterate now
@@ -119,11 +108,13 @@ module WLang
             first = false
           end
       
-          theend = block3 unless theend
+          # Singleton array special case
           unless theend
-            # no enumeration at all (empty array)
-            parsed, theend = parser.parse_block(reached, "wlang/dummy")
-            parsed, theend = parser.parse_block(reached, "wlang/dummy") if parser.has_block?(theend)
+            if parser.has_block?(block3)
+              parsed, theend = parser.parse_block(block3, "wlang/dummy")
+            else
+              theend = block3
+            end
           end
           [buffer, theend]
         end

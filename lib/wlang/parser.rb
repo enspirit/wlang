@@ -201,9 +201,9 @@ module WLang
     #
     # Raises a ParseError at a given offset.
     #
-    def syntax_error(offset)
+    def syntax_error(offset, msg=nil)
       text = self.parse(offset, "wlang/dummy", "")
-      raise ParseError, "Parse error at #{offset} on '#{text}'"
+      raise ParseError, "Parse error at #{offset} on '#{text}': #{msg}"
     end
   
     #

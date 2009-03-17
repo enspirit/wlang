@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 require 'wlang/rulesets/ruleset_utils'
 
@@ -202,6 +202,29 @@ class WLang::RuleSetUtilsTest < Test::Unit::TestCase
     tests.each do |t|
       expected, src = t
       assert_equal(expected, WLang::RuleSet::Utils.decode_uri_with(src,nil,true))
+    end
+  end
+  
+  def test_MULTI_AS
+    rx = Regexp.new(WLang::RuleSet::Utils::MULTI_AS)
+    assert_not_nil rx  =~ "a"
+    assert_not_nil rx  =~ "a, b"
+    assert_not_nil rx  =~ "a , b"
+    assert_not_nil rx  =~ "a,b"
+    assert_not_nil rx  =~ "a,b,c"
+    assert_not_nil rx  =~ "a, b, c"
+    assert_not_nil rx  =~ "a , b , c"
+  end
+  
+  def test_decode_multi_as
+    tests = [
+      [["a"], "a"],
+      [["a", "b"], "a, b"],
+      [["a", "b"], "a,b"],
+      [["a", "b"], "a , b"],
+    ]
+    tests.each do |test|
+      assert_equal(test[0], WLang::RuleSet::Utils.decode_multi_as(test[1], nil))
     end
   end
      
