@@ -124,7 +124,7 @@ module WLang
         end
     
         # handle template file
-        @template_file = rest[0]
+        @template_file = File.expand_path(rest[0])
         raise("File '#{@template_file}' not readable")\
           unless File.file?(@template_file) and File.readable?(@template_file)
 

@@ -184,6 +184,7 @@ module WLang
     def encode(src, encoder, options=nil)
       options = {} unless options
       options['_encoder_'] = encoder
+      options['_template_'] = template
       if String===encoder
         if encoder.include?("/")
           ename, encoder = encoder, WLang::encoder(encoder)
