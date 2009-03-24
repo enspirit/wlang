@@ -12,8 +12,10 @@ module WLang
       # RDoc encoding
       def self.rdoc_encoding(src, options); 
         encoder = RDoc::Markup::ToHtml.new
-        encoder.instance_eval do
-          @from_path = File.dirname(options['_template_'].source_file)
+        if options['_template_'] and options['_template_'].source_file
+          encoder.instance_eval do
+            @from_path = File.dirname(options['_template_'].source_file)
+          end
         end
         encoder.convert(src) 
       end
