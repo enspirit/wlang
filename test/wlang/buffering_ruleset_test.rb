@@ -65,6 +65,24 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
     File.delete(output) if File.exists?(output)
   end
   
+  def test_output_created_dirs
+    output = relative_file("buffering_ruleset_output/buffering_ruleset_test_output.txt", __FILE__)
+    File.delete(output) if File.exists?(output)
+    template = relative_template(">>{buffering_ruleset_output/buffering_ruleset_test_output.txt}{an output}", "buffering-test", __FILE__)
+    assert_equal("", template.instantiate())
+    assert_equal("an output", File.read(output))
+    File.delete(output) if File.exists?(output)
+  end
+  
+  def test_output_multiple_created_dirs
+    output = relative_file("buffering_ruleset_output/subdir/subdir/buffering_ruleset_test_output.txt", __FILE__)
+    File.delete(output) if File.exists?(output)
+    template = relative_template(">>{buffering_ruleset_output/subdir/subdir/buffering_ruleset_test_output.txt}{an output}", "buffering-test", __FILE__)
+    assert_equal("", template.instantiate())
+    assert_equal("an output", File.read(output))
+    File.delete(output) if File.exists?(output)
+  end
+  
   # Tests that an included template can include other thinks
   def test_inclusion_in_include_template_works
     expected = "template3"

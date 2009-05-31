@@ -1,4 +1,6 @@
 require 'wlang/rulesets/ruleset_utils'
+require 'fileutils'
+
 module WLang
   class RuleSet
     
@@ -26,6 +28,8 @@ module WLang
       def self.output(parser, offset)
         uri, reached = parser.parse(offset, "wlang/uri")
         file = parser.template.file_resolve(uri, false)
+        dir = File.dirname(file)
+        FileUtils.mkdir_p(dir) unless File.exists?(dir)
         File.open(file, "w") do |file|
           text, reached = parser.parse_block(reached, nil, file)
         end
