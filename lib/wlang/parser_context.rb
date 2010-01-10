@@ -27,6 +27,10 @@ module WLang
           @__hash = hash
           @__parent = nil
         end
+        
+        def dup
+          @__hash.dup
+        end
     
         # Tries to convert found value to a given variable.
         def method_missing(symbol, *args)
@@ -74,7 +78,9 @@ module WLang
   
       # Evaluates a ruby expression on the current context.
       def evaluate(expression)
-        if /[a-z]+(\/[a-z]+)+/ =~ expression
+        if "self" == expression.strip
+          @current_scope
+        elsif /[a-z]+(\/[a-z]+)+/ =~ expression
           begin
             expression = ("self/" + expression).gsub(/\//,"/:")
             expr = @current_scope.__evaluate(expression)

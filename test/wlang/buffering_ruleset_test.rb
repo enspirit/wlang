@@ -91,4 +91,12 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
     assert_equal(expected, result)
   end
   
+  # Tests that an included template can include other thinks
+  def test_with_works_in_inclusion
+    expected = "blambeau world"
+    file = relative_file("buffering_template4.wtpl", __FILE__)
+    result = WLang::file_instantiate(file, {"who" => "blambeau"}) 
+    assert_equal(expected, result)
+  end
+  
 end # class WLang::ScopingRuleSetTest

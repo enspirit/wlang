@@ -32,6 +32,9 @@ module WLang
       # Regexp string for as expression
       MULTI_AS = VAR + '(' + '\s*,\s*' + VAR + ')*'
       
+      # USING string for as expression
+      USING = VAR + '(' + '\s*,\s*' + VAR + ')*'
+      
       # Basic blocks for building expressions
       BASIC_BLOCKS = {
         :dialect   => {:str => DIALECT,   :groups => 0, :decoder => nil},
@@ -42,7 +45,8 @@ module WLang
         :expr      => {:str => EXPR,      :groups => 0, :decoder => :decode_expr},
         :uri       => {:str => URI,       :groups => 0, :decoder => nil},
         :with      => {:str => WITH,      :groups => 6, :decoder => :decode_with},
-        :multi_as  => {:str => MULTI_AS,  :groups => 1, :decoder => :decode_multi_as}      
+        :multi_as  => {:str => MULTI_AS,  :groups => 1, :decoder => :decode_multi_as},
+        :using     => {:str => USING,     :groups => 1, :decoder => :decode_using}
       }
       
       # Regular expressions of built expressions
@@ -123,6 +127,11 @@ module WLang
       # Decodes a multi as expression
       def self.decode_multi_as(expr, parser)
         expr.split(/\s*,\s*/)
+      end
+      
+      # Decodes a multi as expression
+      def self.decode_using(expr, parser)
+        expr.split(/\s*,\s*/).collect{|s| decode_expr(s, parser)}
       end
       
       # Builds a hash for 'using ... with ...' rules from a decoded expression

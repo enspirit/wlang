@@ -64,11 +64,24 @@ module WLang
         uri, reached = parser.parse(offset, "wlang/uri")
     
         # decode expression
-        decoded = U.decode_uri_with(uri, parser, true)
+        decoded = U.expr(:uri,
+                      ["using", :using, false],
+                      ["with",  :with, false]).decode(uri, parser)
         parser.syntax_error(offset) if decoded.nil?
+        
+        # handle wit
+        if decoded[:using]
+          raise "<<+ does not support multiple with for now." if decoded[:using].size != 1
+          context = decoded[:using][0].dup
+        else
+          context = {}
+        end
+        
+        # handle using now
+        context = context.merge(decoded[:with]) if decoded[:with]
     
         file = parser.template.file_resolve(decoded[:uri], true)
-        instantiated = WLang::file_instantiate(file, decoded[:with])
+        instantiated = WLang::file_instantiate(file, context)
         [instantiated, reached]
       end
   

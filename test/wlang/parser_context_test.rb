@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 require 'wlang/parser_context'
 module WLang
@@ -6,7 +6,7 @@ module WLang
 #
 # Tests WLang::Parser::Context class
 #
-class ParserContextTest
+class ParserContextTest < Test::Unit::TestCase
   
   # Sets a context instance
   def setup
@@ -19,8 +19,9 @@ class ParserContextTest
   # Tests Context#evaluate
   def test_evaluate
     assert_equal("blambeau", @context.evaluate("name"))
-    assert_equal("28", @context.evaluate("age"))
+    assert_equal(28, @context.evaluate("age"))
     assert_equal("123 Main", @context.evaluate("customer.address"))
+    assert_not_nil @context.evaluate("self")
   end
   
 end # class ParserContextTest

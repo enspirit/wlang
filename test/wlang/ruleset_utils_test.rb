@@ -38,6 +38,20 @@ class WLang::RuleSetUtilsTest < Test::Unit::TestCase
     end
   end
   
+  def test_decode_with_a_with
+    source = "/hello with who: 'blambeau'"
+    result = WLang::RuleSet::Utils.expr(:expr, ["using", :using, false], ["with", :with, false]).decode(source) 
+    assert_equal({:expr => '/hello', :with => {'who' => "'blambeau'"}, :using => nil}, result)
+
+    source = "/hello using self with who: 'blambeau'"
+    result = WLang::RuleSet::Utils.expr(:expr, ["using", :using, false], ["with", :with, false]).decode(source) 
+    assert_equal({:expr => '/hello', :with => {'who' => "'blambeau'"}, :using => ['self']}, result)
+    
+    source = "buffering_template5.wtpl using self with who2: who"
+    result = WLang::RuleSet::Utils.expr(:uri, ["using", :using, false], ["with", :with, false]).decode(source) 
+    assert_equal({:uri => 'buffering_template5.wtpl', :with => {'who2' => "who"}, :using => ['self']}, result)
+  end
+  
   def test_DIALECT_regexp
     assert_not_nil(RG_DIALECT =~ "wlang")
     assert_not_nil(RG_DIALECT =~ "xhtml")
