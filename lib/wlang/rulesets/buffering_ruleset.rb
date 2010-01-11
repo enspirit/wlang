@@ -70,16 +70,27 @@ module WLang
         parser.syntax_error(offset) if decoded.nil?
         
         # handle wit
+        context = nil
         if decoded[:using]
           raise "<<+ does not support multiple with for now." if decoded[:using].size != 1
-          context = decoded[:using][0].dup
+          context = decoded[:using][0]
+          raise "Unexpected nil context when duplicated" if context.nil?
         else
           context = {}
         end
         
         # handle using now
-        context = context.merge(decoded[:with]) if decoded[:with]
-    
+        if decoded[:with]
+          case context
+            when WLang::Parser::Context::HashScope
+              context = context.__branch(decoded[:with]) 
+            when Hash
+              context = context.merge(decoded[:with])
+            else
+              raise "Unexpected context #{context}"
+          end
+        end
+        
         file = parser.template.file_resolve(decoded[:uri], true)
         instantiated = WLang::file_instantiate(file, context)
         [instantiated, reached]

@@ -23,13 +23,21 @@ module WLang
         attr_reader :__hash
     
         # Decorates a hash as a scope.
-        def initialize(hash={})
+        def initialize(hash={}, parent=nil)
           @__hash = hash
-          @__parent = nil
+          @__parent = parent
+        end
+        
+        def nil?
+          false
         end
         
         def dup
-          @__hash.dup
+          HashScope.new(@__hash.dup, @__parent)
+        end
+        
+        def __branch(other)
+          HashScope.new(other, self)
         end
     
         # Tries to convert found value to a given variable.
@@ -67,13 +75,21 @@ module WLang
             return nil
           end
         end
+        
+        def inspect
+          "#{__underlying.inspect} with parent #{@__parent.inspect}"  
+        end
     
       end # class HashScope
   
       # Creates an empty context on an init scope object.
       def initialize(init=nil)
-        @current_scope = HashScope.new
-        push(init) unless init.nil?
+        if (Scope===init)
+          @current_scope = init
+        else 
+          @current_scope = HashScope.new
+          push(init) unless init.nil?
+        end
       end
   
       # Evaluates a ruby expression on the current context.
@@ -81,17 +97,20 @@ module WLang
         if "self" == expression.strip
           @current_scope
         elsif /[a-z]+(\/[a-z]+)+/ =~ expression
-          begin
-            expression = ("self/" + expression).gsub(/\//,"/:")
-            expr = @current_scope.__evaluate(expression)
-            expr = expr.__underlying if Scope===expr
-            return expr
-          rescue => ex
-            return nil
-          end
+          expression = ("self/" + expression).gsub(/\//,"/:")
+          expr = @current_scope.__evaluate(expression)
+          expr = expr.__underlying if Scope===expr
+          return expr
         else
           @current_scope.__evaluate(expression)  
         end
+      rescue Exception => ex
+        puts "Warning, some wlang exception when evaluating the expression\n#{expression}"
+        puts "Message was: #{ex.message}"
+        puts ex.backtrace.join("\n")
+        puts "Current scope was:\n"
+        puts @current_scope.__underlying.inspect
+        return nil
       end
   
       # Pushes a new scope instance.

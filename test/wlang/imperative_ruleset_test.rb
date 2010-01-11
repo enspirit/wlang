@@ -95,6 +95,13 @@ class ImperativeRuleSetTest < Test::Unit::TestCase
     end
   end
   
+  def test_enumeration_bug
+    context = {"hello" => "world", "names" => ["blambeau", "llambeau", "chl"]}
+    expected = "worldworldworld"
+    template = "*{names as n}{+{hello}}"
+    assert_equal expected, template.wlang_instantiate(context, "imperative-test")
+  end
+  
 end # class ImperativeRuleSetTest
 
 end # module WLang
