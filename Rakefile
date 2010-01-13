@@ -20,8 +20,7 @@ end
 
 desc "Generates rdoc documentation"
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include( "README.rdoc", "INSTALL", "TODO", "CHANGELOG", "LICENCE",
-                           "CONTRIBUTE", "BUGS", "lib/" )
+  rdoc.rdoc_files.include( "README.rdoc", "LICENCE.rdoc", "lib/" )
   rdoc.main     = "README.rdoc"
   rdoc.rdoc_dir = "doc/api"
   rdoc.title    = "WLang Documentation"
@@ -32,27 +31,6 @@ task :spec => :rerdoc do |t|
   Kernel.exec("ruby -Ilib bin/wlang --output doc/specification/specification.html doc/specification/specification.wtpl")
 end
 
-desc "Converts SVN log to a CHANGELOG file"
-task :cl do |t|
-  File.open('CHANGELOG', 'w') do |output|
-    output << "= ChangeLog"
-    Kernel.open("|svn log") do |io|
-      io.each do |line|
-        case line
-        when /^\-+$/, /\s*\[wlang\]\s*/
-          next
-        when /^(r\d+) \| ([a-z_]+)/
-          output << "\n==== #{$1} (#{$2})\n"
-        when /^$/
-          output << ""
-        else
-          output << "* #{line}"
-        end
-      end
-    end
-  end
-end
-
 gemspec = Gem::Specification.new do |s|
   s.name = 'wlang'
   s.version = version
@@ -61,7 +39,7 @@ gemspec = Gem::Specification.new do |s|
   s.files = Dir['lib/**/*'] + Dir['test/**/*'] + Dir['bin/*'] + Dir['doc/template/*'] + Dir['doc/specification/*']
   s.require_path = 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README.rdoc", "INSTALL", "TODO", "CHANGELOG", "LICENCE", "CONTRIBUTE", "BUGS"]
+  s.extra_rdoc_files = ["README.rdoc", "LICENCE.rdoc"]
   s.rdoc_options << '--title' << 'WLang - Code generator and Template engine' <<
                     '--main' << 'README.rdoc' <<
                     '--line-numbers'  
@@ -69,7 +47,7 @@ gemspec = Gem::Specification.new do |s|
   s.executables = ["wlang"]
   s.author = "Bernard Lambeau"
   s.email = "blambeau@gmail.com"
-  s.homepage = "https://redmine.chefbe.net/projects/revision-zero-public/"
+  s.homepage = "http://blambeau.github.com/wlang/"
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true

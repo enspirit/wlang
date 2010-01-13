@@ -42,7 +42,7 @@ Enjoy _wlang_ !
 
 - The reference implementation of _wlang_, implemented in Ruby, is freely available as a 'wlang' gem
   (under MIT licence). <br/> Use <tt>'gem install wlang'</tt> to install it. For repository and 
-  bug tracker visit us at https://redmine.chefbe.net/projects/revision-zero-public. 
+  bug tracker visit us on {github}[http://github.com/blambeau/wlang] 
 - We don't have another implementation up to now. If you plan to start one in another language, let
   us know!
 
