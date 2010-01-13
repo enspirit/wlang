@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: WLang::WLangCommand</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">WLang::WLangCommand</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/wlang/wlang_command_rb.html">
+                lib/wlang/wlang_command.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/wlang_command_options_rb.html">
+                lib/wlang/wlang_command_options.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Provides the <em>wlang</em> commandline tool. See &#8216;wlang
+&#8212;help&#8217; for documentation.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000051">new</a>&nbsp;&nbsp;
+      <a href="#M000052">run</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="WLangCommand/Options.html" class="link">WLang::WLangCommand::Options</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
+
+        <div class="method-heading">
+          <a href="#M000051" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a commandline instance.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/wlang_command.rb, line 12</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>()
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
+
+        <div class="method-heading">
+          <a href="#M000052" class="method-signature">
+          <span class="method-name">run</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run <em>wlang</em> commandline on specific arguments
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/wlang_command.rb, line 16</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">args</span>)
+      <span class="ruby-comment cmt"># parse the options</span>
+      <span class="ruby-identifier">options</span> = <span class="ruby-constant">Options</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">args</span>)
+    
+      <span class="ruby-comment cmt"># get output buffer</span>
+      <span class="ruby-identifier">buffer</span> = <span class="ruby-constant">STDOUT</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">output_file</span>
+        <span class="ruby-identifier">buffer</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">output_file</span>, <span class="ruby-value str">&quot;w&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+    
+      <span class="ruby-identifier">source</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">template_file</span>)
+      <span class="ruby-identifier">dialect</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">template_dialect</span>
+      <span class="ruby-identifier">braces</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">template_brace</span>
+      <span class="ruby-identifier">context</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">context_object</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">context_name</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">context</span> = {<span class="ruby-identifier">options</span>.<span class="ruby-identifier">context_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">context</span>}
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">template</span> = <span class="ruby-constant">WLang</span><span class="ruby-operator">::</span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">braces</span>)
+      <span class="ruby-identifier">template</span>.<span class="ruby-identifier">source_file</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">template_file</span>
+    
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">verbosity</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Instantiating #{options.template_file}&quot;</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Using dialect #{dialect} : #{dialect.class}&quot;</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Block delimiters are &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Template</span><span class="ruby-operator">::</span><span class="ruby-constant">BLOCK_SYMBOLS</span>[<span class="ruby-identifier">braces</span>].<span class="ruby-identifier">inspect</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Context is &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">inspect</span>
+      <span class="ruby-keyword kw">end</span>
+    
+      <span class="ruby-identifier">buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">instantiate</span>
+    
+      <span class="ruby-comment cmt"># Flush and close if needed</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span><span class="ruby-operator">===</span><span class="ruby-identifier">buffer</span>
+        <span class="ruby-identifier">buffer</span>.<span class="ruby-identifier">flush</span>
+        <span class="ruby-identifier">buffer</span>.<span class="ruby-identifier">close</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

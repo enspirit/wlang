@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: WLang::RuleSet::Basic</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">WLang::RuleSet::Basic</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/wlang/rulesets/basic_ruleset_rb.html">
+                lib/wlang/rulesets/basic_ruleset.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+<a href="Basic.html">Basic</a> ruleset, commonly included by any wlang
+dialect (but some tags, like <tt>${&#8230;}</tt> may be overriden). This
+ruleset is often installed conjointly with <a
+href="Encoding.html">WLang::RuleSet::Encoding</a> which provides
+interresting overridings of <tt>${&#8230;}</tt> and <tt>+{&#8230;}</tt>.
+</p>
+<p>
+For an overview of this ruleset, see the wlang <a
+href="../../../files/specification.html">specification file</a>.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000076">encoding</a>&nbsp;&nbsp;
+      <a href="#M000074">execution</a>&nbsp;&nbsp;
+      <a href="#M000078">inclusion</a>&nbsp;&nbsp;
+      <a href="#M000077">injection</a>&nbsp;&nbsp;
+      <a href="#M000075">modulation</a>&nbsp;&nbsp;
+      <a href="#M000079">recursive_application</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">U</td>
+          <td>=</td>
+          <td class="context-item-value">WLang::RuleSet::Utils</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DEFAULT_RULESET</td>
+          <td>=</td>
+          <td class="context-item-value">{'!' =&gt; :execution, '%' =&gt; :modulation, '^' =&gt; :encoding,                          '+' =&gt; :inclusion, '$' =&gt; :injection, '%!' =&gt; :recursive_application}</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+Default mapping between tag symbols and methods
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000076" class="method-detail">
+        <a name="M000076"></a>
+
+        <div class="method-heading">
+          <a href="#M000076" class="method-signature">
+          <span class="method-name">encoding</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of
+<tt>^{wlang/active-string}{&#8230;}</tt>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000076-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 36</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">encoding</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">encoder</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-value str">&quot;wlang/active-string&quot;</span>)
+        <span class="ruby-identifier">result</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse_block</span>(<span class="ruby-identifier">reached</span>)
+        <span class="ruby-identifier">result</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">encoder</span>)
+        [<span class="ruby-identifier">result</span>, <span class="ruby-identifier">reached</span>]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
+
+        <div class="method-heading">
+          <a href="#M000074" class="method-signature">
+          <span class="method-name">execution</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of <tt>!{wlang/ruby}</tt>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000074-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 21</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">execution</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">expression</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-value str">&quot;wlang/ruby&quot;</span>)
+        <span class="ruby-identifier">value</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">evaluate</span>(<span class="ruby-identifier">expression</span>)
+        <span class="ruby-identifier">result</span> = <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-value str">&quot;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>
+        [<span class="ruby-identifier">result</span>, <span class="ruby-identifier">reached</span>]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000078" class="method-detail">
+        <a name="M000078"></a>
+
+        <div class="method-heading">
+          <a href="#M000078" class="method-signature">
+          <span class="method-name">inclusion</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of <tt>+{wlang/ruby}</tt>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000078-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 49</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inclusion</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">execution</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000077" class="method-detail">
+        <a name="M000077"></a>
+
+        <div class="method-heading">
+          <a href="#M000077" class="method-signature">
+          <span class="method-name">injection</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of <tt>${wlang/ruby}</tt>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000077-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 44</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">injection</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">execution</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
+
+        <div class="method-heading">
+          <a href="#M000075" class="method-signature">
+          <span class="method-name">modulation</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of
+<tt>%{wlang/active-string}{&#8230;}</tt>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 29</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">modulation</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-value str">&quot;wlang/active-string&quot;</span>)
+        <span class="ruby-identifier">result</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse_block</span>(<span class="ruby-identifier">reached</span>, <span class="ruby-identifier">dialect</span>)
+        [<span class="ruby-identifier">result</span>, <span class="ruby-identifier">reached</span>]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000079" class="method-detail">
+        <a name="M000079"></a>
+
+        <div class="method-heading">
+          <a href="#M000079" class="method-signature">
+          <span class="method-name">recursive_application</span><span class="method-args">(parser, offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Rule.html">Rule</a> implementation of <tt>%!{wlang/ruby using
+&#8230; with &#8230;}</tt>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000079-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rulesets/basic_ruleset.rb, line 54</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">recursive_application</span>(<span class="ruby-identifier">parser</span>, <span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-value str">&quot;wlang/active-string&quot;</span>)
+        <span class="ruby-identifier">text</span>, <span class="ruby-identifier">reached</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse_block</span>(<span class="ruby-identifier">reached</span>)
+    
+        <span class="ruby-comment cmt"># decode expression</span>
+        <span class="ruby-identifier">decoded</span> = <span class="ruby-constant">U</span>.<span class="ruby-identifier">expr</span>(<span class="ruby-identifier">:qdialect</span>, 
+                         [<span class="ruby-value str">&quot;using&quot;</span>, <span class="ruby-identifier">:expr</span>, <span class="ruby-keyword kw">false</span>], 
+                         [<span class="ruby-value str">&quot;with&quot;</span>,  <span class="ruby-identifier">:with</span>, <span class="ruby-keyword kw">false</span>]).<span class="ruby-identifier">decode</span>(<span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">parser</span>)
+        <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">syntax_error</span>(<span class="ruby-identifier">offset</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">decoded</span>.<span class="ruby-identifier">nil?</span>
+    
+        <span class="ruby-comment cmt"># build context</span>
+        <span class="ruby-identifier">context</span> = <span class="ruby-constant">U</span>.<span class="ruby-identifier">context_from_using_and_with</span>(<span class="ruby-identifier">decoded</span>)
+    
+        <span class="ruby-comment cmt"># instantiate</span>
+        <span class="ruby-identifier">instantiated</span> = <span class="ruby-constant">WLang</span><span class="ruby-operator">::</span><span class="ruby-identifier">instantiate</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">decoded</span>[<span class="ruby-identifier">:qdialect</span>])
+        [<span class="ruby-identifier">instantiated</span>, <span class="ruby-identifier">reached</span>]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

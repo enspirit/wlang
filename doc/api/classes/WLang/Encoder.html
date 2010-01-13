@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: WLang::Encoder</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">WLang::Encoder</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/wlang/encoder_rb.html">
+                lib/wlang/encoder.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Encapsulates some encoding algorithm. This class is to <a
+href="EncoderSet.html">EncoderSet</a> what <a href="Rule.html">Rule</a> is
+to <a href="RuleSet.html">RuleSet</a>. Encoders are always installed on a
+<a href="EncoderSet.html">EncoderSet</a> (using <a
+href="EncoderSet.html#M000111">EncoderSet#add_encoder</a>), which is itself
+installed on a <a href="Dialect.html">Dialect</a>. Note that the method
+mentionned previously provides a DRY shortcut, allowing not using this
+class directly.
+</p>
+<p>
+Example:
+</p>
+<pre>
+   # Encoder subclassing can be avoided by providing a block to new
+   # The following encoder job is to upcase the text:
+   encoder = Encoder.new do |src,options|
+     src.upcase
+   end
+
+   # It is even better to use the DSL
+   WLang::dialect(&quot;mydialect&quot;) do
+     # The following encoder job is to upcase the text and will be installed
+     # under mydialect/myupcaser qualified name
+     encoder(&quot;myupcaser&quot;) do |src,options|
+       src.upcase
+     end
+   end
+</pre>
+<p>
+Creating a a <a href="Encoder.html#M000063">new</a> encoder can be made in
+two ways: by subclassing this class and overriding the encoder method or by
+passing a block to <a href="Encoder.html#M000063">new</a>. In both cases,
+<b>encoders should always be stateless</b>, to allow reusable dialects that
+could even be used in a multi-threading environment.
+</p>
+<h2>Detailed API</h2>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000064">encode</a>&nbsp;&nbsp;
+      <a href="#M000063">new</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="Encoder.html#M000063">new</a> encoder. If no block is
+given, the invocation of <a href="Encoder.html#M000063">new</a> MUST be
+made on a subclass overriding encoder. Otherwise, the block is considered
+as the effective stateless implementation of encoder and will be called
+with the same arguments.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/encoder.rb, line 39</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Expected a rule block of arity 2&quot;</span>)\
+          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span><span class="ruby-operator">==</span><span class="ruby-value">2</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@block</span> = <span class="ruby-identifier">block</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <a href="#M000064" class="method-signature">
+          <span class="method-name">encode</span><span class="method-args">(src, options)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Fired by the parser when a rule request encoding of some instantiated text.
+Typical example is the standard tag
+<tt>^{encoder/qualified/name}{&#8230;}</tt> (see <a
+href="RuleSet/Basic.html">WLang::RuleSet::Basic</a>) which requires the
+second block instantiation to be encoded by the encoder whose qualified
+name is given by the first block. This method must simply return the
+encoded text.
+</p>
+<p>
+Arguments:
+</p>
+<ul>
+<li>src: source text to <a href="Encoder.html#M000064">encode</a>.
+
+</li>
+<li>options: encoding options through a Hash. Available options are documented
+by encoders themselve.
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/encoder.rb, line 59</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encode</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">raise</span>(<span class="ruby-constant">NotImplementedError</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@block</span>
+      <span class="ruby-ivar">@block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

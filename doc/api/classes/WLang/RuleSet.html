@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: WLang::RuleSet</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">WLang::RuleSet</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/wlang/dialects/plain_text_dialect_rb.html">
+                lib/wlang/dialects/plain_text_dialect.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/dialects/ruby_dialect_rb.html">
+                lib/wlang/dialects/ruby_dialect.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/dialects/sql_dialect_rb.html">
+                lib/wlang/dialects/sql_dialect.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/dialects/xhtml_dialect_rb.html">
+                lib/wlang/dialects/xhtml_dialect.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rule_set_rb.html">
+                lib/wlang/rule_set.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/basic_ruleset_rb.html">
+                lib/wlang/rulesets/basic_ruleset.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/buffering_ruleset_rb.html">
+                lib/wlang/rulesets/buffering_ruleset.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/context_ruleset_rb.html">
+                lib/wlang/rulesets/context_ruleset.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/encoding_ruleset_rb.html">
+                lib/wlang/rulesets/encoding_ruleset.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/imperative_ruleset_rb.html">
+                lib/wlang/rulesets/imperative_ruleset.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/rulesets/ruleset_utils_rb.html">
+                lib/wlang/rulesets/ruleset_utils.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+This class allows grouping matching rules together to build a given
+dialect. Rules are always added with <a
+href="RuleSet.html#M000066">add_rule</a>, which also allows creating simple
+rules on the fly (that is, without subclassing <a
+href="Rule.html">Rule</a>).
+</p>
+<p>
+Examples:
+</p>
+<pre>
+  # we will create a simple dialect with a special tag:
+  #   &lt;tt&gt;+{...}&lt;/tt&gt; which will uppercase its contents
+  upcaser = RuleSet.new
+  upcaser.add_rule '+' do |parser,offset|
+    parsed, offset = parser.parse(offset)
+    [parsed.upcase, offset]
+  end
+</pre>
+<h2>Detailed API</h2>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000069">[]</a>&nbsp;&nbsp;
+      <a href="#M000066">add_rule</a>&nbsp;&nbsp;
+      <a href="#M000067">add_rules</a>&nbsp;&nbsp;
+      <a href="#M000070">build_pattern</a>&nbsp;&nbsp;
+      <a href="#M000065">new</a>&nbsp;&nbsp;
+      <a href="#M000068">pattern</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Module <a href="RuleSet/Basic.html" class="link">WLang::RuleSet::Basic</a><br />
+Module <a href="RuleSet/Buffering.html" class="link">WLang::RuleSet::Buffering</a><br />
+Module <a href="RuleSet/Context.html" class="link">WLang::RuleSet::Context</a><br />
+Module <a href="RuleSet/Encoding.html" class="link">WLang::RuleSet::Encoding</a><br />
+Module <a href="RuleSet/Imperative.html" class="link">WLang::RuleSet::Imperative</a><br />
+Module <a href="RuleSet/PlainText.html" class="link">WLang::RuleSet::PlainText</a><br />
+Module <a href="RuleSet/Ruby.html" class="link">WLang::RuleSet::Ruby</a><br />
+Module <a href="RuleSet/SQL.html" class="link">WLang::RuleSet::SQL</a><br />
+Module <a href="RuleSet/Utils.html" class="link">WLang::RuleSet::Utils</a><br />
+Module <a href="RuleSet/XHtml.html" class="link">WLang::RuleSet::XHtml</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates an <a href="RuleSet.html#M000065">new</a> dialect rule set.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 24</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>() <span class="ruby-ivar">@rules</span>, <span class="ruby-ivar">@pattern</span> = {}, <span class="ruby-keyword kw">nil</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
+
+        <div class="method-heading">
+          <a href="#M000069" class="method-signature">
+          <span class="method-name">[]</span><span class="method-args">(tag)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="Rule.html">Rule</a> associated with a given tag,
+<em>nil</em> if no such rule.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 68</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-ivar">@rules</span>[<span class="ruby-identifier">tag</span>];  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
+
+        <div class="method-heading">
+          <a href="#M000066" class="method-signature">
+          <span class="method-name">add_rule</span><span class="method-args">(tag, rule=nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds a tag matching rule to this rule set. <em>tag</em> must be a <a
+href="../String.html">String</a> with the tag associated to the rule
+(without the &#8217;{&#8217;, that is &#8217;$&#8217; for the tag
+${&#8230;} for example. If rule is ommited and a block is given, a <a
+href="RuleSet.html#M000065">new</a> <a href="Rule.html">Rule</a> instance
+is created on the fly with <em>block</em> as implementation (see <a
+href="Rule.html#M000055">Rule#new</a>). Otherwise rule is expected to be a
+<a href="Rule.html">Rule</a> instance. This method check its arguments,
+raising an ArgumentError if incorrect.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 34</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_rule</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">rule</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) 
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">nil?</span> 
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>,<span class="ruby-value str">&quot;Block required&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+        <span class="ruby-identifier">rule</span> = <span class="ruby-constant">Rule</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Rule expected&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Rule</span><span class="ruby-operator">===</span><span class="ruby-identifier">rule</span>
+      <span class="ruby-ivar">@rules</span>[<span class="ruby-identifier">tag</span>] = <span class="ruby-identifier">rule</span>  
+      <span class="ruby-ivar">@pattern</span> = <span class="ruby-keyword kw">nil</span> 
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
+
+        <div class="method-heading">
+          <a href="#M000067" class="method-signature">
+          <span class="method-name">add_rules</span><span class="method-args">(mod, pairs=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Add rules defined in a given <a href="RuleSet.html">RuleSet</a> module.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 47</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_rules</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">pairs</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>,<span class="ruby-value str">&quot;Module expected&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Module</span><span class="ruby-operator">===</span><span class="ruby-identifier">mod</span>
+      <span class="ruby-identifier">pairs</span> = <span class="ruby-identifier">mod</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_RULESET</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pairs</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">pairs</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">symbol</span>,<span class="ruby-identifier">method</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">method</span>(<span class="ruby-identifier">method</span>)
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>,<span class="ruby-node">&quot;No such method: #{method}&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">add_rule</span>(<span class="ruby-identifier">symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_proc</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
+
+        <div class="method-heading">
+          <a href="#M000068" class="method-signature">
+          <span class="method-name">pattern</span><span class="method-args">(block_symbols)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns a Regexp instance with recognizes all tags installed in the rule
+set. The returned Regexp is backslashing aware (it matches <tt>\${</tt> for
+example) as well as &#8217;{&#8217; and &#8217;}&#8217; aware. This <a
+href="RuleSet.html#M000068">pattern</a> is used by <a
+href="Parser.html">WLang::Parser</a> and is not intended to be used by
+users themselve.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 63</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pattern</span>(<span class="ruby-identifier">block_symbols</span>) <span class="ruby-ivar">@pattern</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">build_pattern</span>(<span class="ruby-identifier">block_symbols</span>); <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Protected Instance methods</h3>
+
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
+
+        <div class="method-heading">
+          <a href="#M000070" class="method-signature">
+          <span class="method-name">build_pattern</span><span class="method-args">(block_symbols)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Internal implementation of <a href="RuleSet.html#M000068">pattern</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/rule_set.rb, line 75</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_pattern</span>(<span class="ruby-identifier">block_symbols</span>)
+      <span class="ruby-identifier">start</span>, <span class="ruby-identifier">stop</span> = <span class="ruby-constant">WLang</span><span class="ruby-operator">::</span><span class="ruby-constant">Template</span><span class="ruby-operator">::</span><span class="ruby-constant">BLOCK_SYMBOLS</span>[<span class="ruby-identifier">block_symbols</span>]
+      <span class="ruby-identifier">start</span>, <span class="ruby-identifier">stop</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">start</span>), <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">stop</span>)
+      <span class="ruby-identifier">s</span> = <span class="ruby-value str">'([\\\\]{0,2}('</span>
+      <span class="ruby-identifier">i</span>=<span class="ruby-value">0</span>
+      <span class="ruby-ivar">@rules</span>.<span class="ruby-identifier">each_key</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'|'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span><span class="ruby-operator">&gt;</span><span class="ruby-value">0</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'('</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">')'</span>
+        <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;)#{start})|[\\\\]{0,2}#{start}|[\\\\]{0,2}#{stop}&quot;</span>
+      <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">s</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

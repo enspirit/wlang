@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: WLang::Parser</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">WLang::Parser</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/wlang/parser_rb.html">
+                lib/wlang/parser.rb
+                </a>
+        <br />
+                <a href="../../files/lib/wlang/parser_context_rb.html">
+                lib/wlang/parser_context.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+<a href="Parser.html">Parser</a> for wlang templates.
+</p>
+<p>
+This class implements the parsing algorithm of wlang, recognizing special
+tags and replacing them using installed rules. Instanciating a template is
+done using <a href="Parser.html#M000023">instantiate</a>. All other methods
+(<a href="Parser.html#M000025">parse</a>, <a
+href="Parser.html#M000027">parse_block</a>, <a
+href="Parser.html#M000026">has_block?</a>) and the like are callbacks for
+rules and should not be used by users themselve.
+</p>
+<p>
+Obtaining a parser MUST be made through <a
+href="Parser.html#M000019">Parser.instantiator</a> (new is private).
+</p>
+<h2>Detailed API</h2>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000022">&lt;&lt;</a>&nbsp;&nbsp;
+      <a href="#M000021">append_buffer</a>&nbsp;&nbsp;
+      <a href="#M000030">block_missing_error</a>&nbsp;&nbsp;
+      <a href="#M000032">context_define</a>&nbsp;&nbsp;
+      <a href="#M000034">context_pop</a>&nbsp;&nbsp;
+      <a href="#M000033">context_push</a>&nbsp;&nbsp;
+      <a href="#M000028">encode</a>&nbsp;&nbsp;
+      <a href="#M000024">evaluate</a>&nbsp;&nbsp;
+      <a href="#M000020">factor_buffer</a>&nbsp;&nbsp;
+      <a href="#M000026">has_block?</a>&nbsp;&nbsp;
+      <a href="#M000023">instantiate</a>&nbsp;&nbsp;
+      <a href="#M000019">instantiator</a>&nbsp;&nbsp;
+      <a href="#M000025">parse</a>&nbsp;&nbsp;
+      <a href="#M000027">parse_block</a>&nbsp;&nbsp;
+      <a href="#M000029">syntax_error</a>&nbsp;&nbsp;
+      <a href="#M000031">unexpected_eof</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="Parser/Context.html" class="link">WLang::Parser::Context</a><br />
+
+    </div>
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">buffer</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Current buffer
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">context</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Current execution context
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">template</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Current parsed template
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">instantiator</span><span class="method-args">(template, buffer=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Factors a parser instance for a given template and an output buffer.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 22</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">instantiator</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">buffer</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:new</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">template</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span>, <span class="ruby-identifier">buffer</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <a href="#M000022" class="method-signature">
+          <span class="method-name">&lt;&lt;</span><span class="method-args">(str, block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Pushes a given string on the output buffer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 70</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">append_buffer</span>(<span class="ruby-ivar">@buffer</span>, <span class="ruby-identifier">str</span>, <span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
+
+        <div class="method-heading">
+          <a href="#M000021" class="method-signature">
+          <span class="method-name">append_buffer</span><span class="method-args">(buffer, str, block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Appends on a given buffer
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 61</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">append_buffer</span>(<span class="ruby-identifier">buffer</span>, <span class="ruby-identifier">str</span>, <span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">buffer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:wlang_append</span>)
+        <span class="ruby-identifier">buffer</span>.<span class="ruby-identifier">wlang_append</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">str</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000030" class="method-detail">
+        <a name="M000030"></a>
+
+        <div class="method-heading">
+          <a href="#M000030" class="method-signature">
+          <span class="method-name">block_missing_error</span><span class="method-args">(offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Raises a <a href="ParseError.html">ParseError</a> at a given offset for a
+missing block
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000030-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000030-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 213</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">block_missing_error</span>(<span class="ruby-identifier">offset</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ParseError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Block expected&quot;</span>, <span class="ruby-identifier">offset</span>, <span class="ruby-ivar">@source_text</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000032" class="method-detail">
+        <a name="M000032"></a>
+
+        <div class="method-heading">
+          <a href="#M000032" class="method-signature">
+          <span class="method-name">context_define</span><span class="method-args">(key, value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Puts a key/value pair in the current context. See Parser::Context::define
+for details.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000032-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 229</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_define</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">define</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000034" class="method-detail">
+        <a name="M000034"></a>
+
+        <div class="method-heading">
+          <a href="#M000034" class="method-signature">
+          <span class="method-name">context_pop</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Pops the top scope of the context stack. See Parser::Context::pop for
+details.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000034-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 244</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_pop</span>
+      <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">pop</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000033" class="method-detail">
+        <a name="M000033"></a>
+
+        <div class="method-heading">
+          <a href="#M000033" class="method-signature">
+          <span class="method-name">context_push</span><span class="method-args">(context)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Pushes a new scope on the current context stack. See Parser::Context::push
+for details.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000033-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 237</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_push</span>(<span class="ruby-identifier">context</span>)
+      <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">context</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000028" class="method-detail">
+        <a name="M000028"></a>
+
+        <div class="method-heading">
+          <a href="#M000028" class="method-signature">
+          <span class="method-name">encode</span><span class="method-args">(src, encoder, options=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Encodes a given text using an encoder, that may be a qualified name or an
+<a href="Encoder.html">Encoder</a> instance.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000028-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000028-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 184</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encode</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">encoder</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">options</span> = {} <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>
+      <span class="ruby-identifier">options</span>[<span class="ruby-value str">'_encoder_'</span>] = <span class="ruby-identifier">encoder</span>
+      <span class="ruby-identifier">options</span>[<span class="ruby-value str">'_template_'</span>] = <span class="ruby-identifier">template</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">String</span><span class="ruby-operator">===</span><span class="ruby-identifier">encoder</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">&quot;/&quot;</span>)
+          <span class="ruby-identifier">ename</span>, <span class="ruby-identifier">encoder</span> = <span class="ruby-identifier">encoder</span>, <span class="ruby-constant">WLang</span><span class="ruby-operator">::</span><span class="ruby-identifier">encoder</span>(<span class="ruby-identifier">encoder</span>)
+          <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ParseError</span>,<span class="ruby-node">&quot;Unknown encoder: #{ename}&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">ename</span>, <span class="ruby-identifier">encoder</span> = <span class="ruby-identifier">encoder</span>, <span class="ruby-ivar">@dialect</span>.<span class="ruby-identifier">find_encoder</span>(<span class="ruby-identifier">encoder</span>)
+          <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ParseError</span>,<span class="ruby-node">&quot;Unknown encoder: #{ename}&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">not</span>(<span class="ruby-constant">Encoder</span><span class="ruby-operator">===</span><span class="ruby-identifier">encoder</span>)
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ParseError</span>,<span class="ruby-node">&quot;Unknown encoder: #{encoder}&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000024" class="method-detail">
+        <a name="M000024"></a>
+
+        <div class="method-heading">
+          <a href="#M000024" class="method-signature">
+          <span class="method-name">evaluate</span><span class="method-args">(expression)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Evaluates a ruby expression on the current context. See <a
+href="Parser/Context.html#M000036">WLang::Parser::Context#evaluate</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000024-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000024-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 137</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">evaluate</span>(<span class="ruby-identifier">expression</span>)
+      <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">evaluate</span>(<span class="ruby-identifier">expression</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">factor_buffer</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Factors a specific buffer on the current dialect
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 56</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">factor_buffer</span>
+      <span class="ruby-ivar">@dialect</span>.<span class="ruby-identifier">factor_buffer</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000026" class="method-detail">
+        <a name="M000026"></a>
+
+        <div class="method-heading">
+          <a href="#M000026" class="method-signature">
+          <span class="method-name">has_block?</span><span class="method-args">(offset)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Checks if a given offset is a starting block. For easy implementation of
+rules the check applied here is that text starting at <em>offset</em> in
+the template is precisely &#8217;}{&#8217; (the reason for that is that <a
+href="Parser.html#M000023">instantiate</a>, <a
+href="Parser.html#M000025">parse</a>, <a
+href="Parser.html#M000027">parse_block</a> always stop parsing on a
+&#8217;}&#8217;)
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000026-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 164</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_block?</span>(<span class="ruby-identifier">offset</span>)
+      <span class="ruby-ivar">@source_text</span>[<span class="ruby-identifier">offset</span>,<span class="ruby-value">2</span>]<span class="ruby-operator">==</span><span class="ruby-value str">'}{'</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000023" class="method-detail">
+        <a name="M000023"></a>
+
+        <div class="method-heading">
+          <a href="#M000023" class="method-signature">
+          <span class="method-name">instantiate</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parses the text
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000023-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000023-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 75</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instantiate</span>
+      <span class="ruby-comment cmt"># Main variables:</span>
+      <span class="ruby-comment cmt"># - offset: matching current position</span>
+      <span class="ruby-comment cmt"># - rules: handlers of '{' currently opened</span>
+      <span class="ruby-identifier">offset</span>, <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">rules</span> = <span class="ruby-ivar">@offset</span>, <span class="ruby-ivar">@dialect</span>.<span class="ruby-identifier">pattern</span>(<span class="ruby-ivar">@template</span>.<span class="ruby-identifier">block_symbols</span>), []
+      <span class="ruby-ivar">@source_text</span> = <span class="ruby-identifier">template</span>.<span class="ruby-identifier">source_text</span>
+    
+      <span class="ruby-comment cmt"># we start matching everything in the ruleset</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">match_at</span>=<span class="ruby-ivar">@source_text</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">pattern</span>,<span class="ruby-identifier">offset</span>)
+        <span class="ruby-identifier">match</span>, <span class="ruby-identifier">match_length</span> = <span class="ruby-identifier">$~</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">$~</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">length</span>
+      
+        <span class="ruby-comment cmt"># puts pre_match (we can't use $~.pre_match !)</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-ivar">@source_text</span>[<span class="ruby-identifier">offset</span>, <span class="ruby-identifier">match_at</span><span class="ruby-operator">-</span><span class="ruby-identifier">offset</span>], <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">match_at</span><span class="ruby-operator">&gt;</span><span class="ruby-value">0</span>
+      
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@source_text</span>[<span class="ruby-identifier">match_at</span>,<span class="ruby-value">1</span>]<span class="ruby-operator">==</span><span class="ruby-value str">'\\'</span>           <span class="ruby-comment cmt"># escaping sequence</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">match</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>], <span class="ruby-keyword kw">false</span>)
+          <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">match_at</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">match_length</span>
+        
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">==</span><span class="ruby-value">1</span>               <span class="ruby-comment cmt"># simple '{' or '}' here</span>
+          <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">match_at</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">match_length</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">match</span><span class="ruby-operator">==</span><span class="ruby-value str">'{'</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">match</span>, <span class="ruby-keyword kw">false</span>)  <span class="ruby-comment cmt"># simple '{' are always pushed</span>
+            <span class="ruby-comment cmt"># we push '{' in rules to recognize it's associated '}'</span>
+            <span class="ruby-comment cmt"># that must be pushed on buffer also</span>
+            <span class="ruby-identifier">rules</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">match</span>   
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-comment cmt"># end of my job if I can't pop a previous rule</span>
+            <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">empty?</span>
+            <span class="ruby-comment cmt"># otherwise, push '}' only if associated to a simple '{'</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">match</span>, <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Rule</span><span class="ruby-operator">===</span><span class="ruby-identifier">rules</span>.<span class="ruby-identifier">pop</span>
+          <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">match</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>]<span class="ruby-operator">==</span><span class="ruby-value str">'{'</span>              <span class="ruby-comment cmt"># opening special tag</span>
+          <span class="ruby-comment cmt"># following line should never return nil as the matching pattern comes </span>
+          <span class="ruby-comment cmt"># from the ruleset itself!</span>
+          <span class="ruby-identifier">rule</span> = <span class="ruby-ivar">@dialect</span>.<span class="ruby-identifier">ruleset</span>[<span class="ruby-identifier">match</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]]     
+          <span class="ruby-identifier">rules</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rule</span>
+        
+          <span class="ruby-comment cmt"># lauch that rule, get it's replacement and my new offset</span>
+          <span class="ruby-identifier">replacement</span>, <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">start_tag</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">match_at</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">match_length</span>)
+          <span class="ruby-identifier">replacement</span> = <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">replacement</span>.<span class="ruby-identifier">nil?</span>
+          <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Bad implementation of rule #{match[0..-2]}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">offset</span>.<span class="ruby-identifier">nil?</span>
+        
+          <span class="ruby-comment cmt"># push replacement</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">replacement</span>, <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">replacement</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-keyword kw">end</span>  <span class="ruby-comment cmt"># while match_at=...</span>
+    
+      <span class="ruby-comment cmt"># trailing data (end of @template reached only if no match_at)</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">match_at</span>
+        <span class="ruby-identifier">unexpected_eof</span>(<span class="ruby-ivar">@source_text</span>.<span class="ruby-identifier">length</span>, <span class="ruby-value str">'}'</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-ivar">@source_text</span>[<span class="ruby-identifier">offset</span>, <span class="ruby-value">1</span><span class="ruby-operator">+</span><span class="ruby-ivar">@source_text</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span><span class="ruby-identifier">offset</span>], <span class="ruby-keyword kw">false</span>)
+        <span class="ruby-identifier">offset</span> = <span class="ruby-ivar">@source_text</span>.<span class="ruby-identifier">length</span>
+      <span class="ruby-keyword kw">end</span>
+      [<span class="ruby-ivar">@buffer</span>, <span class="ruby-identifier">offset</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000025" class="method-detail">
+        <a name="M000025"></a>
+
+        <div class="method-heading">
+          <a href="#M000025" class="method-signature">
+          <span class="method-name">parse</span><span class="method-args">(offset, dialect=nil, buffer=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Launches a child parser for instantiation at a given <em>offset</em> in
+given <em>dialect</em> (same dialect than self if dialect is nil) and with
+an output <em>buffer</em>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000025-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000025-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 146</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-identifier">dialect</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">buffer</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dialect</span>.<span class="ruby-identifier">nil?</span>
+        <span class="ruby-identifier">dialect</span> = <span class="ruby-ivar">@dialect</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">String</span><span class="ruby-operator">===</span><span class="ruby-identifier">dialect</span>
+        <span class="ruby-identifier">dname</span>, <span class="ruby-identifier">dialect</span> = <span class="ruby-identifier">dialect</span>, <span class="ruby-constant">WLang</span><span class="ruby-operator">::</span><span class="ruby-identifier">dialect</span>(<span class="ruby-identifier">dialect</span>)
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ParseError</span>,<span class="ruby-node">&quot;Unknown modulation dialect: #{dname}&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dialect</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">not</span>(<span class="ruby-constant">Dialect</span><span class="ruby-operator">===</span><span class="ruby-identifier">dialect</span>)
+        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ParseError</span>,<span class="ruby-node">&quot;Unknown modulation dialect: #{dialect}&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:new</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-ivar">@template</span>, <span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">offset</span>, <span class="ruby-identifier">buffer</span>).<span class="ruby-identifier">instantiate</span> 
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000027" class="method-detail">
+        <a name="M000027"></a>
+
+        <div class="method-heading">
+          <a href="#M000027" class="method-signature">
+          <span class="method-name">parse_block</span><span class="method-args">(offset, dialect=nil, buffer=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parses a given block starting at a given <em>offset</em>, expressed in a
+given <em>dialect</em> and using an output <em>buffer</em>. This method
+raises a <a href="ParseError.html">ParseError</a> if there is no block at
+the offset. It implies that we are on a &#8217;}{&#8217;, see <a
+href="Parser.html#M000026">has_block?</a> for details. Rules may thus force
+mandatory block parsing without having to check anything. Optional blocks
+must be handled by rules themselve.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000027-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000027-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 175</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_block</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-identifier">dialect</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">buffer</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">block_missing_error</span>(<span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-value">2</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">has_block?</span>(<span class="ruby-identifier">offset</span>)
+      <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-value">2</span>, <span class="ruby-identifier">dialect</span>, <span class="ruby-identifier">buffer</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000029" class="method-detail">
+        <a name="M000029"></a>
+
+        <div class="method-heading">
+          <a href="#M000029" class="method-signature">
+          <span class="method-name">syntax_error</span><span class="method-args">(offset, msg=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Raises a <a href="ParseError.html">ParseError</a> at a given offset.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000029-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000029-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 205</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">syntax_error</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-identifier">msg</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">text</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-value str">&quot;wlang/dummy&quot;</span>, <span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ParseError</span>, <span class="ruby-node">&quot;Parse error at #{offset} on '#{text}': #{msg}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000031" class="method-detail">
+        <a name="M000031"></a>
+
+        <div class="method-heading">
+          <a href="#M000031" class="method-signature">
+          <span class="method-name">unexpected_eof</span><span class="method-args">(offset, expected)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Raises a <a href="ParseError.html">ParseError</a> at a given offset for a
+unexpected EOF specif. the expected character when EOF found
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000031-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000031-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/wlang/parser.rb, line 221</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unexpected_eof</span>(<span class="ruby-identifier">offset</span>, <span class="ruby-identifier">expected</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ParseError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;'#{expected}' expected, EOF found.&quot;</span>, <span class="ruby-identifier">offset</span>, <span class="ruby-ivar">@source_text</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
