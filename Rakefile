@@ -20,9 +20,9 @@ end
 
 desc "Generates rdoc documentation"
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include( "README", "INSTALL", "TODO", "CHANGELOG", "LICENCE",
+  rdoc.rdoc_files.include( "README.rdoc", "INSTALL", "TODO", "CHANGELOG", "LICENCE",
                            "CONTRIBUTE", "BUGS", "lib/" )
-  rdoc.main     = "README"
+  rdoc.main     = "README.rdoc"
   rdoc.rdoc_dir = "doc/api"
   rdoc.title    = "WLang Documentation"
 end
@@ -61,9 +61,9 @@ gemspec = Gem::Specification.new do |s|
   s.files = Dir['lib/**/*'] + Dir['test/**/*'] + Dir['bin/*'] + Dir['doc/template/*'] + Dir['doc/specification/*']
   s.require_path = 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README", "INSTALL", "TODO", "CHANGELOG", "LICENCE", "CONTRIBUTE", "BUGS"]
+  s.extra_rdoc_files = ["README.rdoc", "INSTALL", "TODO", "CHANGELOG", "LICENCE", "CONTRIBUTE", "BUGS"]
   s.rdoc_options << '--title' << 'WLang - Code generator and Template engine' <<
-                    '--main' << 'README' <<
+                    '--main' << 'README.rdoc' <<
                     '--line-numbers'  
   s.bindir = "bin"
   s.executables = ["wlang"]
