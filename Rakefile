@@ -28,8 +28,8 @@ Rake::RDocTask.new do |rdoc|
 end
 
 desc "Generates the specification file"
-task :spec => :rdoc do |t|
-  Kernel.exec("ruby -Ilib bin/wlang --output doc/api/SPECIFICATION.html doc/specification/specification.wtpl")
+task :spec => :rerdoc do |t|
+  Kernel.exec("ruby -Ilib bin/wlang --output doc/specification/specification.html doc/specification/specification.wtpl")
 end
 
 desc "Converts SVN log to a CHANGELOG file"
