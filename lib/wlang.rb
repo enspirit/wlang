@@ -151,7 +151,7 @@ module WLang
   #   WLang.instantiate "SELECT * FROM people WHERE name='{name}'", {"who" => "Mr. O'Neil"}, "wlang/sql"
   #   WLang.instantiate "Hello $(who) !", {"who" => "Mr. Jones"}, "wlang/active-string", :parentheses
   #
-  def self.instantiate(template, context=nil, dialect="wlang/active-string", block_symbols=:braces)
+  def self.instantiate(template, context=nil, dialect="wlang/active-string", block_symbols = :braces)
     WLang::Template.new(template, dialect, context, block_symbols).instantiate
   end
   
@@ -168,7 +168,7 @@ module WLang
   #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}, STDOUT
   #   Wlang.file_instantiate "template.xxx", {"who" => "Mr. Jones"}, STDOUT, "wlang/xhtml"
   #
-  def self.file_instantiate(file, context=nil, buffer=nil, dialect=nil, block_symbols=:braces)
+  def self.file_instantiate(file, context=nil, buffer=nil, dialect=nil, block_symbols = :braces)
     raise "File '#{file}' does not exists or is unreadable"\
       unless File.exists?(file) and File.readable?(file)
     if dialect.nil?

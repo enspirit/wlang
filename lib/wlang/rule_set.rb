@@ -60,7 +60,9 @@ module WLang
     # as well as '{' and '}' aware. This pattern is used by WLang::Parser and is
     # not intended to be used by users themselve.
     # 
-    def pattern(block_symbols) @pattern ||= build_pattern(block_symbols); end
+    def pattern(block_symbols) 
+      build_pattern(block_symbols); 
+    end
 
     #
     # Returns the Rule associated with a given tag, _nil_ if no such rule.

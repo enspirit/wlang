@@ -25,7 +25,7 @@ module WLang
     #
     # Creates a template instance.
     #
-    def initialize(source, dialect, context=nil, block_symbols=:braces)
+    def initialize(source, dialect, context=nil, block_symbols = :braces)
       raise(ArgumentError, "Source is mandatory") if source.nil?
       if String===dialect
         dname, dialect = dialect, WLang::dialect(dialect)

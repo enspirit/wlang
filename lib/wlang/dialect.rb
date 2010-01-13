@@ -45,7 +45,7 @@ module WLang
     attr_reader :name
     
     # Parent dialect
-    attr_reader :name
+    attr_reader :parent
     
     #
     # Creates a dialect instance. _builder_ block is a chunk of code of the DSL

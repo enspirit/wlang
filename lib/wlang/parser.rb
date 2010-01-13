@@ -92,7 +92,7 @@ module WLang
         
         elsif match.length==1               # simple '{' or '}' here
           offset = match_at + match_length
-          if match=='{'
+          if match==Template::BLOCK_SYMBOLS[template.block_symbols][0]
             self.<<(match, false)  # simple '{' are always pushed
             # we push '{' in rules to recognize it's associated '}'
             # that must be pushed on buffer also
@@ -104,7 +104,7 @@ module WLang
             self.<<(match, false) unless Rule===rules.pop
           end
         
-        elsif match[-1,1]=='{'              # opening special tag
+        elsif match[-1,1]==Template::BLOCK_SYMBOLS[template.block_symbols][0] # opening special tag
           # following line should never return nil as the matching pattern comes 
           # from the ruleset itself!
           rule = @dialect.ruleset[match[0..-2]]     
