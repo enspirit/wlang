@@ -136,6 +136,8 @@ module WLang
     #
     def evaluate(expression)
       @context.evaluate(expression)
+    rescue Exception => ex
+      raise ::WLang::EvalError, "#{template.where(@offset)} evaluation of '#{expression}' failed", ex.backtrace
     end
   
     #
@@ -199,19 +201,25 @@ module WLang
       encoder.encode(src, options)
     end
   
+    # Raises an exception with a friendly message
+    def error(offset, message)
+      template.error(offset, message)
+    end
+  
     #
     # Raises a ParseError at a given offset.
     #
     def syntax_error(offset, msg=nil)
       text = self.parse(offset, "wlang/dummy", "")
-      raise ParseError, "Parse error at #{offset} on '#{text}': #{msg}"
+      msg = msg.nil? ? '' : ": #{msg}"
+      template.parse_error(offset, "parse error on '#{text}'#{msg}")
     end
   
     #
     # Raises a ParseError at a given offset for a missing block
     #
     def block_missing_error(offset)
-      raise ParseError.new("Block expected", offset, @source_text)
+      template.parse_error(offset, "parse error, block was expected")
     end
   
     #
@@ -219,7 +227,7 @@ module WLang
     # specif. the expected character when EOF found
     #
     def unexpected_eof(offset, expected)
-      raise ParseError.new("'#{expected}' expected, EOF found.", offset, @source_text)
+      template.parse_error(offset, "#{expected} expected, EOF found")
     end
   
     #

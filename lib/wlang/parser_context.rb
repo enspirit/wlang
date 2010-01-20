@@ -104,13 +104,6 @@ module WLang
         else
           @current_scope.__evaluate(expression)  
         end
-      rescue Exception => ex
-        puts "Warning, some wlang exception when evaluating the expression\n#{expression}"
-        puts "Message was: #{ex.message}"
-        puts ex.backtrace.join("\n")
-        puts "Current scope was:\n"
-        puts @current_scope.__underlying.inspect
-        return nil
       end
   
       # Pushes a new scope instance.

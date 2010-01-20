@@ -20,8 +20,13 @@ module WLang
       # Rule implementation of <tt><<{wlang/uri}</tt>
       def self.input(parser, offset)
         uri, reached = parser.parse(offset, "wlang/uri")
-        file = parser.template.file_resolve(uri, true)
-        [File.read(file), reached]
+        file = parser.template.file_resolve(uri, false)
+        if File.file?(file) and File.readable?(file)
+          [File.read(file), reached]
+        else
+          text = parser.parse(offset, "wlang/dummy")[0]
+          parser.error(offset, "unable to apply input rule <<{#{text}}, not a file or not readable (#{file})")
+        end
       end
   
       # Rule implementation of <tt>>>{wlang/uri}</tt>
@@ -29,11 +34,15 @@ module WLang
         uri, reached = parser.parse(offset, "wlang/uri")
         file = parser.template.file_resolve(uri, false)
         dir = File.dirname(file)
-        FileUtils.mkdir_p(dir) unless File.exists?(dir)
-        File.open(file, "w") do |file|
-          text, reached = parser.parse_block(reached, nil, file)
+        if File.writable?(dir) or not(File.exists?(dir))
+          FileUtils.mkdir_p(dir) unless File.exists?(dir)
+          File.open(file, "w") do |file|
+            text, reached = parser.parse_block(reached, nil, file)
+          end
+          ["", reached]
+        else
+          parser.error(offset, "unable to apply output rule >>{#{text}}, not a writable directory (#{file})")
         end
-        ["", reached]
       end
     
       # Rule implementation of <<={wlang/uri as x}{...}
@@ -44,18 +53,23 @@ module WLang
         decoded = U.decode_uri_as(uri)
         parser.syntax_error(offset) if decoded.nil?
     
-        file = parser.template.file_resolve(decoded[:uri], true)
-        data = WLang::load_data(file)
+        file = parser.template.file_resolve(decoded[:uri], false)
+        if File.file?(file) and File.readable?(file)
+          data = WLang::load_data(file)
     
-        # handle two different cases
-        if parser.has_block?(reached)
-          parser.context_push(decoded[:variable] => data)
-          text, reached = parser.parse_block(reached)
-          parser.context_pop
-          [text, reached]
+          # handle two different cases
+          if parser.has_block?(reached)
+            parser.context_push(decoded[:variable] => data)
+            text, reached = parser.parse_block(reached)
+            parser.context_pop
+            [text, reached]
+          else
+            parser.context_define(decoded[:variable], data)
+            ["", reached]
+          end
         else
-          parser.context_define(decoded[:variable], data)
-          ["", reached]
+          text = parser.parse(offset, "wlang/dummy")[0]
+          parser.error(offset, "unable to apply data-assignment rule <<={#{text}} (#{file}), not a file or not readable (#{file})")
         end
       end
 
@@ -91,9 +105,14 @@ module WLang
           end
         end
         
-        file = parser.template.file_resolve(decoded[:uri], true)
-        instantiated = WLang::file_instantiate(file, context)
-        [instantiated, reached]
+        file = parser.template.file_resolve(decoded[:uri], false)
+        if File.file?(file) and File.readable?(file)
+          instantiated = WLang::file_instantiate(file, context)
+          [instantiated, reached]
+        else
+          text = parser.parse(offset, "wlang/dummy")[0]
+          parser.error(offset, "unable to apply input-inclusion rule <<+{#{text}}, not a file or not readable (#{file})")
+        end
       end
   
 

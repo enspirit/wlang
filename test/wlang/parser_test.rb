@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 module WLang
   
@@ -77,11 +77,11 @@ class ParserTest < Test::Unit::TestCase
   def test_parser_error_find_line_and_column
     assert_error_at_line_column("-{tag", 1, 5)
     assert_error_at_line_column("-{tag with spaces   ", 1, 20)
-    assert_error_at_line_column("-{tag as i}{\n", 1, 12)
-    assert_error_at_line_column("-{tag as i}{\n\n", 1, 12)
-    assert_error_at_line_column("-{tag as i}{\ntext\n", 2, 4)
-    assert_error_at_line_column("-{tag as i}{\n\ntext\n", 3, 4)
-    assert_error_at_line_column("-{tag as i}{\n\n\ntext\n", 4, 4)
+    assert_error_at_line_column("-{tag as i}{\n", 2, 0)
+    assert_error_at_line_column("-{tag as i}{\n\n", 3, 0)
+    assert_error_at_line_column("-{tag as i}{\ntext\n", 3, 0)
+    assert_error_at_line_column("-{tag as i}{\n\ntext\n", 4, 0)
+    assert_error_at_line_column("-{tag as i}{\n\n\ntext\n", 5, 0)
   end
   
 end # ParserTest
