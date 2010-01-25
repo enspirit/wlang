@@ -37,13 +37,13 @@ module WLang
       
       # Checks internals
       def check
-        raise "WLang::Parser::State fatal: missing parser" unless parser
-        raise "WLang::Parser::State fatal: missing hosted" unless hosted
-        raise "WLang::Parser::State fatal: missing template" unless template
-        raise "WLang::Parser::State fatal: missing dialect" unless dialect
-        raise "WLang::Parser::State fatal: missing offset" unless offset
-        raise "WLang::Parser::State fatal: missing scope" unless scope
-        raise "WLang::Parser::State fatal: missing buffer" unless buffer
+        raise "WLang::Parser::State fatal: invalid parser #{parser}" unless ::WLang::Parser===parser
+        raise "WLang::Parser::State fatal: invalid hosted #{hosted}" unless ::WLang::HostedLanguage===hosted
+        raise "WLang::Parser::State fatal: missing template #{template}" unless ::WLang::Template===template
+        raise "WLang::Parser::State fatal: missing dialect #{dialect}" unless ::WLang::Dialect===dialect
+        raise "WLang::Parser::State fatal: missing offset #{offset}" unless Integer===offset
+        raise "WLang::Parser::State fatal: missing scope #{scope}" unless ::WLang::HashScope===scope
+        raise "WLang::Parser::State fatal: missing buffer #{buffer}" unless buffer.respond_to?(:<<)
         self
       end
       
