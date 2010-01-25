@@ -62,26 +62,9 @@ module WLang
       @buffer = buffer
     end
     
-    # Factors a specific buffer on the current dialect
-    def factor_buffer
-      self.dialect.factor_buffer
-    end
-    
-    # Appends on a given buffer
-    def append_buffer(buffer, str, block)
-      if buffer.respond_to?(:wlang_append)
-        buffer.wlang_append(str, block)
-      else
-        buffer << str
-      end
-    end
+    ###################################################################### Main parser methods
   
-    # Pushes a given string on the output buffer
-    def <<(str, block)
-      append_buffer(buffer, str, block)
-    end
-
-    # Parses the text
+    # Parses the template's text and instantiate it
     def instantiate
       # Main variables put in local scope for efficiency:
       #   - template:     current parsed template
@@ -148,15 +131,7 @@ module WLang
       [buffer, offset-1]
     end
   
-    #
-    # Evaluates a ruby expression on the current context. 
-    # See WLang::Parser::Context#evaluate.
-    #
-    def evaluate(expression)
-      context.evaluate(expression)
-    rescue Exception => ex
-      raise ::WLang::EvalError, "#{template.where(self.offset)} evaluation of '#{expression}' failed", ex.backtrace
-    end
+    ###################################################################### Callbacks for rule sets
   
     #
     # Launches a child parser for instantiation at a given _offset_ in given 
@@ -197,6 +172,69 @@ module WLang
       parse(offset+2, dialect, buffer)
     end
   
+    ###################################################################### Facade on the buffer
+  
+    # Factors a specific buffer on the current dialect
+    def factor_buffer
+      self.dialect.factor_buffer
+    end
+    
+    # Appends on a given buffer
+    def append_buffer(buffer, str, block)
+      if buffer.respond_to?(:wlang_append)
+        buffer.wlang_append(str, block)
+      else
+        buffer << str
+      end
+    end
+  
+    # Pushes a given string on the output buffer
+    def <<(str, block)
+      append_buffer(buffer, str, block)
+    end
+
+    ###################################################################### Facade on the scope
+  
+    #
+    # Puts a key/value pair in the current context. See Parser::Context::define
+    # for details.
+    #
+    def context_define(key, value)
+      puts "Warning: using deprecated method Parser.context_define, #{caller[0]}"
+      self.context.define(key,value)
+    end
+
+    #    
+    # Pushes a new scope on the current context stack. See Parser::Context::push
+    # for details.
+    #
+    def context_push(new_context)
+      puts "Warning: using deprecated method Parser.context_push, #{caller[0]}"
+      self.context.push(new_context)
+    end
+
+    #  
+    # Pops the top scope of the context stack. See Parser::Context::pop for details.
+    #
+    def context_pop
+      puts "Warning: using deprecated method Parser.context_pop, #{caller[0]}"
+      self.context.pop
+    end
+  
+    ###################################################################### Facade on the hosted language
+  
+    #
+    # Evaluates a ruby expression on the current context. 
+    # See WLang::Parser::Context#evaluate.
+    #
+    def evaluate(expression)
+      context.evaluate(expression)
+    rescue Exception => ex
+      raise ::WLang::EvalError, "#{template.where(self.offset)} evaluation of '#{expression}' failed", ex.backtrace
+    end
+  
+    ###################################################################### Facade on the dialect
+  
     #
     # Encodes a given text using an encoder, that may be a qualified name or an
     # Encoder instance.
@@ -219,6 +257,8 @@ module WLang
       encoder.encode(src, options)
     end
   
+    ###################################################################### About errors
+
     # Raises an exception with a friendly message
     def error(offset, message)
       template.error(offset, message)
@@ -246,32 +286,6 @@ module WLang
     #
     def unexpected_eof(offset, expected)
       template.parse_error(offset, "#{expected} expected, EOF found")
-    end
-  
-    #
-    # Puts a key/value pair in the current context. See Parser::Context::define
-    # for details.
-    #
-    def context_define(key, value)
-      puts "Warning: using deprecated method Parser.context_define, #{caller[0]}"
-      self.context.define(key,value)
-    end
-
-    #    
-    # Pushes a new scope on the current context stack. See Parser::Context::push
-    # for details.
-    #
-    def context_push(new_context)
-      puts "Warning: using deprecated method Parser.context_push, #{caller[0]}"
-      self.context.push(new_context)
-    end
-
-    #  
-    # Pops the top scope of the context stack. See Parser::Context::pop for details.
-    #
-    def context_pop
-      puts "Warning: using deprecated method Parser.context_pop, #{caller[0]}"
-      self.context.pop
     end
   
     private_class_method :new
