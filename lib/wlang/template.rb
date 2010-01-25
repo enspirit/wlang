@@ -63,14 +63,10 @@ module WLang
     # Instantiate the template, with an additional context and an output buffer.
     #
     def instantiate(buffer=nil, context=nil)
-      unless context.nil? 
-        @context.push(context)
-      end
+      @context.push(context) unless context.nil? 
       parser = WLang::Parser.instantiator(self, buffer)
       instantiated = parser.instantiate
-      unless context.nil?
-        @context.pop
-      end
+      @context.pop unless context.nil?
       instantiated[0]
     end
     
