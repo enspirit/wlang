@@ -25,13 +25,22 @@ module WLang
   
     # Current parsed template
     attr_reader :template
+    
+    # Current source text
+    attr_reader :source_text
+  
+    # Current offset
+    attr_reader :offset
   
     # Current execution context
     attr_reader :context
   
     # Current buffer
     attr_reader :buffer
-  
+    
+    # Current dialect
+    attr_reader :dialect
+    
     #
     # Initializes a parser instance. _parent_ is the Parser instance of the higher
     # parsing stage. _template_ is the current instantiated template, _offset_ is
@@ -46,6 +55,7 @@ module WLang
       raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
       @parent = parent
       @template = template
+      @source_text = template.source_text
       @context = template.context
       @offset = offset
       @dialect = dialect
@@ -54,7 +64,7 @@ module WLang
     
     # Factors a specific buffer on the current dialect
     def factor_buffer
-      @dialect.factor_buffer
+      self.dialect.factor_buffer
     end
     
     # Appends on a given buffer
@@ -68,25 +78,33 @@ module WLang
   
     # Pushes a given string on the output buffer
     def <<(str, block)
-      append_buffer(@buffer, str, block)
+      append_buffer(buffer, str, block)
     end
 
     # Parses the text
     def instantiate
-      # Main variables:
-      # - offset: matching current position
-      # - rules: handlers of '{' currently opened
-      offset, pattern, rules = @offset, @dialect.pattern(@template.block_symbols), []
-      @source_text = template.source_text
+      # Main variables put in local scope for efficiency:
+      #   - template:     current parsed template
+      #   - source_text:  current template's source text
+      #   - offset:       matching current position
+      #   - pattern:      current dialect's regexp pattern
+      #   - rules:        handlers of '{' currently opened
+      template    = self.template
+      source_text = self.source_text
+      dialect     = self.dialect
+      offset      = self.offset
+      buffer      = self.buffer
+      pattern     = dialect.pattern(template.block_symbols)
+      rules       = []
     
       # we start matching everything in the ruleset
-      while match_at=@source_text.index(pattern,offset)
+      while match_at=source_text.index(pattern,offset)
         match, match_length = $~[0], $~[0].length
       
         # puts pre_match (we can't use $~.pre_match !)
-        self.<<(@source_text[offset, match_at-offset], false) if match_at>0
+        self.<<(source_text[offset, match_at-offset], false) if match_at>0
       
-        if @source_text[match_at,1]=='\\'           # escaping sequence
+        if source_text[match_at,1]=='\\'           # escaping sequence
           self.<<(match[1..-1], false)
           offset = match_at + match_length
         
@@ -107,7 +125,7 @@ module WLang
         elsif match[-1,1]==Template::BLOCK_SYMBOLS[template.block_symbols][0] # opening special tag
           # following line should never return nil as the matching pattern comes 
           # from the ruleset itself!
-          rule = @dialect.ruleset[match[0..-2]]     
+          rule = dialect.ruleset[match[0..-2]]     
           rules << rule
         
           # lauch that rule, get it's replacement and my new offset
@@ -121,13 +139,13 @@ module WLang
       
       end  # while match_at=...
     
-      # trailing data (end of @template reached only if no match_at)
+      # trailing data (end of template reached only if no match_at)
       unless match_at
-        unexpected_eof(@source_text.length, '}') unless rules.empty?
-        self.<<(@source_text[offset, 1+@source_text.length-offset], false)
-        offset = @source_text.length
+        unexpected_eof(source_text.length, '}') unless rules.empty?
+        self.<<(source_text[offset, 1+source_text.length-offset], false)
+        offset = source_text.length
       end
-      [@buffer, offset-1]
+      [buffer, offset-1]
     end
   
     #
@@ -135,9 +153,9 @@ module WLang
     # See WLang::Parser::Context#evaluate.
     #
     def evaluate(expression)
-      @context.evaluate(expression)
+      context.evaluate(expression)
     rescue Exception => ex
-      raise ::WLang::EvalError, "#{template.where(@offset)} evaluation of '#{expression}' failed", ex.backtrace
+      raise ::WLang::EvalError, "#{template.where(self.offset)} evaluation of '#{expression}' failed", ex.backtrace
     end
   
     #
@@ -147,14 +165,14 @@ module WLang
     #
     def parse(offset, dialect=nil, buffer=nil)
       if dialect.nil?
-        dialect = @dialect
+        dialect = self.dialect
       elsif String===dialect
         dname, dialect = dialect, WLang::dialect(dialect)
         raise(ParseError,"Unknown modulation dialect: #{dname}") if dialect.nil?
       elsif not(Dialect===dialect)
         raise(ParseError,"Unknown modulation dialect: #{dialect}")
       end
-      Parser.send(:new, self, @template, dialect, offset, buffer).instantiate 
+      Parser.send(:new, self, template, dialect, offset, buffer).instantiate 
     end
   
     # 
@@ -164,7 +182,7 @@ module WLang
     # parsing on a '}')
     #
     def has_block?(offset)
-      @source_text[offset,2]=='}{'
+      self.source_text[offset,2]=='}{'
     end
   
     #
@@ -192,7 +210,7 @@ module WLang
           ename, encoder = encoder, WLang::encoder(encoder)
           raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
         else
-          ename, encoder = encoder, @dialect.find_encoder(encoder)
+          ename, encoder = encoder, self.dialect.find_encoder(encoder)
           raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
         end
       elsif not(Encoder===encoder)
@@ -235,22 +253,25 @@ module WLang
     # for details.
     #
     def context_define(key, value)
-      @context.define(key,value)
+      puts "Warning: using deprecated method Parser.context_define, #{caller[0]}"
+      self.context.define(key,value)
     end
 
     #    
     # Pushes a new scope on the current context stack. See Parser::Context::push
     # for details.
     #
-    def context_push(context)
-      @context.push(context)
+    def context_push(new_context)
+      puts "Warning: using deprecated method Parser.context_push, #{caller[0]}"
+      self.context.push(new_context)
     end
 
     #  
     # Pops the top scope of the context stack. See Parser::Context::pop for details.
     #
     def context_pop
-      @context.pop
+      puts "Warning: using deprecated method Parser.context_pop, #{caller[0]}"
+      self.context.pop
     end
   
     private_class_method :new
