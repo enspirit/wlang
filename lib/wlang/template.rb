@@ -1,7 +1,9 @@
 module WLang
-  
   # 
-  # Template in a given wlang dialect, providing a default context object.
+  # Template in a given wlang dialect and expecting :braces, :brackets or 
+  # :parentheses as block delimiters. A template is an abstraction over a 
+  # wlang source text. It also provides utilities to create friendly location
+  # messages for offsets in the source text.
   #
   class Template
   
@@ -19,9 +21,7 @@ module WLang
     # Attached file source
     attr_accessor :source_file
   
-    #
     # Creates a template instance.
-    #
     def initialize(source, dialect, block_symbols = :braces)
       dialect = WLang::dialect(dialect)
       raise(ArgumentError, "Source is mandatory") if source.nil?
@@ -52,9 +52,7 @@ module WLang
       end
     end
   
-    #
-    # Instantiate the template, with an additional context and an output buffer.
-    #
+    # Instantiates the template, with optinal context and hosted language.
     def instantiate(context = {}, hosted = ::WLang::HostedLanguage.new)
       p = ::WLang::Parser.new(hosted, self, context)
       p.instantiate[0]
@@ -68,17 +66,14 @@ module WLang
     
     # Raises a WLang::Error for the given offset
     def error(offset, msg = "")
-      src = source_text
-      line, column = src.__wlang_line_of(offset), src.__wlang_column_of(offset)-1
-      raise WLang::Error, "#{source_file || 'inline template'}:#{line}:#{column} #{msg}"
+      raise WLang::Error, "#{where(offset)} #{msg}"
     end
     
     # Raises a friendly ParseError, with positions and so on
     def parse_error(offset, msg = "")
       src = source_text
-      line, column = src.__wlang_line_of(offset), src.__wlang_column_of(offset)-1
-      ex = ParseError.new("#{source_file || 'inline template'}:#{line}:#{column} #{msg}")
-      ex.line, ex.column = line, column
+      ex = ParseError.new("#{where(offset)} #{msg}")
+      ex.line, ex.column = src.__wlang_line_of(offset), src.__wlang_column_of(offset)-1
       raise ex
     end
   

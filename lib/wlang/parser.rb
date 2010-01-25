@@ -4,7 +4,6 @@ require 'wlang/rule_set'
 require 'wlang/errors'
 require 'wlang/template'
 module WLang
-
   #
   # Parser for wlang templates.
   #
@@ -308,8 +307,9 @@ module WLang
     def unexpected_eof(offset, expected)
       template.parse_error(offset, "#{expected} expected, EOF found")
     end
-  
+    
+    # Protected methods are...
     protected :state, :hosted, :offset, :source_text, :buffer, :dialect
+    
   end # class Parser
-
 end # module WLang
