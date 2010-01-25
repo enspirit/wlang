@@ -86,7 +86,7 @@ module WLang
       
       # Returns a friendly wlang backtrace as an array
       def backtrace
-        parent ? (parent.backtrace << where) : [where]
+        parent ? parent.backtrace.unshift(where) : [where]
       end
       
     end # class State

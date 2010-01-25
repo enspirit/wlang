@@ -15,12 +15,12 @@
     <h1 id="title">${spec.title} (version ${spec.version})</h1>
     <ul id="tabs">
       *{spec.sections.reverse as section}{
-        <li id="+{section.id}focus" onclick="show('{section.id}')">${section.name}</li>
+        <li id="+{section.identifier}focus" onclick="show('{section.identifier}')">${section.name}</li>
       }
     </ul>
     <div class="clear"></div>
     *{spec.sections as section}{
-	  <div id="{section.id}" style="display: none;">
+	  <div id="{section.identifier}" style="display: none;">
 	    <div class="header">
 		  <h2>${section.name}</h2>
 		  ?{section.links}{

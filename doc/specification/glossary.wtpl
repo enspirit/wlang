@@ -4,11 +4,11 @@
     <th class="definition">definition</th>
     <th class="example">example</th>
   </tr>
-  *{spec/glossary as t}{
+  *{spec.glossary as t}{
   <tr>
-    <td><em>${t/term}</em></td>
-    <td>^{rdoc/nop}{+{t/definition}}</td>
-    <td style="font-size: 90%;">^{rdoc/nop}{+{t/example}}</td>
+    <td><em>${t.term}</em></td>
+    <td>^{rdoc/nop}{+{t.definition}}</td>
+    <td style="font-size: 90%;">^{rdoc/nop}{+{t.example}}</td>
   </tr>
 }
 </table>

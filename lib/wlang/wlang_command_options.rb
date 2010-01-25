@@ -65,6 +65,11 @@ module WLang
             @template_dialect = value
           end
       
+          opt.on("-m", "--methodize", 
+                 "Use methodization of hashes?") do |value|
+            Kernel.load('wlang/ext/hash_methodize.rb')
+          end
+      
           opt.on("-o", "--output=OUTPUT",
                  "Flush instantiation result in output file") do |value|
             @output_file = value         

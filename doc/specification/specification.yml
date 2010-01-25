@@ -2,26 +2,26 @@
 title: WLang
 version: 0.8.4
 sections:
-  - id: about
+  - identifier: about
     name: About
     file: about.rdoc
-  - id: overview
+  - identifier: overview
     name: Overview
     file: overview.rdoc
-  - id: rulesets
+  - identifier: rulesets
     name: Rulesets
     file: rulesets.wtpl
     links: 'spec["rulesets"].reverse'
-  - id: dialects
+  - identifier: dialects
     name: Dialects
     file: dialects.wtpl
-  - id: hosting
+  - identifier: hosting
     name: Hosting language
     file: hosting.rdoc
-  - id: glossary
+  - identifier: glossary
     name: Glossary
     file: glossary.wtpl
-  - id: symbols
+  - identifier: symbols
     name: Tag symbols
     file: symbols.wtpl
 glossary:

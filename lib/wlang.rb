@@ -1,4 +1,4 @@
-require 'wlang/ruby_extensions'
+require 'wlang/ext/string'
 require 'stringio'
 require 'wlang/rule'
 require 'wlang/rule_set'

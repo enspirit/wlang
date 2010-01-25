@@ -5,12 +5,12 @@
     <th class="meaning">meaning</th>
     <th class="remark">remark</th>
   </tr>
-  *{spec/symbols as s}{
-  <tr>
-	<td><em>${s/name}</em></td>
-	<td>${s/symbol}</td>
-	<td>${s/meaning}</td>
-	<td>${s/remark}</td>
-  </tr>
-}
+  *{spec.symbols as s}{
+    <tr>
+    	<td><em>${s.name}</em></td>
+    	<td>${s.symbol}</td>
+    	<td>${s.meaning}</td>
+    	<td>${s.remark}</td>
+    </tr>
+  }
 </table>

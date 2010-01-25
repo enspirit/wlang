@@ -16,7 +16,9 @@ class String
     WLang::instantiate(self, context, dialect, block_symbols)
   end
   alias :wlang :wlang_instantiate
-    
+  
+  # Computes the column number for a given offset in 
+  # this string
   def __wlang_column_of(index)
     return 1 if index == 0
     newline_index = rindex("\n", index - 1)
@@ -27,6 +29,8 @@ class String
     end
   end
   
+  # Computes the line number for a given offset in 
+  # this string
   def __wlang_line_of(index)
     self[0...index].count("\n") + 1
   end

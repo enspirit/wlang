@@ -14,7 +14,7 @@ module WLang
       @pairing = pairing || {}
       @parent = parent
     end
-    
+        
     # Returns the root scope
     def root
       @root ||= (parent ? parent.root : self)

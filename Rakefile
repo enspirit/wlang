@@ -37,7 +37,7 @@ end
 
 desc "Generates the specification file"
 task :specification => :rerdoc do |t|
-  Kernel.exec("ruby -Ilib bin/wlang --output doc/specification/specification.html doc/specification/specification.wtpl")
+  Kernel.exec("ruby -Ilib bin/wlang --methodize --output doc/specification/specification.html doc/specification/specification.wtpl")
 end
 
 gemspec = Gem::Specification.new do |s|
