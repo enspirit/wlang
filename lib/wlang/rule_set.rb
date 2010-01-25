@@ -21,7 +21,10 @@ module WLang
     #
     # Creates an new dialect rule set.
     #    
-    def initialize() @rules, @pattern = {}, nil; end
+    def initialize() 
+      @rules = {}
+      @patterns = Hash.new{|h, k| h[k] = build_pattern(k)} 
+    end
 
     #  
     # Adds a tag matching rule to this rule set. _tag_ must be a String with the
@@ -38,7 +41,7 @@ module WLang
       end
       raise(ArgumentError, "Rule expected") unless Rule===rule
       @rules[tag] = rule  
-      @pattern = nil 
+      @patterns.clear
     end
 
     #
@@ -61,7 +64,7 @@ module WLang
     # not intended to be used by users themselve.
     # 
     def pattern(block_symbols) 
-      build_pattern(block_symbols); 
+      @patterns[block_symbols]
     end
 
     #
