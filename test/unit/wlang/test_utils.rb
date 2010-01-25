@@ -17,7 +17,7 @@ module WLang::TestUtils
   
   # Factors a template and fakes its source-file as from
   def relative_template(src, dialect, from=__FILE__)
-    template = WLang::Template.new(src, dialect)
+    template = WLang::template(src, dialect)
     template.source_file = from
     template
   end

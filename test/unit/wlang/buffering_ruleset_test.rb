@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'wlang'
-require 'wlang/test_utils.rb'
+require File.join(File.dirname(__FILE__), 'test_utils.rb')
 require 'wlang/rulesets/buffering_ruleset'
 
 # Tests the Scoping ruleset
@@ -31,7 +31,7 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
   def test_input_accepts_injection
     expected = read_relative_file("ruby_template.wrb", __FILE__)
     template = relative_template("<<{ruby_template.wrb}", "buffering-test", __FILE__)
-    result = template.instantiate("", "ext" => "wrb")
+    result = template.instantiate("ext" => "wrb")
     assert_equal(expected, result)
   end
   
@@ -40,7 +40,7 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
     output = relative_file("buffering_ruleset_test_output.txt", __FILE__)
     File.delete(output) if File.exists?(output)
     template = relative_template(">>{buffering_ruleset_test_output.txt}{an output}", "buffering-test", __FILE__)
-    assert_equal("", template.instantiate())
+    assert_equal("", template.instantiate)
     assert_equal("an output", File.read(output))
     File.delete(output) if File.exists?(output)
   end
@@ -50,7 +50,7 @@ class WLang::BufferingRuleSetTest < Test::Unit::TestCase
     output = relative_file("buffering_ruleset_test_output.txt", __FILE__)
     File.delete(output) if File.exists?(output)
     template = relative_template(">>{buffering_ruleset_test_output.${ext}}{an output}", "buffering-test", __FILE__)
-    assert_equal("", template.instantiate("", "ext" => "txt"))
+    assert_equal("", template.instantiate("ext" => "txt"))
     assert_equal("an output", File.read(output))
     File.delete(output) if File.exists?(output)
   end

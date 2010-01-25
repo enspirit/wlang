@@ -6,8 +6,11 @@ require 'wlang/encoder_set'
 require 'wlang/dialect'
 require 'wlang/dialect_dsl'
 require 'wlang/dialect_loader'
+require 'wlang/basic_object'
+require 'wlang/hosted_language'
+require 'wlang/hash_scope'
 require 'wlang/parser'
-require 'wlang/parser_context'
+require 'wlang/parser_state'
 require 'wlang/intelligent_buffer'
 
 #
@@ -94,6 +97,8 @@ module WLang
       raise "Unsupported qualified names in dialect installation"\
         unless name.index('/').nil?
       Dialect::DSL.new(@dialect).dialect(name, *extensions, &block).build!
+    elsif Dialect===name
+      name
     else
       @dialect.dialect(name)
     end
@@ -137,6 +142,31 @@ module WLang
     @dialect.encoder(name)
   end
 
+  # Factors a template instance for a given string source, dialect (default to
+  # 'wlang/active-string') and block symbols (default to :braces)
+  def self.template(source, dialect = 'wlang/active-string', block_symbols = :braces)
+    template = Template.new(source, WLang::dialect(dialect), block_symbols)
+  end
+
+  # Factors a template instance for a given file, optional dialect (if nil is 
+  # passed, the dialect is infered from the extension) and block symbols 
+  # (default to :braces)
+  def self.file_template(file, dialect = nil, block_symbols = :braces)
+    # Check the file
+    file = File.expand_path(file)
+    raise "File '#{file}' does not exists or is unreadable" unless File.exists?(file) and File.readable?(file)
+    
+    # Check the dialect
+    dialect = self.infer_dialect(file) if dialect.nil?
+    raise("No known dialect for file extension '#{File.extname(file)}'\n"\
+          "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", ")) if dialect.nil?
+          
+    # Build the template now
+    template = template(File.read(file), dialect, block_symbols)
+    template.source_file = file
+    template
+  end
+
   #
   # Instantiates a template written in some _wlang_ dialect, using a given _context_
   # (providing instantiation data). Returns instantiatiation as a String. If you want 
@@ -151,35 +181,23 @@ module WLang
   #   WLang.instantiate "SELECT * FROM people WHERE name='{name}'", {"who" => "Mr. O'Neil"}, "wlang/sql"
   #   WLang.instantiate "Hello $(who) !", {"who" => "Mr. Jones"}, "wlang/active-string", :parentheses
   #
-  def self.instantiate(template, context=nil, dialect="wlang/active-string", block_symbols = :braces)
-    WLang::Template.new(template, dialect, context, block_symbols).instantiate
+  def self.instantiate(source, context = {}, dialect="wlang/active-string", block_symbols = :braces)
+    template(source, dialect, block_symbols).instantiate(context || {})
   end
   
   #
   # Instantiates a file written in some _wlang_ dialect, using a given _context_
-  # (providing instantiation data). Outputs instantiation in _buffer_ (any object
-  # responding to <tt><<</tt>, usually a IO; String is supported as well). If
-  # _dialect_ is nil, tries to infer it from the file extension; otherwise _dialect_ 
-  # is expected to be a qualified dialect name. See instantiate about <tt>block_symbols</tt>.
-  # Returns _buffer_.
+  # (providing instantiation data). If _dialect_ is nil, tries to infer it from the file 
+  # extension; otherwise _dialect_ is expected to be a qualified dialect name or a Dialect
+  # instance. See instantiate about <tt>block_symbols</tt>.
   #
   # Examples:
   #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}
   #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}, STDOUT
   #   Wlang.file_instantiate "template.xxx", {"who" => "Mr. Jones"}, STDOUT, "wlang/xhtml"
   #
-  def self.file_instantiate(file, context=nil, buffer=nil, dialect=nil, block_symbols = :braces)
-    raise "File '#{file}' does not exists or is unreadable"\
-      unless File.exists?(file) and File.readable?(file)
-    if dialect.nil?
-      dialect = infer_dialect(file) if dialect.nil?
-      raise("No known dialect for file extension '#{File.extname(file)}'\n"\
-            "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", "))\
-        if dialect.nil?
-    end
-    t = WLang::Template.new(File.read(file), dialect, context, block_symbols)
-    t.source_file = file
-    t.instantiate(buffer)
+  def self.file_instantiate(file, context = nil, dialect = nil, block_symbols = :braces)
+    t = file_template(file, dialect, block_symbols).instantiate(context || {})
   end
   
 end

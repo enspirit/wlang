@@ -27,20 +27,17 @@ module WLang
       dialect = options.template_dialect
       braces = options.template_brace
       context = options.context_object
-      unless options.context_name.nil?
-        context = {options.context_name => context}
-      end
-      template = WLang::Template.new(source, dialect, context, braces)
-      template.source_file = options.template_file
+      context = {options.context_name => context} unless options.context_name.nil?
+      template = WLang::file_template(options.template_file, options.template_dialect, braces)
     
       if options.verbosity>1
         puts "Instantiating #{options.template_file}"
-        puts "Using dialect #{dialect} : #{dialect.class}"
+        puts "Using dialect #{dialect}"
         puts "Block delimiters are " << Template::BLOCK_SYMBOLS[braces].inspect
         puts "Context is " << context.inspect
       end
     
-      buffer << template.instantiate
+      buffer << template.instantiate(context)
     
       # Flush and close if needed
       if File===buffer

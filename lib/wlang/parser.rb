@@ -13,56 +13,70 @@ module WLang
   # using instantiate. All other methods (parse, parse_block, has_block?) and the 
   # like are callbacks for rules and should not be used by users themselve.
   #
-  # Obtaining a parser MUST be made through Parser.instantiator (new is private).
-  #
   # == Detailed API
   class Parser
 
-    # Factors a parser instance for a given template and an output buffer. 
-    def self.instantiator(template, buffer=nil)
-      Parser.send(:new, nil, template, nil, 0, buffer)
+    # Initializes a parser instance.
+    def initialize(hosted, template, scope)
+      raise(ArgumentError, "Hosted language is mandatory (a ::WLang::HostedLanguage)") unless ::WLang::HostedLanguage===hosted
+      raise(ArgumentError, "Template is mandatory (a ::WLang::Template)") unless ::WLang::Template===template
+      raise(ArgumentError, "Scope is mandatory (a Hash)") unless ::Hash===scope
+      @state = ::WLang::Parser::State.new(self).branch(
+        :hosted   => hosted,
+        :template => template,
+        :dialect  => template.dialect,
+        :offset   => 0,
+        :shared   => :none,
+        :scope    => scope,
+        :buffer   => template.dialect.factor_buffer)
     end
-  
-    # Current parsed template
-    attr_reader :template
     
-    # Current source text
-    attr_reader :source_text
-  
-    # Current offset
-    attr_reader :offset
-  
-    # Current execution context
-    attr_reader :context
-  
-    # Current buffer
-    attr_reader :buffer
+    ###################################################################### Facade on the parser state
     
-    # Current dialect
-    attr_reader :dialect
+    # Returns the current parser state
+    def state(); @state; end
     
-    #
-    # Initializes a parser instance. _parent_ is the Parser instance of the higher
-    # parsing stage. _template_ is the current instantiated template, _offset_ is
-    # where the parsing must start in the template and _buffer_ is the output buffer
-    # where the instantiation result must be pushed.
-    #
-    def initialize(parent, template, dialect, offset, buffer)
-      raise(ArgumentError, "Template is mandatory") unless WLang::Template===template
-      raise(ArgumentError, "Offset is mandatory") unless Integer===offset
-      dialect = template.dialect if dialect.nil?
-      buffer = dialect.factor_buffer if buffer.nil?
-      raise(ArgumentError, "Buffer is mandatory") unless buffer.respond_to?(:<<)
-      @parent = parent
-      @template = template
-      @source_text = template.source_text
-      @context = template.context
-      @offset = offset
-      @dialect = dialect
-      @buffer = buffer
+    # Returns the current template
+    def template() state.template; end
+    
+    # Returns the current buffer
+    def dialect() state.dialect; end
+    
+    # Returns the current template's source text
+    def source_text() state.template.source_text; end
+    
+    # Returns the current offset
+    def offset() state.offset; end
+    
+    # Returns the current buffer
+    def buffer() state.buffer; end
+    
+    # Returns the current hosted language
+    def hosted() state.hosted; end
+    
+    # Branches the current parser
+    def branch(opts = {}) 
+      raise ArgumentError, "Parser branching requires a block" unless block_given?
+      @state = @state.branch(opts)
+      result = yield(@state)
+      @state = @state.parent
+      result
+    end
+    
+    ###################################################################### Facade on the file system
+    
+    # Resolves an URI throught the current template
+    def file_resolve(uri)
+      # TODO: refactor me to handle absolute URIs
+      template.file_resolve(uri)
     end
     
     ###################################################################### Facade on wlang itself
+    
+    # Factors a template instance for a given file
+    def file_template(file, dialect = nil, block_symbols = :braces)
+      WLang::file_template(file, dialect, block_symbols)
+    end
     
     # Finds a real dialect instance from an argument (Dialect instance or 
     # qualified name)
@@ -171,7 +185,10 @@ module WLang
     #
     def parse(offset, dialect=nil, buffer=nil)
       dialect = ensure_dialect(dialect.nil? ? self.dialect : dialect)
-      Parser.send(:new, self, template, dialect, offset, buffer).instantiate 
+      buffer  = dialect.factor_buffer if buffer.nil?
+      branch(:offset => offset, :dialect => dialect, :buffer => buffer) do
+        instantiate
+      end
     end
   
     # 
@@ -219,15 +236,12 @@ module WLang
     # returned.
     def branch_scope(pairing = {}, which = :all)
       raise ArgumentError, "Parser.branch_scope expects a block" unless block_given?
-      context.push(pairing)
-      result = yield
-      context.pop
-      result
+      branch(:scope => pairing, :shared => which) { yield }
     end
     
     # Adds a key/value pair on the current scope.
     def scope_define(key, value)
-      context.define(key,value)
+      state.scope[key] = value
     end
 
     ###################################################################### Facade on the hosted language
@@ -237,9 +251,7 @@ module WLang
     # See WLang::Parser::Context#evaluate.
     #
     def evaluate(expression)
-      context.evaluate(expression)
-    rescue Exception => ex
-      raise ::WLang::EvalError, "#{template.where(self.offset)} evaluation of '#{expression}' failed", ex.backtrace
+      hosted.evaluate(expression, state)
     end
   
     ###################################################################### Facade on the dialect
@@ -291,8 +303,7 @@ module WLang
       template.parse_error(offset, "#{expected} expected, EOF found")
     end
   
-    private_class_method :new
-    protected :context, :offset, :source_text, :buffer, :dialect
+    protected :state, :hosted, :offset, :source_text, :buffer, :dialect
   end # class Parser
 
 end # module WLang

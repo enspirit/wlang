@@ -41,6 +41,7 @@ module WLang
           end
           ["", reached]
         else
+          text = parser.parse(offset, "wlang/dummy")[0]
           parser.error(offset, "unable to apply output rule >>{#{text}}, not a writable directory (#{file})")
         end
       end
@@ -76,38 +77,28 @@ module WLang
       def self.input_inclusion(parser, offset)
         uri, reached = parser.parse(offset, "wlang/uri")
     
-        # decode expression
+        # decode the expression
         decoded = U.expr(:uri,
-                      ["using", :using, false],
+                      ["share", :share, false],
                       ["with",  :with, false]).decode(uri, parser)
         parser.syntax_error(offset) if decoded.nil?
         
-        # handle wit
-        context = nil
-        if decoded[:using]
-          raise "<<+ does not support multiple with for now." if decoded[:using].size != 1
-          context = decoded[:using][0]
-          raise "Unexpected nil context when duplicated" if context.nil?
-        else
-          context = {}
-        end
+        # Look for share
+        decoded[:share] = :root unless decoded[:share]
+        decoded[:with]  = {}    unless decoded[:with]
         
-        # handle using now
-        if decoded[:with]
-          case context
-            when WLang::Parser::Context::HashScope
-              context = context.__branch(decoded[:with]) 
-            when Hash
-              context = context.merge(decoded[:with])
-            else
-              raise "Unexpected context #{context}"
-          end
-        end
+        # Resolve the file by delegation to the parser
+        file = parser.file_resolve(decoded[:uri])
         
-        file = parser.template.file_resolve(decoded[:uri], false)
+        # Go for it
         if File.file?(file) and File.readable?(file)
-          instantiated = WLang::file_instantiate(file, context)
-          [instantiated, reached]
+          parser.branch(:template => parser.file_template(file),
+                        :offset   => 0,
+                        :shared   => decoded[:share],
+                        :scope    => decoded[:with]) {
+            instantiated, forget = parser.instantiate
+            [instantiated, reached]
+          }
         else
           text = parser.parse(offset, "wlang/dummy")[0]
           parser.error(offset, "unable to apply input-inclusion rule <<+{#{text}}, not a file or not readable (#{file})")

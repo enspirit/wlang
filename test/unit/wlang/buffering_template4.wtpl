@@ -1,1 +1,1 @@
-<<+{buffering_template5.wtpl using self with who2: who, hello: 'world'}
+<<+{buffering_template5.wtpl share all with who2: who, hello: 'world'}

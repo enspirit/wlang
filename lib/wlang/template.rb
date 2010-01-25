@@ -13,9 +13,6 @@ module WLang
     # Template wlang dialect (wlang/...)
     attr_reader :dialect
 
-    # Instantiation context
-    attr_reader :context
-    
     # Block symbols
     attr_reader :block_symbols
   
@@ -25,16 +22,12 @@ module WLang
     #
     # Creates a template instance.
     #
-    def initialize(source, dialect, context=nil, block_symbols = :braces)
+    def initialize(source, dialect, block_symbols = :braces)
+      dialect = WLang::dialect(dialect)
       raise(ArgumentError, "Source is mandatory") if source.nil?
-      if String===dialect
-        dname, dialect = dialect, WLang::dialect(dialect)
-        raise(ArgumentError, "Unknown dialect #{dname}") if dialect.nil?
-      end     
-      raise(ArgumentError, "Dialect is mandatory") unless WLang::Dialect===dialect
+      raise(ArgumentError, "Dialect instance expected for dialect, #{dialect} received") unless Dialect===dialect
       @source = source
       @dialect = dialect
-      @context = WLang::Parser::Context.new(context)  
       @block_symbols = block_symbols
     end
   
@@ -62,12 +55,9 @@ module WLang
     #
     # Instantiate the template, with an additional context and an output buffer.
     #
-    def instantiate(buffer=nil, context=nil)
-      @context.push(context) unless context.nil? 
-      parser = WLang::Parser.instantiator(self, buffer)
-      instantiated = parser.instantiate
-      @context.pop unless context.nil?
-      instantiated[0]
+    def instantiate(context = {}, hosted = ::WLang::HostedLanguage.new)
+      p = ::WLang::Parser.new(hosted, self, context)
+      p.instantiate[0]
     end
     
     # Returns a friendly position of an offset in the source text

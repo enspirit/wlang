@@ -34,6 +34,10 @@ module WLang
       @expression = expression
     end
     
+    def to_s
+      "Evaluation of #{@expression} failed, #{@cause ? @cause.message : ''}"
+    end
+    
   end # class EvalError
   
   #
@@ -49,6 +53,10 @@ module WLang
     def initialize(msg = nil, parser_state = nil, expression = nil, variable = nil)
       super(msg, parser_state, expression)
       @variable = variable
+    end
+    
+    def to_s
+      "Unable to find variable #{@variable}"
     end
     
   end # class UndefinedVariableError

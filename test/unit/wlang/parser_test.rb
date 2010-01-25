@@ -21,42 +21,41 @@ class ParserTest < Test::Unit::TestCase
   
   # Instantiate the given string as template
   def instantiate_str(str)
-    Parser.instantiator(Template.new(str, "example")).instantiate()[0]
+    WLang::template(str, "example").instantiate
   end
   
   # Asserts the result of an instanciation
-  def assert_instanciation_equal(expected, template, msg=nil)
-    template = Template.new(template, "example")
-    parser = Parser.instantiator(template)
-    assert_equal(expected, parser.instantiate()[0])
+  def assert_instantiation_equal(expected, template, msg=nil)
+    template = WLang::template(template, "example")
+    assert_equal(expected, template.instantiate)
   end
   
   def test_parser_accepts_whole_tag
     template, expected = "+{hello}", "HELLO"
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
     template, expected = " +{hello} ", " HELLO "
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
   end
 
   def test_parser_accepts_whole_block
     template, expected = "{hello}", "{hello}"
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
   end
         
   def test_parser_ignores_backslashed_tags
     template, expected = "\\+{hello\\}", "+{hello}"
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
   end
   
   def test_parser_ignores_backslashed_blocks
     template, expected = "\\{hello\\} world", "{hello} world"
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
   end
   
   def test_parser_on_a_complex_case
     template = "Hello \\\\} world! -{ITEMS AS I}{do +{something} \\{with \\} i} here is my name:+{name} and { that's not -{COMMON} text } !\\{"
     expected = "Hello \\} world! items as i{do SOMETHING {with } i} here is my name:NAME and { that's not common text } !\{"
-    assert_instanciation_equal(expected, template)
+    assert_instantiation_equal(expected, template)
   end
   
   def test_parser_raises_error
