@@ -21,7 +21,7 @@ require 'wlang/intelligent_buffer'
 module WLang
   
   # Current version of WLang
-  VERSION = "0.8.5".freeze
+  VERSION = "0.9.0".freeze
   
   # Reusable string for building dialect name based regexps  
   DIALECT_NAME_REGEXP_STR = "[-a-z]+"

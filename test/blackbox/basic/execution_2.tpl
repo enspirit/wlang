@@ -1,1 +1,1 @@
-!{WLang::VERSION}
+!{WLang.name}
