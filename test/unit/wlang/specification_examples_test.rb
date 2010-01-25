@@ -11,7 +11,7 @@ class WLang::SpecificationExamplesTest < Test::Unit::TestCase
     context = {"name" => "O'Neil",
                "author" => "blambeau",
                "authors" => ["blambeau", "llambeau", "ancailliau"]}
-    spec_file = File.join(File.dirname(__FILE__),"../../doc/specification/specification.yml")
+    spec_file = File.join(File.dirname(__FILE__),"../../../doc/specification/specification.yml")
     spec = YAML.load(File.open(spec_file))
     spec["rulesets"].each do |ruleset|
       next if ruleset["examples"].nil?
