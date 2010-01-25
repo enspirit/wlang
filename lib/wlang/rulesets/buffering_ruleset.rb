@@ -80,12 +80,13 @@ module WLang
         # decode the expression
         decoded = U.expr(:uri,
                       ["share", :share, false],
+                      ["using", :using, false],
                       ["with",  :with, false]).decode(uri, parser)
         parser.syntax_error(offset) if decoded.nil?
         
-        # Look for share
-        decoded[:share] = :root unless decoded[:share]
-        decoded[:with]  = {}    unless decoded[:with]
+        # Look for share and context
+        shared  = decoded[:share].nil? ? :root : decoded[:share]
+        context = U.context_from_using_and_with(decoded)
         
         # Resolve the file by delegation to the parser
         file = parser.file_resolve(decoded[:uri])
@@ -94,8 +95,8 @@ module WLang
         if File.file?(file) and File.readable?(file)
           parser.branch(:template => parser.file_template(file),
                         :offset   => 0,
-                        :shared   => decoded[:share],
-                        :scope    => decoded[:with]) {
+                        :shared   => shared,
+                        :scope    => context) {
             instantiated, forget = parser.instantiate
             [instantiated, reached]
           }

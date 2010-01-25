@@ -57,16 +57,24 @@ module WLang
     
         # decode expression
         decoded = U.expr(:qdialect, 
+                         ["share", :share, false],
                          ["using", :expr, false], 
                          ["with",  :with, false]).decode(dialect, parser)
         parser.syntax_error(offset) if decoded.nil?
     
         # build context
-        context = U.context_from_using_and_with(decoded)
+        dialect2 = decoded[:qdialect]
+        shared  = decoded[:share].nil? ? :root : decoded[:share]
+        context  = U.context_from_using_and_with(decoded)
         
         # TODO: refactor me!!
-        instantiated = WLang::instantiate(text, context, decoded[:qdialect])
-        [instantiated, reached]
+        parser.branch(:template => WLang::template(text, dialect2),
+                      :offset   => 0,
+                      :shared   => shared,
+                      :scope    => context) {
+          instantiated, forget = parser.instantiate
+          [instantiated, reached]
+        }
       end
   
     end  # module Basic
