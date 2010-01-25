@@ -289,7 +289,7 @@ rulesets:
       # #={wlang/active-string}{...}{...}
       - name:      "block-assignment<br/>(third block is optional)"
         symbol:    "="
-        signature: "#={wlang/active-string <as x>}{...}{...}"
+        signature: "#={wlang/active-string}{...}{...}"
         definition: |-
           <tt>%={+{@parser.current_dialect} as #1}{#2}{#3}</tt>
       # ^={wlang/active-string as x}{...}{...}

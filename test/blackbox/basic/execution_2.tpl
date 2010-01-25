@@ -1,0 +1,1 @@
+!{WLang::VERSION}

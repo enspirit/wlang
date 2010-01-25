@@ -5,9 +5,13 @@ module WLang
     module Ruby
   
       # Default encoders  
-      DEFAULT_ENCODERS = {"single-quoting" => :single_quoting, 
+      DEFAULT_ENCODERS = {"main-encoding" =>  :main_encoding,
+                          "single-quoting" => :single_quoting, 
                           "double-quoting" => :double_quoting, 
                           "regex-escaping" => :regex_escaping}
+  
+      # No-op encoding here
+      def self.main_encoding(src, options); src; end
   
       # Single-quoting encoding
       def self.single_quoting(src, options); src.gsub(/([^\\])'/,%q{\1\\\'}); end
