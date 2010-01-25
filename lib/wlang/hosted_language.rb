@@ -19,11 +19,18 @@ module WLang
         if @parser_state.scope.has_key?(name.to_s)
           @parser_state.scope[name.to_s]
         else
-          Kernel.raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
+          variable_missing(name)
         end
       else
         super(name, *args, &block)
       end
+    end
+    
+    # Called when a variable cannot be found. By default, it raises an
+    # UndefinedVariableError. This method is intended to be overriden 
+    # for handling such a situation more friendly.
+    def variable_missing(name)
+      Kernel.raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
     end
     
     #

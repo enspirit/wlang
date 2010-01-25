@@ -1,0 +1,1 @@
+<<+{input_inclusion_2.tpl with who: 'blambeau'}

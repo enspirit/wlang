@@ -85,7 +85,7 @@ module WLang
         parser.syntax_error(offset) if decoded.nil?
         
         # Look for share and context
-        shared  = decoded[:share].nil? ? :root : decoded[:share]
+        shared  = decoded[:share].nil? ? :none : decoded[:share]
         context = U.context_from_using_and_with(decoded)
         
         # Resolve the file by delegation to the parser

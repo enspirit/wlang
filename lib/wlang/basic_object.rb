@@ -6,8 +6,8 @@ module WLang
   class BasicObject
 
     # Methods that we keep
-    KEPT_METHODS = ["__send__", "__id__", "instance_eval", "initialize", "object_id", "nil?",
-                    :__send__, :__id__, :instance_eval, :initialize, :object_id, :nil?]
+    KEPT_METHODS = ["__send__", "__id__", "instance_eval", "initialize", "object_id", "nil?", "singleton_method_added",
+                    :__send__, :__id__, :instance_eval, :initialize, :object_id, :nil?, :singleton_method_added]
 
     # Removes all methods that are not needed to the class
     (instance_methods + private_instance_methods).each do |m|

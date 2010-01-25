@@ -18,12 +18,25 @@ module WLang
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Context
         }
+        dialect("buffering") {
+          ruby_require "wlang/rulesets/basic_ruleset"
+          ruby_require "wlang/rulesets/buffering_ruleset"
+          rules WLang::RuleSet::Basic
+          rules WLang::RuleSet::Buffering
+        }
       end
+      hosted = ::WLang::HostedLanguage.new
+      def hosted.variable_missing(name)
+        ""
+      end
+      WLang::file_extension_map('.tpl', 'blackbox/buffering')
 
       # Context used here
       context = {
-        'who'      => 'wlang',
-        'whowho'   => 'who'
+        'who'         => 'wlang',
+        'whowho'      => 'who',
+        'input_file'  => 'text_1.txt',
+        'data_file_1' => 'data_1.rb'
       }
 
       Dir["#{File.dirname(__FILE__)}/*"].each do |folder|
@@ -31,9 +44,9 @@ module WLang
         Dir["#{folder}/*.tpl"].each do |template_file|
           begin
             basename = File.basename(template_file, ".tpl")
-            template = File.read(File.join(folder, "#{basename}.tpl"))
             expected = File.read(File.join(folder, "#{basename}.exp"))
-            assert_equal(expected, template.wlang(context.dup, "blackbox/#{dialect_name}"), "Blackbox test failed #{basename}")
+            template = WLang::file_template(template_file, "blackbox/#{dialect_name}")
+            assert_equal(expected, template.instantiate(context.dup, hosted), "Blackbox test failed #{basename}")
           rescue Exception => ex
             puts "Blackbox test failed: #{template_file}\n#{ex.message}"
             puts ex.backtrace.join("\n")

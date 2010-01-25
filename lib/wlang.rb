@@ -129,6 +129,11 @@ module WLang
     loader.call(uri) 
   end
   
+  # Maps a file extension to a dialect qualified name
+  def self.file_extension_map(extension, dialect_qname) 
+    WLang::FILE_EXTENSIONS[extension] = dialect_qname
+  end
+
   # Infers a dialect from a file extension
   def self.infer_dialect(uri)
     WLang::FILE_EXTENSIONS[File.extname(uri)]
