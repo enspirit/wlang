@@ -220,7 +220,7 @@ module WLang
     #
     def context_define(key, value)
       puts "Warning: using deprecated method Parser.context_define, #{caller[0]}"
-      self.context.define(key,value)
+      context.define(key,value)
     end
 
     #    
@@ -229,7 +229,7 @@ module WLang
     #
     def context_push(new_context)
       puts "Warning: using deprecated method Parser.context_push, #{caller[0]}"
-      self.context.push(new_context)
+      context.push(new_context)
     end
 
     #  
@@ -237,7 +237,7 @@ module WLang
     #
     def context_pop
       puts "Warning: using deprecated method Parser.context_pop, #{caller[0]}"
-      self.context.pop
+      context.pop
     end
   
     ###################################################################### Facade on the hosted language
@@ -302,6 +302,7 @@ module WLang
     end
   
     private_class_method :new
+    protected :context, :offset, :source_text, :buffer, :dialect
   end # class Parser
 
 end # module WLang
