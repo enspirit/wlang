@@ -124,24 +124,23 @@ module WLang
       symbols     = self.template.block_symbols
       source_text = self.source_text
       dialect     = self.dialect
-      offset      = self.offset
       buffer      = self.buffer
       pattern     = dialect.pattern(template.block_symbols)
       rules       = []
     
       # we start matching everything in the ruleset
-      while match_at=source_text.index(pattern, offset)
+      while match_at=source_text.index(pattern, self.offset)
         match, match_length = $~[0], $~[0].length
       
         # puts pre_match (we can't use $~.pre_match !)
-        self.<<(source_text[offset, match_at-offset], false) if match_at>0
+        self.<<(source_text[self.offset, match_at-self.offset], false) if match_at>0
       
         if source_text[match_at,1]=='\\'           # escaping sequence
           self.<<(match[1..-1], false)
-          offset = match_at + match_length
+          self.offset = match_at + match_length
         
         elsif match.length==1               # simple '{' or '}' here
-          offset = match_at + match_length
+          self.offset = match_at + match_length
           if match==Template::BLOCK_SYMBOLS[symbols][0]
             self.<<(match, false)  # simple '{' are always pushed
             # we push '{' in rules to recognize it's associated '}'
@@ -160,10 +159,13 @@ module WLang
           rule = dialect.ruleset[match[0..-2]]     
           rules << rule
         
+          # Just added to get the last position in case of an error
+          self.offset = match_at + match_length
+
           # lauch that rule, get it's replacement and my new offset
-          replacement, offset = rule.start_tag(self, match_at + match_length)
+          replacement, self.offset = rule.start_tag(self, match_at + match_length)
           replacement = "" if replacement.nil?
-          raise "Bad implementation of rule #{match[0..-2]}" if offset.nil?
+          raise "Bad implementation of rule #{match[0..-2]}" if self.offset.nil?
       
           # push replacement
           self.<<(replacement, true) unless replacement.empty?
@@ -174,10 +176,10 @@ module WLang
       # trailing data (end of template reached only if no match_at)
       unless match_at
         unexpected_eof(source_text.length, '}') unless rules.empty?
-        self.<<(source_text[offset, 1+source_text.length-offset], false)
-        offset = source_text.length
+        self.<<(source_text[self.offset, 1+source_text.length-self.offset], false)
+        self.offset = source_text.length
       end
-      [buffer, offset-1]
+      [buffer, self.offset-1]
     end
   
     ###################################################################### Callbacks for rule sets
