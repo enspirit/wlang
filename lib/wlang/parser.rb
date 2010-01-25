@@ -62,6 +62,37 @@ module WLang
       @buffer = buffer
     end
     
+    ###################################################################### Facade on wlang itself
+    
+    # Finds a real dialect instance from an argument (Dialect instance or 
+    # qualified name)
+    def ensure_dialect(dialect)
+      if String===dialect
+        dname, dialect = dialect, WLang::dialect(dialect)
+        raise(ParseError,"Unknown modulation dialect: #{dname}") if dialect.nil?
+      elsif not(Dialect===dialect)
+        raise(ParseError,"Unknown modulation dialect: #{dialect}")
+      end    
+      dialect  
+    end
+    
+    # Finds a real ecoder instance from an argument (Encoder instance or
+    # qualified or unqualified name)
+    def ensure_encoder(encoder)
+      if String===encoder
+        if encoder.include?("/")
+          ename, encoder = encoder, WLang::encoder(encoder)
+          raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
+        else
+          ename, encoder = encoder, self.dialect.find_encoder(encoder)
+          raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
+        end
+      elsif not(Encoder===encoder)
+        raise(ParseError,"Unknown encoder: #{encoder}")
+      end
+      encoder
+    end
+  
     ###################################################################### Main parser methods
   
     # Parses the template's text and instantiate it
@@ -139,14 +170,7 @@ module WLang
     # _buffer_.
     #
     def parse(offset, dialect=nil, buffer=nil)
-      if dialect.nil?
-        dialect = self.dialect
-      elsif String===dialect
-        dname, dialect = dialect, WLang::dialect(dialect)
-        raise(ParseError,"Unknown modulation dialect: #{dname}") if dialect.nil?
-      elsif not(Dialect===dialect)
-        raise(ParseError,"Unknown modulation dialect: #{dialect}")
-      end
+      dialect = ensure_dialect(dialect.nil? ? self.dialect : dialect)
       Parser.send(:new, self, template, dialect, offset, buffer).instantiate 
     end
   
@@ -174,11 +198,6 @@ module WLang
   
     ###################################################################### Facade on the buffer
   
-    # Factors a specific buffer on the current dialect
-    def factor_buffer
-      self.dialect.factor_buffer
-    end
-    
     # Appends on a given buffer
     def append_buffer(buffer, str, block)
       if buffer.respond_to?(:wlang_append)
@@ -235,6 +254,11 @@ module WLang
   
     ###################################################################### Facade on the dialect
   
+    # Factors a specific buffer on the current dialect
+    def factor_buffer
+      self.dialect.factor_buffer
+    end
+    
     #
     # Encodes a given text using an encoder, that may be a qualified name or an
     # Encoder instance.
@@ -243,18 +267,7 @@ module WLang
       options = {} unless options
       options['_encoder_'] = encoder
       options['_template_'] = template
-      if String===encoder
-        if encoder.include?("/")
-          ename, encoder = encoder, WLang::encoder(encoder)
-          raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
-        else
-          ename, encoder = encoder, self.dialect.find_encoder(encoder)
-          raise(ParseError,"Unknown encoder: #{ename}") if encoder.nil?
-        end
-      elsif not(Encoder===encoder)
-        raise(ParseError,"Unknown encoder: #{encoder}")
-      end
-      encoder.encode(src, options)
+      ensure_encoder(encoder).encode(src, options)
     end
   
     ###################################################################### About errors
