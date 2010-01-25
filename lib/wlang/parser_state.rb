@@ -35,6 +35,18 @@ module WLang
         @parser, @parent = parser, parent
       end
       
+      # Checks internals
+      def check
+        raise "WLang::Parser::State fatal: missing parser" unless parser
+        raise "WLang::Parser::State fatal: missing hosted" unless hosted
+        raise "WLang::Parser::State fatal: missing template" unless template
+        raise "WLang::Parser::State fatal: missing dialect" unless dialect
+        raise "WLang::Parser::State fatal: missing offset" unless offset
+        raise "WLang::Parser::State fatal: missing scope" unless scope
+        raise "WLang::Parser::State fatal: missing buffer" unless buffer
+        self
+      end
+      
       #
       # Branches this state.
       #
@@ -64,7 +76,17 @@ module WLang
           else
             raise ArgumentError, "Invalid ParserState.branch option :shared #{opts[:shared]}" 
         end
-        child
+        child.check
+      end
+      
+      # Returns a friendly location for this parser state
+      def where
+        template ? template.where(offset) : "Source template tree"
+      end
+      
+      # Returns a friendly wlang backtrace as an array
+      def backtrace
+        parent ? (parent.backtrace << where) : [where]
       end
       
     end # class State

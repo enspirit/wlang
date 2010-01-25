@@ -63,21 +63,21 @@ module WLang
     # Returns a friendly position of an offset in the source text
     def where(offset)
       src = source_text
-      "#{@source_file}:#{src.__wlang_line_of(offset)}:#{src.__wlang_column_of(offset)-1}"
+      "#{source_file || 'inline template'}:#{src.__wlang_line_of(offset)}:#{src.__wlang_column_of(offset)-1}"
     end
     
     # Raises a WLang::Error for the given offset
     def error(offset, msg = "")
       src = source_text
       line, column = src.__wlang_line_of(offset), src.__wlang_column_of(offset)-1
-      raise WLang::Error, "#{@source_file}:#{line}:#{column} #{msg}"
+      raise WLang::Error, "#{source_file || 'inline template'}:#{line}:#{column} #{msg}"
     end
     
     # Raises a friendly ParseError, with positions and so on
     def parse_error(offset, msg = "")
       src = source_text
       line, column = src.__wlang_line_of(offset), src.__wlang_column_of(offset)-1
-      ex = ParseError.new("#{@source_file}:#{line}:#{column} #{msg}")
+      ex = ParseError.new("#{source_file || 'inline template'}:#{line}:#{column} #{msg}")
       ex.line, ex.column = line, column
       raise ex
     end

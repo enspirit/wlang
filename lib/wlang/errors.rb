@@ -11,9 +11,17 @@ module WLang
     
     # Creates an error instance with a given parser state
     def initialize(msg = nil, parser_state = nil, cause = nil)
+      raise ArgumentError, "msg expected to be nil or a String" unless (msg.nil? or String===msg)
+      raise ArgumentError, "parser_state expected to be nil or a State"\
+        unless (parser_state.nil? or ::WLang::Parser::State===parser_state)
       super(msg)
       @parser_state = parser_state
       @cause = cause
+    end
+    
+    # Returns a friendly wlang backtrace
+    def wlang_backtrace
+      parser_state ? parser_state.backtrace : ["no backtrace information, sorry"]
     end
     
   end # class Error

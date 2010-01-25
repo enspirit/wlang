@@ -49,7 +49,7 @@ module WLang
       ex.expression = expression if ex.respond_to?(:expression=)
       Kernel.raise ex
     rescue Exception => ex
-      Kernel.raise ::WLang::EvalError.new(parser_state, expression, ex)
+      Kernel.raise ::WLang::EvalError.new(ex.message, parser_state, expression, ex)
     ensure
       @parser_state = nil
     end

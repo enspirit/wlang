@@ -11,6 +11,9 @@ require 'wlang/wlang_command'
 begin
   r = WLang::WLangCommand.new
   r.run ARGV
+rescue ::WLang::Error => e
+  $stderr.puts e.message
+  $stderr.puts e.wlang_backtrace.join("\n\t")
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

@@ -47,6 +47,9 @@ module WLang
     
     # Returns the current offset
     def offset() state.offset; end
+
+    # Sets the current offset of the parser    
+    def offset=(offset) state.offset = offset; end
     
     # Returns the current buffer
     def buffer() state.buffer; end
@@ -118,6 +121,7 @@ module WLang
       #   - pattern:      current dialect's regexp pattern
       #   - rules:        handlers of '{' currently opened
       template    = self.template
+      symbols     = self.template.block_symbols
       source_text = self.source_text
       dialect     = self.dialect
       offset      = self.offset
@@ -126,7 +130,7 @@ module WLang
       rules       = []
     
       # we start matching everything in the ruleset
-      while match_at=source_text.index(pattern,offset)
+      while match_at=source_text.index(pattern, offset)
         match, match_length = $~[0], $~[0].length
       
         # puts pre_match (we can't use $~.pre_match !)
@@ -138,7 +142,7 @@ module WLang
         
         elsif match.length==1               # simple '{' or '}' here
           offset = match_at + match_length
-          if match==Template::BLOCK_SYMBOLS[template.block_symbols][0]
+          if match==Template::BLOCK_SYMBOLS[symbols][0]
             self.<<(match, false)  # simple '{' are always pushed
             # we push '{' in rules to recognize it's associated '}'
             # that must be pushed on buffer also
@@ -150,7 +154,7 @@ module WLang
             self.<<(match, false) unless Rule===rules.pop
           end
         
-        elsif match[-1,1]==Template::BLOCK_SYMBOLS[template.block_symbols][0] # opening special tag
+        elsif match[-1,1]==Template::BLOCK_SYMBOLS[symbols][0] # opening special tag
           # following line should never return nil as the matching pattern comes 
           # from the ruleset itself!
           rule = dialect.ruleset[match[0..-2]]     
@@ -160,7 +164,7 @@ module WLang
           replacement, offset = rule.start_tag(self, match_at + match_length)
           replacement = "" if replacement.nil?
           raise "Bad implementation of rule #{match[0..-2]}" if offset.nil?
-        
+      
           # push replacement
           self.<<(replacement, true) unless replacement.empty?
         end
