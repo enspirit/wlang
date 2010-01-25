@@ -1,19 +1,20 @@
 module WLang
   #
-  # Implements the hosted language of WLang. The hosted language is
-  # responsible of evaluating expressions. 
+  # Implements the hosted language abstraction of WLang. The hosted language is
+  # mainly responsible of evaluating expressions. 
   #
   # This default implementation implements the ruby hosted language, 
-  # using instance_eval, delegating missing sub expressions to the current 
-  # scope.
+  # using instance_eval, delegating missing sub expressions to a scope.
   #
-  # This class is not thread safe. It is intended to be subclassed for 
+  # This class is not thread safe. Moreover, it is intended to be subclassed for 
   # providing a main scope, accessible in all parser states/templates.
   #
   class HostedLanguage < ::WLang::BasicObject
     
-    # Delegates the missing lookup to the current parser scope
-    # or raises a NoMethod
+    #
+    # Delegates the missing lookup to the current parser scope or raises an
+    # UndefinedVariableError (see variable_missing)
+    #
     def method_missing(name, *args, &block)
       if @parser_state and args.empty? and block.nil?
         if @parser_state.scope.has_key?(name.to_s)
@@ -26,9 +27,11 @@ module WLang
       end
     end
     
+    #
     # Called when a variable cannot be found. By default, it raises an
     # UndefinedVariableError. This method is intended to be overriden 
     # for handling such a situation more friendly.
+    #
     def variable_missing(name)
       Kernel.raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
     end

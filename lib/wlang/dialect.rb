@@ -3,8 +3,8 @@ require 'wlang/rule_set'
 module WLang
 
   #
-  # Implements the _dialect_ abstraction (see {README}[link://files/README.html]).
-  # A dialect instance is a aggregation of encoders and ruleset (through EncoderSet
+  # Implements the _dialect_ abstraction (see {README}[link://files/README.rdoc]).
+  # A dialect instance is an aggregation of encoders and ruleset (through EncoderSet
   # and RuleSet classes). A dialect is also a node in the dialect tree and has a 
   # qualified name through this tree. For example <tt>wlang/xhtml</tt> is the 
   # qualified name of a <tt>xhtml</tt> dialect which is a child dialect of 
@@ -26,7 +26,7 @@ module WLang
   # Standard dialect obtention methods (WLang#dialect as well as WLang::Dialect#dialect)
   # ensure that returned dialects are built. If you obtain dialects another way, 
   # be sure that they are built before using them (is_built? and build! are your 
-  # friends to achive that goal).      
+  # friends to achieve that goal).      
   #
   # Moreover, child dialects may require tools of their ancestors. The following 
   # invariant should always be respected: if a dialect is built, all its ancestors

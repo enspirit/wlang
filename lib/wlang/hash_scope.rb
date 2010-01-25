@@ -1,5 +1,39 @@
 require 'delegate'
 module WLang
+  #
+  # Implements a scoping mechanism on top of a ruby hash (accessible through pairing). 
+  # Such a scope mimics hashses for has_key?, [] and []= methods. A scope has an 
+  # accessible parent. Scopes form a tree, the root being accessible using its 
+  # natural accessor. Scope lookup (has_key? and []) uses the hierarchy to find
+  # accessible variables.
+  #
+  # Branching a scope allows installing new variables that hide variables with the 
+  # same name in the parent scope. Branching is made easy through the branch methods
+  # that accepts a block, passing the child as first argument:
+  #
+  #   scope = HashScope.new(:name => 'wlang')
+  #   puts scope[:name]    # prints 'wlang'
+  #   scope.branch(:name => 'other') do |child|
+  #     puts child[:name]  # prints 'other'
+  #   end
+  #   puts scope[:name]    # prints 'wlang'
+  #
+  # This branching mechanism is intended to be used to keep a current scope as instance
+  # variable of a using class:
+  # 
+  #   # We create an initial scope at construction
+  #   def initialize
+  #     @scope = HashScope.new
+  #   end
+  #
+  #   # Appends the current scope with new key/value pairs. Yields the block
+  #   # with the new scope and restore the original one after that.
+  #   def do_something_with_a_new_scope(hash = {})
+  #     @scope = @scope.branch(:name => 'other')
+  #       yield if block_given?
+  #     @scope = @scope.parent
+  #   end
+  #
   class HashScope
     
     # The parent scope, or nil if no such parent
