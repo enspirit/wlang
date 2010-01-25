@@ -50,7 +50,7 @@ module WLang
         execution(parser, offset)
       end
   
-      # Rule implementation of <tt>%!{wlang/ruby using ... with ...}</tt>
+      # Rule implementation of <tt>%!{wlang/ruby using ... with ...}{...}</tt>
       def self.recursive_application(parser, offset)
         dialect, reached = parser.parse(offset, "wlang/active-string")
         text, reached = parser.parse_block(reached)
