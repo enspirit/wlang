@@ -57,5 +57,20 @@ describe ::WLang::HashScope do
     scope = scope.parent
     scope[:hello].should == "world"
   end
+  
+  it "should respect scoping hierarchy" do
+    scope = newscope(:hello => "world")
+    child = newscope({}, scope)
+    child2 = newscope({}, child)
+
+    scope.parent.should be_nil
+    scope.root.should == scope
+
+    child.parent.should == scope
+    child.root.should == scope
+
+    child2.parent.should == child
+    child2.root.should == scope
+  end
 
 end

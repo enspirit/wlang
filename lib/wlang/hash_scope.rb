@@ -15,6 +15,11 @@ module WLang
       @parent = parent
     end
     
+    # Returns the root scope
+    def root
+      @root ||= (parent ? parent.root : self)
+    end
+    
     # Checks if a key exists in this scope, delegating to
     # parent if not found and allowed
     def has_key?(key, delegate = true)
