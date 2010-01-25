@@ -29,7 +29,7 @@ task :test => [:unit, :spec]
 
 desc "Generates rdoc documentation"
 Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include( "README.rdoc", "LICENCE.rdoc", "lib/" )
+  rdoc.rdoc_files.include( "README.rdoc", "LICENCE.rdoc", "CHANGELOG.rdoc", "lib/" )
   rdoc.main     = "README.rdoc"
   rdoc.rdoc_dir = "doc/api"
   rdoc.title    = "WLang Documentation"
@@ -48,7 +48,7 @@ gemspec = Gem::Specification.new do |s|
   s.files = Dir['lib/**/*'] + Dir['test/**/*'] + Dir['bin/*'] + Dir['doc/template/*'] + Dir['doc/specification/*']
   s.require_path = 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README.rdoc", "LICENCE.rdoc"]
+  s.extra_rdoc_files = ["README.rdoc", "LICENCE.rdoc", "CHANGELOG.rdoc"]
   s.rdoc_options << '--title' << 'WLang - Code generator and Template engine' <<
                     '--main' << 'README.rdoc' <<
                     '--line-numbers'  
