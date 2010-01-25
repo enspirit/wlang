@@ -101,10 +101,10 @@ module WLang
             end
         
             # install arguments and parse block2, positioned at block3 
-            parser.context_push(merge_each_args(names, args))
-            parsed, block3 = parser.parse_block(block2)
-            parser.append_buffer(buffer, parsed, true)
-            parser.context_pop
+            parser.branch_scope(merge_each_args(names, args)) {
+              parsed, block3 = parser.parse_block(block2)
+              parser.append_buffer(buffer, parsed, true)
+            }
             first = false
           end
       

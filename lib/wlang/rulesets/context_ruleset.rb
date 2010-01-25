@@ -29,12 +29,11 @@ module WLang
     
         # handle two different cases
         if parser.has_block?(reached)
-          parser.context_push(decoded[:variable] => value)
-          text, reached = parser.parse_block(reached)
-          parser.context_pop
-          [text, reached]
+          parser.branch_scope(decoded[:variable] => value) {
+            parser.parse_block(reached)
+          }
         else
-          parser.context_define(decoded[:variable], value)
+          parser.scope_define(decoded[:variable], value)
           ["", reached]
         end
       end
@@ -52,12 +51,11 @@ module WLang
     
         # handle two different cases
         if parser.has_block?(reached)
-          parser.context_push(decoded[:variable] => value)
-          text, reached = parser.parse_block(reached)
-          parser.context_pop
-          [text, reached]
+          parser.branch_scope(decoded[:variable] => value) {
+            parser.parse_block(reached)
+          }
         else
-          parser.context_define(decoded[:variable], value)
+          parser.scope_define(decoded[:variable], value)
           ["", reached]
         end
       end
@@ -75,12 +73,11 @@ module WLang
     
         # handle two different cases
         if parser.has_block?(reached)
-          parser.context_push(decoded[:variable] => value)
-          text, reached = parser.parse_block(reached)
-          parser.context_pop
-          [text, reached]
+          parser.branch_scope(decoded[:variable] => value) {
+            parser.parse_block(reached)
+          }
         else
-          parser.context_define(decoded[:variable], value)
+          parser.scope_define(decoded[:variable], value)
           ["", reached]
         end
       end
@@ -99,12 +96,11 @@ module WLang
     
         # handle two different cases
         if parser.has_block?(reached)
-          parser.context_push(decoded[:variable] => value)
-          text, reached = parser.parse_block(reached)
-          parser.context_pop
-          [text, reached]
+          parser.branch_scope(decoded[:variable] => value) {
+            parser.parse_block(reached)
+          }
         else
-          parser.context_define(decoded[:variable], value)
+          parser.scope_define(decoded[:variable], value)
           ["", reached]
         end
       end

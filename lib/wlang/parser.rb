@@ -214,32 +214,22 @@ module WLang
 
     ###################################################################### Facade on the scope
   
-    #
-    # Puts a key/value pair in the current context. See Parser::Context::define
-    # for details.
-    #
-    def context_define(key, value)
-      puts "Warning: using deprecated method Parser.context_define, #{caller[0]}"
+    # Yields the block in a new scope branch, pushing pairing values on it.
+    # Original scope is restored after that. Returns what the yielded block
+    # returned.
+    def branch_scope(pairing = {}, which = :all)
+      raise ArgumentError, "Parser.branch_scope expects a block" unless block_given?
+      context.push(pairing)
+      result = yield
+      context.pop
+      result
+    end
+    
+    # Adds a key/value pair on the current scope.
+    def scope_define(key, value)
       context.define(key,value)
     end
 
-    #    
-    # Pushes a new scope on the current context stack. See Parser::Context::push
-    # for details.
-    #
-    def context_push(new_context)
-      puts "Warning: using deprecated method Parser.context_push, #{caller[0]}"
-      context.push(new_context)
-    end
-
-    #  
-    # Pops the top scope of the context stack. See Parser::Context::pop for details.
-    #
-    def context_pop
-      puts "Warning: using deprecated method Parser.context_pop, #{caller[0]}"
-      context.pop
-    end
-  
     ###################################################################### Facade on the hosted language
   
     #

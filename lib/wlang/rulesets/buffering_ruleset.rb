@@ -59,12 +59,11 @@ module WLang
     
           # handle two different cases
           if parser.has_block?(reached)
-            parser.context_push(decoded[:variable] => data)
-            text, reached = parser.parse_block(reached)
-            parser.context_pop
-            [text, reached]
+            parser.branch_scope(decoded[:variable] => data) {
+              parser.parse_block(reached)
+            }
           else
-            parser.context_define(decoded[:variable], data)
+            parser.scope_define(decoded[:variable], data)
             ["", reached]
           end
         else
