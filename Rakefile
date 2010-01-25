@@ -1,6 +1,7 @@
 require "rake/rdoctask"
 require "rake/testtask"
 require "rake/gempackagetask"
+require 'spec/rake/spectask'
 require "rubygems"
 
 dir     = File.dirname(__FILE__)
@@ -9,14 +10,22 @@ version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
 
 task :default => [:all]
-task :all => [:test, :rerdoc, :spec, :repackage]
+task :all => [:test, :rerdoc, :specification, :repackage]
 
-desc "Lauches all tests"
-Rake::TestTask.new do |test|
+desc "Lauches all unit tests"
+Rake::TestTask.new(:unit) do |test|
   test.libs       = [ "lib", "test/unit" ]
   test.test_files = ['test/unit/test_all.rb']
   test.verbose    =  true
 end
+
+desc "Runs all rspec test"
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_files = FileList['test/spec/test_all.rb']
+end
+
+desc "Runs all tests (unit and rspec)"
+task :test => [:unit, :spec]
 
 desc "Generates rdoc documentation"
 Rake::RDocTask.new do |rdoc|
@@ -27,7 +36,7 @@ Rake::RDocTask.new do |rdoc|
 end
 
 desc "Generates the specification file"
-task :spec => :rerdoc do |t|
+task :specification => :rerdoc do |t|
   Kernel.exec("ruby -Ilib bin/wlang --output doc/specification/specification.html doc/specification/specification.wtpl")
 end
 
