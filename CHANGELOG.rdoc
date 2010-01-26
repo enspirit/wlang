@@ -18,13 +18,18 @@
 ==== New features (by order of importance)
 
 - WLang::HostingLanguage introduced, with a default one for Ruby. The hosting language
-  is THE way to provide a main scope, accessible to all templates at once.
+  is the way to provide a main scope, accessible to all templates at once.
+- WLang::HostingLanguage is not sensitive to the difference between symbol keys and strings
 - Buffering and Context rulesets now branch the current parser instead of creating a new one
 - WLang::Error and subclasses propose a backtrace information
 - WLang::Parser refactored to encapsulate the whole state in another class (WLang::Parser::State)
 - WLang facade has been made much more robust as it now checks all its arguments.
-- WLang::dialect may now be used to ensure dialect instances from both Dialect arg and qualified names.
+- WLang::dialect may now be used to ensure dialect instances from both Dialect args and qualified names.
 - Introduction of WLang.template and WLang.file_template
+- plain-text dialect proposes new camel-based encoders
+- wlang/active-string dialect has the imperative rule set included
+- sql dialect has been added
+- ruby dialect proposes a method-case encoder
 
 === Version 0.8.5
 

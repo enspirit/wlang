@@ -27,6 +27,18 @@ WLang::dialect("ruby", ".rb", ".ruby") do
   end
 end
 
+# sql dialect
+WLang::dialect("sql", ".sql") do
+  ruby_require "wlang/dialects/sql_dialect" do
+    encoders WLang::EncoderSet::SQL
+  end
+  dialect("sybase", '.sybsql') do
+    ruby_require "wlang/dialects/sql_dialect" do
+      encoders WLang::EncoderSet::SQL::Sybase
+    end
+  end
+end
+
 # ruby dialect
 WLang::dialect("xhtml", ".html", ".xhtml", ".htm") do
   ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
@@ -56,6 +68,7 @@ WLang::dialect("wlang") do
   # wlang/active-string dialect
   dialect("active-string") do
     rules WLang::RuleSet::Basic
+    rules WLang::RuleSet::Imperative
   end
   
   # wlang/uri dialect

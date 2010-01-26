@@ -91,8 +91,8 @@ module WLang
       # UndefinedVariableError (calls @hosted.variable_missing precisely)
       def method_missing(name, *args, &block)
         if @parser_state and args.empty? and block.nil?
-          if @parser_state.scope.has_key?(name.to_s)
-            @parser_state.scope[name.to_s]
+          if effname = knows?(name)
+            @parser_state.scope[effname]
           else
             @hosted.variable_missing(name)
           end
@@ -103,7 +103,13 @@ module WLang
     
       # Checks if a variable is known in the current parser scope
       def knows?(name)
-        @parser_state.scope.has_key?(name.to_s) || @parser_state.scope.has_key?(name)
+        if @parser_state.scope.has_key?(name)
+          name
+        elsif @parser_state.scope.has_key?(name.to_s) 
+          name.to_s
+        else
+          nil
+        end
       end
     
       # Evaluates an expression

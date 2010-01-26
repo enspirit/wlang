@@ -8,25 +8,39 @@ escaping and the like. WLang proposes a generic engine that you can extend to fi
 proposes standard instantiations of this engine for common tasks such as creating SQL queries, 
 instantiating web pages, etc.    
 
-== Roadmap
+=== A collection of typical encoders
 
-- For terminology and a quick overview of _wlang_ for generating code, read on.
-- For the current cheatsheet/specification see the file doc/specification/specification.html
-- If you want to learn _wlang_ quickly, see the example directory or read examples
-  in the specification file (if you understand all examples in the specification file, then you 
-  probably master wlang.
-- If you want a killer example (but simple) see the way the specification.html file
-  is generated in doc/specification directory
-- If you want to know which dialects are available (that is, in which target languages 
-  you can generate code), see the specification as well or read the file 
-  lib/wlang/dialects/standard_dialects.rb in the source distribution.
-- If you want to create your own wlang dialect, see WLang::Dialect::DSL
-- If you think that your own dialect is of generic purpose and well-designed, if
-  you have any question or want to contribute join us on {github}[http://github.com/blambeau/wlang].
+The first basic usage of WLang is to provide a collection of text encoders:
+
+  WLang::encode('&',      'xhtml/entities-encoding')      # &amp;
+  WLang::encode("O'Neil", 'sql/single-quoting')           # O\'Neil   
+  WLang::encode("O'Neil", 'sql/sybase/single-quoting')    # O''Neil   
+  ...
+  WLang::encode("hello world",  'plain-text/camel')        # HelloWorld  
+  WLang::encode("hello world",  'plain-text/lower-camel')  # helloWorld  
+  ...
+  WLang::encode("helloWorld",   'ruby/method-case')        # hello_world
   
-== Overview
+=== A powerful alternative to ruby string interpolation
 
-(for bold words, see terminology later) Basic usage of _wlang_ is as follows: 
+The second usage is to have shortcuts for using these encoders in typical 
+situations:
+
+  # Hello world!
+  "Hello ${who}!".wlang(:who => 'world')                          
+
+  # Hello cruel &amp; world!
+  "Hello ${who}!".wlang({:who => 'cruel & world'}, 'wlang/xhtml') 
+  
+  # Hello blambeau, llambeau
+  "Hello *{authors as a}{${a}}{, }".wlang(:authors => ['blambeau', 'llambeau'])
+  
+  # INSERT INTO people VALUES ('O\'Neil')
+  INSERT INTO people VALUES ('{who}')".wlang(:who => "O'Neil")
+
+=== A powerful templating engine
+
+But the main usage of _wlang_ is as follows (for bold words, see terminology later): 
 you have a *template* file (written in a given _wlang_ *dialect*), you have some 
 instantiation *context* (data provided through a Ruby Hash or a yaml file for 
 example) and you would like to instantiate the template with that data.
@@ -46,23 +60,56 @@ the template is straightforward:
 
   require 'wlang'
   context = {"title" => "Hello world in WLang", "who" => "Alice"}
-  WLang.file_instantiate("template.whtml", context, STDOUT)
+  STDOUT << WLang.file_instantiate("template.whtml", context)
   
-=== Seems magic ... but is not!
+=== Behind the scene
 
-- first of all, it <b>does not allow XSS attacks</b>: even if _who_ is a value
-  like <tt>'<script>[some javascript code]</script>'</tt>, it will be automatically
-  entities-encoded and will appear for itself, not allowing the browser to interpret
-  it as javascript code.
-- <b>it is not hardcoded</b>, but uses _wlang_ shortcuts: 
-  - as you did not specify the _wlang_ dialect of your template, it has been infered
-    as 'wlang/xhtml' from the file extension.
-  - in this dialect, the wlang rule associated with the tag ${...} (<tt>${who}</tt> 
-    for example) automatically replaces the tag by the context data under 'who' (in
-    the hash), while taking care of applying entities-encoding.
-- <b>${...} is only one available tag</b>. Actuall _wlang_ dialects come with a lot 
-  of useful tags that provide shortuct to common tasks ... entities-encoding is only one ! 
+- WLang helps you avoiding SQL injection and XSS attacks through the same tags reacting differently
+  in different contexts.
+- WLang understands your context (and its dialect) from the template file extension
+- WLang provides a rich collection of pre-defined tags and dialects
+- WLang allows you to create your own encoders, tags and dialects while reusing existing ones
+- WLang may change the current dialect during the template instantiation itself (generating
+  html with embedded javascript is easy and natural)
+- WLang is able to generate wlang code without any perturabation
 
+=== Additional examples (availability of the tags may depend on the dialect)
+
+- Include text files on the fly
+
+    <<{my_file.html}
+
+- Instantiate sub-templates on the fly, passing data as arguments
+
+    <<+{my_sub_template.whtml using who: 'blambeau'}
+
+- Load data from yaml or ruby files on the fly
+
+    <<={resources.yaml as resources}{
+      *{resources as r}{ ${r} }
+    }
+
+- Generate a wlang template and instantiate it after that
+    
+    tpl = "Hello $(${varname})!".wlang(:varname => 'who')             # => Hello $(varname)!
+    tpl.wlang({:who => 'wlang'}, 'wlang/active-string', :parentheses) # => Hello wlang!
+
+== Roadmap
+
+- For terminology and a quick overview of _wlang_ for generating code, read on.
+- For the current cheatsheet/specification see the file doc/specification/specification.html
+- If you want to learn _wlang_ quickly, see the example directory or read examples
+  in the specification file (if you understand all examples in the specification file, then you 
+  probably master wlang.
+- If you want a killer example (but simple) see the way the specification.html file
+  is generated in doc/specification directory
+- If you want to know which dialects are available (that is, in which target languages 
+  you can generate code), see the specification as well or read the file 
+  lib/wlang/dialects/standard_dialects.rb in the source distribution.
+- If you want to create your own wlang dialect, see WLang::Dialect::DSL
+- If you think that your own dialect is of generic purpose and well-designed, if
+  you have any question or want to contribute join us on {github}[http://github.com/blambeau/wlang].
+  
 == Terminology
 
 _wlang_ comes with a well-defined terminology for the underlying abstractions. As 
