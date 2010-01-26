@@ -36,6 +36,11 @@ module WLang
       Kernel.raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
     end
     
+    # Checks if a variable is known
+    def knows?(name)
+      @parser_state.scope.has_key?(name.to_s) || @parser_state.scope.has_key?(name)
+    end
+    
     #
     # Evaluates a given expression in the context of a given
     # parser state.
@@ -46,7 +51,12 @@ module WLang
     #
     def evaluate(expression, parser_state)
       @parser_state = parser_state
-      instance_eval(expression)
+      result = instance_eval(expression)
+      if result.object_id == self.object_id
+        Kernel.puts "Warning: using deprecated 'using self' syntax (#{parser_state.where})"
+        result = parser_state.scope.to_h
+      end
+      result
     rescue ::WLang::Error => ex
       ex.parser_state = parser_state
       ex.expression = expression if ex.respond_to?(:expression=)

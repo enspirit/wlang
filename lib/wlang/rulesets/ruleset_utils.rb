@@ -143,11 +143,23 @@ module WLang
         expr.to_sym
       end
       
+      # Converts something to a usable hash
+      def self.to_hash(hash)
+        case hash
+          when Hash
+            hash.dup
+          when NilClass
+            {}
+          when Array
+            hash.inject({}){|memo, n| memo.merge!(to_hash(n))}
+          else
+            raise ArgumentError, "Unable to convert #{hash} to an hash"
+        end
+      end
+      
       # Builds a hash for 'using ... with ...' rules from a decoded expression
-      def self.context_from_using_and_with(decoded)
-        context = decoded[:using]
-        context = context.dup unless context.nil?
-        context = {} if context.nil?
+      def self.context_from_using_and_with(decoded, parser = nil)
+        context = to_hash(decoded[:using])
         context.merge!(decoded[:with]) unless decoded[:with].nil?
         context  
       end

@@ -86,7 +86,7 @@ module WLang
         
         # Look for share and context
         shared  = decoded[:share].nil? ? :none : decoded[:share]
-        context = U.context_from_using_and_with(decoded)
+        context = U.context_from_using_and_with(decoded, parser)
         
         # Resolve the file by delegation to the parser
         file = parser.file_resolve(decoded[:uri])

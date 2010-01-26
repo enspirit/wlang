@@ -45,6 +45,7 @@ module WLang
     # Creates a scope instance with a parent and initial 
     # pairing through a Hash
     def initialize(pairing = nil, parent = nil)
+      raise ArgumentError, "Hash expected for pairing #{pairing.class} received" unless (pairing.nil? or Hash===pairing)
       @pairing = pairing || {}
       @parent = parent
     end
@@ -77,6 +78,11 @@ module WLang
       child = HashScope.new(pairing, self)
       yield child if block_given?
       child
+    end
+    
+    # Converts this scope to a full hash with all variables
+    def to_h
+      parent ? parent.to_h.merge(pairing) : pairing.dup
     end
     
   end # class HashScope

@@ -309,7 +309,7 @@ module WLang
     end
     
     # Protected methods are...
-    protected :state, :hosted, :offset, :source_text, :buffer, :dialect
+    protected :hosted, :offset, :source_text, :buffer, :dialect
     
   end # class Parser
 end # module WLang
