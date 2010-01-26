@@ -116,19 +116,42 @@ module WLang
   # arguments. Calling <code>WLang::dialect(arg)</code> ensures that the result will
   # be a Dialect instance in all cases (if the arg is valid).
   #
+  # Example:
+  #    
+  #   # This methods does something with a wlang dialect. _dialect_ argument may
+  #   # be a Dialect instance or a qualified dialect name.
+  #   def my_method(dialect = 'wlang/active-string')
+  #     # ensures the Dialect instance or raises an ArgumentError if the dialect
+  #     # qualified name is invalid (returns nil otherwise !)
+  #     dialect = WLang::dialect(dialect) 
+  #   end
+  #
   # <b>When called with a block</b>, this method installs a _wlang_ dialect under 
   # _name_ (which cannot be qualified). Extensions can be provided to let _wlang_
   # automatically recognize files that are expressed in this dialect. The block
   # is interpreted as code in the dialect DSL (domain specific language, see 
   # WLang::Dialect::DSL). Returns nil in this case.
   #
+  # Example:
+  #
+  #   # New dialect with 'my_dialect' qualified name and automatically installed
+  #   # to recognize '.wmyd' file extensions
+  #   WLang::dialect("my_dialect", '.wmyd') do
+  #     # see WLang::Dialect::DSL for this part of the code
+  #   end
+  #
   # <b>When called without a block</b> this method returns a Dialect instance 
   # installed under name (which can be a qualified name). Extensions are ignored
   # in this case. Returns nil if not found, a Dialect instance otherwise.
   #
+  # Example:
+  #
+  #   # Lookup for the 'wlang/xhtml' dialect
+  #   wxhtml = WLang::dialect('wlang/xhtml')
+  #
   # This method raises an ArgumentError if
-  #   - _name_ is not a valid dialect qualified name
-  #   - any of the file extension in _extensions_ is invalid
+  # * _name_ is not a valid dialect qualified name
+  # * any of the file extension in _extensions_ is invalid
   #
   def self.dialect(name, *extensions, &block)
     # first case, already a dialect
@@ -174,10 +197,38 @@ module WLang
   
   #
   # Returns an encoder installed under a qualified name. Returns nil if not 
-  # found.
+  # found. If name is already an Encoder instance, returns it immediately.
+  #
+  # Example:
+  #
+  #   encoder = WLang::encoder('xhtml/entities-encoding')
+  #   encoder.encode('something that needs html entities escaping')
+  #
+  # This method raises an ArgumentError if _name_ is not a valid encoder qualified 
+  # name.
   #
   def self.encoder(name)
+    check_qualified_encoder_name(name)
     @dialect.encoder(name)
+  end
+  
+  # 
+  # Shortcut for
+  #
+  #   WLang::encoder(encoder_qname).encode(source, options)
+  #
+  # This method raises an ArgumentError 
+  # * if _source_ is not a String
+  # * if the encoder qualified name is invalid
+  # 
+  # It raises a WLang::Error if the encoder cannot be found
+  #
+  def self.encode(source, encoder_qname, options = {})
+    raise ArgumentError, "String expected for source" unless String===source
+    check_qualified_encoder_name(encoder_qname)
+    encoder = WLang::encoder(encoder_qname)
+    raise WLang::Error, "Unable to find encoder #{encoder_qname}" if encoder.nil?
+    encoder.encode(source, options)
   end
 
   ######################################################################## About data loading
@@ -210,8 +261,8 @@ module WLang
   #   </html>
   #
   # This method raises an ArgumentError if 
-  #   - no block is given or if the block is not of arity 1
-  #   - any of the file extensions in _exts_ is invalid
+  # * no block is given or if the block is not of arity 1
+  # * any of the file extensions in _exts_ is invalid
   #
   def self.data_loader(*exts, &block)
     raise(ArgumentError, "WLang::data_loader expects a block") unless block_given?
@@ -240,10 +291,20 @@ module WLang
   # Factors a template instance for a given string source, dialect (default to
   # 'wlang/active-string') and block symbols (default to :braces)
   #
+  # Example:
+  #
+  #   # The template source code must be interpreted as wlang/xhtml
+  #   template = WLang::template('<p>Hello ${who}!</p>', 'wlang/xhtml')
+  #   str = template.instantiate(:hello => 'world')
+  #
+  #   # We may also use other block symbols...
+  #   template = WLang::template('<p>Hello $(who)!</p>', 'wlang/xhtml', :parentheses)
+  #   str = template.instantiate(:hello => 'world')
+  #
   # This method raises an ArgumentError if 
-  #   - _source_ is not a String
-  #   - _dialect_ is not a valid dialect qualified name or Dialect instance
-  #   - _block_symbols_ is not in [:braces, :brackets, :parentheses]
+  # * _source_ is not a String
+  # * _dialect_ is not a valid dialect qualified name or Dialect instance
+  # * _block_symbols_ is not in [:braces, :brackets, :parentheses]
   #
   def self.template(source, dialect = 'wlang/active-string', block_symbols = :braces)
     raise ArgumentError, "String expected for source" unless String===source
@@ -257,13 +318,20 @@ module WLang
   # passed, the dialect is infered from the extension) and block symbols 
   # (default to :braces)
   #
+  # Example:
+  #
+  #   # the file index.wtpl is a wlang source code in 'wlang/xhtml' dialect 
+  #   # (automatically infered from file extension)
+  #   template = WLang::template('index.wtpl')
+  #   puts template.instantiate(:who => 'world') # puts 'Hello world!'
+  #
   # This method raises an ArgumentError
-  #   - if _file_ does not exists, is not a file or is not readable
-  #   - if _dialect_ is not a valid qualified dialect name, Dialect instance, or nil
-  #   - _block_symbols_ is not in [:braces, :brackets, :parentheses]
+  # * if _file_ does not exists, is not a file or is not readable
+  # * if _dialect_ is not a valid qualified dialect name, Dialect instance, or nil
+  # * _block_symbols_ is not in [:braces, :brackets, :parentheses]
   #
   # It raises a WLang::Error
-  #   - if no dialect can be infered from the file extension (if _dialect_ was nil)
+  # * if no dialect can be infered from the file extension (if _dialect_ was nil)
   #
   def self.file_template(file, dialect = nil, block_symbols = :braces)
     check_readable_file(file)
@@ -294,13 +362,13 @@ module WLang
   #   WLang.instantiate "Hello $(who) !", {"who" => "Mr. Jones"}, "wlang/active-string", :parentheses
   #
   # This method raises an ArgumentError if 
-  #   - _source_ is not a String
-  #   _ _context_ is not nil or a Hash
-  #   - _dialect_ is not a valid dialect qualified name or Dialect instance
-  #   - _block_symbols_ is not in [:braces, :brackets, :parentheses]
+  # * _source_ is not a String
+  # * _context_ is not nil or a Hash
+  # * _dialect_ is not a valid dialect qualified name or Dialect instance
+  # * _block_symbols_ is not in [:braces, :brackets, :parentheses]
   #
   # It raises a WLang::Error
-  #   - something goes wrong during instantiation (see WLang::Error and subclasses)
+  # * something goes wrong during instantiation (see WLang::Error and subclasses)
   #
   def self.instantiate(source, context = {}, dialect="wlang/active-string", block_symbols = :braces)
     raise ArgumentError, "Hash expected for context argument" unless (context.nil? or Hash===context)
@@ -315,18 +383,17 @@ module WLang
   #
   # Examples:
   #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}
-  #   Wlang.file_instantiate "template.wtpl", {"who" => "Mr. Jones"}, STDOUT
-  #   Wlang.file_instantiate "template.xxx", {"who" => "Mr. Jones"}, STDOUT, "wlang/xhtml"
+  #   Wlang.file_instantiate "template.xxx", {"who" => "Mr. Jones"}, "wlang/xhtml"
   #
   # This method raises an ArgumentError if 
-  #   - _file_ is not a readable file
-  #   _ _context_ is not nil or a Hash
-  #   - _dialect_ is not a valid dialect qualified name, Dialect instance or nil
-  #   - _block_symbols_ is not in [:braces, :brackets, :parentheses]
+  # * _file_ is not a readable file
+  # * _context_ is not nil or a Hash
+  # * _dialect_ is not a valid dialect qualified name, Dialect instance or nil
+  # * _block_symbols_ is not in [:braces, :brackets, :parentheses]
   #
   # It raises a WLang::Error
-  #   - if no dialect can be infered from the file extension (if _dialect_ was nil)
-  #   - something goes wrong during instantiation (see WLang::Error and subclasses)
+  # * if no dialect can be infered from the file extension (if _dialect_ was nil)
+  # * something goes wrong during instantiation (see WLang::Error and subclasses)
   #
   def self.file_instantiate(file, context = nil, dialect = nil, block_symbols = :braces)
     raise ArgumentError, "Hash expected for context argument" unless (context.nil? or Hash===context)

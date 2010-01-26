@@ -14,6 +14,7 @@ module WLang
   # Language instead (see WLang::Dialect::DSL). 
   #
   # === For developers only
+  #
   # In order to avoid having users to install all required gems of all dialects
   # wlang implements a lazy load design pattern on the dialect tree, through the
   # WLang::Dialect::DSL and WLang::Dialect::Loader classes. The former only creates

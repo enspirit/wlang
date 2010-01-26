@@ -56,7 +56,7 @@ module WLang
     # - options: encoding options through a Hash. Available options are documented 
     #   by encoders themselve. 
     #
-    def encode(src, options)
+    def encode(src, options = {})
       raise(NotImplementedError) unless @block
       @block.call(src, options)
     end

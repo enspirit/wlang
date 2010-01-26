@@ -15,7 +15,8 @@ module WLang
   #   # Reopening the DSL class allows providing tools
   #   class ::WLang::HostedLanguage::DSL < ::WLang::BasicObject
   #
-  #     # Simulates a 'now' variable in all template scopes
+  #     # Simulates a 'now' variable in all template scopes (this is not the best
+  #     # way to do it, see later)
   #     def now
   #       Time.now
   #     end
@@ -39,10 +40,41 @@ module WLang
   # ATTENTION: in order to avoid strange name conflicts between wlang templates and
   # ruby Kernel/Object methods, the DSL class is a BasicObject. It means that few 
   # methods are known in its own scope. Always use Kernel.puts, Kernel.raise, ...
-  # explicitely when extending the DSL.
+  # explicitely when extending the DSL. Moreover, methods added to the DSL will 
+  # always hide user's variables in the scope as they have the priority due to the
+  # implementation, as the following example illustrates (same DSL extension than
+  # before):
+  #
+  #    <html>
+  #      <!-- following line will show the time, not 'something' -->
+  #      ={'something' as now}{ ${now} }
+  #    </html>
+  #
+  # An alternative for installing low-priority variables and tools is to reopen the
+  # HostedLanguage class itself and to override variable_missing:
+  #
+  #   class WLang::HostedLanguage
+  #
+  #     # Low-priority now2 variable
+  #     def now2
+  #       Time.now
+  #     end
+  #
+  #     # Low-priority variables are checked before raising an UndefinedVariableError
+  #     def variable_missing(name)
+  #       case name
+  #         when :who2, ...
+  #           self.send(name)
+  #         else
+  #           raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
+  #       end
+  #     end 
+  #
+  #   end
   #
   # This class is thread safe, meaning that the same hosting language instance may be 
-  # safely shared by concurrent wlang parsers.
+  # safely shared by concurrent wlang parsers. Extending or re-opening this class and using
+  # instance variables will make it non thread-safe.
   #
   class HostedLanguage
     
@@ -100,9 +132,10 @@ module WLang
     end # class DSL
     
     #
-    # Called when a variable cannot be found. By default, it raises an
-    # UndefinedVariableError. This method is intended to be overriden 
-    # for handling such a situation more friendly.
+    # Called when a variable cannot be found (name is a Symbol object). This default
+    # implementation raises an UndefinedVariableError. This method is intended to be 
+    # overriden for handling such a situation more friendly or for installing 
+    # low-priority global variables (see class documentation).
     #
     def variable_missing(name)
       raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
