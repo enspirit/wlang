@@ -25,6 +25,11 @@ module WLang
       @encoders = {}
     end
   
+    # Yields the block with name, encoder pairs
+    def each
+      @encoders.each_pair{|name,encoder| yield(name, encoder)}
+    end
+    
     #
     # Adds an encoder under a specific name. Supported signatures are as follows:
     # - _name_ is a symbol: _encoder_ and _block_ are ignored and encoder is 

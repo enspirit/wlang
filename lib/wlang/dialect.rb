@@ -48,6 +48,9 @@ module WLang
     # Parent dialect
     attr_reader :parent
     
+    # Sub dialects by name
+    attr_reader :dialects
+    
     #
     # Creates a dialect instance. _builder_ block is a chunk of code of the DSL
     # that will be executed twice: once at construction time to create sub dialects

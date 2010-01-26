@@ -1,0 +1,14 @@
+<div class="dialect">
+  <div style="margin-bottom: 20px">
+    <h3 style="display: inline">${dialect.qualified_name}</h3>
+    ?{dialect.ruleset}{
+      <p style="display: inline">Includes *{dialect.ruleset.reuse as mod}{${mod.name.match(/::([A-Za-z]+)$/)[1]}}{, }</p>
+    }
+  </div>
+  
+  ?{dialect.dialects}{
+    *{dialect.dialects.keys.sort{|k1, k2| k1 <=> k2} as name}{
+      <<+{dialect.wtpl with dialect: dialect.dialects[name]}
+    }
+  }
+</div>

@@ -44,6 +44,10 @@ describe ::WLang do
     expected = "Hello wlang!"
     tpl = "Hello $(${varname})!".wlang(:varname => 'who')          
     tpl.wlang({:who => 'wlang'}, 'wlang/active-string', :parentheses).should == expected
+
+    context = {:varname => 'who', :who => 'wlang'}
+    expected = "Hello wlang!"
+    "Hello ${${varname}}!".wlang(context).should == expected
   end
   
 end

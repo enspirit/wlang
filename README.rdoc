@@ -81,13 +81,18 @@ the template is straightforward:
 
 - Instantiate sub-templates on the fly, passing data as arguments
 
-    <<+{my_sub_template.whtml using who: 'blambeau'}
+    <<+{my_sub_template.whtml using who: 'wlang'}
 
 - Load data from yaml or ruby files on the fly
 
     <<={resources.yaml as resources}{
       *{resources as r}{ ${r} }
     }
+
+- WLang instrospection (basic example)
+
+    context = {:varname => 'who', :who => 'wlang'}
+    "Hello ${${varname}}!".wlang(context)                     # => Hello wlang!
 
 - Generate a wlang template and instantiate it after that
     

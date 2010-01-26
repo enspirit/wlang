@@ -50,3 +50,4 @@ table.examples td { border-bottom: 1px dashed black; }
 th.dialect, td.dialect { width: 150px; }
 th.expression, td.expression { width: 350px; }
 th.replacement, td.replacement { width: 350px; }
+div.dialect {padding-left: 20px;}

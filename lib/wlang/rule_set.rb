@@ -18,12 +18,21 @@ module WLang
   # == Detailed API
   class RuleSet
 
+    # Which modules are reused
+    attr_reader :reuse
+
     #
     # Creates an new dialect rule set.
     #    
     def initialize() 
       @rules = {}
+      @reuse = []
       @patterns = Hash.new{|h, k| h[k] = build_pattern(k)} 
+    end
+
+    # Yields the block with name, rule pairs
+    def each
+      @rules.each_pair{|name,rule| yield(name, rule)}
     end
 
     #  
@@ -49,6 +58,7 @@ module WLang
     #
     def add_rules(mod, pairs=nil)
       raise(ArgumentError,"Module expected") unless Module===mod
+      reuse << mod
       pairs = mod::DEFAULT_RULESET if pairs.nil?
       pairs.each_pair do |symbol,method|
         meth = mod.method(method)

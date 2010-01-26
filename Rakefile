@@ -36,7 +36,7 @@ Rake::RDocTask.new do |rdoc|
 end
 
 desc "Generates the specification file"
-task :specification => :rerdoc do |t|
+task :specification do |t|
   Kernel.exec("ruby -Ilib bin/wlang --methodize --output doc/specification/specification.html doc/specification/specification.wtpl")
 end
 

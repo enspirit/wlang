@@ -75,6 +75,11 @@ module WLang
   # which is anonymous because it does not appear in qualified names.
   #
   @dialect = Dialect.new("", nil)
+
+  # Returns the root of the dialect tree
+  def self.dialect_tree
+    @dialect
+  end
   
   #
   # Maps a file extension to a dialect qualified name.
