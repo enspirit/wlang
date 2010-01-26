@@ -91,8 +91,10 @@ the template is straightforward:
 
 - Generate a wlang template and instantiate it after that
     
-    tpl = "Hello $(${varname})!".wlang(:varname => 'who')             # => Hello $(varname)!
-    tpl.wlang({:who => 'wlang'}, 'wlang/active-string', :parentheses) # => Hello wlang!
+    dialect = 'wlang/active-string'
+    tpl = "Hello $(${varname})!"                              # => Hello $(${varname})
+    tpl = tpl.wlang(:varname => 'who')                        # => Hello $(who)!
+    tpl = tpl.wlang({:who => 'wlang'}, dialect, :parentheses) # => Hello wlang!
 
 == Roadmap
 
