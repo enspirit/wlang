@@ -61,6 +61,7 @@ module WLang
     # Returns a friendly position of an offset in the source text
     def where(offset)
       src = source_text
+      source_file = File.expand_path(self.source_file)
       "#{source_file || 'inline template'}:#{src.__wlang_line_of(offset)}:#{src.__wlang_column_of(offset)-1}"
     end
     

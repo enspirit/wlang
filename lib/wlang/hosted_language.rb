@@ -119,8 +119,8 @@ module WLang
         # backward compatibility with >= 0.8.4 where 'using self'
         # was allowed. This will be removed in wlang 1.0.0
         if __result__.object_id == self.object_id
-          Kernel.puts "Warning: using deprecated 'using self' syntax (#{parser_state.where})\n"\
-                      "will be removed in wlang 1.0.0. Use 'share all', extends "/
+          Kernel.puts "Warning: using deprecated 'using self' syntax (#{@parser_state.where})\n"\
+                      "will be removed in wlang 1.0.0. Use 'share all', extends "\
                       "::WLang::HostedLanguage::DSL with useful methods or create your own"\
                       " hosted language."
           __result__ = @parser_state.scope.to_h
