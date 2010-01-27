@@ -1,0 +1,1 @@
+Hello ={'wlang' as result}{${result}}!

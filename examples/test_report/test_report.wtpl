@@ -34,33 +34,36 @@
       <h1>Test report for test suite: ${suite}</h1>
       <table class="suite">
         *{suite.tests as test}{
-          ={test.makerun as result}
-          <tr class="?{result.passed?}{passed}{failed}">
-            <td class="raef">RAEF: [${result.run_count},${result.assertion_count},${result.error_count},${result.failure_count}]</td>
-            <td class="name">
-	            ?{result.error_count>0 or result.failure_count>0}{
-	                <b style="color: red;">${test.name}</b><br/>
-	                <table class="fails">
-		                *{result.errors as err}{
-		                  <tr>
-		                    <td class="kind">error</td>
-		                    <td class="location">${err.exception.backtrace[0]}</td>
-		                    <td class="message">${err.exception.message}</td>
-		                  </tr>
-		                }
-		                *{result.failures as fail}{
-		                  <tr>
-		                    <td class="kind">failure</td>
-		                    <td class="location">${fail.location}</td>
-		                    <td class="message">${fail.message}</td>
-		                  </tr>
-		                }
-		            </table>
-			     }{
-			       ${test.name}
-			     }
-            </td>
-          </tr>
+          ={test.makerun as myresult}{
+            ?{myresult}{
+            <tr class="?{myresult.passed?}{passed}{failed}">
+              <td class="raef">RAEF: [${myresult.run_count},${myresult.assertion_count},${myresult.error_count},${myresult.failure_count}]</td>
+              <td class="name">
+  	            ?{myresult.error_count>0 or myresult.failure_count>0}{
+  	                <b style="color: red;">${test.name}</b><br/>
+  	                <table class="fails">
+  		                *{myresult.errors as err}{
+  		                  <tr>
+  		                    <td class="kind">error</td>
+  		                    <td class="location">${err.exception.backtrace[0]}</td>
+  		                    <td class="message">${err.exception.message}</td>
+  		                  </tr>
+  		                }
+  		                *{myresult.failures as fail}{
+  		                  <tr>
+  		                    <td class="kind">failure</td>
+  		                    <td class="location">${fail.location}</td>
+  		                    <td class="message">${fail.message}</td>
+  		                  </tr>
+  		                }
+  		            </table>
+    			     }{
+    			       ${test.name}
+    			     }
+              </td>
+            </tr>
+            }
+          }
         }
       </table>
     }

@@ -113,26 +113,26 @@ module WLang
       end
     
       # Evaluates an expression
-      def __evaluate(expression)
-        result = instance_eval(expression)
+      def __evaluate(__expression__)
+        __result__ = instance_eval(__expression__)
         
         # backward compatibility with >= 0.8.4 where 'using self'
         # was allowed. This will be removed in wlang 1.0.0
-        if result.object_id == self.object_id
+        if __result__.object_id == self.object_id
           Kernel.puts "Warning: using deprecated 'using self' syntax (#{parser_state.where})\n"\
                       "will be removed in wlang 1.0.0. Use 'share all', extends "/
                       "::WLang::HostedLanguage::DSL with useful methods or create your own"\
                       " hosted language."
-          result = parser_state.scope.to_h
+          __result__ = @parser_state.scope.to_h
         end
         
-        result
+        __result__
       rescue ::WLang::Error => ex
         ex.parser_state = @parser_state
-        ex.expression = expression if ex.respond_to?(:expression=)
+        ex.expression = __expression__ if ex.respond_to?(:expression=)
         Kernel.raise ex
       rescue Exception => ex
-        Kernel.raise ::WLang::EvalError.new(ex.message, @parser_state, expression, ex)
+        Kernel.raise ::WLang::EvalError.new(ex.message, @parser_state, __expression__, ex)
       end
       
     end # class DSL

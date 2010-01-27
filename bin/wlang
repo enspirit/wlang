@@ -6,6 +6,8 @@
 #  Copyright (c) 2009 University of Louvain, Bernard & Louis Lambeau
 #  Released under a MIT or Ruby licence
 #
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'wlang'
 require 'wlang/wlang_command'
 
 begin

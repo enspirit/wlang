@@ -7,7 +7,10 @@
     <table>
       <tr>
         <td>Contents of the rdoc file.</td>
-        <td><textarea cols="80" rows="25">${text}</textarea></td>
+        <td>
+<textarea cols="80" rows="25">
+${text}
+</textarea></td>
       </tr>
       <tr>
         <td>Visual result of the .rdoc to .html transformation.</td>

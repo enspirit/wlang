@@ -13,9 +13,13 @@ class Test::Unit::TestCase
   # Overrided to return a TestResult instance instead of taking it as argument.
   def makerun
     result = Test::Unit::TestResult.new
-    self.run(result) do |mode, name|
+    begin
+      self.run(result) do |mode, name|
+      end
+    rescue Exception => ex
+      puts "Error: #{ex.message}"
     end
-    return result
+    result
   end
 end
 

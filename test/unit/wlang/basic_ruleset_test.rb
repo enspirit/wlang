@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'wlang'
-require 'wlang/test_utils'
+require File.join(File.dirname(__FILE__), 'test_utils.rb')
 require 'wlang/rulesets/basic_ruleset'
 require 'wlang/rulesets/context_ruleset'
 require 'wlang/rulesets/buffering_ruleset'

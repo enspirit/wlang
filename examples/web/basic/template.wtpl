@@ -1,14 +1,15 @@
+<<={data.yaml as d}
 <html>
   <head>
-    <title>${title}</title>
+    <title>${d.title}</title>
   </head>
   <body>
-    <h1>Hello ${name}</h1>
-    +{h1}
-    ${h1}
+    <h1>Hello ${d.name}</h1>
+    +{d.h1}
+    ${d.h1}
     <p>My preferences are:</p>
     <table>
-      *{prefs using each_pair as key, value}{
+      *{d.prefs using each_pair as key, value}{
         <tr>
 	        <td>${key}</td>
 	        <td>${value}</td>
