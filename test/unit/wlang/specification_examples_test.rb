@@ -1,4 +1,4 @@
-require 'test/unit/testcase'
+require 'test/unit'
 require 'wlang'
 require 'wlang/dialects/standard_dialects'
 require "yaml"
