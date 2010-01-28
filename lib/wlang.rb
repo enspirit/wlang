@@ -6,7 +6,6 @@ require 'wlang/encoder_set'
 require 'wlang/dialect'
 require 'wlang/dialect_dsl'
 require 'wlang/dialect_loader'
-require 'wlang/basic_object'
 require 'wlang/hosted_language'
 require 'wlang/hash_scope'
 require 'wlang/parser'
@@ -170,7 +169,7 @@ module WLang
       # first case, dialect installation
       raise "Unsupported qualified names in dialect installation"\
         unless name.index('/').nil?
-      Dialect::DSL.new(@dialect).dialect(name, *extensions, &block).build!
+      Dialect::DSL.new(@dialect).dialect(name, *extensions, &block)
     else
       # second case, dialect lookup
       @dialect.dialect(name)

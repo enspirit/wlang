@@ -1,5 +1,18 @@
 == Changelog
 
+=== Version 0.9.1
+
+==== Broken features and APIs (by order of importance)
+
+- HostedLanguage::DSL is strictly private and should be reopened. Methods added to this class
+  will never be available in templates. Use HostedLanguage.variable_missing instead. 
+- ::WLang::BasicObject has been removed. HostedLanguage::DSL implements its own strategy, which
+  is spec tested in test/spec/basic_object.spec
+
+==== New features (by order of importance)
+
+- A new encoder redcloth/xhtml allows using Textile markups easily
+
 === Version 0.9.0
 
 ==== Broken features and APIs (by order of importance)

@@ -58,6 +58,13 @@ WLang::dialect("rdoc") do
   end
 end
 
+# rdoc dialect
+WLang::dialect("redcloth") do
+  ruby_require "RedCloth", "wlang/dialects/redcloth_dialect" do
+    encoders WLang::EncoderSet::RedClothEncoders
+  end
+end
+
 # wlang dialects
 WLang::dialect("wlang") do
   

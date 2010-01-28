@@ -8,62 +8,27 @@ module WLang
   # This default implementation implements the ruby hosted language. It works 
   # with ::WLang::HostedLanguage::DSL, which uses instance_eval for evaluating
   # the expression. Calls to missing methods (without parameter and block) are
-  # converted in scope lookups. The DSL class is intended to be used as an open
-  # class. Doing so allows providing common utils to all templates, as illustrated
-  # below:
+  # converted in scope lookups. The DSL class is strictly private, as it uses 
+  # a somewhat complex ruby introspection mechanism to ensure that scoping will
+  # not be perturbated by Kernel methods and Object private methods even if 
+  # additional gems are loaded later.
   #
-  #   # Reopening the DSL class allows providing tools
-  #   class ::WLang::HostedLanguage::DSL < ::WLang::BasicObject
-  #
-  #     # Simulates a 'now' variable in all template scopes (this is not the best
-  #     # way to do it, see later)
-  #     def now
-  #       Time.now
-  #     end
-  #
-  #     # Something non-deterministic, for the sake of the example
-  #     def lucky
-  #       Kernel.rand <= 0.5
-  #     end
-  #
-  #   end
-  #
-  #   # Typical usage in templates
-  #   <html>
-  #     [...]
-  #     <p>The current time is #{now}</p>
-  #     [...]
-  #     <p>You are ?{do_it}{lucky}{not lucky}</p>
-  #     [...]
-  #   </html>
-  #
-  # ATTENTION: in order to avoid strange name conflicts between wlang templates and
-  # ruby Kernel/Object methods, the DSL class is a BasicObject. It means that few 
-  # methods are known in its own scope. Always use Kernel.puts, Kernel.raise, ...
-  # explicitely when extending the DSL. Moreover, methods added to the DSL will 
-  # always hide user's variables in the scope as they have the priority due to the
-  # implementation, as the following example illustrates (same DSL extension than
-  # before):
-  #
-  #    <html>
-  #      <!-- following line will show the time, not 'something' -->
-  #      ={'something' as now}{ ${now} }
-  #    </html>
-  #
-  # An alternative for installing low-priority variables and tools is to reopen the
-  # HostedLanguage class itself and to override variable_missing:
+  # If you want to intall low-priority variables and tools available in all wlang
+  # templates (global scoping) you can reopen the HostedLanguage class itself and
+  # override variable_missing. Note that "low-priority" means that these methods
+  # will be hidden if a user installs a variable with the same name in its template.
   #
   #   class WLang::HostedLanguage
   #
-  #     # Low-priority now2 variable
-  #     def now2
+  #     # Low-priority now variable
+  #     def now
   #       Time.now
   #     end
   #
   #     # Low-priority variables are checked before raising an UndefinedVariableError
   #     def variable_missing(name)
   #       case name
-  #         when :who2, ...
+  #         when :who, ...
   #           self.send(name)
   #         else
   #           raise ::WLang::UndefinedVariableError.new(nil, nil, nil, name)
@@ -79,12 +44,29 @@ module WLang
   class HostedLanguage
     
     # The hosted language DSL, interpreting expressions
-    class DSL < ::WLang::BasicObject
+    class DSL
+      
+      # Methods that we keep
+      KEPT_METHODS = [ "__send__", "__id__", "instance_eval", "initialize", "object_id", 
+                       "singleton_method_added", "singleton_method_undefined", "method_missing",
+                       "__evaluate__", "knows?"]
+
+      class << self
+        def __clean_scope__
+          # Removes all methods that are not needed to the class
+          (instance_methods + private_instance_methods).each do |m|
+            undef_method(m.to_s.to_sym) unless KEPT_METHODS.include?(m.to_s)
+          end
+        end
+      end
       
       # Creates a DSL instance for a given hosted language and 
       # parser state
       def initialize(hosted, parser_state)
         @hosted, @parser_state = hosted, parser_state
+        class << self
+          __clean_scope__
+        end
       end
       
       # Delegates the missing lookup to the current parser scope or raises an
@@ -113,7 +95,7 @@ module WLang
       end
     
       # Evaluates an expression
-      def __evaluate(__expression__)
+      def __evaluate__(__expression__)
         __result__ = instance_eval(__expression__)
         
         # backward compatibility with >= 0.8.4 where 'using self'
@@ -156,7 +138,7 @@ module WLang
     # - an EvalError when something more severe occurs
     #
     def evaluate(expression, parser_state)
-      DSL.new(self, parser_state).__evaluate(expression)
+      ::WLang::HostedLanguage::DSL.new(self, parser_state).__evaluate__(expression)
     end
     
   end # class HostedLanguage
