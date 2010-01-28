@@ -11,6 +11,7 @@
 
 ==== New features (by order of importance)
 
+- WLang does not requires the rdoc gem by default
 - A new encoder redcloth/xhtml allows using Textile markups easily
 - The wlang/xhtml dialect provides a tag helper for links @{...}{...}
 - The parser class returns friendly messages when a rule is ill-implemented
