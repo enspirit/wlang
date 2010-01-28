@@ -110,6 +110,14 @@ module WLang
     end
   
     ###################################################################### Main parser methods
+    
+    # Checks the result of a given rule
+    def launch_rule(dialect, rule_symbol, rule, offset)
+      result = rule.start_tag(self, offset)
+      raise WLang::Error, "Bad rule implementation #{dialect.qualified_name} #{rule_symbol}{}\n#{result.inspect}"\
+        unless result.size == 2 and String===result[0] and Integer===result[1]
+      result
+    end
   
     # Parses the template's text and instantiate it
     def instantiate
@@ -155,16 +163,15 @@ module WLang
         elsif match[-1,1]==Template::BLOCK_SYMBOLS[symbols][0] # opening special tag
           # following line should never return nil as the matching pattern comes 
           # from the ruleset itself!
-          rule = dialect.ruleset[match[0..-2]]     
+          rule_symbol = match[0..-2]
+          rule = dialect.ruleset[rule_symbol]     
           rules << rule
         
           # Just added to get the last position in case of an error
           self.offset = match_at + match_length
 
           # lauch that rule, get it's replacement and my new offset
-          replacement, self.offset = rule.start_tag(self, match_at + match_length)
-          replacement = "" if replacement.nil?
-          raise "Bad implementation of rule #{match[0..-2]}" if self.offset.nil?
+          replacement, self.offset = launch_rule(dialect, rule_symbol, rule, self.offset)
       
           # push replacement
           self.<<(replacement, true) unless replacement.empty?
