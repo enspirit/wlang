@@ -58,7 +58,7 @@ module WLang
     # Checks if a key exists in this scope, delegating to
     # parent if not found and allowed
     def has_key?(key, delegate = true)
-      pairing.has_key?(key) || (delegate && parent && parent.has_key?(key))
+      pairing.has_key?(key) || (!delegate.nil? && !parent.nil? && parent.has_key?(key))
     end
     
     # Returns the value associated to a key, delegating to parent
