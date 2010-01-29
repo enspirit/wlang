@@ -2,6 +2,10 @@
 
 === Version 0.9.1
 
+==== Bug fixes
+
+- #307, about HashScope.has_key? which returned nil instead of false in some situations
+
 ==== Broken features and APIs (by order of importance)
 
 - HostedLanguage::DSL is strictly private and should be reopened. Methods added to this class
