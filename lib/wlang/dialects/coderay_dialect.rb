@@ -13,7 +13,7 @@ module WLang
 
       # Default encoders  
       DEFAULT_ENCODERS = {"java" => :coderay, "ruby" => :coderay, "html" => :coderay, 
-                          "yaml" => :coderay}
+                          "yaml" => :coderay, "sql" => :coderay}
   
       # Upcase encoding
       def self.coderay(src, options);
@@ -21,10 +21,8 @@ module WLang
         encoder = $1.to_sym
         tokens = CodeRay.scan src, encoder
         highlighted = tokens.html({
-          :line_numbers => :inline, 
           :wrap => :div, 
-          :css => :style,
-          :style => :cygnus}
+          :css => :class}
         )
         return highlighted
       end

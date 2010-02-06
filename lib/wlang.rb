@@ -342,7 +342,7 @@ module WLang
     
     # Check the dialect
     dialect = self.infer_dialect(file) if dialect.nil?
-    raise WLangError, "No known dialect for file extension '#{File.extname(file)}'\n"\
+    raise WLang::Error, "No known dialect for file extension '#{File.extname(file)}'\n"\
                       "Known extensions are: " << WLang::FILE_EXTENSIONS.keys.join(", ") if dialect.nil?
           
     # Build the template now
