@@ -13,7 +13,9 @@ module WLang
 
       # Default encoders  
       DEFAULT_ENCODERS = {"java" => :coderay, "ruby" => :coderay, "html" => :coderay, 
-                          "yaml" => :coderay, "sql" => :coderay}
+                          "yaml" => :coderay, "sql" => :coderay, "css" => :coderay,
+                          "javascript" => :coderay, "json" => :coderay, "php" => :coderay,
+                          "xml" => :coderay}
   
       # Upcase encoding
       def self.coderay(src, options);
