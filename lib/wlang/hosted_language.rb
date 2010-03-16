@@ -55,7 +55,8 @@ module WLang
         def __clean_scope__
           # Removes all methods that are not needed to the class
           (instance_methods + private_instance_methods).each do |m|
-            undef_method(m.to_s.to_sym) unless KEPT_METHODS.include?(m.to_s)
+            m_to_s = m.to_s
+            undef_method(m_to_s.to_sym) unless ('__' == m_to_s[0..1]) or KEPT_METHODS.include?(m_to_s)
           end
         end
       end
