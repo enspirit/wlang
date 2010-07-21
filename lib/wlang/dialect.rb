@@ -236,7 +236,8 @@ module WLang
   
     # Factors a spacing friendly buffer for instantiation in this dialect
     def factor_buffer
-      IntelligentBuffer.new
+      #IntelligentBuffer.new
+      ""
     end
   
     # Returns a string representation   

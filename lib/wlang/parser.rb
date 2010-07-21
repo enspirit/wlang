@@ -185,7 +185,7 @@ module WLang
         self.<<(source_text[self.offset, 1+source_text.length-self.offset], false)
         self.offset = source_text.length
       end
-      [buffer, self.offset-1]
+      [dialect.apply_post_transform(buffer), self.offset-1]
     end
   
     ###################################################################### Callbacks for rule sets

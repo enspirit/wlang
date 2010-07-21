@@ -5,6 +5,7 @@
 ==== New features (by order of importance)
 
 - Implements main transformer on dialects
+- Makes coderay encoders available without options using a bit of meta programming
 
 === Version 0.9.1
 

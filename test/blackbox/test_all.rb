@@ -24,11 +24,14 @@ module WLang
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Buffering
         }
-        dialect("postblock") {
-          post_transform{|txt| "<notextile>#{txt}</notextile>"}
+        dialect("postblock", ".pre") {
+          post_transform{|txt| "<pre>#{txt}</pre>"}
+          rules WLang::RuleSet::Basic
+          rules WLang::RuleSet::Buffering
         }
         dialect("poststring") {
           post_transform "plain-text/upcase"
+          rules WLang::RuleSet::Basic
         }
       end
       hosted = ::WLang::HostedLanguage.new
