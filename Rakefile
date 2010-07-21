@@ -14,7 +14,7 @@ task :all => [:test, :rerdoc, :specification, :repackage]
 
 desc "Lauches all unit tests"
 Rake::TestTask.new(:unit) do |test|
-  test.libs       = [ "lib", "test/unit" ]
+  test.libs       = [ "lib" ]
   test.test_files = ['test/unit/test_all.rb', 'test/blackbox/test_all.rb']
   test.verbose    =  true
 end

@@ -24,6 +24,12 @@ module WLang
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Buffering
         }
+        dialect("postblock") {
+          post_transform{|txt| "<notextile>#{txt}</notextile>"}
+        }
+        dialect("poststring") {
+          post_transform "plain-text/upcase"
+        }
       end
       hosted = ::WLang::HostedLanguage.new
       def hosted.variable_missing(name)

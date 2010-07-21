@@ -86,6 +86,11 @@ module WLang
       end
   
       #
+      # Sets a transformer to use at end of generation time.
+      #
+      def post_transform(transformer = nil, &block) end
+  
+      #
       # Adds a dialect encoder under _name_. Encoder's code is provided by the block.
       # This block should always take <tt>|src, options|</tt> arguments: _src_ is
       # the string to encode, _options_ is a Hash instance containing additional 

@@ -51,6 +51,9 @@ module WLang
     # Sub dialects by name
     attr_reader :dialects
     
+    # Post transformer
+    attr_accessor :post_transformer
+    
     #
     # Creates a dialect instance. _builder_ block is a chunk of code of the DSL
     # that will be executed twice: once at construction time to create sub dialects
@@ -123,7 +126,7 @@ module WLang
       @ruleset = RuleSet.new if @ruleset.nil?
       @ruleset.add_rules(mod, pairs)
     end
-  
+    
     ### Query API ################################################################
   
     # Returns qualified name of this dialect
@@ -165,6 +168,18 @@ module WLang
         # found but not last of qualified name -> build it and delegate
         child_dialect.build!
         return child_dialect.dialect(name[1..-1]) 
+      end
+    end
+    
+    # Applies post transformation 
+    def apply_post_transform(text)
+      case self.post_transformer
+        when String
+          WLang::encode(text, self.post_transformer, {})
+        when Proc
+          self.post_transformer.call(text)
+        else
+          text
       end
     end
   

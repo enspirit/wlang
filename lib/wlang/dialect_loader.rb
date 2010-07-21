@@ -39,6 +39,11 @@ module WLang
       # See WLang::Dialect::DSL#dialect
       def dialect(name, *extensions, &block) end
   
+      # See WLang::Dialect::DSL::post_transformer
+      def post_transform(transformer = nil, &block) 
+        @dialect.post_transformer = (transformer || block)
+      end
+  
       # See WLang::Dialect::DSL#encoder
       def encoder(name, &block) 
         @dialect.add_encoder(name, &block)

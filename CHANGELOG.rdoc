@@ -1,5 +1,11 @@
 == Changelog
 
+=== Version 0.9.2
+
+==== New features (by order of importance)
+
+- Implements main transformer on dialects
+
 === Version 0.9.1
 
 ==== Bug fixes
