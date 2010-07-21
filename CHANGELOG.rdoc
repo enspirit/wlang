@@ -6,6 +6,7 @@
 
 - Implements main transformer on dialects
 - Makes coderay encoders available without options using a bit of meta programming
+- System-local absolute paths (i.e. starting with '/') are recognized by buffer rulesets
 
 === Version 0.9.1
 

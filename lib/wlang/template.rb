@@ -33,13 +33,20 @@ module WLang
   
     # Resolved a relative uri
     def file_resolve(uri, exists=false)
-      raise("Unable to resolve #{uri}, this template is not attached to a file")\
-        unless @source_file
-      target = File.join(File.dirname(@source_file), uri)
-      if exists and not(File.exists?(target))
-        raise "File '#{uri}' does not exists"
+      require 'uri'
+      real_uri = URI::parse(uri)
+      if real_uri.absolute?
+        raise WLang::Error, "Unable to resolve #{uri}, absolute uri are not supported"
+      elsif real_uri.path[0, 1] == '/'
+        real_uri.path
+      else
+        raise WLang::Error, "Unable to resolve #{uri}, this template is not attached to a file" unless @source_file
+        target = File.join(File.dirname(@source_file), uri)
+        if exists and not(File.exists?(target))
+          raise WLang::Error, "File '#{uri}' does not exists"
+        end
+        target
       end
-      target
     end
   
     # Returns template's source text

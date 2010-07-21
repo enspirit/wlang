@@ -69,7 +69,6 @@ module WLang
     
     # Resolves an URI throught the current template
     def file_resolve(uri)
-      # TODO: refactor me to handle absolute URIs
       template.file_resolve(uri)
     end
     
