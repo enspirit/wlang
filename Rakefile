@@ -7,7 +7,6 @@ dir     = File.dirname(__FILE__)
 lib     = File.join(dir, "lib", "wlang.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
-
 task :default => [:all]
 task :all => [:test, :specification, :repackage]
 
@@ -20,14 +19,6 @@ end
 
 desc "Runs all tests (unit and rspec)"
 task :test => [:unit, :spec]
-
-desc "Generates rdoc documentation"
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include( "README.md", "LICENCE.md", "CHANGELOG.md", "lib/" )
-  rdoc.main     = "README.md"
-  rdoc.rdoc_dir = "doc/api"
-  rdoc.title    = "WLang Documentation"
-end
 
 desc "Generates the specification file"
 task :specification do |t|
@@ -54,6 +45,35 @@ gemspec = Gem::Specification.new do |s|
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true
+end
+
+#
+# Install a rake task for running examples written using rspec.
+#
+# More information about rspec: http://relishapp.com/rspec
+# This file has been written to conform to RSpec v2.4.0
+#
+begin
+  require "rspec/core/rake_task"
+  desc "Run RSpec code examples"
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    # Glob pattern to match files.
+    t.pattern = 'test/spec/*.spec'
+
+    # Use verbose output. If this is set to true, the task will print the
+    # executed spec command to stdout.
+    t.verbose = true
+
+    # Command line options to pass to rspec.
+    # See 'rspec --help' about this
+    t.rspec_opts = %w{--color --backtrace}
+  end
+rescue LoadError => ex
+  task :spec do
+    abort 'rspec is not available. In order to run spec, you must: gem install rspec'
+  end
+ensure
+  task :test => [:spec]
 end
 
 # 
