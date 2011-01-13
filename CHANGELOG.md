@@ -1,4 +1,19 @@
-# Version 0.9.3
+# Version 0.10.0
+
+## New features
+
+* Introduced a wlang/hosted language which parses blocks as actually described in the specification
+* Introduced a semantics +{...} in wlang/ruby that prints literals.
+* wlang/ruby now includes the Buffering ruleset
+
+## Broken features and APIs
+
+* Due to the wlang/ruby <-> wlang/hosted changes and the fact that wlang/ruby now includes the 
+  Buffering ruleset, users that generate ruby (a few) may have broken templates and should probably
+  be pessimist and require wlang 0.9.x
+* For the same reason, users that make complex wlang meta-constructions ala +{+{...}} could observe
+  problems due to the change of +{...} in wlang/ruby. The wlang/hosted dialect is introduced to limit
+  such problems, but not encountering them is not guaranteed.
 
 ## Development-based changesets
 

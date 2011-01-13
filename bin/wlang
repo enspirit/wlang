@@ -16,6 +16,7 @@ begin
 rescue ::WLang::Error => e
   $stderr.puts e.message
   $stderr.puts e.wlang_backtrace.join("\n\t")
+  $stderr.puts e.backtrace.join("\n\t")
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

@@ -102,6 +102,7 @@ WLang::dialect("wlang") do
       rules WLang::RuleSet::Basic
       rules WLang::RuleSet::Encoding
       rules WLang::RuleSet::Imperative
+      rules WLang::RuleSet::Buffering
       rules WLang::RuleSet::Context
       rules WLang::RuleSet::Ruby
     end

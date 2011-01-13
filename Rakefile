@@ -5,7 +5,7 @@ require "rubygems"
 
 dir     = File.dirname(__FILE__)
 lib     = File.join(dir, "lib", "wlang.rb")
-version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
+version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d+\.\d+\.\d+)\1/, 2]
 
 task :default => [:all]
 task :all => [:test, :specification, :repackage]
@@ -13,7 +13,9 @@ task :all => [:test, :specification, :repackage]
 desc "Lauches all unit tests"
 Rake::TestTask.new(:unit) do |test|
   test.libs       = [ "lib" ]
-  test.test_files = ['test/unit/test_all.rb', 'test/blackbox/test_all.rb']
+  test.test_files = ['test/unit/test_all.rb', 
+                     'test/blackbox/test_all.rb',
+                     'test/standard_dialects/test_all.rb']
   test.verbose    =  true
 end
 
