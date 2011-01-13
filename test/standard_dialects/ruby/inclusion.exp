@@ -3,3 +3,4 @@
 "a_string"
 12
 [:a_symbol, "a_string", 12]
+{:key => ["value"]}

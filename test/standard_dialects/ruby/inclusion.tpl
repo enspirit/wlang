@@ -3,3 +3,4 @@
 +{data[:a_string]}
 +{data[:an_integer]}
 +{data[:an_array]}
++{data[:a_hash]}
