@@ -18,7 +18,7 @@ module WLang
 
       # Rule implementation of <tt>={wlang/hosted as x}{...}</tt>
       def self.assignment(parser, offset)
-        expr, reached = parser.parse(offset, "wlang/ruby")
+        expr, reached = parser.parse(offset, "wlang/hosted")
     
         # decode expression
         decoded = U.decode_expr_as(expr)
@@ -62,7 +62,7 @@ module WLang
     
       # Rule implementation of <tt>%={wlang/active-string as x}{...}{...}</tt>
       def self.modulo_assignment(parser, offset)
-        dialect_as, reached = parser.parse(offset, "wlang/ruby")
+        dialect_as, reached = parser.parse(offset, "wlang/hosted")
 
         # decode expression
         decoded = U.decode_qdialect_as(dialect_as)
@@ -84,7 +84,7 @@ module WLang
     
       # Rule implementation of <tt>^={wlang/active-string as x}{...}{...}</tt>
       def self.encoding_assignment(parser, offset)
-        encoding_as, reached = parser.parse(offset, "wlang/ruby")
+        encoding_as, reached = parser.parse(offset, "wlang/hosted")
 
         # decode expression
         decoded = U.decode_qencoder_as(encoding_as)

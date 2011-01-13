@@ -19,7 +19,7 @@ module WLang
   
       # Rule implementation of <tt>!{wlang/ruby}</tt>.
       def self.execution(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         value = parser.evaluate(expression)
         result = value.nil? ? "" : value.to_s
         [result, reached]

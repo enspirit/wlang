@@ -27,7 +27,7 @@ module WLang
       # otherwise instantiates #3 if present.
       #
       def self.conditional(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         value = parser.evaluate(expression)
         if value
           then_block, reached = parser.parse_block(reached)
@@ -64,7 +64,7 @@ module WLang
       # name x in the scope). If #3 is present, it is instantiated between elements.
       #
       def self.enumeration(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
     
         # decode 'wlang/hosted using each as x' expression
         hash = U.expr(:expr,

@@ -72,6 +72,18 @@ WLang::dialect("wlang") do
   dialect("dummy") do
   end
   
+  # wlang/ruby dialect
+  dialect("hosted") do
+    ruby_require "wlang/dialects/hosted_dialect" do
+      encoders WLang::EncoderSet::Hosted
+      rules    WLang::RuleSet::Basic
+      rules    WLang::RuleSet::Encoding
+      rules    WLang::RuleSet::Imperative
+      rules    WLang::RuleSet::Context
+      rules    WLang::RuleSet::Hosted
+    end
+  end
+  
   # wlang/active-string dialect
   dialect("active-string") do
     rules WLang::RuleSet::Basic

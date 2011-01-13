@@ -1,6 +1,6 @@
 ---
 title: WLang
-version: 0.9.1
+version: 0.9.3
 sections:
   - identifier: about
     name: About
@@ -254,15 +254,15 @@ rulesets:
       scope is provided by the Context ruleset. All are variants of 'saving previous instantiations' in 
       scope variables...
     examples:
-      - ["wlang/*", '={name as n}{Hello +{n}}',                      "Hello O'Neil"]
-      - ["wlang/*", '={name as n}Hello +{n}',                        "Hello O'Neil"]
-      - ["wlang/*", '#={name}{blambeau}{Hello +{name}} and +{name}', "Hello blambeau and O'Neil"]
-      - ["wlang/*", '#={name}{blambeau}Hello +{name} and +{name}',   "Hello blambeau and blambeau"]
-      - ["wlang/*", '={author as name}{Hello +{name}} and +{name}', "Hello blambeau and O'Neil"]
-      - ["wlang/*", '={author as name}Hello +{name} and +{name}',   "Hello blambeau and blambeau"]
-      - ["wlang/*", '%={wlang/dummy as hello}{Hello +{name}}{+{hello}}', "Hello +{name}"]
-      - ["wlang/*", '^={plain-text/upcase as name}{+{author}}{Hello +{name}} and +{name}', "Hello BLAMBEAU and O'Neil"]
-      - ["wlang/*", '^={plain-text/upcase as name}{+{author}}Hello +{name} and +{name}', "Hello BLAMBEAU and BLAMBEAU"]
+      - ["wlang/*", '={name as n}{Hello !{n}}',                      "Hello O'Neil"]
+      - ["wlang/*", '={name as n}Hello !{n}',                        "Hello O'Neil"]
+      - ["wlang/*", '#={name}{blambeau}{Hello !{name}} and !{name}', "Hello blambeau and O'Neil"]
+      - ["wlang/*", '#={name}{blambeau}Hello !{name} and !{name}',   "Hello blambeau and blambeau"]
+      - ["wlang/*", '={author as name}{Hello !{name}} and !{name}',  "Hello blambeau and O'Neil"]
+      - ["wlang/*", '={author as name}Hello !{name} and !{name}',    "Hello blambeau and blambeau"]
+      - ["wlang/*", '%={wlang/dummy as hello}{Hello !{name}}{!{hello}}', "Hello !{name}"]
+      - ["wlang/*", '^={plain-text/upcase as name}{!{author}}{Hello !{name}} and !{name}', "Hello BLAMBEAU and O'Neil"]
+      - ["wlang/*", '^={plain-text/upcase as name}{!{author}}Hello !{name} and !{name}', "Hello BLAMBEAU and BLAMBEAU"]
       
     rules: 
       # ={wlang/hosted as x}{...}

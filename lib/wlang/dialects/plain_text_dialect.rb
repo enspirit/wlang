@@ -47,7 +47,7 @@ module WLang
   
       # Upcase rule as <tt>+{wlang/hosted}</tt>
       def self.upcase(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         value = parser.evaluate(expression)
         value = value.nil? ? "" : value.to_s
         result = WLang::EncoderSet::PlainText.upcase(value)
@@ -56,7 +56,7 @@ module WLang
   
       # Downcase rule as <tt>-{wlang/hosted}</tt>
       def self.downcase(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         value = parser.evaluate(expression)
         value = value.nil? ? "" : value.to_s
         result = EncoderSet::PlainText.downcase(value)

@@ -106,7 +106,7 @@ module WLang
     
         # Rule implementation of <tt>+{wlang/ruby}</tt>.
         def self.inclusion(parser, offset)
-          expression, reached = parser.parse(offset, "wlang/ruby")
+          expression, reached = parser.parse(offset, "wlang/hosted")
           value = parser.evaluate(expression)
           result = WLang::EncoderSet::Ruby.to_literal(value)
           [result, reached]

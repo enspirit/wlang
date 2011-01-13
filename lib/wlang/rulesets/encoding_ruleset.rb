@@ -45,7 +45,7 @@ module WLang
   
       # Injection as <tt>${wlang/ruby}</tt>
       def self.injection(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         result = parser.evaluate(expression)
         encoded = parser.encode(result.to_s, "main-encoding")
         [encoded, reached]
@@ -53,7 +53,7 @@ module WLang
   
       # Single-quoted as <tt>'{wlang/ruby}</tt>
       def self.single_quoted(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         result = parser.evaluate(expression)
         encoded = parser.encode(result.to_s, "single-quoting")
         ["'" << encoded, reached]
@@ -61,7 +61,7 @@ module WLang
   
       # Double-quoted as <tt>"{wlang/ruby}</tt>
       def self.double_quoted(parser, offset)
-        expression, reached = parser.parse(offset, "wlang/ruby")
+        expression, reached = parser.parse(offset, "wlang/hosted")
         result = parser.evaluate(expression)
         encoded = parser.encode(result.to_s, "double-quoting")
         ['"' << encoded, reached]
