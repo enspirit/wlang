@@ -5,6 +5,7 @@
 * Introduced a wlang/hosted language which parses blocks as actually described in the specification
 * Introduced a semantics +{...} in wlang/ruby that prints literals.
 * wlang/ruby now includes the Buffering ruleset
+* Introduced a wlang/active-text dialect which includes Basic, Imperative, Buffering and Context rulesets.
 
 ## Broken features and APIs
 

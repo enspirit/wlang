@@ -90,6 +90,14 @@ WLang::dialect("wlang") do
     rules WLang::RuleSet::Imperative
   end
   
+  # wlang/active-text dialect
+  dialect("active-text") do
+    rules WLang::RuleSet::Basic
+    rules WLang::RuleSet::Imperative
+    rules WLang::RuleSet::Buffering
+    rules WLang::RuleSet::Context
+  end
+  
   # wlang/uri dialect
   dialect("uri") do
     rules WLang::RuleSet::Basic
