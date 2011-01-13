@@ -105,6 +105,8 @@ rulesets:
       - ["wlang/active-string", "Hello %{wlang/dummy}{!{name}}",       "Hello !{name}"]
       - ["wlang/dummy",         "Hello %{wlang/dummy}{!{name}}",       "Hello %{wlang/dummy}{!{name}}"]
       - ["wlang/active-string", "Hello ^{plain-text/upcase}{${name}}", "Hello O'NEIL"]
+      - ["wlang/ruby",          "puts +{name}",                        "puts \"O'Neil\""]
+      - ["wlang/ruby",          "puts +{authors}",                     "puts [\"blambeau\", \"llambeau\", \"ancailliau\"]"]
     rules:
       # !{wlang/hosted}
       - name:      "execution"

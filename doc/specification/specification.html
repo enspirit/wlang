@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>WLang (version 0.9.1)</title>
+    <title>WLang (version 0.9.3)</title>
     <style type="text/css">
       body {
   font-family: arial, verdana, sans-serif;
@@ -72,7 +72,7 @@ function show(who) {
 	  //--></script>
   </head>
   <body onload="show('about')">
-    <h1 id="title">WLang (version 0.9.1)</h1>
+    <h1 id="title">WLang (version 0.9.3)</h1>
     <ul id="tabs">
       
         <li id="symbolsfocus" onclick="show('symbols')">Tag symbols</li>
@@ -618,6 +618,34 @@ value (this really advanced rule allows  metaprogramming).</td>
           </td>
         </tr>
       
+        <tr>
+          <td class="dialect">
+            <tt>wlang/ruby</tt>
+          </td>
+          <td class="expression">
+            <tt>puts +{name}</tt>
+          </td>
+          <td class="replacement">
+            
+            <tt>puts "O'Neil"</tt>
+            
+          </td>
+        </tr>
+      
+        <tr>
+          <td class="dialect">
+            <tt>wlang/ruby</tt>
+          </td>
+          <td class="expression">
+            <tt>puts +{authors}</tt>
+          </td>
+          <td class="replacement">
+            
+            <tt>puts ["blambeau", "llambeau", "ancailliau"]</tt>
+            
+          </td>
+        </tr>
+      
     </table>
     <div style="clear: both;"></div>
   
@@ -982,7 +1010,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>={name as n}{Hello +{n}}</tt>
+            <tt>={name as n}{Hello !{n}}</tt>
           </td>
           <td class="replacement">
             
@@ -996,7 +1024,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>={name as n}Hello +{n}</tt>
+            <tt>={name as n}Hello !{n}</tt>
           </td>
           <td class="replacement">
             
@@ -1010,7 +1038,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>#={name}{blambeau}{Hello +{name}} and +{name}</tt>
+            <tt>#={name}{blambeau}{Hello !{name}} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1024,7 +1052,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>#={name}{blambeau}Hello +{name} and +{name}</tt>
+            <tt>#={name}{blambeau}Hello !{name} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1038,7 +1066,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>={author as name}{Hello +{name}} and +{name}</tt>
+            <tt>={author as name}{Hello !{name}} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1052,7 +1080,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>={author as name}Hello +{name} and +{name}</tt>
+            <tt>={author as name}Hello !{name} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1066,11 +1094,11 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>%={wlang/dummy as hello}{Hello +{name}}{+{hello}}</tt>
+            <tt>%={wlang/dummy as hello}{Hello !{name}}{!{hello}}</tt>
           </td>
           <td class="replacement">
             
-            <tt>Hello +{name}</tt>
+            <tt>Hello !{name}</tt>
             
           </td>
         </tr>
@@ -1080,7 +1108,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>^={plain-text/upcase as name}{+{author}}{Hello +{name}} and +{name}</tt>
+            <tt>^={plain-text/upcase as name}{!{author}}{Hello !{name}} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1094,7 +1122,7 @@ replacement  value.</td>
             <tt>wlang/*</tt>
           </td>
           <td class="expression">
-            <tt>^={plain-text/upcase as name}{+{author}}Hello +{name} and +{name}</tt>
+            <tt>^={plain-text/upcase as name}{!{author}}Hello !{name} and !{name}</tt>
           </td>
           <td class="replacement">
             
@@ -1250,6 +1278,18 @@ instantiation as replacement value.</td>
   <div class="dialect">
   <div style="margin-bottom: 20px">
     <h3 style="display: inline">wlang/dummy</h3>
+    
+  </div>
+  
+  
+</div>
+
+
+  <div class="dialect">
+  <div style="margin-bottom: 20px">
+    <h3 style="display: inline">wlang/hosted</h3>
+    
+      <p style="display: inline">Includes Basic, Encoding, Imperative, Context, Hosted</p>
     
   </div>
   
