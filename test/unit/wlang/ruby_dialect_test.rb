@@ -94,7 +94,7 @@ class RubyDialectTest < Test::Unit::TestCase
       assert_equal(expected, result)
     end
   end
-
+  
 end # class RubyDialectTest
     
 end # module WLang

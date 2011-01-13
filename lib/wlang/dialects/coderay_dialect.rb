@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'coderay'
 module WLang
   class EncoderSet

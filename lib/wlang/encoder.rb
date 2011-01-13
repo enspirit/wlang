@@ -37,10 +37,6 @@ module WLang
     # same arguments. 
     #
     def initialize(&block)
-      unless block.nil?
-        raise(ArgumentError, "Expected a rule block of arity 2")\
-          unless block.arity==2
-      end
       @block = block
     end
   

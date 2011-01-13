@@ -1,7 +1,6 @@
 require "rake/rdoctask"
 require "rake/testtask"
 require "rake/gempackagetask"
-require 'spec/rake/spectask'
 require "rubygems"
 
 dir     = File.dirname(__FILE__)
@@ -19,9 +18,10 @@ Rake::TestTask.new(:unit) do |test|
   test.verbose    =  true
 end
 
-desc "Runs all rspec test"
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_files = FileList['test/spec/test_all.rb']
+require "rspec/core/rake_task"
+desc "Run RSpec code examples"
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = 'test/spec/test_all.rb'
 end
 
 desc "Runs all tests (unit and rspec)"
