@@ -1,0 +1,79 @@
+# Version 0.9.3
+
+## Development-based changesets
+
+* Moved to rspec 2.4.0
+* Moved from rdoc to yard for generating the documentation
+* README, CHANGELOG and LICENCE are now in Mardown instead of rdoc
+
+# Version 0.9.2
+
+## New features (by order of importance)
+
+* Implements main transformer on dialects
+* Makes coderay encoders available without options using a bit of meta programming
+* System-local absolute paths (i.e. starting with '/') are recognized by buffer rulesets
+
+# Version 0.9.1
+
+## Bug fixes
+
+* #307, about HashScope.has_key? which returned nil instead of false in some situations
+
+## Broken features and APIs (by order of importance)
+
+* HostedLanguage::DSL is strictly private and should be reopened. Methods added to this class
+  will never be available in templates. Use HostedLanguage.variable_missing instead. 
+* ::WLang::BasicObject has been removed. HostedLanguage::DSL implements its own strategy, which
+  is spec tested in test/spec/basic_object.spec
+
+## New features (by order of importance)
+
+* WLang does not requires the rdoc gem by default
+* A new encoder redcloth/xhtml allows using Textile markups easily
+* The wlang/xhtml dialect provides a tag helper for links @{...}{...}
+* The parser class returns friendly messages when a rule is ill-implemented
+
+# Version 0.9.0
+
+## Broken features and APIs (by order of importance)
+
+* Major broken API in WLang.instantiate and WLang.file_instantiate which do not allow passing
+  buffers anymore
+* Hash are not methodized by default anymore (major broken feature with 0.8.x versions)
+* Expressions 'a la' PHP w@w (sections/.../.../id) are not supported anymore
+* The default hosted language raises a WLang::UndefinedVariableError when a variable cannot be
+  found in the current template scope (0.8.x versions returned nil in this case)
+* Template.initialize does not take a default context anymore
+* WLang::Parser.context_xxx do not exist anymore. Use branch(...) instead
+* WLang::Parser::Context removed, and WLang::HashScope introduced
+* WLang::Parser instance variables are all made protected
+
+## New features (by order of importance)
+
+* WLang::HostingLanguage introduced, with a default one for Ruby. The hosting language
+  is the way to provide a main scope, accessible to all templates at once.
+* WLang::HostingLanguage is not sensitive to the difference between symbol keys and strings
+* Buffering and Context rulesets now branch the current parser instead of creating a new one
+* WLang::Error and subclasses propose a backtrace information
+* WLang::Parser refactored to encapsulate the whole state in another class (WLang::Parser::State)
+* WLang facade has been made much more robust as it now checks all its arguments.
+* WLang::dialect may now be used to ensure dialect instances from both Dialect args and qualified names.
+* Introduction of WLang.template and WLang.file_template
+* plain-text dialect proposes new camel-based encoders
+* wlang/active-string dialect has the imperative rule set included
+* sql dialect has been added
+* ruby dialect proposes a method-case encoder
+
+# Version 0.8.5
+
+* Enhances error messages a lot
+* Some bug fixes for ruby 0.8.7
+
+# Version 0.8.4
+
+* Migration from svn.chefbe.net to github.com
+
+# Version 0.8.0
+
+* First public version
