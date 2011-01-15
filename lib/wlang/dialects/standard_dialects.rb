@@ -27,6 +27,13 @@ WLang::dialect("ruby", ".rb", ".ruby") do
   end
 end
 
+# yaml dialect
+WLang::dialect("yaml", ".yaml", ".yml") do
+  ruby_require "wlang/dialects/yaml_dialect" do
+    encoders WLang::EncoderSet::YAML
+  end
+end
+
 # sql dialect
 WLang::dialect("sql", ".sql") do
   ruby_require "wlang/dialects/sql_dialect" do
