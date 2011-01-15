@@ -6,7 +6,9 @@ It's main aim is to help you creating web pages, sql queries, ruby code (that is
 general) without having to worry too much about html entities encoding, sql back quoting, string
 escaping and the like. WLang proposes a generic engine that you can extend to fit your needs. It also 
 proposes standard instantiations of this engine for common tasks such as creating SQL queries, 
-instantiating web pages, etc.    
+instantiating web pages, etc.
+
+Basic concepts and usage is illustrated below. Also have a look at the [detailed specification](http://blambeau.github.com/wlang).
 
 ## A collection of typical encoders
 
