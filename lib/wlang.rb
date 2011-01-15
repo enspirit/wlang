@@ -58,7 +58,7 @@ module WLang
 
   # Checks that _name_ is a valid qualified dialect name or raises an ArgumentError
   def self.check_qualified_dialect_name(name)
-    raise ArgumentError, "Invalid dialect qualified name #{name} (/^[-a-z]+([\/][-a-z]+)*$/ expected)", caller\
+    raise ArgumentError, "Invalid dialect qualified name '#{name}' (/^[-a-z]+([\/][-a-z]+)*$/ expected)", caller\
       unless QUALIFIED_DIALECT_NAME_REGEXP =~ name
   end
 
