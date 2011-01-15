@@ -15,7 +15,8 @@ Rake::TestTask.new(:unit) do |test|
   test.libs       = [ "lib" ]
   test.test_files = ['test/unit/test_all.rb', 
                      'test/blackbox/test_all.rb',
-                     'test/standard_dialects/test_all.rb']
+                     'test/standard_dialects/test_all.rb',
+                     'test/standard_dialects/**/*_test.rb']
   test.verbose    =  true
 end
 

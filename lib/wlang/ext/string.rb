@@ -34,6 +34,11 @@ class String
   def __wlang_line_of(index)
     self[0...index].count("\n") + 1
   end
-
+  
+  def __wlang_realign(offset, strip_first = false)
+    s = gsub(/^/, ' ' * offset)
+    strip_first ? s.gsub(/\A\s*/, "") : s
+  end
+  
 end
-
+       

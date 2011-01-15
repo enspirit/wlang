@@ -315,7 +315,7 @@ module WLang
     end
     
     # Protected methods are...
-    protected :hosted, :offset, :source_text, :buffer, :dialect
+    protected :hosted, :offset, :source_text, :dialect
     
   end # class Parser
 end # module WLang

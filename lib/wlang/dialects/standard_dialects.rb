@@ -117,6 +117,19 @@ WLang::dialect("wlang") do
   end
   
   # wlang/ruby dialect
+  dialect("yaml", ".wyaml", ".wyml") do
+    ruby_require "wlang/dialects/yaml_dialect" do
+      encoders WLang::EncoderSet::YAML
+      rules WLang::RuleSet::Basic
+      rules WLang::RuleSet::Encoding
+      rules WLang::RuleSet::Imperative
+      rules WLang::RuleSet::Buffering
+      rules WLang::RuleSet::Context
+      rules WLang::RuleSet::YAML
+    end
+  end
+  
+  # wlang/ruby dialect
   dialect("xhtml", ".wtpl", ".whtml") do
     ruby_require "cgi", "wlang/dialects/xhtml_dialect" do
       encoders WLang::EncoderSet::XHtml

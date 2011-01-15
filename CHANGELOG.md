@@ -6,6 +6,7 @@
 * Introduced a semantics +{...} in wlang/ruby that prints literals.
 * wlang/ruby now includes the Buffering ruleset
 * Introduced a wlang/active-text dialect which includes Basic, Imperative, Buffering and Context rulesets.
+* Introduced a wlang/yaml dialect with special inclusion +{...} operator 
 
 ## Broken features and APIs
 
