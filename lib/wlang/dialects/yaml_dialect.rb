@@ -20,7 +20,7 @@ module WLang
           value = parser.evaluate(expression)
           col = parser.buffer.__wlang_column_of(parser.buffer.length)
           result = value.to_yaml.
-                         gsub(/^\s*---\s*/,"").
+                         gsub(/^\s*---\s*|\n$/,"").
                          __wlang_realign(col-1, true)
           [result, reached]
         end
