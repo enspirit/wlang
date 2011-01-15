@@ -101,44 +101,38 @@ function show(who) {
 		
 		  <p>
 WLang is a a reusable and extensible <em>code generator</em>, also known as
-a  <em>templating engine</em>. Motivation for it can be found at <a
+a <em>templating engine</em>. Motivation for it can be found at <a
 href="http://www.revision-zero.org/wlang">www.revision-zero.org/wlang</a>.
 The current file is the reference of the tool.
 </p>
 <h3>Topics</h3>
 <dl>
-<dt>Short overview</dt><dd><p>
-Probably the first section to read! Basic usage of <em>wlang</em> is
+<dt>Short overview</dt><dd>Probably the first section to read! Basic usage of <em>wlang</em> is
 explained here and pointers are given to continue your learning.
-</p>
+
 </dd>
-<dt>Rulesets</dt><dd><p>
-Standard rulesets are specified. As most of them are included in standard
-dialects,  looking at standard rulesets is the quickest way to learn all of
+<dt>Rulesets</dt><dd>Standard rulesets are specified. As most of them are included in standard
+dialects, looking at standard rulesets is the quickest way to learn all of
 them at once.
-</p>
+
 </dd>
-<dt>Dialects</dt><dd><p>
-Standard dialects are described. This page also provides useful cheatsheets
-of  available tags in standard dialects.
-</p>
+<dt>Dialects</dt><dd>Standard dialects are described. This page also provides useful cheatsheets
+of available tags in standard dialects.
+
 </dd>
-<dt>Hosting language</dt><dd><p>
-Somewhat more tricky but powerful. The notion of hosting language is
+<dt>Hosting language</dt><dd>Somewhat more tricky but powerful. The notion of hosting language is
 explained more deeply. Implementing you own hosting language abstraction
 (advanced topic) sometimes leads to cleaner and cross-implementation
 templates.
-</p>
+
 </dd>
-<dt>Glossary</dt><dd><p>
-<em>wlang</em> comes with a terminology, knowing it will make your reading
+<dt>Glossary</dt><dd><em>wlang</em> comes with a terminology, knowing it will make your reading
 easier.
-</p>
+
 </dd>
-<dt>Symbols</dt><dd><p>
-If you plan to create your own tags, it can be useful to know what is
+<dt>Symbols</dt><dd>If you plan to create your own tags, it can be useful to know what is
 allowed and what is not. This pages covers this topic.
-</p>
+
 </dd>
 </dl>
 <h3>About this document</h3>
@@ -156,9 +150,9 @@ following command:
 The file &#8216;specification.wtpl&#8217; is almost empty and other files
 next to it are all kept simple and written in the most appropriate format
 for the task at hand (YAML for structured parts, RDoc for text sections,
-sometimes YAML embedding short sentences writted in RDoc style, etc.).  One
+sometimes YAML embedding short sentences writted in RDoc style, etc.). One
 way to learn <em>wlang</em> quickly is to download the source distribution
-and to look how this is made possible ;-) 
+and to look how this is made possible ;-)
 </p>
 <p>
 This reference document is under a <a
@@ -173,32 +167,30 @@ Enjoy <em>wlang</em> !
 </p>
 <h3>Distribution</h3>
 <ul>
-<li><p>
-The reference implementation of <em>wlang</em>, implemented in Ruby, is
+<li>The reference implementation of <em>wlang</em>, implemented in Ruby, is
 freely available as a &#8216;wlang&#8217; gem (under MIT licence). <br/>
-Use <tt>'gem install wlang'</tt> to install it. For repository and  bug
-tracker visit us on <a href="http://github.com/blambeau/wlang">github</a> 
-</p>
+Use <tt>'gem install wlang'</tt> to install it. For repository and bug
+tracker visit us on <a href="http://github.com/blambeau/wlang">github</a>
+
 </li>
-<li><p>
-We don&#8217;t have another implementation up to now. If you plan to start
+<li>We don&#8217;t have another implementation up to now. If you plan to start
 one in another language, let us know!
-</p>
+
 </li>
 </ul>
 <h3>Authors</h3>
 <p>
 <em>wlang</em> has been initially designed by Bernard and Louis Lambeau
-during the implementation of w@w, yet another  web framework (proof of
+during the implementation of w@w, yet another web framework (proof of
 concept). They are also maintainers of the reference implementation.
 </p>
 <h3>Credits</h3>
 <p>
 This work is supported by the <a
 href="http://www.uclouvain.be/en-ingi.html">department of computer
-science</a> of the  <a
+science</a> of the <a
 href="http://www.uclouvain.be/en-index.html">University of Louvain</a>
-(EPL/INGI, Universite Catholique de Louvain,  UCL, Louvain-la-Neuve,
+(EPL/INGI, Universite Catholique de Louvain, UCL, Louvain-la-Neuve,
 Belgium).
 </p>
 <p>
@@ -220,15 +212,15 @@ Wallonia (ReQuest project, RW Conv. 315592 and GISELE project, RW Conv.
 		  <h3>What is <em>wlang</em> designed for?</h3>
 <p>
 <em>wlang</em> helps you <b>generating code</b>, in a broad sense. It was
-originally the templating engine of  w@w, a proof-of-concept web framework.
-While more powerful than the original version, the <b>templating 
-engine</b> ability of <em>wlang</em> has been kept unchanged. For this
-reason, generating html code with <em>wlang</em> is probably a bit more
-mature than generating ruby, java or sql code, to take some examples of
-what <em>wlang</em> can do. It is the author opinion that <em>wlang</em>
-will also become mature quiclky for these tasks because of its foundations:
+originally the templating engine of w@w, a proof-of-concept web framework.
+While more powerful than the original version, the <b>templating engine</b>
+ability of <em>wlang</em> has been kept unchanged. For this reason,
+generating html code with <em>wlang</em> is probably a bit more mature than
+generating ruby, java or sql code, to take some examples of what
+<em>wlang</em> can do. It is the author opinion that <em>wlang</em> will
+also become mature quiclky for these tasks because of its foundations:
 <b>its engine is generic</b> (in a sense, <em>wlang</em> does not really
-care about  what it generates) but is <b>fully and easily configurable</b>.
+care about what it generates) but is <b>fully and easily configurable</b>.
 Generation of html files is mature because <em>wlang</em> has been used a
 lot for such a job; thus its authors have acquired experience of what is
 useful when generating simple as well as complex html files. This
@@ -240,31 +232,31 @@ contains information for you!)
 </p>
 <p>
 Consider this file for example, which is completely self-contained. It
-consists of several parts, some  of them being structured - the tables for
-example - while others are not. It also embeds a complete CSS  stylesheet
+consists of several parts, some of them being structured - the tables for
+example - while others are not. It also embeds a complete CSS stylesheet
 and some javascript functions. We have not written this file manually, nor
-do we maintain it  this way. In fact, this reference document is entirely
-generated by <em>wlang</em>  itself from separated parts  written mainly in
+do we maintain it this way. In fact, this reference document is entirely
+generated by <em>wlang</em> itself from separated parts written mainly in
 yaml and rdoc files. Also, the cheatsheets given later contains a lot of
-examples. To  ensure that all of them are correct, we simply ask
-<em>wlang</em> to compute them during generation (technically,  we say that
+examples. To ensure that all of them are correct, we simply ask
+<em>wlang</em> to compute them during generation (technically, we say that
 <b><em>wlang</em> naturally allows metaprogramming</b>). Lastly, if
-<em>wlang</em> can be used inside a web  framework, it can also be used as
-a standalone (commandline) tool for generating single files like this  one
-or multiple files, even if all of them are of different nature.
+<em>wlang</em> can be used inside a web framework, it can also be used as a
+standalone (commandline) tool for generating single files like this one or
+multiple files, even if all of them are of different nature.
 </p>
 <p>
 <b>Maybe you are looking for a code generator for another language than
-html</b> (which one does not really care,  unless really specific; we call
+html</b> (which one does not really care, unless really specific; we call
 it the <em>target language</em>)? Don&#8217;t be affraid by our previous
 words about <em>wlang</em>&#8217;s maturity: even in such a case,
-<em>wlang</em> is your friend.  Start with an existing dialect (see later
-about dialects), which will provide basic utilities for starting and try 
-to identify common patterns when you use them. Then simply create special
-shortcuts that are more friendly to  use than combining several existing
+<em>wlang</em> is your friend. Start with an existing dialect (see later
+about dialects), which will provide basic utilities for starting and try to
+identify common patterns when you use them. Then simply create special
+shortcuts that are more friendly to use than combining several existing
 utils &#8230; you are on the way of creating your own mature and reusable
-dialect  for that target language. In this case, don&#8217;t forget to
-share it &#8230;
+dialect for that target language. In this case, don&#8217;t forget to share
+it &#8230;
 </p>
 <h3>Template and instantiation</h3>
 <p>
@@ -287,7 +279,7 @@ value</em>. Consider the following example:
 </pre>
 <p>
 Assume that we have some instantitation data through the following hash (or
-something similar, like a YAML file): 
+something similar, like a YAML file):
 </p>
 <pre>
   {&quot;title&quot; =&gt; &quot;Short overview of wlang&quot;, &quot;authors&quot; =&gt; [&quot;blambeau&quot;, &quot;llambeau&quot;, &quot;ancailliau&quot;]}
@@ -297,7 +289,7 @@ When instantiated this template will produce exactly the same html file
 except for special tags <tt>${title}</tt> and <tt>*{whos as who}{${who}}{,
 }</tt> that will be replaced by <tt>'Short overview of wlang'</tt> and
 <tt>'blambeau, llambeau, ancailliau'</tt>, respectively. A lot of tags is
-available, each of them being  designed for a specific task: inserting the
+available, each of them being designed for a specific task: inserting the
 value of a variable, iterating over collections, including another file,
 dynamically loading instantiation data, etc. All of these things are
 commonly proposed by templating engines and <em>wlang</em> is one of them
@@ -305,22 +297,22 @@ commonly proposed by templating engines and <em>wlang</em> is one of them
 </p>
 <p>
 Indeed (and maybe surprisingly) <em>wlang</em> can also behave really
-differently on the same template:  replacing <tt>${title}</tt> but not
-<tt>*{...}</tt> or the converse, or not replacing anything, or replacing 
+differently on the same template: replacing <tt>${title}</tt> but not
+<tt>*{...}</tt> or the converse, or not replacing anything, or replacing
 both tags but not <tt>${who}</tt>, etc. All of this is possible in
-<em>wlang</em>. The magic relies under the notion  of <em>dialect</em>,
+<em>wlang</em>. The magic relies under the notion of <em>dialect</em>,
 which you need to understand.
 </p>
 <h3>Dialects and Rulesets</h3>
 <p>
 The notion of dialect drives the recognition of tags as well as their
-replacement during instantiation.  Dialects are what makes <em>wlang</em>
+replacement during instantiation. Dialects are what makes <em>wlang</em>
 really powerful: if instantiated as being written in the
-<tt>wlang/xhtml</tt>  dialect, the template above will give the result
-mentionned previously. In contrast, if written in  <tt>wlang/dummy</tt> the
+<tt>wlang/xhtml</tt> dialect, the template above will give the result
+mentionned previously. In contrast, if written in <tt>wlang/dummy</tt> the
 template will be reproduced whitout any change (no tag replacement at all).
 This behavior is not hardcoded; it results from the definition of wlang
-(standard) dialects: <tt>wlang/xhtml</tt>  define special meanings for
+(standard) dialects: <tt>wlang/xhtml</tt> define special meanings for
 <tt>${...}</tt> and <tt>*{...}{...}{...}</tt> while <tt>wlang/dummy</tt>
 does not.
 </p>
@@ -328,33 +320,30 @@ does not.
 The replacement of a given <em>tag</em> during instantiation is computed by
 what we call the <em>rule</em> attached to the tag (keeping rules and tags
 as different concepts leads to another feature of <em>wlang</em>: you can
-reuse rule  implementations and attach them to other tags than those
+reuse rule implementations and attach them to other tags than those
 proposed). A dialect comes with a set of (tag, rule) pairs that determine
 its replacement behavior. Such a set is called a <em>ruleset</em>; for
-easier reuse, standard  rulesets are already implemented. A dialect is a
-packaging of standard rulesets (and maybe implements specific  tag/rule
+easier reuse, standard rulesets are already implemented. A dialect is a
+packaging of standard rulesets (and maybe implements specific tag/rule
 pairs) designed for generating code in a given target language.
 </p>
-<pre>
- 
-</pre>
 <p>
 A complete <em>wlang</em> implementation already provides standard dialects
-for common tasks: creating html pages,  building SQL queries, generating
-code in Ruby or in another language, etc. Each dialect comes with special 
+for common tasks: creating html pages, building SQL queries, generating
+code in Ruby or in another language, etc. Each dialect comes with special
 tags that are useful for the task at hand (a tag for back-quoting values is
-useful for creating SQL queries but does not really makes sense  for
+useful for creating SQL queries but does not really makes sense for
 generating an html page where, in contrast, a tag for encoding entities is
-probably welcome). Such an  implementation also allows you to extend
-standard dialects and to create your own dialect by implementing  specific
+probably welcome). Such an implementation also allows you to extend
+standard dialects and to create your own dialect by implementing specific
 tags and rules or by reusing existing ones. Lastlty, the dialect in used
-during instantiation can be changed  dynamically  (<em>explicitly</em>, by
+during instantiation can be changed dynamically (<em>explicitly</em>, by
 using the <tt>%{dialect/qualified/name}{...}</tt> standard tag and
 <em>implicitly</em>, when rules parse their blocks).
 </p>
 <p>
 To learn more about standard dialects and reusable rules, read the
-&#8216;Dialects&#8217; and &#8216;Rulesets&#8217; pages of this 
+&#8216;Dialects&#8217; and &#8216;Rulesets&#8217; pages of this
 documentation.
 </p>
 <h3>Grammar</h3>
@@ -365,41 +354,36 @@ instantiation. It is simple, but comes with some constraints that are
 explained below:
 </p>
 <ul>
-<li><p>
-block delimiters are &#8217;{&#8217; and &#8217;}&#8217; by default;
+<li>block delimiters are &#8217;{&#8217; and &#8217;}&#8217; by default;
 <em>wlang</em> can be configured to use &#8217;(&#8217; and &#8217;)&#8217;
-or &#8217;[&#8217; and &#8217;]&#8217; instead.  However, block
+or &#8217;[&#8217; and &#8217;]&#8217; instead. However, block
 <b>delimiters are template-specific</b>: only one kind of delimiters can be
 used inside the same template.
-</p>
+
 </li>
-<li><p>
-block delimiters <b>must always be paired</b>, even when not used for
-delimiting blocks. If an opening or closing delimiter  is not paired, it
+<li>block delimiters <b>must always be paired</b>, even when not used for
+delimiting blocks. If an opening or closing delimiter is not paired, it
 must be escaped with a backslash, which will not be reproduced. If you want
 a backslash to appear before a block delimiter in the instantiation result,
 use a double backslash.
-</p>
+
 </li>
-<li><p>
-if a given tag has a special meaning in the current dialect and you
+<li>if a given tag has a special meaning in the current dialect and you
 don&#8217;t want it to be replaced by <em>wlang</em> you can escape it with
 a backslash as well (the backslash will not be reproduced).
-</p>
+
 </li>
-<li><p>
-some tags (precisely: some rules associated with tags) require multiple
-blocks (like <tt>*{...}{...}{...}</tt> in  <tt>wlang/xhtml</tt> for
-example, with the third block bein optional). In such a case no character
-is allowed between  the end of a block &#8217;}&#8217; and the start of the
-next one &#8217;{&#8217;, not even spaces or a carriage return. In other
-words, multiple blocks (that must be interpreted as such) must touch each
-others using &#8217;}{&#8217; precisely,  as ilustrated below. If a
-non-optional block is missing a parse error is raised by the <em>wlang</em>
+<li>some tags (precisely: some rules associated with tags) require multiple
+blocks (like <tt>*{...}{...}{...}</tt> in <tt>wlang/xhtml</tt> for example,
+with the third block bein optional). In such a case no character is allowed
+between the end of a block &#8217;}&#8217; and the start of the next one
+&#8217;{&#8217;, not even spaces or a carriage return. In other words,
+multiple blocks (that must be interpreted as such) must touch each others
+using &#8217;}{&#8217; precisely, as ilustrated below. If a non-optional
+block is missing a parse error is raised by the <em>wlang</em>
 implementation.
-</p>
+
 <pre>
-    
   *{authors as who}{${who}}{, }    -&gt;    blambeau, llambeau, ancailliau
   *{authors as who}{${who}} {, }   -&gt;    blambeaullambeauancailliau {, }
   *{authors as who} {${who}}{, }   -&gt;    parse error 1:18, missing block 2 in *{...}{...}
@@ -410,10 +394,10 @@ implementation.
 In addition to these constraints, dialects and the hosting language may
 impose restrictions on what can be put inside specific blocks of tags/rules
 (for example, &#8216;authors as who&#8217; is valid as first tag of
-<tt>*{...}{...}</tt> but not every string is, of course).  These
-constraints are not specific to the wlang grammar <em>per se</em> and are
-explained in the &#8216;Rulesets&#8217;, &#8216;Dialects&#8217; and
-&#8216;Hosting  language&#8217; pages of this document. 
+<tt>*{...}{...}</tt> but not every string is, of course). These constraints
+are not specific to the wlang grammar <em>per se</em> and are explained in
+the &#8216;Rulesets&#8217;, &#8216;Dialects&#8217; and &#8216;Hosting
+language&#8217; pages of this document.
 </p>
 
 		
@@ -438,46 +422,45 @@ them are also included by standard dialects.
 <h3>How to read this cheatsheet?</h3>
 <p>
 First of all, focus on the examples; they are written to let you learn
-<em>wlang</em> quickly and  deeply. Some of them are a bit difficult to
+<em>wlang</em> quickly and deeply. Some of them are a bit difficult to
 understand but they are representative of <em>wlang</em> powerfulness
 (don&#8217;t be affraid: in practice, some constructions are never used).
 Don&#8217;t forget that the <tt>wlang/dummy</tt> dialect does not recognize
-any tag. We also assume instantiation  data to be the following hash:
+any tag. We also assume instantiation data to be the following hash:
 </p>
 <pre>
-  {&quot;name&quot;     =&gt;  &quot;O'Neil&quot;, 
+  {&quot;name&quot;     =&gt;  &quot;O'Neil&quot;,
    &quot;author&quot;   =&gt;  &quot;blambeau&quot;
    &quot;authors&quot;  =&gt;  [&quot;blambeau&quot;, &quot;llambeau&quot;, &quot;ancailliau&quot;]}
 </pre>
 <p>
 Moreover, the dialect column in the examples is important; <em>wlang</em>
-behaves differently  in different dialects. When the dialect does not care,
+behaves differently in different dialects. When the dialect does not care,
 we use <tt>wlang/*</tt> which means &#8216;in any dialect that includes
 this ruleset&#8217;.
 </p>
 <p>
 Next, certain rule definitions are given as shortcuts for longer
 expressions, involving other tags. This is somewhat representative of
-<em>wlang</em> usage, even if these rules are not actually implemented 
-this way (mainly for efficiency concerns). Once again, understanding
-shortcuts will help you  mastering wlang! In definitions (textual as well
-as shortcuts), we use #1, #2, and #3 to refer to  the content of the
-blocks. Those identifiers are not real <em>wlang</em> constructs, but are
-only used here for  easier explanations (for those who know this kind of
-vocabulary: they are part of the meta-language, not the language <em>per
-se</em>).
+<em>wlang</em> usage, even if these rules are not actually implemented this
+way (mainly for efficiency concerns). Once again, understanding shortcuts
+will help you mastering wlang! In definitions (textual as well as
+shortcuts), we use #1, #2, and #3 to refer to the content of the blocks.
+Those identifiers are not real <em>wlang</em> constructs, but are only used
+here for easier explanations (for those who know this kind of vocabulary:
+they are part of the meta-language, not the language <em>per se</em>).
 </p>
 <p>
 Lastly, dialect names that appear in rule signatures are to be interpreted
-as an implicit dialect  modulation: the corresponding block (often the
-first one) is not instantiated in the current dialect  but in the one
-specified by the signature. In contrast, when we use &#8217;&#8230;&#8217;
-it means that the  corresponding block is simply instantiated in the
-current dialect. Implicit dialect modulation is in fact natural: if a block
-expects an uri for example, the easiest way is to give it exactly:
+as an implicit dialect modulation: the corresponding block (often the first
+one) is not instantiated in the current dialect but in the one specified by
+the signature. In contrast, when we use &#8217;&#8230;&#8217; it means that
+the corresponding block is simply instantiated in the current dialect.
+Implicit dialect modulation is in fact natural: if a block expects an uri
+for example, the easiest way is to give it exactly:
 <tt>&lt;&lt;{a/file/to/include.txt}</tt>. But you can even compute it using
 <em>wlang</em>, as illustrated by the example below. In complex situations
-you will probably be happy to use a dialect that helps you  doing so (think
+you will probably be happy to use a dialect that helps you doing so (think
 at all blocks that expect an expression in the hosting language, for
 example)!
 </p>
@@ -491,9 +474,9 @@ example)!
   <h3 id="Basic">Basic</h3>
   <p>
 The Basic ruleset is commonly installed on any dialect and provides access
-to <em>wlang</em>  foundations inside your template: requesting the hosting
+to <em>wlang</em> foundations inside your template: requesting the hosting
 language to execute some expression, changing the current dialect and
-encoding text. 
+encoding text.
 </p>
 
   <table class="ruleset">
@@ -507,7 +490,7 @@ encoding text.
         <td class="signature"><tt>!{wlang/hosted}</tt></td>
         <td class="name">execution</td>
         <td class="definition">Instantiates #1, looking for an expression of the hosting language.
-Evaluates it,  looking for any object. Converts it to a string (using to_s
+Evaluates it, looking for any object. Converts it to a string (using to_s
 for example if Ruby is the hosting language) and returns the result as
 replacement value.</td>
       </tr>
@@ -515,15 +498,15 @@ replacement value.</td>
       <tr>
         <td class="signature"><tt>%{wlang/active-string}{...}</tt></td>
         <td class="name">modulation</td>
-        <td class="definition">Instantiates #1, looking for a dialect qualified name. Instantiates #2 
-according to the rules defined by that dialect and returns the #2&#8217;s 
+        <td class="definition">Instantiates #1, looking for a dialect qualified name. Instantiates #2
+according to the rules defined by that dialect and returns the #2&#8217;s
 instantiation as replacement value.</td>
       </tr>
     
       <tr>
         <td class="signature"><tt>^{wlang/active-string}{...}</tt></td>
         <td class="name">encoding</td>
-        <td class="definition">Instantiates #1, looking for an encoder qualified name. Instantiates #2 in 
+        <td class="definition">Instantiates #1, looking for an encoder qualified name. Instantiates #2 in
 the current dialect. Encode #2&#8217;s instantiation using encoder found in
 (#1) and returns encoding as replacement value.</td>
       </tr>
@@ -531,11 +514,11 @@ the current dialect. Encode #2&#8217;s instantiation using encoder found in
       <tr>
         <td class="signature"><tt>%!{wlang/active-string &lt;using&gt;? &lt;with&gt;?}{...}</tt></td>
         <td class="name">recursive-application</td>
-        <td class="definition">Instantiates #1, looking for a dialect qualified name. Instantiates #2  in
+        <td class="definition">Instantiates #1, looking for a dialect qualified name. Instantiates #2 in
 the current dialect. Instantiates #2&#8217;s instantiation in the dialect
 found in #1, using context installed by &#8216;using &#8230;&#8217; and
-&#8216;with &#8230;&#8217;. Returns this  instantiation as replacement
-value (this really advanced rule allows  metaprogramming).</td>
+&#8216;with &#8230;&#8217;. Returns this instantiation as replacement value
+(this really advanced rule allows metaprogramming).</td>
       </tr>
     
       <tr>
@@ -654,10 +637,10 @@ value (this really advanced rule allows  metaprogramming).</td>
   <p>
 Almost all languages require escaping/encoding in specific situations:
 quoted string literals always come with an escaping mechanism
-(unfortunately different from one language to another),  html requires
+(unfortunately different from one language to another), html requires
 entities-encoding, etc. The Encoding ruleset proposes shortcut tags for
-encoding.  Note that these shortcuts are written in such a way that they
-don&#8217;t depend on the effective  dialect. <em>wlang</em> hides language
+encoding. Note that these shortcuts are written in such a way that they
+don&#8217;t depend on the effective dialect. <em>wlang</em> hides language
 and vendors differences!
 </p>
 
@@ -842,7 +825,7 @@ result)</td>
   <h3 id="Imperative">Imperative</h3>
   <p>
 Instantiating conditionally and iterating collection elements are common
-code generation tasks.  The Imperative dialect provides these features.
+code generation tasks. The Imperative dialect provides these features.
 </p>
 
   <table class="ruleset">
@@ -855,9 +838,9 @@ code generation tasks.  The Imperative dialect provides these features.
       <tr>
         <td class="signature"><tt>?{wlang/hosted}{...}{...}</tt></td>
         <td class="name">conditional<br/>(third block is optional)</td>
-        <td class="definition">Instantiates #1, looking for an expression in the hosting language. 
-Evaluates it, looking for a boolean value (according to boolean semantics 
-of the hosting language). If true, instantiates #2, otherwise instantiates 
+        <td class="definition">Instantiates #1, looking for an expression in the hosting language.
+Evaluates it, looking for a boolean value (according to boolean semantics
+of the hosting language). If true, instantiates #2, otherwise instantiates
 #3 if present, returning instantiation as replacement value.</td>
       </tr>
     
@@ -865,9 +848,9 @@ of the hosting language). If true, instantiates #2, otherwise instantiates
         <td class="signature"><tt>*{wlang/hosted &lt;as x&gt;?}{...}{...}</tt></td>
         <td class="name">enumeration<br/>(third block is optional)</td>
         <td class="definition">Instantiates #1, looking for an expression in the hosting language.
-Evaluates  it, looking for an enumerable. Iterates all its elements,
-instantiating #2 for  each of them (the iterated value is set under name x
-in the scope). If #3 is  present, it is instantiated between elements.
+Evaluates it, looking for an enumerable. Iterates all its elements,
+instantiating #2 for each of them (the iterated value is set under name x
+in the scope). If #3 is present, it is instantiated between elements.
 Replacement is the concatenation of all these instantiations.</td>
       </tr>
     
@@ -947,7 +930,7 @@ Replacement is the concatenation of all these instantiations.</td>
   <p>
 Complex templates come with specific needs. The ability to manipulate the
 context and the current scope is provided by the Context ruleset. All are
-variants of &#8216;saving previous instantiations&#8217; in  scope
+variants of &#8216;saving previous instantiations&#8217; in scope
 variables&#8230;
 </p>
 
@@ -962,10 +945,10 @@ variables&#8230;
         <td class="signature"><tt>={wlang/hosted &lt;as x&gt;}{...}</tt></td>
         <td class="name">assignment<br/>(second block is optional)</td>
         <td class="definition">Instantiates #1, looking for an expression in the hosting language.
-Evaluates  it, looking for any object. Without second block, expands the
-current scope with  &#8216;x&#8217; being bound to evaluation result.
+Evaluates it, looking for any object. Without second block, expands the
+current scope with &#8216;x&#8217; being bound to evaluation result.
 Otherwise, branches the current scope for the second block instantiation
-only and bind &#8216;x&#8217; the same way (i.e. x will not be  available
+only and bind &#8216;x&#8217; the same way (i.e. x will not be available
 outside the second block). Returns an empty string as replacement value.</td>
       </tr>
     
@@ -973,12 +956,12 @@ outside the second block). Returns an empty string as replacement value.</td>
         <td class="signature"><tt>%={wlang/active-string &lt;as x&gt;}{...}{...}</tt></td>
         <td class="name">modulo-assignment<br/>(third block is optional)</td>
         <td class="definition">Instantiates #1, looking for a dialect qualified name. Instantiates #2
-according  to the rules defined by that dialect. Without third block,
-expands the current  scope with &#8216;x&#8217; being bound to #2&#8217;s
-instantiation. Otherwise, branches the current  scope for the third block
-instantiation only and binds &#8216;x&#8217; the same way (i.e. x will  not
+according to the rules defined by that dialect. Without third block,
+expands the current scope with &#8216;x&#8217; being bound to #2&#8217;s
+instantiation. Otherwise, branches the current scope for the third block
+instantiation only and binds &#8216;x&#8217; the same way (i.e. x will not
 be available outside the third block). Returns an empty string as
-replacement  value.</td>
+replacement value.</td>
       </tr>
     
       <tr>
@@ -1138,8 +1121,8 @@ replacement  value.</td>
   <h3 id="Buffering">Buffering</h3>
   <p>
 The Buffering ruleset is probably one of the more useful. It allows you to
-load text and data files,  to change the current output buffer (for
-generating multiple files for example) and even to start  the instantiation
+load text and data files, to change the current output buffer (for
+generating multiple files for example) and even to start the instantiation
 on other templates.
 </p>
 
@@ -1153,7 +1136,7 @@ on other templates.
       <tr>
         <td class="signature"><tt>&lt;&lt;{wlang/uri}</tt></td>
         <td class="name">input</td>
-        <td class="definition">Instantiates #1, looking for an uri. Returns the text content of the found 
+        <td class="definition">Instantiates #1, looking for an uri. Returns the text content of the found
 uri (#1) as replacement value.</td>
       </tr>
     
@@ -1170,10 +1153,10 @@ string as replacement value.</td>
         <td class="name">data-assignment</td>
         <td class="definition">Instantiates #1, looking for an uri. Loads data provided by this uri, based
 on the file extension (typically .yml or .rb). Without second block,
-expands the current scope  with &#8216;x&#8217; being bound to the data.
-Otherwise, branches the current scope for the second  block instantiation
+expands the current scope with &#8216;x&#8217; being bound to the data.
+Otherwise, branches the current scope for the second block instantiation
 only and binds &#8216;x&#8217; the same way (i.e. x will not be available
-outside  the second block). Returns an empty string as replacement value.</td>
+outside the second block). Returns an empty string as replacement value.</td>
       </tr>
     
       <tr>
@@ -1203,9 +1186,9 @@ instantiation as replacement value.</td>
 		  
   <div class="dialect">
   <div style="margin-bottom: 20px">
-    <h3 style="display: inline">wlang/active-text</h3>
+    <h3 style="display: inline">wlang/hosted</h3>
     
-      <p style="display: inline">Includes Basic, Imperative, Buffering, Context</p>
+      <p style="display: inline">Includes Basic, Encoding, Imperative, Context, Hosted</p>
     
   </div>
   
@@ -1218,6 +1201,18 @@ instantiation as replacement value.</td>
     <h3 style="display: inline">wlang/uri</h3>
     
       <p style="display: inline">Includes Basic</p>
+    
+  </div>
+  
+  
+</div>
+
+
+  <div class="dialect">
+  <div style="margin-bottom: 20px">
+    <h3 style="display: inline">wlang/active-text</h3>
+    
+      <p style="display: inline">Includes Basic, Imperative, Buffering, Context</p>
     
   </div>
   
@@ -1309,18 +1304,6 @@ instantiation as replacement value.</td>
 </div>
 
 
-  <div class="dialect">
-  <div style="margin-bottom: 20px">
-    <h3 style="display: inline">wlang/hosted</h3>
-    
-      <p style="display: inline">Includes Basic, Encoding, Imperative, Context, Hosted</p>
-    
-  </div>
-  
-  
-</div>
-
-
 		
       </div>
     
@@ -1361,19 +1344,19 @@ dialect</em>.</td>
     <td>Basically, <em>dialect</em> is used as a synonym for (programming)
 <em>language</em>. However <em>wlang</em> uses a tree of dialects, allowing
 specializations: <tt>sql/sybase</tt> for example is the qualified name of a
-sub-dialect &#8216;sybase&#8217; of the &#8216;sql&#8217; dialect. 
-Dialects come with associated <em>encoders</em>.</td>
+sub-dialect &#8216;sybase&#8217; of the &#8216;sql&#8217; dialect. Dialects
+come with associated <em>encoders</em>.</td>
     <td style="font-size: 90%;"><tt>sql/sybase</tt></td>
   </tr>
 
   <tr>
     <td><em>wlang dialect</em></td>
     <td>When we talk about a <em>wlang dialect</em>, we are actually refering to
-some  specialization of the wlang tag-based grammar: <tt>wlang/xhtml</tt>
+some specialization of the wlang tag-based grammar: <tt>wlang/xhtml</tt>
 for example is the templating language <em>wlang</em> proposes to generate
-xhtml pages. An  example of source code in that dialect has been shown
+xhtml pages. An example of source code in that dialect has been shown
 before. In addition to its encoders a <em>wlang dialect</em> comes with its
-sets of <em>tags</em>  and associated <em>rules</em>.</td>
+sets of <em>tags</em> and associated <em>rules</em>.</td>
     <td style="font-size: 90%;"><tt>wlang/xhtml</tt></td>
   </tr>
 
@@ -1381,7 +1364,7 @@ sets of <em>tags</em>  and associated <em>rules</em>.</td>
     <td><em>encoder</em></td>
     <td>Text transformation (algorithm) applying some encoding conventions of a
 portion of a the target language generated by a dialect. HTML
-entities-encoding, SQL&#8217;s back-quoting  are examples of encoders.
+entities-encoding, SQL&#8217;s back-quoting are examples of encoders.
 Encoders are accessible through their qualified name (dialect/encoder).</td>
     <td style="font-size: 90%;"><tt>xhtml/entities-encoding</tt><br/><tt>sql/single-quoting</tt></td>
   </tr>
@@ -1395,7 +1378,7 @@ Encoders are accessible through their qualified name (dialect/encoder).</td>
   <tr>
     <td><em>wlang tag</em></td>
     <td>Special tags in the template, starting with wlang symbols and a number of
-wlang  blocks. A tag is associated with a wlang rule.</td>
+wlang blocks. A tag is associated with a wlang rule.</td>
     <td style="font-size: 90%;"><tt>${...}</tt><br/><tt>?{...}{...}{...}</tt></td>
   </tr>
 
@@ -1404,21 +1387,21 @@ wlang  blocks. A tag is associated with a wlang rule.</td>
     <td>Transformation semantics of a given <em>tag</em>. When wlang instantiates a
 template it simply replaces <em>wlang tags</em> by some <em>replacement
 value</em> (which is always a string). This value is computed by the rule
-attached to  the tag. Rule definition (see Rulesets tab on top of the page)
+attached to the tag. Rule definition (see Rulesets tab on top of the page)
 explicitly describes the number of blocks it expects, in which dialect they
 are parsed and instantiated and the way the replacement value is computed.</td>
     <td style="font-size: 90%;"><tt>^{wlang/active-string}{...}</tt><br/> Instantiates #1, looking for an
-encoder qualified name. Instantiates #2 in  the current dialect. Encode
+encoder qualified name. Instantiates #2 in the current dialect. Encode
 #2&#8217;s instantiation using encoder found in (#1) and return the result
 as replacement value.</td>
   </tr>
 
   <tr>
     <td><em>context</em></td>
-    <td>Some rules allow code to be executed in the <em>hosting language</em> (the 
+    <td>Some rules allow code to be executed in the <em>hosting language</em> (the
 definition explicitly announce it by putting <tt>wlang/hosted</tt> in the
 corresponding block). When doing so, this code is in fact executed in a
-given context that  provides the execution semantics.</td>
+given context that provides the execution semantics.</td>
     <td style="font-size: 90%;"></td>
   </tr>
 
