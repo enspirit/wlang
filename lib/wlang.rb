@@ -285,7 +285,7 @@ module WLang
   def self.load_data(uri, extension=nil)
     check_file_extension(extension = extension.nil? ? File.extname(uri) : extension)
     loader = DATA_EXTENSIONS[extension]
-    raise ::WLang::Error("No data loader for #{extension}") if loader.nil?
+    raise ::WLang::Error, "No data loader for #{extension}" if loader.nil?
     loader.call(uri) 
   end
   
