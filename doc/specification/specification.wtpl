@@ -37,5 +37,6 @@
 		}
       </div>
     }
+    <<{analytics.wtpl}
   </body>
 </html>
