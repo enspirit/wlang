@@ -41,6 +41,8 @@ variables:
     - {name: coderay, version: ">= 0", groups: [development]}
     - {name: RedCloth, version: ">= 0", groups: [development]}
   rake_tasks:
+    debug_mail:
+      nb_changelog_sections: 2
     spec_test:
       pattern: 'spec/*.spec'
     unit_test:

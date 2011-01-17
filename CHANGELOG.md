@@ -8,7 +8,7 @@
 
   * WLang source code follows the ruby.noe template that comes bundled with Noe
 
-# Version 0.10.0 / 2011-01-16
+# Version 0.10.0 / 2011-01-14
 
 * New features
 
