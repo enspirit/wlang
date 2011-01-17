@@ -1,5 +1,4 @@
-require "wlang"
-
+require File.expand_path('../spec_helper', __FILE__)
 describe "The wlang/xhtml dialect" do
   
   it("should provide helpers to create links") {

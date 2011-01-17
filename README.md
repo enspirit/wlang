@@ -1,12 +1,10 @@
 # What is _wlang_ ?
 
-_wlang_ is a simple, powerful, robust and secure <b>code generation</b>/<b>templating engine</b>
-(at least, authors hope so ;-) Motivation for it can be found at http://www.revision-zero.org/wlang. 
-It's main aim is to help you creating web pages, sql queries, ruby code (that is, generating code in 
-general) without having to worry too much about html entities encoding, sql back quoting, string
-escaping and the like. WLang proposes a generic engine that you can extend to fit your needs. It also 
-proposes standard instantiations of this engine for common tasks such as creating SQL queries, 
-instantiating web pages, etc.
+WLang is a general-purpose *code generation*/*templating engine*. It's main aim is to help you generating
+web pages, sql queries, ruby code (that is, generating code in general) without having to worry too much 
+about html entities encoding, sql back quoting, string escaping and the like. WLang proposes a generic 
+engine that you can extend to fit your needs. It also proposes standard instantiations of this engine 
+for common tasks such as creating SQL queries, instantiating web pages, and so on.
 
 Basic concepts and usage is illustrated below. Also have a look at the [detailed specification](http://blambeau.github.com/wlang).
 

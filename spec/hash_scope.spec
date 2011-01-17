@@ -1,4 +1,4 @@
-require 'wlang'
+require File.expand_path('../spec_helper', __FILE__)
 require 'wlang/hash_scope'
 
 describe ::WLang::HashScope do

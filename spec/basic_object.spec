@@ -1,4 +1,4 @@
-require "wlang"
+require File.expand_path('../spec_helper', __FILE__)
 describe "WLang's version of BasicObject" do
   
   class A 

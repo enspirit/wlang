@@ -1,0 +1,52 @@
+# Noe template for ruby gem libraries (https://github.com/blambeau/noe) - short version
+# Run 'noe show-spec' and 'noe help show-spec' for additional details.
+
+# Don't remove this entry!
+template-info:
+  name: "ruby"
+  version: 1.1.0
+
+# Update to match your own configuration.
+variables:
+  lower: 
+    wlang
+  upper:
+    WLang
+  version:
+    0.10.1
+  summary: |-
+    WLang is a powerful code generation and templating engine
+  description: |-
+    WLang is a general-purpose *code generation*/*templating engine*. It's main aim is to help you generating
+    web pages, sql queries, ruby code (that is, generating code in general) without having to worry too much 
+    about html entities encoding, sql back quoting, string escaping and the like. WLang proposes a generic 
+    engine that you can extend to fit your needs. It also proposes standard instantiations of this engine 
+    for common tasks such as creating SQL queries, instantiating web pages, and so on.
+  authors: 
+    - {name: Bernard Lambeau, email: blambeau@gmail.com}
+    - {name: Louis Lambeau, email: llambeau@gmail.com}
+  links:
+    - http://github.com/blambeau/wlang
+    - http://rubygems.org/gems/wlang
+    - http://blambeau.github.com/wlang
+    - http://revision-zero.org/wlang
+  dependencies:
+    - {name: rake,      version: "~> 0.8.7",  groups: [development]}
+    - {name: bundler,   version: "~> 1.0",    groups: [development]}
+    - {name: rspec,     version: "~> 2.4.0",  groups: [development]}
+    - {name: yard,      version: "~> 0.6.4",  groups: [development]}
+    - {name: bluecloth, version: "~> 2.0.9",  groups: [development]}
+    #
+    - {name: rdoc, version: ">= 0", groups: [development]}
+    - {name: coderay, version: ">= 0", groups: [development]}
+    - {name: RedCloth, version: ">= 0", groups: [development]}
+  rake_tasks:
+    spec_test:
+      pattern: 'spec/*.spec'
+    unit_test:
+      pattern:
+      test_files: 
+        - test/unit/test_all.rb
+        - test/blackbox/test_all.rb
+        - test/standard_dialects/test_all.rb
+        - test/standard_dialects/**/*_test.rb

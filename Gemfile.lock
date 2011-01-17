@@ -1,0 +1,37 @@
+PATH
+  remote: .
+  specs:
+    wlang (0.10.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    RedCloth (4.2.3)
+    bluecloth (2.0.9)
+    coderay (0.9.7)
+    diff-lcs (1.1.2)
+    rake (0.8.7)
+    rdoc (2.5.11)
+    rspec (2.4.0)
+      rspec-core (~> 2.4.0)
+      rspec-expectations (~> 2.4.0)
+      rspec-mocks (~> 2.4.0)
+    rspec-core (2.4.0)
+    rspec-expectations (2.4.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.4.0)
+    yard (0.6.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  RedCloth
+  bluecloth (~> 2.0.9)
+  bundler (~> 1.0)
+  coderay
+  rake (~> 0.8.7)
+  rdoc
+  rspec (~> 2.4.0)
+  wlang!
+  yard (~> 0.6.4)

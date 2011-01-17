@@ -1,4 +1,4 @@
-require "wlang"
+require File.expand_path('../spec_helper', __FILE__)
 describe("WLang should support coderay encoder") do
   
   it("should support basic coderay encoding") {

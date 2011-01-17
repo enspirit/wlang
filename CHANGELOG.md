@@ -1,10 +1,14 @@
-# Version 0.10.1
+# Version 0.10.1 / 2011-01-17
 
-# Bug fixes
+## Bug fixes
 
 * Fixed a bug when using multi-block syntaxes with another delimiter than braces.
 
-# Version 0.10.0
+## Other enhancements
+
+* WLang source code follows the ruby.noe template that comes bundled with Noe
+
+# Version 0.10.0 / 2011-01-16
 
 ## New features
 

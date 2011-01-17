@@ -1,3 +1,4 @@
+require 'wlang/loader'
 require 'wlang/ext/string'
 require 'stringio'
 require 'wlang/rule'

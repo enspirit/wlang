@@ -1,4 +1,4 @@
-require "wlang"
+require File.expand_path('../spec_helper', __FILE__)
 describe("WLang should support redcloth encoder") do
   
   it("should support basic redcloth encoding") {
