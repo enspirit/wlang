@@ -21,7 +21,7 @@ require 'wlang/intelligent_buffer'
 module WLang
   
   # Current version of WLang
-  VERSION = "0.10.1".freeze
+  VERSION = "0.10.2".freeze
 
   ######################################################################## About files and extensions
   

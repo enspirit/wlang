@@ -1,3 +1,7 @@
+# Version 0.10.2 / FIX ME
+
+* ...
+
 # Version 0.10.1 / 2011-01-17
 
 * Bug fixes
