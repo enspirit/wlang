@@ -1,6 +1,8 @@
-# Version 0.11.0 
+# Version 0.10.1
 
-* ...
+# Bug fixes
+
+* Fixed a bug when using multi-block syntaxes with another delimiter than braces.
 
 # Version 0.10.0
 

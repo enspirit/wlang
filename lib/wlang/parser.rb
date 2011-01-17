@@ -209,7 +209,7 @@ module WLang
     # parsing on a '}')
     #
     def has_block?(offset)
-      self.source_text[offset,2]=='}{'
+      self.source_text[offset,2] == template.block_endstart
     end
   
     #

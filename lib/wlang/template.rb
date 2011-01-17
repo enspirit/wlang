@@ -58,6 +58,11 @@ module WLang
           @source.to_s
       end
     end
+    
+    # Returns template's block endstart (typically '}{')
+    def block_endstart
+      @block_endstart ||= BLOCK_SYMBOLS[block_symbols].reverse.join
+    end
   
     # Instantiates the template, with optinal context and hosted language.
     def instantiate(context = {}, hosted = ::WLang::HostedLanguage.new)

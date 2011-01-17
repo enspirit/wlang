@@ -1,3 +1,3 @@
-*{WLang::dialect_tree.dialect('wlang').dialects using each_pair as name, dialect}{
+*{WLang::dialect_tree.dialect('wlang').dialects using each_value as dialect}{
   <<+{dialect.wtpl with dialect: dialect.build!}
 }
