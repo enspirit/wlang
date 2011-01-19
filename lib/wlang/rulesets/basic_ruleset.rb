@@ -72,7 +72,7 @@ module WLang
                       :offset   => 0,
                       :shared   => shared,
                       :scope    => context) {
-          instantiated, forget = parser.instantiate
+          instantiated, forget = parser.instantiate(true)
           [instantiated, reached]
         }
       end

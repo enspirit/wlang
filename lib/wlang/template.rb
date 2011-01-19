@@ -67,7 +67,7 @@ module WLang
     # Instantiates the template, with optinal context and hosted language.
     def instantiate(context = {}, hosted = ::WLang::HostedLanguage.new)
       p = ::WLang::Parser.new(hosted, self, context)
-      p.instantiate[0]
+      p.instantiate(true)[0]
     end
     
     # Returns a friendly position of an offset in the source text

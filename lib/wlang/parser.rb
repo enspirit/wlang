@@ -118,8 +118,11 @@ module WLang
       result
     end
   
-    # Parses the template's text and instantiate it
-    def instantiate
+    #
+    # Parses the template's text and instantiate it. Dialect post_transformer is 
+    # only applied of _apply_posttransform_ is set to true.
+    #
+    def instantiate(apply_posttransform = true)
       # Main variables put in local scope for efficiency:
       #   - template:     current parsed template
       #   - source_text:  current template's source text
@@ -184,7 +187,13 @@ module WLang
         self.<<(source_text[self.offset, 1+source_text.length-self.offset], false)
         self.offset = source_text.length
       end
-      [dialect.apply_post_transform(buffer), self.offset-1]
+      
+      # Apply post-transformation only if required
+      if apply_posttransform
+        [dialect.apply_post_transform(buffer), self.offset-1]
+      else
+       [buffer, self.offset-1]
+      end
     end
   
     ###################################################################### Callbacks for rule sets
@@ -194,11 +203,13 @@ module WLang
     # _dialect_ (same dialect than self if dialect is nil) and with an output 
     # _buffer_.
     #
-    def parse(offset, dialect=nil, buffer=nil)
-      dialect = ensure_dialect(dialect.nil? ? self.dialect : dialect)
-      buffer  = dialect.factor_buffer if buffer.nil?
-      branch(:offset => offset, :dialect => dialect, :buffer => buffer) do
-        instantiate
+    def parse(offset, req_dialect = nil, req_buffer = nil)
+      dialect = ensure_dialect(req_dialect.nil? ? self.dialect : req_dialect)
+      buffer  = (req_buffer.nil? ? dialect.factor_buffer : req_buffer)
+      branch(:offset => offset, 
+             :dialect => dialect, 
+             :buffer => buffer) do
+        instantiate(!req_dialect.nil?)
       end
     end
   

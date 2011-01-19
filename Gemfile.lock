@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wlang (0.10.1)
+    wlang (0.10.2)
 
 GEM
   remote: http://rubygems.org/

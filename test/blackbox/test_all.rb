@@ -28,6 +28,7 @@ module WLang
           post_transform{|txt| "<pre>#{txt}</pre>"}
           rules WLang::RuleSet::Basic
           rules WLang::RuleSet::Buffering
+          rules WLang::RuleSet::Imperative
         }
         dialect("poststring") {
           post_transform "plain-text/upcase"
@@ -45,7 +46,8 @@ module WLang
         'who'         => 'wlang',
         'whowho'      => 'who',
         'input_file'  => 'text_1.txt',
-        'data_file_1' => 'data_1.rb'
+        'data_file_1' => 'data_1.rb',
+        'authors'     => ['blambeau', 'llambeau', 'acailliau']
       }
 
       Dir["#{File.dirname(__FILE__)}/*"].each do |folder|

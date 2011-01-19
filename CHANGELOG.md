@@ -1,6 +1,15 @@
 # Version 0.10.2 / FIX ME
 
-* ...
+* Bug fixes
+
+  * Fixed a bug that led to applying dialect post-transformation too many times in multi 
+    block syntaxes. Post-transformation rules related strategies are now:
+      - Parser#instantiate now takes an optional boolean argument to set/unset dialect
+        post transformation (defaults to true, for backward compatibility). 
+      - Invoking Template.instantiate always invoke Parser#instantiate(true)
+      - Buffering's <<+{...} always apply post-transformation as well
+      - Otherwise, post-transformation is only applied when the dialect explicitely changes
+        when invoking Parser#parse and Parser#parse_block
 
 # Version 0.10.1 / 2011-01-17
 

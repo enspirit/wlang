@@ -97,7 +97,9 @@ module WLang
                         :offset   => 0,
                         :shared   => shared,
                         :scope    => context) {
-            instantiated, forget = parser.instantiate
+            # We ask the parser to instantiate and apply 
+            # post transformation in all cases
+            instantiated, forget = parser.instantiate(true)
             [instantiated, reached]
           }
         else
