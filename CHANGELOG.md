@@ -1,4 +1,4 @@
-# Version 0.10.2 / FIX ME
+# Version 0.10.2 / 2011-02-25
 
 * Bug fixes
 
@@ -10,6 +10,10 @@
       - Buffering's <<+{...} always apply post-transformation as well
       - Otherwise, post-transformation is only applied when the dialect explicitely changes
         when invoking Parser#parse and Parser#parse_block
+
+* Other enhancements
+
+  * Added a bluecloth/xhtml dialect and encoder.
 
 # Version 0.10.1 / 2011-01-17
 
