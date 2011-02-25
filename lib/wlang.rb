@@ -1,4 +1,5 @@
 require 'wlang/loader'
+require 'wlang/version'
 require 'wlang/ext/string'
 require 'stringio'
 require 'wlang/rule'
@@ -20,9 +21,6 @@ require 'wlang/intelligent_buffer'
 #
 module WLang
   
-  # Current version of WLang
-  VERSION = "0.10.2".freeze
-
   ######################################################################## About files and extensions
   
   # Regular expression for file extensions
