@@ -6,12 +6,12 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    RedCloth (4.2.3)
-    bluecloth (2.0.9)
+    RedCloth (4.2.7)
+    bluecloth (2.0.11)
     coderay (0.9.7)
     diff-lcs (1.1.2)
     rake (0.8.7)
-    rdoc (2.5.11)
+    rdoc (3.5.3)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
       rspec-expectations (~> 2.4.0)
