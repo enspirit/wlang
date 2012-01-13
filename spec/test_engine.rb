@@ -5,7 +5,7 @@ module WLang
     let(:engine){ WLang::Engine.new }
     
     it 'should compile as expected' do
-      engine.call("Hello ${world}!").should eq("Hello ${world}!")
+      engine.call("Hello ${world}!").should be_a(Array)
     end
     
   end

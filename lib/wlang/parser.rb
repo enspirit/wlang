@@ -2,7 +2,7 @@ module WLang
   class Parser
 
     def call(input)
-      input
+      [:static, input]
     end
 
   end # class Engine
