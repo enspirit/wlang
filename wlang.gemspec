@@ -129,6 +129,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("yard", "~> 0.7.2")
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_development_dependency("wlang", "~> 0.10.2")
+  s.add_dependency("citrus", "~> 2.4.1")
   s.add_dependency("temple", "~> 0.3.5")
 
   # The version of ruby required by this gem

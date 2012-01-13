@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 group :runtime do
+  gem "citrus", "~> 2.4.1"
   gem "temple", "~> 0.3.5"
 end
 
