@@ -7,8 +7,8 @@ module WLang
     subject{ generator.call(source) }
 
     describe '[:proc, ...]' do
-      let(:source)  { [:proc, "name", [:static, "Hello world"]] }
-      let(:expected){ %q{name = lambda{|buf| buf << ("Hello world") }} }
+      let(:source)  { [:proc, [:static, "Hello world"]] }
+      let(:expected){ %q{lambda{|buf| buf << ("Hello world") }} }
       it{ should eq(expected) }
     end
     

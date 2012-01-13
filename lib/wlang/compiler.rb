@@ -10,14 +10,11 @@ module WLang
     end
     
     def on_wlang(symbols, *functions)
-      functions = functions.map{|fn| call(fn) }
-      ids       = functions.map{|fn| fn[1]    }
-      code      = [:dynamic, "wlang(#{symbols.inspect}, [#{ids.join(', ')}])"]
-      ([:multi] + functions + [code])
+      [:wlang, symbols] + functions.map{|f| call(f)}
     end
     
     def on_fn(code)
-      [:proc, unique_name, call(code)]
+      [:proc, call(code)]
     end
     
   end # class Compiler

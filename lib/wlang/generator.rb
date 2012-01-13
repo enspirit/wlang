@@ -4,10 +4,15 @@ module WLang
     def call(x)
       compile(x)
     end
+    
+    def on_wlang(symbols, *procs)
+      procs = procs.map{|p| call(p)}.join(', ')
+      "wlang(symbols, [#{procs}])"
+    end
 
-    def on_proc(name, code)
+    def on_proc(code)
       code = Generator.new(:buffer => "buf").call(code)
-      "#{name} = lambda{|buf| #{code} }"
+      "lambda{|buf| #{code} }"
     end
 
     def on_dynamic(code)

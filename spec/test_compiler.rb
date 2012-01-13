@@ -27,7 +27,7 @@ module WLang
     
     describe "[:template, ...] should compile the inner function" do
       let(:source)  { [:template, [:fn, [:static, "Hello world!"]]]          }
-      let(:expected){ [:proc, "_wlang_compiler1", [:static, "Hello world!"]] }
+      let(:expected){ [:proc, [:static, "Hello world!"]] }
       it{ should eq(expected) }
     end
 
