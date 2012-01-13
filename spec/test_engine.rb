@@ -28,5 +28,26 @@ module WLang
       proc.call(context, "").should eq("Hello world!")
     end
     
+    it 'should work when evaluated on a dialect' do
+      context = Object.new 
+      def context.who; "world"; end
+      dialect = WLang::Dialect.new(context)
+      proc    = eval(subject)
+      proc.call(dialect, "").should eq("Hello world!")
+    end
+    
+    describe 'the high-order' do
+      subject{ engine.call("Hello ${${who}}!") }
+    
+      it 'should support high-order' do
+        context = Object.new 
+        def context.world; "the world"; end
+        def context.who; "world"; end
+        dialect = WLang::Dialect.new(context)
+        proc    = eval(subject)
+        proc.call(dialect, "").should eq("Hello the world!")
+      end
+    end
+    
   end
 end
