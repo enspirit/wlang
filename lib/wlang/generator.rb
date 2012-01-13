@@ -7,7 +7,7 @@ module WLang
     
     def on_wlang(symbols, *procs)
       procs = procs.map{|p| call(p)}.join(', ')
-      "wlang(symbols, [#{procs}])"
+      "wlang(#{symbols.inspect}, [#{procs}])"
     end
 
     def on_proc(code)

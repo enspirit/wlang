@@ -11,6 +11,12 @@ module WLang
       let(:expected){ %q{lambda{|buf| buf << ("Hello world") }} }
       it{ should eq(expected) }
     end
-    
+
+    describe '[:wlang, ...]' do
+      let(:source)  { [:wlang, "$", [:proc, [:static, "Hello world"]]]      }
+      let(:expected){ %q{wlang("$", [lambda{|buf| buf << ("Hello world") }])} }
+      it{ should eq(expected) }
+    end
+
   end
 end
