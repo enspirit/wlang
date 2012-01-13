@@ -1,5 +1,9 @@
 source 'http://rubygems.org'
 
+group :runtime do
+  gem "temple", "~> 0.3.5"
+end
+
 group :development do
   gem "rake", "~> 0.9.2"
   gem "bundler", "~> 1.0"
