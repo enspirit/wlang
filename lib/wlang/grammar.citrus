@@ -1,15 +1,17 @@
 grammar WLang::Grammar
 
   rule template
-    concat
+    (strconcat ''){
+      [:template, [:fn, strconcat.value]]
+    }
   end
   
-  rule concat
+  rule strconcat
     (non_static | static)* {
       if matches.size == 1
         matches.first.value
       else
-        [:concat] + matches.map(&:value)
+        [:strconcat] + matches.map(&:value)
       end
     }
   end
@@ -25,7 +27,7 @@ grammar WLang::Grammar
   end
   
   rule block
-    (fn_start template fn_stop){
+    (fn_start strconcat fn_stop){
       [:static, to_s]
     }
   end
@@ -41,8 +43,8 @@ grammar WLang::Grammar
   end
   
   rule function
-    (fn_start template fn_stop){
-      template.value
+    (fn_start strconcat fn_stop){
+      strconcat.value
     }
   end
   

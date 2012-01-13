@@ -109,8 +109,8 @@ module WLang
         end
       end
 
-      describe 'the concat rule' do
-        let(:rule){ :concat        }
+      describe 'the strconcat rule' do
+        let(:rule){ :strconcat        }
         let(:text){ 'Hello ${who}' }
         it{ should_not be_nil      }
       end
@@ -167,8 +167,8 @@ module WLang
         it{ should eq([:wlang, '$', [:fn, [:static, "who"]] ]) }
       end
       
-      describe 'concat rule' do
-        let(:rule){ :concat }
+      describe 'the strconcat rule' do
+        let(:rule){ :strconcat }
         describe "when a single match" do
           let(:text){ "Hello world" }
           it{ should eq([:static, text]) }
@@ -177,14 +177,28 @@ module WLang
           let(:text){ "Hello ${who}!" }
           specify{ 
             expected = \
-              [:concat, 
+              [:strconcat, 
                 [:static, "Hello "],
                 [:wlang, '$', [:fn, [:static, "who"]]],
-                [:static, "!"]
-              ]
+                [:static, "!"]]
             subject.should eq(expected)
           }
         end
+      end
+      
+      describe 'the template rule' do
+        let(:rule){ :template       }
+        let(:text){ "Hello ${who}!" }
+        specify{ 
+          expected = \
+            [:template,
+              [:fn,
+                [:strconcat, 
+                  [:static, "Hello "],
+                  [:wlang, '$', [:fn, [:static, "who"]]],
+                  [:static, "!"]]]]
+          subject.should eq(expected) 
+        }
       end
       
     end
