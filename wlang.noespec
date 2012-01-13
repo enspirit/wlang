@@ -34,4 +34,3 @@ variables:
     - {name: rspec,     version: "~> 2.8.0",  groups: [development]}
     - {name: yard,      version: "~> 0.7.2",  groups: [development]}
     - {name: bluecloth, version: "~> 2.2.0",  groups: [development]}
-    - {name: wlang,     version: "~> 0.10.2", groups: [development]}

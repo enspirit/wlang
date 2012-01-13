@@ -11,5 +11,4 @@ group :development do
   gem "rspec", "~> 2.8.0"
   gem "yard", "~> 0.7.2"
   gem "bluecloth", "~> 2.2.0"
-  gem "wlang", "~> 0.10.2"
 end
