@@ -73,8 +73,10 @@ module WLang
           
       describe 'the wlang rule' do
         let(:rule){ :wlang      }
-        let(:text){ '${who}'    }
-        it{ should_not be_nil   }
+        describe 'on a single wlang block' do
+          let(:text){ '${who}'    }
+          it{ should_not be_nil   }
+        end
       end
       
       describe 'the static rule' do
@@ -111,6 +113,10 @@ module WLang
 
       describe "the template rule" do
         let(:rule){ :template }
+        describe 'on an empty template' do
+          let(:text){ "" }
+          it{ should_not be_nil }
+        end
         describe 'on a static template' do
           let(:text){ "Hello world" }
           it{ should_not be_nil }
@@ -145,10 +151,36 @@ module WLang
         it{ should eq([:static, text]) }
       end
       
+      describe 'the block rule' do
+        let(:rule){ :block }
+        let(:text){ "{ world }" }
+        it{ should eq([:static, text]) }
+      end
+      
       describe 'the wlang rule' do
         let(:rule){ :wlang }
         let(:text){ "${who}" }
         it{ should eq([:wlang, '$', [:fn, [:static, "who"]] ]) }
+      end
+      
+      describe 'concat rule' do
+        let(:rule){ :concat }
+        describe "when a single match" do
+          let(:text){ "Hello world" }
+          it{ should eq([:static, text]) }
+        end
+        describe "with multiple matches" do
+          let(:text){ "Hello ${who}!" }
+          specify{ 
+            expected = \
+              [:concat, 
+                [:static, "Hello "],
+                [:wlang, '$', [:fn, [:static, "who"]]],
+                [:static, "!"]
+              ]
+            subject.should eq(expected)
+          }
+        end
       end
       
     end
