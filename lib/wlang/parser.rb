@@ -3,7 +3,7 @@ module WLang
   class Parser
 
     def call(input)
-      WLang::Grammar.parse(input)
+      WLang::Grammar.parse(input).value
     end
 
   end # class Engine

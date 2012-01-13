@@ -10,7 +10,7 @@ module WLang
           [:static, "Hello "],
           [:wlang,  "$",
             [:fn, 
-              [:concat, [:static, "world"]]
+              [:static, "world"]
             ]
           ],
           [:static, "!"]
