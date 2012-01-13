@@ -1,8 +1,9 @@
 module WLang
+  Citrus.load(File.expand_path('../grammar', __FILE__))
   class Parser
 
     def call(input)
-      [:static, input]
+      WLang::Grammar.parse(input)
     end
 
   end # class Engine
