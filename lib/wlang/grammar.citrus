@@ -31,8 +31,18 @@ grammar WLang::Grammar
   end
   
   rule wlang
-    (symbols fn_start template fn_stop){
-      [:wlang, symbols.to_s, [:fn, template.value]]
+    (symbols functions){
+      [:wlang, symbols.to_s] + functions.value
+    }
+  end
+  
+  rule functions
+    function+ { matches.map{|fn| [:fn, fn.value]} }
+  end
+  
+  rule function
+    (fn_start template fn_stop){
+      template.value
     }
   end
   

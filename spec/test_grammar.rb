@@ -77,6 +77,10 @@ module WLang
           let(:text){ '${who}'    }
           it{ should_not be_nil   }
         end
+        describe 'on a wlang with two blocks' do
+          let(:text){ '${who}{,}' }
+          it{ should_not be_nil   }
+        end
       end
       
       describe 'the static rule' do
