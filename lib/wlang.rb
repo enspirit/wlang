@@ -10,4 +10,6 @@ module WLang
   
 end # module WLang
 require 'wlang/parser'
+require 'wlang/compiler'
+require 'wlang/generator'
 require 'wlang/engine'

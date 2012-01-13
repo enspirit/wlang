@@ -5,7 +5,9 @@ module WLang
     let(:engine){ WLang::Engine.new }
     
     it 'should compile as expected' do
-      engine.call("Hello ${world}!").should be_a(Array)
+      compiled = engine.call("Hello ${world}!")
+      compiled.should be_a(String)
+      Kernel.eval(compiled).should be_a(Proc)
     end
     
   end
