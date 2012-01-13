@@ -5,11 +5,19 @@ grammar WLang::Grammar
   end
   
   rule concat
-    (static | non_static)*
+    (non_static | static)* {
+      if matches.size == 1
+        matches.first.value
+      else
+        [:concat] + matches.map(&:value)
+      end
+    }
   end
   
   rule static
-    (!stop_char .)+
+    (!stop_char .)+ { 
+      [:static, to_s] 
+    }
   end
   
   rule non_static
@@ -17,11 +25,15 @@ grammar WLang::Grammar
   end
   
   rule block
-    fn_start template fn_stop
+    (fn_start template fn_stop){
+      [:static, to_s]
+    }
   end
   
   rule wlang
-    symbols fn_start template fn_stop
+    (symbols fn_start template fn_stop){
+      [:wlang, symbols.to_s, [:fn, template.value]]
+    }
   end
   
   rule stop_char

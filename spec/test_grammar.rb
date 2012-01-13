@@ -4,62 +4,153 @@ module WLang
     
     let(:grammar){ WLang::Grammar }
 
-    it 'fn_start' do
-      match = grammar.parse("{", :root => :fn_start)
-      match.should_not be_nil
-      match.should eq("{")
-    end
-    
-    it 'fn_stop' do
-      match = grammar.parse("}", :root => :fn_stop)
-      match.should_not be_nil
-      match.should eq("}")
-    end
-    
-    it 'symbols' do
-      WLang::SYMBOLS.each do |sym|
-        match = grammar.parse(sym, :root => :symbols)
-        match.should_not_be_nil
-        match.should eq(sym)
-      end
-      match = grammar.parse(WLang::SYMBOLS.join, :root => :symbols)
-      match.should_not_be_nil
-    end
-    
-    it 'stop_char' do
-      grammar.parse("{", :root => :stop_char).should eq("{")
-      grammar.parse("}", :root => :stop_char).should eq("}")
-      grammar.parse("${", :root => :stop_char).should eq("${")
-      grammar.parse("<<+{", :root => :stop_char).should eq("<<+{")
-      lambda{ grammar.parse("$", :root => :stop_char) }.should raise_error(Citrus::ParseError)
-    end
-    
-    it 'block' do
-      grammar.parse("{ hello }", :root => :block).should eq("{ hello }")
-    end
-    
-    it 'wlang' do
-      grammar.parse("${who}", :root => :wlang).should eq("${who}")
-    end
+    context "parsing" do
+      
+      subject{ 
+        if defined?(trailing)
+          grammar.parse(text, :root => rule, :consume => false) 
+        else
+          grammar.parse(text, :root => rule) 
+        end
+      }
+      after { subject.should eq(text) }
 
-    it 'static' do
-      grammar.parse("Hello world",  :root => :static).should eq("Hello world")
-      grammar.parse("Hello ${who}", :root => :static, :consume => false).should eq("Hello ")
+      describe 'the fn_start rule' do
+        let(:rule){ :fn_start }
+        let(:text){ "{"       }
+        it{ should_not be_nil }
+      end
+
+      describe 'the fn_stop rule' do
+        let(:rule){ :fn_stop  }
+        let(:text){ "}"       }
+        it{ should_not be_nil }
+      end
+      
+      describe 'the symbols rule' do
+        let(:rule){ :symbols }
+        WLang::SYMBOLS.each do |sym|
+          describe 'on #{sym}' do
+            let(:text){ sym }
+            it{ should_not be_nil }
+          end
+        end
+        describe 'on "<<+"' do
+          let(:text){ "<<+"     }
+          it{ should_not be_nil }
+        end
+        describe 'on joined symbols' do
+          let(:text){ WLang::SYMBOLS.join }
+          it{ should_not be_nil }
+        end
+      end
+      
+      describe 'the stop char rule' do
+        let(:rule){ :stop_char  }
+        describe 'on {' do
+          let(:text){ '{'         }
+          it{ should_not be_nil   }
+        end
+        describe 'on }' do
+          let(:text){ '}'         }
+          it{ should_not be_nil   }
+        end
+        describe 'on ${' do
+          let(:text){ '${'        }
+          it{ should_not be_nil   }
+        end
+        describe 'on <<+{' do
+          let(:text){ '<<+{'      }
+          it{ should_not be_nil   }
+        end
+      end
+
+      describe 'the block rule' do
+        let(:rule){ :block      }
+        let(:text){ '{ hello }' }
+        it{ should_not be_nil   }
+      end
+          
+      describe 'the wlang rule' do
+        let(:rule){ :wlang      }
+        let(:text){ '${who}'    }
+        it{ should_not be_nil   }
+      end
+      
+      describe 'the static rule' do
+        let(:rule){ :static       }
+        describe 'on pure static text' do
+          let(:text){ 'Hello world' }
+          it{ should_not be_nil     }
+        end
+        describe 'with trailing chars' do
+          let(:text){ 'Hello '       }
+          let(:trailing){ "${who}"   }
+          it{ should_not be_nil      }
+        end
+      end
+      
+      describe 'the non_static rule on a block' do
+        describe 'on a block' do
+          let(:rule){ :non_static   }
+          let(:text){ '{ hello }'   }
+          it{ should_not be_nil     }
+        end
+        describe 'on a wlang' do
+          let(:rule){ :non_static   }
+          let(:text){ '${who}'      }
+          it{ should_not be_nil     }
+        end
+      end
+
+      describe 'the concat rule' do
+        let(:rule){ :concat        }
+        let(:text){ 'Hello ${who}' }
+        it{ should_not be_nil      }
+      end
+
+      describe "the template rule" do
+        let(:rule){ :template }
+        describe 'on a static template' do
+          let(:text){ "Hello world" }
+          it{ should_not be_nil }
+        end
+        describe 'on a block' do
+          let(:text){ "{ world }" }
+          it{ should_not be_nil }
+        end
+        describe 'on a wlang' do
+          let(:text){ "${who}" }
+          it{ should_not be_nil }
+        end
+        describe 'on a high-order wlang' do
+          let(:text){ "${${who}}" }
+          it{ should_not be_nil }
+        end
+        describe 'on a mix' do
+          let(:text){ "Hello ${who}!" }
+          it{ should_not be_nil }
+        end
+      end
+
     end
     
-    it 'non_static' do
-      grammar.parse("{ hello }", :root => :non_static).should eq("{ hello }")
-      grammar.parse("${who}",    :root => :non_static).should eq("${who}")
-    end
-    
-    it 'concat' do
-      grammar.parse("Hello ${who}", :root => :concat).should eq("Hello ${who}")
-    end
-    
-    it 'template' do
-      grammar.parse("Hello").should eq("Hello")
-      grammar.parse("Hello!").should eq("Hello!")
-      grammar.parse("Hello ${who}!").should eq("Hello ${who}!")
+    context "value" do
+      
+      subject{ grammar.parse(text, :root => rule).value }
+      
+      describe 'the static rule' do
+        let(:rule){ :static }
+        let(:text){ "Hello world!" }
+        it{ should eq([:static, text]) }
+      end
+      
+      describe 'the wlang rule' do
+        let(:rule){ :wlang }
+        let(:text){ "${who}" }
+        it{ should eq([:wlang, '$', [:fn, [:static, "who"]] ]) }
+      end
+      
     end
     
   end
