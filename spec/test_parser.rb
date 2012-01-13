@@ -4,7 +4,7 @@ module WLang
     
     let(:parser){ WLang::Parser.new }
 
-    it 'should parse as expected' do
+    it 'should parse "Hello ${world}!" as expected' do
       expected = \
         [:concat,
           [:static, "Hello "],
