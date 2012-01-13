@@ -21,11 +21,11 @@ module WLang
       def context.wlang(symbols, fns)
         raise unless symbols == "$"
         raise unless fns.map(&:class) == [Proc]
-        raise unless fns.first.call(self) == "who"
+        raise unless fns.first.call(self, "") == "who"
         "world"
       end
 
-      proc.call(context).should eq("Hello world!")
+      proc.call(context, "").should eq("Hello world!")
     end
     
   end

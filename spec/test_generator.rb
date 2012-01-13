@@ -8,13 +8,13 @@ module WLang
 
     describe '[:proc, ...]' do
       let(:source)  { [:proc, [:static, "Hello world"]] }
-      let(:expected){ %q{lambda{|d,b=''| b << ("Hello world") }} }
+      let(:expected){ %q{lambda{|d1,b1| b1 << ("Hello world") }} }
       it{ should eq(expected) }
     end
 
     describe '[:wlang, ...]' do
       let(:source)  { [:wlang, "$", [:proc, [:static, "Hello world"]]]      }
-      let(:expected){ %q{_buf << (d.wlang("$", [lambda{|d,b=''| b << ("Hello world") }]))} }
+      let(:expected){ %q{_buf << (d0.wlang("$", [lambda{|d1,b1| b1 << ("Hello world") }]))} }
       it{ should eq(expected) }
     end
 
