@@ -2,29 +2,19 @@ module WLang
   class Dialect
     module ClassMethods
       
-      def mapping
-        @mapping ||= {}
-      end
-      
       def rule(symbols, method = nil, &block)
         method ||= block
-        method = install_rule_method(symbols, method) if method.is_a?(Proc)
-        mapping[symbols] = method
+        aliasname = dispatch_name(symbols)
+        if method.is_a?(Proc)
+          define_method(aliasname, &block)
+        else
+          module_eval <<-EOF
+            alias :#{aliasname} :#{method}
+          EOF
+        end
       end
       
-      private
-      
-      def method_for(symbols)
-        mapping[symbols]
-      end
-      
-      def install_rule_method(symbols, block)
-        methodname = symbols2method(symbols)
-        define_method(methodname, &block)
-        method = methodname
-      end
-      
-      def symbols2method(symbols)
+      def dispatch_name(symbols)
         chars = if RUBY_VERSION >= "1.9"
           symbols.chars.map{|s| s.ord}.join("_")
         else

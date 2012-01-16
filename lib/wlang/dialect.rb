@@ -1,24 +1,10 @@
 module WLang
   class Dialect
-
-    def initialize(context)
-      @context = context
+    
+    def dispatch(symbols, *args, &blk)
+      send self.class.dispatch_name(symbols), *args, &blk
     end
     
-    def wlang(symbols, fns)
-      if symbols == "$"
-        execution(fns)
-      else
-        fns.inject(symbols.dup){|buf,fn|
-          fn.call(self, buf)
-        }
-      end
-    end
-    
-    def execution(fns)
-      @context.instance_eval fns.first.call(self, "")
-    end
-
   end # class Dialect
 end # module WLang
 require 'wlang/dialect/class_methods'
