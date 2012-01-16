@@ -27,18 +27,16 @@ module WLang
       compile(x)
     end
     
-    def on_wlang(symbols, *procs)
-      if meth = dialect.method_for(symbols)
-        procs  = procs.map{|p| call(p)}.join(', ')
-        call [:dynamic, "d#{myid}.#{meth}(#{procs})"]
-      else
-        call [:multi,
-               [:static, "#{symbols}#{braces.first}"],
-               [:multi,  procs.map(&last)],
-               [:static, braces.last] ]
-      end
+    def on_dispatch_static(meth, *procs)
+      procs = procs.map{|p| call(p)}.join(', ')
+      call [:dynamic, "d#{myid}.#{meth}(#{procs})"]
     end
-
+    
+    def on_dispatch_dynamic(symbols, *procs)
+      procs = procs.map{|p| call(p)}.join(', ')
+      call [:dynamic, "d#{myid}.dispatch(#{symbols.inspect}, #{procs})"]
+    end
+    
     def on_proc(code)
       id   = idgen.next
       gen  = Generator.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
