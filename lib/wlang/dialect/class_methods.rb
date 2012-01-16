@@ -8,11 +8,7 @@ module WLang
       
       def rule(symbols, method = nil, &block)
         method ||= block
-        if method.is_a?(Proc)
-          methodname = symbols2method(symbols)
-          define_method(methodname, &method)
-          method = methodname
-        end
+        method = install_rule_method(symbols, method) if method.is_a?(Proc)
         mapping[symbols] = method
       end
       
@@ -20,6 +16,12 @@ module WLang
       
       def method_for(symbols)
         mapping[symbols]
+      end
+      
+      def install_rule_method(symbols, block)
+        methodname = symbols2method(symbols)
+        define_method(methodname, &block)
+        method = methodname
       end
       
       def symbols2method(symbols)
