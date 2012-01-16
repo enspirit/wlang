@@ -18,7 +18,12 @@ module WLang
     end
     
     def on_wlang(symbols, *functions)
-      args = functions.map{|f| call(f)}
+      # Compile functions with a fresh new compiler
+      # (they might be defined in another dialect)
+      c    = Compiler.new(:braces => braces)
+      args = functions.map{|f| c.call(f)}
+      
+      # Apply dispatching rules on this dialect now
       if dialect && (meth=dialect.dispatch_name(symbols))
         [ :dispatch, :static, meth ] + args
       elsif dialect

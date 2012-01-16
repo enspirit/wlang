@@ -67,6 +67,18 @@ module WLang
                             [:static, "{"], [:static, "world"],  [:static, "}"] ] }
           it{ should eq(expected) }
         end
+        context 'on high-order template' do
+          let(:source){ 
+            [:wlang, "!", [:fn, [:wlang, "!", [:static, "who"]] ] ]
+          }
+          let(:expected){ 
+            [ :dispatch, :static, :execution, 
+                [:proc, 
+                  [:dispatch, :dynamic, "!", 
+                    [:static, "who"] ] ] ]
+          }
+          it{ should eq(expected) }
+        end
       end # with a dialect
       
     end # [:wlang, ...]
