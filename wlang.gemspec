@@ -130,6 +130,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_dependency("citrus", "~> 2.4.1")
   s.add_dependency("temple", "~> 0.3.5")
+  s.add_dependency("backports", "~> 2.3.0")
 
   # The version of ruby required by this gem
   #

@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 group :runtime do
   gem "citrus", "~> 2.4.1"
   gem "temple", "~> 0.3.5"
+  gem "backports", "~> 2.3.0", 
+      :platforms => ["ruby_18", "mri_18", "mingw_18", 'jruby']
 end
 
 group :development do
