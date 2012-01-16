@@ -14,14 +14,29 @@ module WLang
     def myid
       options[:myid] || 0
     end
+    
+    def dialect
+      options[:dialect] or raise "Dialect not set"
+    end
+
+    def braces
+      ["{", "}"]
+    end
 
     def call(x)
       compile(x)
     end
     
     def on_wlang(symbols, *procs)
-      procs = procs.map{|p| call(p)}.join(', ')
-      call [:dynamic, "d#{myid}.wlang(#{symbols.inspect}, [#{procs}])"]
+      if meth = dialect.method_for(symbols)
+        procs  = procs.map{|p| call(p)}.join(', ')
+        call [:dynamic, "d#{myid}.#{meth}(#{procs})"]
+      else
+        call [:multi,
+               [:static, "#{symbols}#{braces.first}"],
+               [:multi,  procs.map(&last)],
+               [:static, braces.last] ]
+      end
     end
 
     def on_proc(code)
