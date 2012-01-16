@@ -8,11 +8,7 @@ module WLang
     end
 
     def idgen
-      if options[:idgen]
-        options[:idgen] 
-      else
-        @idgen ||= IdGen.new
-      end
+      options[:idgen] ? options[:idgen] : (@idgen ||= IdGen.new)
     end
     
     def myid
