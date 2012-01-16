@@ -1,5 +1,5 @@
 grammar WLang::Grammar
-
+  
   rule template
     (strconcat ''){
       [:template, [:fn, strconcat.value]]
@@ -55,13 +55,13 @@ grammar WLang::Grammar
   rule symbols
     /[!\^%"\$&'\*\+\?@~\#,\-\.\/:;=<>\|_]+/
   end
-
+  
   rule fn_start
     '{'
   end
-
+  
   rule fn_stop
     '}'
   end
-
+  
 end

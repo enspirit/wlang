@@ -1,8 +1,10 @@
 module WLang
   class Dialect
     
-    def braces
-      [ "{", "}" ]
+    attr_reader :braces
+    
+    def initialize(braces = [ "{", "}" ])
+      @braces = braces
     end
     
     def dispatch(symbols, *fns)
