@@ -3,7 +3,18 @@ module WLang
     module MetaUtils
       
       def method_code(meth, who = self)
-        meth.is_a?(Proc) ? meth : who.instance_method(meth)
+        case meth
+        when Proc, UnboundMethod
+          meth
+        when Symbol
+          who.instance_method(meth)
+        else
+          raise ArgumentError, "Unexpected code #{meth}"
+        end
+      end
+      
+      def fn_arity(method, who = self)
+        method_code(method, who).arity
       end
       
       def dispatch_name(symbols)
@@ -15,13 +26,22 @@ module WLang
         "_dynamic_#{chars}".to_sym
       end
       
-      def fn_arity(method, who = self)
-        method_code(method, who).arity
-      end
-      
       def define_rule_method(symbols, code)
-        methname = dispatch_name(symbols)
-        define_method(methname, code)
+        methname, arity = dispatch_name(symbols), fn_arity(code)
+        define_method(methname) do |*fns|
+          callable     = code.is_a?(UnboundMethod) ? code.bind(self) : code
+          args, rest   = fns[0...arity], fns[arity..-1]
+          instantiated = callable.call(*args)
+          unless rest.empty?
+            start, stop = braces
+            rest.each{|fn| 
+              instantiated << start
+              fn.call(self, instantiated) 
+              instantiated << stop
+            }
+          end
+          instantiated
+        end
       end
       
     end

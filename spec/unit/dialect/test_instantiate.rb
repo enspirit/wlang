@@ -17,7 +17,7 @@ module WLang
     end
     
     it 'do not eat extra blocks' do
-      pending { upcasing.instantiate("Hello !{who}{world}").should eq("Hello WHO{world}") }
+      upcasing.instantiate("Hello !{who}{world}").should eq("Hello WHO{world}")
     end
     
   end # describe Dialect

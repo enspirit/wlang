@@ -20,7 +20,7 @@ module WLang
     
     class Bar < Foo
       
-      def upcasing(fn, *rest)
+      def upcasing(fn)
         "Bar#upcasing"
       end
       
