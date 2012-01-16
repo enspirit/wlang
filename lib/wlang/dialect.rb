@@ -4,7 +4,7 @@ module WLang
     def initialize(context)
       @context = context
     end
-
+    
     def wlang(symbols, fns)
       if symbols == "$"
         execution(fns)
@@ -21,3 +21,4 @@ module WLang
 
   end # class Dialect
 end # module WLang
+require 'wlang/dialect/class_methods'
