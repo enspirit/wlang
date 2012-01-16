@@ -1,3 +1,4 @@
+require 'spec_helper'
 module WLang
   describe Dialect do
     
@@ -45,6 +46,5 @@ module WLang
       end
     end
     
-    
-  end
+  end # describe Dialect
 end # module WLang
