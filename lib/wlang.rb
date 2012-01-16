@@ -9,6 +9,7 @@ module WLang
   SYMBOLS = "!^%\"$&'*+?@~#,-./:;=<>|_".chars.to_a
   
 end # module WLang
+require 'wlang/scope'
 require 'wlang/parser'
 require 'wlang/compiler'
 require 'wlang/generator'
