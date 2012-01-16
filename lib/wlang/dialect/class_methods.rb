@@ -2,14 +2,6 @@ module WLang
   class Dialect
     module ClassMethods
       
-      def engine
-        engine = Class.new(Temple::Engine)
-        engine.use WLang::Parser
-        engine.use WLang::Compiler, :dialect => self
-        engine.use WLang::Generator
-        engine.new
-      end
-      
       def rule(symbols, method = nil, &block)
         method ||= block
         aliasname = dispatch_name(symbols)

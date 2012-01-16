@@ -2,21 +2,32 @@ require 'spec_helper'
 module WLang
   describe Dialect do
     
-    class Foo < Dialect
+    class Upcasing < Dialect
+      public :engine
       
-      def execution(fn, *rest)
-        "Foo#execution"
+      def upcasing(fn, *rest)
+        fn.call(self, "").upcase
       end
       
-      rule "!", :execution
+      rule "!", :upcasing
     end
     
-    let(:foo){ Foo.new }
+    let(:upcasing){ Upcasing.new }
     
     describe 'engine' do
+      
       it "returns an Engine" do
-        Foo.engine.should be_a(Temple::Engine)
+        upcasing.engine.should be_a(Temple::Engine)
       end
+      
+    end # engine
+    
+    describe "instantiate" do
+      
+      it 'works as expected' do
+        upcasing.instantiate("Hello !{who}").should eq("Hello WHO")
+      end
+      
     end
     
   end # describe Dialect
