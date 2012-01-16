@@ -6,7 +6,7 @@ module WLang
     end
     
     def braces
-      options[:braces] || [ "{", "}" ]
+      (dialect && dialect.braces) || options[:braces]
     end
     
     def on_template(fn)

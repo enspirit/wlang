@@ -1,8 +1,18 @@
 module WLang
   class Dialect
     
-    def dispatch(symbols, *args)
-      self.class.dispatch(self, symbols, args)
+    def braces
+      [ "{", "}" ]
+    end
+    
+    def dispatch(symbols, *fns)
+      meth = self.class.dispatch_name(symbols)
+      if respond_to?(meth)
+        send meth, *fns
+      else
+        start, stop = braces
+        fns.inject("#{symbols}"){|buf,fn| buf << start; fn.call(buf, self); buf << stop}
+      end
     end
     
   end # class Dialect

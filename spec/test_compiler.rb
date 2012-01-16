@@ -45,6 +45,9 @@ module WLang
       end
       
       context "with a dialect" do
+        def braces
+          [ '{', '}' ]
+        end
         def dispatch_name(symbols) 
           symbols == "!" ? :execution : nil
         end
