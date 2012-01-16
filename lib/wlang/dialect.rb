@@ -38,4 +38,5 @@ module WLang
     
   end # class Dialect
 end # module WLang
+require 'wlang/dialect/meta_utils'
 require 'wlang/dialect/class_methods'
