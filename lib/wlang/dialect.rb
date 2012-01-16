@@ -11,6 +11,13 @@ module WLang
       self.class.dispatch_name(symbols)
     end
     
+    def instantiate(tpl, context = {})
+      @context = Scope.factor(context)
+      code = engine.call(tpl)
+      proc = eval(code)
+      proc.call(self, "")
+    end
+    
     def dispatch(symbols, *fns)
       if respond_to?(meth = dispatch_name(symbols))
         send meth, *fns
@@ -19,10 +26,18 @@ module WLang
       end
     end
     
-    def instantiate(tpl, context = {})
-      code = engine.call(tpl)
-      proc = eval(code)
-      proc.call(self, "")
+    def _(fn)
+      fn.call(self, "")
+    end
+    
+    def evaluate(what)
+      @context.instance_eval(what)
+    end
+    
+    def with_context(ctx)
+      old, @context = @context, ctx
+      yield
+      @context = ctx
     end
     
     private

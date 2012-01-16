@@ -27,16 +27,28 @@ module WLang
     end
     
     describe 'fn_arity' do
-      it 'workd on procs' do
+      it 'works on procs' do
         fn_arity(lambda{||}).should eq(0)
         fn_arity(lambda{|fn|}).should eq(1)
         fn_arity(lambda{|fn1,fn2|}).should eq(2)
       end
-      it 'workd on symbols' do
+      it 'works on symbols' do
         fn_arity(:arity0, self.class).should eq(0)
         fn_arity(:arity1, self.class).should eq(1)
         fn_arity(:arity2, self.class).should eq(2)
       end
+    end
+    
+    it 'normalize_fns' do
+      normalize_fns([], 0).should eq([[],[]])
+      normalize_fns([], 1).should eq([[nil],[]])
+      normalize_fns([:a], 1).should eq([[:a],[]])
+      normalize_fns([:a], 2).should eq([[:a, nil],[]])
+      normalize_fns([:a], 0).should eq([[],[:a]])
+      normalize_fns([:a, :b], 0).should eq([[],[:a, :b]])
+      normalize_fns([:a, :b], 1).should eq([[:a],[:b]])
+      normalize_fns([:a, :b], 2).should eq([[:a, :b],[]])
+      normalize_fns([:a, :b], 3).should eq([[:a, :b, nil],[]])
     end
     
   end # describe Dialect

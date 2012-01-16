@@ -43,9 +43,9 @@ module WLang
       code = gen.call(code)
       "lambda{|d#{id},b#{id}| #{code} }"
     end
-
+    
     def on_dynamic(code)
-      concat(code)
+      concat("#{code}.to_s")
     end
     
   end # class Generator

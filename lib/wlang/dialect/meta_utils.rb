@@ -17,6 +17,11 @@ module WLang
         method_code(method, who).arity
       end
       
+      def normalize_fns(fns, arity)
+        fns.fill(nil, fns.length, arity - fns.length)
+        [fns[0...arity], fns[arity..-1]]
+      end
+      
       def dispatch_name(symbols, prefix = "_drule")
         chars = if RUBY_VERSION >= "1.9"
           symbols.chars.map{|s| s.ord}.join("_")
@@ -38,7 +43,7 @@ module WLang
           methname = dispatch_name(symbols)
           arity    = fn_arity(code)
           define_method(methname) do |*fns|
-            args, rest   = fns[0...arity], fns[arity..-1]
+            args, rest = self.class.normalize_fns(fns, arity)
             instantiated = code.bind(self).call(*args)
             flush_trailing_fns(instantiated, nil, rest)
           end
