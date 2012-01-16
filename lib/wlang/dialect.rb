@@ -1,8 +1,8 @@
 module WLang
   class Dialect
     
-    def dispatch(symbols, *args, &blk)
-      send self.class.dispatch_name(symbols), *args, &blk
+    def dispatch(symbols, *args)
+      self.class.dispatch(self, symbols, args)
     end
     
   end # class Dialect

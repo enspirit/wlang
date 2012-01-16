@@ -54,6 +54,10 @@ module WLang
         bar.dispatch("@", nil).should eq('Foo#link')
         bar.dispatch("<", nil).should eq('Bar#less')
       end
+      it 'dispatches correctly on unknown symbols' do
+        foo.dispatch(">", lambda{|buf,d| d.should eq(foo); "Foo#>"}).should eq('Foo#>')
+        bar.dispatch(">", lambda{|buf,d| d.should eq(bar); "Bar#>"}).should eq('Bar#>')
+      end
     end
     
   end # describe Dialect

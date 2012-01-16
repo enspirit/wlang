@@ -31,6 +31,15 @@ module WLang
         "_dynamic_#{chars}".to_sym
       end
       
+      def dispatch(dialect, symbols, fns)
+        meth = dispatch_name(symbols)
+        if dialect.respond_to?(meth)
+          dialect.send meth, *fns
+        else
+          fns.inject(""){|buf,fn| fn.call(buf, dialect)}
+        end
+      end
+      
     end
     extend ClassMethods
   end # class Daialect
