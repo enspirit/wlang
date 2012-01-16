@@ -32,15 +32,7 @@ module WLang
           callable     = code.is_a?(UnboundMethod) ? code.bind(self) : code
           args, rest   = fns[0...arity], fns[arity..-1]
           instantiated = callable.call(*args)
-          unless rest.empty?
-            start, stop = braces
-            rest.each{|fn| 
-              instantiated << start
-              fn.call(self, instantiated) 
-              instantiated << stop
-            }
-          end
-          instantiated
+          flush_trailing_fns(instantiated, nil, rest)
         end
       end
       

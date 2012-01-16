@@ -15,8 +15,7 @@ module WLang
       if respond_to?(meth = dispatch_name(symbols))
         send meth, *fns
       else
-        start, stop = braces
-        fns.inject("#{symbols}"){|buf,fn| buf << start; fn.call(buf, self); buf << stop}
+        flush_trailing_fns("", symbols, fns)
       end
     end
     
@@ -27,6 +26,19 @@ module WLang
     end
     
     private
+    
+    def flush_trailing_fns(buf, symbols, fns)
+      buf << symbols if symbols
+      unless fns.empty?
+        start, stop = braces
+        fns.each do |fn|
+          buf << start
+          fn.call(self, buf)
+          buf << stop
+        end
+      end
+      buf
+    end
     
     def engine
       engine = Class.new(Temple::Engine)

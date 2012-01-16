@@ -46,8 +46,8 @@ module WLang
     end
 
     it 'dispatches correctly on unknown symbols' do
-      foo.dispatch(">", lambda{|buf,d| d.should eq(foo); buf << "foo"}).should eq('>{foo}')
-      bar.dispatch(">", lambda{|buf,d| d.should eq(bar); buf << "bar"}).should eq('>{bar}')
+      foo.dispatch(">", lambda{|d,buf| d.should eq(foo); buf << "foo"}).should eq('>{foo}')
+      bar.dispatch(">", lambda{|d,buf| d.should eq(bar); buf << "bar"}).should eq('>{bar}')
     end
     
   end # describe Dialect
