@@ -14,6 +14,8 @@ module WLang
       
       rule "!", :execution
       rule "$", :escaping
+      rule "@" do |fn, *rest| "Foo#link"; end
+      rule "<" do |fn, *rest| "Foo#less"; end
     end
     
     class Bar < Foo
@@ -23,7 +25,11 @@ module WLang
       end
       
       rule "$", :upcasing
+      rule "<" do |fn, *rest| "Bar#less"; end
     end
+    
+    let(:foo){ Foo.new }
+    let(:bar){ Bar.new }
     
     describe 'dispatch_name' do
       include Dialect::ClassMethods
@@ -37,12 +43,16 @@ module WLang
     
     describe 'dispatch' do
       it 'dispatches correctly on a class' do
-        Foo.new.dispatch("!", nil).should eq("Foo#execution")
-        Foo.new.dispatch("$", nil).should eq("Foo#escaping")
+        foo.dispatch("!", nil).should eq("Foo#execution")
+        foo.dispatch("$", nil).should eq("Foo#escaping")
+        foo.dispatch("@", nil).should eq('Foo#link')
+        foo.dispatch("<", nil).should eq('Foo#less')
       end
       it 'dispatches correctly on a subclass' do
-        Bar.new.dispatch("!", nil).should eq("Foo#execution")
-        Bar.new.dispatch("$", nil).should eq("Bar#upcasing")
+        bar.dispatch("!", nil).should eq("Foo#execution")
+        bar.dispatch("$", nil).should eq("Bar#upcasing")
+        bar.dispatch("@", nil).should eq('Foo#link')
+        bar.dispatch("<", nil).should eq('Bar#less')
       end
     end
     
