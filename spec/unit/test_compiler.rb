@@ -45,43 +45,42 @@ module WLang
       end
       
       context "with a dialect" do
-        def braces
-          [ '{', '}' ]
-        end
-        def dispatch_name(symbols) 
-          symbols == "!" ? :execution : nil
-        end
-        let(:compiler){ WLang::Compiler.new(:dialect => self) }
+        let(:compiler){ WLang::Compiler.new(:dialect => Foo.new) }
+
         context "on an existing rule" do
           let(:source)  { [:wlang, "!", [:fn, [:static, "Hello world"]]] }
-          let(:expected){ [:dispatch, :static, :execution, [:proc, [:static, "Hello world"]]] }
+          let(:expected){ [:dispatch, :static, :_drule_33, [:proc, [:static, "Hello world"]]] }
           it{ should eq(expected) }
         end
-        context "on an missing rule" do
-          let(:source)  { [:wlang, "$", [:fn, [:static, "Hello world"]]] }
-          let(:expected){ [:multi, [:static, "$"], 
+
+        context "on a missing rule" do
+          let(:source)  { [:wlang, ".", [:fn, [:static, "Hello world"]]] }
+          let(:expected){ [:multi, [:static, "."], 
                             [:static, "{"], [:static, "Hello world"], [:static, "}"] ]}
           it{ should eq(expected) }
         end
-        context "on an missing rule with two blocks" do
-          let(:source)  { [:wlang, "$", [:fn, [:static, "Hello "]], [:fn, [:static, "world"]] ] }
-          let(:expected){ [:multi, [:static, "$"], 
+
+        context "on a missing rule with two blocks" do
+          let(:source)  { [:wlang, ".", [:fn, [:static, "Hello "]], [:fn, [:static, "world"]] ] }
+          let(:expected){ [:multi, [:static, "."], 
                             [:static, "{"], [:static, "Hello "], [:static, "}"], 
                             [:static, "{"], [:static, "world"],  [:static, "}"] ] }
           it{ should eq(expected) }
         end
+
         context 'on high-order template' do
           let(:source){ 
             [:wlang, "!", [:fn, [:wlang, "!", [:static, "who"]] ] ]
           }
           let(:expected){ 
-            [ :dispatch, :static, :execution, 
+            [ :dispatch, :static, :_drule_33, 
                 [:proc, 
                   [:dispatch, :dynamic, "!", 
                     [:static, "who"] ] ] ]
           }
           it{ should eq(expected) }
         end
+
       end # with a dialect
       
     end # [:wlang, ...]

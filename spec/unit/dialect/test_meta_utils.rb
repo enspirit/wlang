@@ -9,10 +9,10 @@ module WLang
     
     describe 'dispatch_name' do
       it "works with a single char" do
-        dispatch_name("$").should eq(:_dynamic_36)
+        dispatch_name("$").should eq(:_drule_36)
       end
       it "works with a multiple chars" do
-        dispatch_name("$$").should eq(:_dynamic_36_36)
+        dispatch_name("$$").should eq(:_drule_36_36)
       end
     end
     

@@ -2,47 +2,21 @@ require 'spec_helper'
 module WLang
   describe Dialect, "dispatch" do
     
-    class Foo < Dialect
-      
-      def execution(fn)
-        "Foo#execution"
-      end
-      
-      def escaping(fn)
-        "Foo#escaping"
-      end
-      
-      rule "!", :execution
-      rule "$", :escaping
-      rule "@" do |fn| "Foo#link"; end
-      rule "<" do |fn| "Foo#less"; end
-    end
-    
-    class Bar < Foo
-      
-      def upcasing(fn)
-        "Bar#upcasing"
-      end
-      
-      rule "$", :upcasing
-      rule "<" do |fn| "Bar#less"; end
-    end
-    
     let(:foo){ Foo.new }
     let(:bar){ Bar.new }
     
     it 'dispatches correctly on a class' do
-      foo.dispatch("!", nil).should eq("Foo#execution")
-      foo.dispatch("$", nil).should eq("Foo#escaping")
-      foo.dispatch("@", nil).should eq('Foo#link')
-      foo.dispatch("<", nil).should eq('Foo#less')
+      foo.dispatch("!", nil).should eq("(foo#execution )")
+      foo.dispatch("$", nil).should eq("(foo#escaping )")
+      foo.dispatch("@", nil).should eq('(foo#link )')
+      foo.dispatch("<", nil).should eq('(foo#less )')
     end
 
     it 'dispatches correctly on a subclass' do
-      bar.dispatch("!", nil).should eq("Foo#execution")
-      bar.dispatch("$", nil).should eq("Bar#upcasing")
-      bar.dispatch("@", nil).should eq('Foo#link')
-      bar.dispatch("<", nil).should eq('Bar#less')
+      bar.dispatch("!", nil).should eq("(foo#execution )")
+      bar.dispatch("$", nil).should eq("(bar#escaping )")
+      bar.dispatch("@", nil).should eq('(foo#link )')
+      bar.dispatch("<", nil).should eq('(bar#less )')
     end
 
     it 'dispatches correctly on unknown symbols' do

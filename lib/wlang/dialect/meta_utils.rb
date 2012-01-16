@@ -17,22 +17,33 @@ module WLang
         method_code(method, who).arity
       end
       
-      def dispatch_name(symbols)
+      def dispatch_name(symbols, prefix = "_drule")
         chars = if RUBY_VERSION >= "1.9"
           symbols.chars.map{|s| s.ord}.join("_")
         else
           symbols.chars.map{|s| s[0]}.join("_")
         end
-        "_dynamic_#{chars}".to_sym
+        "#{prefix}_#{chars}".to_sym
       end
       
       def define_rule_method(symbols, code)
-        methname, arity = dispatch_name(symbols), fn_arity(code)
-        define_method(methname) do |*fns|
-          callable     = code.is_a?(UnboundMethod) ? code.bind(self) : code
-          args, rest   = fns[0...arity], fns[arity..-1]
-          instantiated = callable.call(*args)
-          flush_trailing_fns(instantiated, nil, rest)
+        case code
+        when Symbol
+          define_rule_method(symbols, instance_method(code))
+        when Proc
+          rulename = dispatch_name(symbols, "_rule")
+          define_method(rulename, code)
+          define_rule_method(symbols, rulename)
+        when UnboundMethod
+          methname = dispatch_name(symbols)
+          arity    = fn_arity(code)
+          define_method(methname) do |*fns|
+            args, rest   = fns[0...arity], fns[arity..-1]
+            instantiated = code.bind(self).call(*args)
+            flush_trailing_fns(instantiated, nil, rest)
+          end
+        else
+          raise "Unable to use #{code} for a rule"
         end
       end
       
