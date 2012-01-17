@@ -2,21 +2,6 @@ module WLang
   class Dialect
     module MetaUtils
       
-      def method_code(meth, who = self)
-        case meth
-        when Proc, UnboundMethod
-          meth
-        when Symbol
-          who.instance_method(meth)
-        else
-          raise ArgumentError, "Unexpected code #{meth}"
-        end
-      end
-      
-      def fn_arity(method, who = self)
-        method_code(method, who).arity
-      end
-      
       def normalize_fns(fns, arity)
         fns.fill(nil, fns.length, arity - fns.length)
         [fns[0...arity], fns[arity..-1]]
@@ -41,7 +26,7 @@ module WLang
           define_rule_method(symbols, rulename)
         when UnboundMethod
           methname = dispatch_name(symbols)
-          arity    = fn_arity(code)
+          arity    = code.arity
           define_method(methname) do |*fns|
             args, rest = self.class.normalize_fns(fns, arity)
             instantiated = code.bind(self).call(*args)

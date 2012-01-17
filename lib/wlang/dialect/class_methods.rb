@@ -7,7 +7,7 @@ module WLang
       end
       
       def rule(symbols, method = nil, &block)
-        define_rule_method(symbols, method_code(method || block))
+        define_rule_method(symbols, method || block)
       end
       
     end
