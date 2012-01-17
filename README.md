@@ -13,7 +13,7 @@ far**.
 * http://rubygems.org/gems/wlang
 * http://revision-zero.org/wlang
 
-## What is wlang?
+## Abstract semantics
 
 WLang is a templating engine with a powerful semantics in terms of concatenation
 of strings and high-order functions (i.e. functions that take other functions as
@@ -33,6 +33,8 @@ That is, the compilation of this template yields a function that concatenates th
 string `"Hello"` with the result of the higher-order function `($ )` and then the
 string `" !"`.
 
+## Example
+
 ```ruby
 tpl = WLang::Html.compile("Hello ${who}")
 # => #<Proc:0x8865d64@(irb):4 (lambda)>
@@ -41,7 +43,7 @@ tpl.call(:who => "WLang & World")
 # => "Hello WLang &amp; World !"
 ```
 
-### High-order functions and Dialects
+## Dialects through high-order functions
 
 High-order functions provide the semantics of the template tags. In the Html example 
 above:
