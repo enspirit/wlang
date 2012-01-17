@@ -43,12 +43,12 @@ module WLang
             define_method(rulename, code)
             define_tag_method(symbols, rulename)
           when UnboundMethod
-            methname = tag_dispatching_name(symbols)
+            methname = tag_dispatching_name(symbols, "_dtag")
             arity    = code.arity
-            define_method(methname) do |*fns|
+            define_method(methname) do |buf, fns|
               args, rest = normalize_tag_fns(fns, arity)
-              instantiated = code.bind(self).call(*args)
-              flush_trailing_fns(instantiated, nil, rest)
+              buf << code.bind(self).call(*args)
+              flush_trailing_fns(buf, rest)
             end
           else
             raise "Unable to use #{code} for a tag"
@@ -59,27 +59,24 @@ module WLang
       
       module InstanceMethods
         
-        def dispatch(symbols, *fns)
+        def dispatch(symbols, buf, *fns)
           extra, meth = find_dispatching_method(symbols)
+          buf << extra unless extra.empty?
           if meth
-            res = send(meth, *fns)
-            extra.empty? ? res : (extra << res)
+            send(meth, buf, fns)
           else
-            flush_trailing_fns("", symbols, fns)
+            flush_trailing_fns(buf, fns)
           end
         end
         
         private
         
-        def flush_trailing_fns(buf, symbols, fns)
-          buf << symbols if symbols
-          unless fns.empty?
-            start, stop = braces
-            fns.each do |fn|
-              buf << start
-              fn.call(self, buf)
-              buf << stop
-            end
+        def flush_trailing_fns(buf, fns)
+          start, stop = braces
+          fns.each do |fn|
+            buf << start
+            fn.call(self, buf)
+            buf << stop
           end
           buf
         end

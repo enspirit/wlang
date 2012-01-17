@@ -27,14 +27,9 @@ module WLang
       compile(x)
     end
     
-    def on_dispatch_static(meth, *procs)
-      procs = procs.map{|p| call(p)}.join(', ')
-      call [:dynamic, "d#{myid}.#{meth}(#{procs})"]
-    end
-    
     def on_dispatch_dynamic(symbols, *procs)
       procs = procs.map{|p| call(p)}.join(', ')
-      call [:dynamic, "d#{myid}.dispatch(#{symbols.inspect}, #{procs})"]
+      "d#{myid}.dispatch(#{symbols.inspect}, b#{myid}, #{procs})"
     end
     
     def on_proc(code)

@@ -12,15 +12,9 @@ module WLang
       it{ should eq(expected) }
     end
     
-    describe '[:dispatch, :static, ...] with a single fn' do
-      let(:source)  { [:dispatch, :static, "execution", [:proc, [:static, "Hello world"]]]      }
-      let(:expected){ %q{_buf << (d0.execution(lambda{|d1,b1| b1 << ("Hello world") }).to_s)} }
-      it{ should eq(expected) }
-    end
-
     describe '[:dispatch, :dynamic, ...] with a single fn' do
       let(:source)  { [:dispatch, :dynamic, "$", [:proc, [:static, "Hello world"]]]      }
-      let(:expected){ %q{_buf << (d0.dispatch("$", lambda{|d1,b1| b1 << ("Hello world") }).to_s)} }
+      let(:expected){ %q{d0.dispatch("$", b0, lambda{|d1,b1| b1 << ("Hello world") })} }
       it{ should eq(expected) }
     end
 
