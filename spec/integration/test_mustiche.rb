@@ -17,7 +17,7 @@ describe Mustiche do
   end
 
   it '!{...} is not pertubrated by !!{...}' do
-    pending{ m("Hello !!{who}!", {:who => "World"}).should eq("Hello !World!") }
+    m("Hello !!{who}!", {:who => "World"}).should eq("Hello !World!")
   end
 
   it '${...} should escape html entities' do

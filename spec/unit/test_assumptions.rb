@@ -12,7 +12,7 @@ describe "ruby assumptions" do
   end
   
   it "lambda arity" do
-    lambda{}.arity.should eq(0)
+    lambda{|| }.arity.should eq(0)
     lambda{|fn|}.arity.should eq(1)
     lambda{|fn1,fn2|}.arity.should eq(2)
   end

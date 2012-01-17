@@ -14,8 +14,9 @@ class Foo < WLang::Dialect
   
   tag "!", :execution
   tag "$", :escaping
-  tag "@" do |fn| "(foo#link #{_ fn})"; end
-  tag "<" do |fn| "(foo#less #{_ fn})"; end
+  tag "@"  do |fn| "(foo#link #{_ fn})";   end
+  tag "<"  do |fn| "(foo#less #{_ fn})";   end
+  tag '!@' do |fn| "(foo#bangat #{_ fn})"; end
 end
 
 class Bar < Foo

@@ -37,19 +37,6 @@ module WLang
     
     private
     
-    def flush_trailing_fns(buf, symbols, fns)
-      buf << symbols if symbols
-      unless fns.empty?
-        start, stop = braces
-        fns.each do |fn|
-          buf << start
-          fn.call(self, buf)
-          buf << stop
-        end
-      end
-      buf
-    end
-    
     def compile(template)
       source = engine.call(template)
       proc   = eval(source, TOPLEVEL_BINDING)
