@@ -3,7 +3,7 @@ module WLang
     
     attr_reader :braces
     
-    def initialize(braces = [ "{", "}" ])
+    def initialize(braces = WLang::BRACES)
       @braces = braces
     end
     
@@ -37,6 +37,7 @@ module WLang
     def with_context(ctx)
       old, @context = @context, ctx
       yield
+    ensure
       @context = ctx
     end
     
@@ -53,6 +54,16 @@ module WLang
         end
       end
       buf
+    end
+    
+    def compile(template)
+      source = engine.call(template)
+      proc   = eval(source, TOPLEVEL_BINDING)
+      lambda do |context|
+        with_context(context) do
+          proc.call(self, "")
+        end
+      end
     end
     
     def engine

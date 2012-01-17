@@ -7,6 +7,9 @@ module WLang
   
   # These are allows block symbols
   SYMBOLS = "!^%\"$&'*+?@~#,-./:;=<>|_".chars.to_a
+
+  # Template braces
+  BRACES = ['{', '}']
   
 end # module WLang
 require 'wlang/scope'
