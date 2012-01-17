@@ -2,13 +2,13 @@ require 'spec_helper'
 module WLang
   describe Dialect, ".compile" do
     
-    it 'returns a Proc' do
-      Upcasing.compile("Hello !{who}").should be_a(Proc)
+    it 'returns a String' do
+      Upcasing.compile("Hello !{who}").should be_a(String)
     end
     
-    it 'calling the Proc instantiates the template' do
-      proc = Upcasing.compile("Hello !{who}!")
-      proc.call({}).should eq("Hello WHO!")
+    it 'evaluting the String returns a template' do
+      str = Upcasing.compile("Hello !{who}!")
+      eval(str).should be_a(Proc)
     end
     
   end # describe Dialect
