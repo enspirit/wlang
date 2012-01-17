@@ -8,6 +8,7 @@ group :runtime do
 end
 
 group :development do
+  gem "ruby-prof", "~> 0.10.8"
   gem "rake", "~> 0.9.2"
   gem "bundler", "~> 1.0"
   gem "rspec", "~> 2.8.0"
