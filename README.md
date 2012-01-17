@@ -54,9 +54,9 @@ above:
 * it evaluates `who` in the current scope and receives the string `"WLang & World"`
 * it escapes that string for HTML and returns the result
 
-A set of high-order functions mapped to tags is called a _Dialect_, such as 
-`WLang::Html`. One of the nice features of WLang is that creating you own dialect is
-very simple. Let take an example:
+A set of high-order functions mapped to tags is called a _Dialect_, such as `WLang::Html`. 
+One of the powerful features of WLang is that creating you own dialect is very simple. 
+Let take an example:
 
 ```ruby
 class Upcasing < WLang::Dialect
@@ -66,8 +66,8 @@ class Upcasing < WLang::Dialect
   end
 
 end
-tpl = Upcasing.compile("Hello ${who}")
-tpl.call(:who => "WLang & World")
-# => "Hello WLANG & WORLD !"
+tpl = Upcasing.compile("Hello ${world}")
+tpl.call({ })
+# => "Hello WORLD !"
 ```
 
