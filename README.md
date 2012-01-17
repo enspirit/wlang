@@ -25,7 +25,7 @@ Hello ${who} !
 
 The functional semantics of this template is as follows:
 
-```
+```clojure
 (fn (concat "Hello", ($ (fn "who")), " !"))
 ```
 
@@ -33,7 +33,7 @@ That is, the compilation of this template yields a function that concatenates th
 string `"Hello"` with the result of the higher-order function `($ )` and then the
 string `" !"`.
 
-```
+```ruby
 tpl = WLang::Html.compile("Hello ${who}")
 # => #<Proc:0x8865d64@(irb):4 (lambda)>
 
@@ -56,7 +56,7 @@ A set of high-order functions mapped to tags is called a _Dialect_, such as
 `WLang::Html`. One of the nice features of WLang is that creating you own dialect is
 very simple. Let take an example:
 
-```
+```ruby
 class Upcasing < WLang::Dialect
 
   tag '$' do |fn|
