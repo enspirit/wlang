@@ -37,53 +37,10 @@ module WLang
     end
     
     describe '[:wlang, ...]' do
-      
-      context "without dialect" do
-        let(:source)  { [:wlang, "$", [:fn, [:static, "Hello world"]]] }
-        let(:expected){ [:dispatch, :dynamic, "$", [:proc, [:static, "Hello world"]]] }
-        it{ should eq(expected) }
-      end
-      
-      context "with a dialect" do
-        let(:compiler){ WLang::Compiler.new(:dialect => Foo.new) }
-
-        context "on an existing rule" do
-          let(:source)  { [:wlang, "!", [:fn, [:static, "Hello world"]]] }
-          let(:expected){ [:dispatch, :static, :_drule_33, [:proc, [:static, "Hello world"]]] }
-          it{ should eq(expected) }
-        end
-
-        context "on a missing rule" do
-          let(:source)  { [:wlang, ".", [:fn, [:static, "Hello world"]]] }
-          let(:expected){ [:multi, [:static, "."], 
-                            [:static, "{"], [:static, "Hello world"], [:static, "}"] ]}
-          it{ should eq(expected) }
-        end
-
-        context "on a missing rule with two blocks" do
-          let(:source)  { [:wlang, ".", [:fn, [:static, "Hello "]], [:fn, [:static, "world"]] ] }
-          let(:expected){ [:multi, [:static, "."], 
-                            [:static, "{"], [:static, "Hello "], [:static, "}"], 
-                            [:static, "{"], [:static, "world"],  [:static, "}"] ] }
-          it{ should eq(expected) }
-        end
-
-        context 'on high-order template' do
-          let(:source){ 
-            [:wlang, "!", [:fn, [:wlang, "!", [:static, "who"]] ] ]
-          }
-          let(:expected){ 
-            [ :dispatch, :static, :_drule_33, 
-                [:proc, 
-                  [:dispatch, :dynamic, "!", 
-                    [:static, "who"] ] ] ]
-          }
-          it{ should eq(expected) }
-        end
-
-      end # with a dialect
-      
-    end # [:wlang, ...]
+      let(:source)  { [:wlang, "$", [:fn, [:static, "Hello world"]]] }
+      let(:expected){ [:dispatch, :dynamic, "$", [:proc, [:static, "Hello world"]]] }
+      it{ should eq(expected) }
+    end
     
   end # describe Compile
 end # module WLang
