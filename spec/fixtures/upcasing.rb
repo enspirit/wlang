@@ -1,6 +1,6 @@
 class Upcasing < WLang::Dialect
   
-  rule "!" do |fn|
+  tag "!" do |fn|
     fn.call(self, "").upcase
   end
   

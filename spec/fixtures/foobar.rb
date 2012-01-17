@@ -12,10 +12,10 @@ class Foo < WLang::Dialect
     "(foo#escaping #{_ fn})"
   end
   
-  rule "!", :execution
-  rule "$", :escaping
-  rule "@" do |fn| "(foo#link #{_ fn})"; end
-  rule "<" do |fn| "(foo#less #{_ fn})"; end
+  tag "!", :execution
+  tag "$", :escaping
+  tag "@" do |fn| "(foo#link #{_ fn})"; end
+  tag "<" do |fn| "(foo#less #{_ fn})"; end
 end
 
 class Bar < Foo
@@ -24,7 +24,7 @@ class Bar < Foo
     "(bar#escaping #{_ fn})"
   end
   
-  rule "$", :escaping
-  rule "<" do |fn| "(bar#less #{_ fn})"; end
+  tag "$", :escaping
+  tag "<" do |fn| "(bar#less #{_ fn})"; end
 end
 

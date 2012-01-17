@@ -1,5 +1,7 @@
+require 'wlang/dialect/tags'
 module WLang
   class Dialect
+    include Dialect::Tags
     
     attr_reader :braces
     
@@ -7,8 +9,8 @@ module WLang
       @braces = braces
     end
     
-    def dispatch_name(symbols)
-      self.class.dispatch_name(symbols)
+    def self.compile(template, braces = WLang::BRACES)
+      new(braces).send(:compile, template)
     end
     
     def instantiate(tpl, context = {})
@@ -16,14 +18,6 @@ module WLang
       code = engine.call(tpl)
       proc = eval(code)
       proc.call(self, "")
-    end
-    
-    def dispatch(symbols, *fns)
-      if respond_to?(meth = dispatch_name(symbols))
-        send meth, *fns
-      else
-        flush_trailing_fns("", symbols, fns)
-      end
     end
     
     def _(fn)
@@ -76,5 +70,3 @@ module WLang
     
   end # class Dialect
 end # module WLang
-require 'wlang/dialect/meta_utils'
-require 'wlang/dialect/class_methods'

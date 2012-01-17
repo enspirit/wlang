@@ -8,12 +8,16 @@ describe Mustiche do
     mustiche.instantiate(tpl, context)
   end
 
-  it '!{...} to_s on strings' do
+  it '!{...} calls to_s on strings' do
     m("Hello !{who}!", {:who => "World"}).should eq("Hello World!")
   end
 
-  it '!{...} to_s on numerics' do
+  it '!{...} calls to_s on numerics' do
     m("Hello !{who}!", {:who => 12}).should eq("Hello 12!")
+  end
+
+  it '!{...} is not pertubrated by !!{...}' do
+    pending{ m("Hello !!{who}!", {:who => "World"}).should eq("Hello !World!") }
   end
 
   it '${...} should escape html entities' do
