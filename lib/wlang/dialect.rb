@@ -9,12 +9,16 @@ module WLang
       @braces = braces
     end
     
-    def self.template(source, braces = WLang::BRACES)
-      new(braces).send(:template, source)
+    def self.parse(source, braces = WLang::BRACES)
+      new(braces).send(:parse, source)
     end
     
     def self.compile(source, braces = WLang::BRACES)
       new(braces).send(:compile, source)
+    end
+    
+    def self.template(source, braces = WLang::BRACES)
+      new(braces).send(:template, source)
     end
     
     def instantiate(tpl, context = {})
@@ -40,6 +44,10 @@ module WLang
     end
     
     private
+    
+    def parse(source)
+      WLang::Parser.new.call(source)
+    end
     
     def compile(source)
       engine.call(source)
