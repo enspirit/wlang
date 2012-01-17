@@ -33,6 +33,7 @@ module WLang
     end
     
     def evaluate(what)
+      return @context if what.strip == "self"
       @context.instance_eval(what)
     end
     
