@@ -4,10 +4,6 @@ module WLang
       
       module ClassMethods
         
-        def tag(symbols, method = nil, &block)
-          define_tag_method(symbols, method || block)
-        end
-        
         def tag_dispatching_name(symbols, prefix = "_dtag")
           symbols = symbols.chars unless symbols.is_a?(Array)
           chars = if RUBY_VERSION >= "1.9"
@@ -71,6 +67,15 @@ module WLang
         
         private
         
+        def find_dispatching_method(symbols, subject = self)
+          self.class.find_dispatching_method(symbols, subject)
+        end
+        
+        def normalize_tag_fns(fns, arity)
+          fns.fill(nil, fns.length, arity - fns.length)
+          [fns[0...arity], fns[arity..-1]]
+        end
+        
         def flush_trailing_fns(buf, fns)
           start, stop = braces
           fns.each do |fn|
@@ -79,31 +84,6 @@ module WLang
             buf << stop
           end
           buf
-        end
-
-        def find_dispatching_method(symbols, subject = self)
-          self.class.find_dispatching_method(symbols, subject)
-        end
-
-        def normalize_tag_fns(fns, arity)
-          fns.fill(nil, fns.length, arity - fns.length)
-          [fns[0...arity], fns[arity..-1]]
-        end
-        
-        def _(fn)
-          fn.call(self, "")
-        end
-
-        def evaluate(what)
-          return @context if what.strip == "self"
-          @context.instance_eval(what)
-        end
-
-        def with_context(ctx)
-          old, @context = @context, Scope.factor(ctx)
-          yield
-        ensure
-          @context = ctx
         end
         
       end # module InstanceMethods

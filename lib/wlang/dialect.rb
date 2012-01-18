@@ -1,7 +1,9 @@
 require 'wlang/dialect/dispatching'
+require 'wlang/dialect/dsl'
 module WLang
   class Dialect
     include Dialect::Dispatching
+    include Dialect::DSL
     
     attr_reader :braces
     
