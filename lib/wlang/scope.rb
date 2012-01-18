@@ -25,6 +25,8 @@ module WLang
           __(@__obj__[name])
         elsif @__obj__.has_key?(name.to_s)
           __(@__obj__[name.to_s])
+        elsif @__obj__.respond_to?(name)
+          @__obj__.send(name, *args, &block)
         else
           super
         end
