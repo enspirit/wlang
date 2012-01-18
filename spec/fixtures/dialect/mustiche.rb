@@ -12,7 +12,7 @@ class Mustiche < WLang::Dialect
     buf = ""
     evaluate(_ fn1).each do |val|
       buf << (_ fn3) if fn3 and !buf.empty?
-      with_context(val) do
+      with_scope(val) do
         buf << (_ fn2)
       end
     end

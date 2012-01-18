@@ -1,8 +1,8 @@
 require 'spec_helper'
 describe Mustiche do
 
-  def m(tpl, context = {})
-    Mustiche.instantiate(tpl, context)
+  def m(tpl, scope = {})
+    Mustiche.instantiate(tpl, scope)
   end
 
   it '!{...} calls to_s on strings' do
@@ -23,14 +23,12 @@ describe Mustiche do
 
   it '*{...} should iterate' do
     tpl = "Hello *{numbers}{!{self}}!"
-    ctx = {:numbers => [1,2,3]}
-    m(tpl, ctx).should eq("Hello 123!")
+    m(tpl, {:numbers => [1,2,3]}).should eq("Hello 123!")
   end
 
   it '*{...} should have a third optional block' do
     tpl = "Hello *{numbers}{!{self}}{, }!"
-    ctx = {:numbers => [1,2,3]}
-    m(tpl, ctx).should eq("Hello 1, 2, 3!")
+    m(tpl, {:numbers => [1,2,3]}).should eq("Hello 1, 2, 3!")
   end
 
 end

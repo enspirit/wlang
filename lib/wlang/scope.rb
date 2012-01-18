@@ -11,8 +11,8 @@ module WLang
     end
     def __(arg); Scope.factor(arg); end
 
-    def initialize(context)
-      @context = context
+    def initialize(__obj__)
+      @__obj__ = __obj__
     end
 
   end # class Scope
@@ -21,26 +21,26 @@ module WLang
 
     def method_missing(name, *args, &block)
       if args.empty? and !block
-        if @context.has_key?(name)
-          __(@context[name])
-        elsif @context.has_key?(name.to_s)
-          __(@context[name.to_s])
+        if @__obj__.has_key?(name)
+          __(@__obj__[name])
+        elsif @__obj__.has_key?(name.to_s)
+          __(@__obj__[name.to_s])
         else
           super
         end
-      elsif @context.respond_to?(name)
-        @context.send(name, *args, &block)
+      elsif @__obj__.respond_to?(name)
+        @__obj__.send(name, *args, &block)
       end
     end
 
     def respond_to?(name)
-      @context.respond_to?(name) or
-      @context.has_key?(name) or
-      @context.has_key?(name.to_s)
+      @__obj__.respond_to?(name) or
+      @__obj__.has_key?(name) or
+      @__obj__.has_key?(name.to_s)
     end
 
     def [](name)
-      __(@context[name])
+      __(@__obj__[name])
     end
 
   end # class HashScope

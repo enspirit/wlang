@@ -2,8 +2,8 @@ require 'spec_helper'
 module WLang
   describe Dialect, "instantiate" do
     
-    def instantiate(source, ctx)
-      Upcasing.instantiate(source, ctx)
+    def instantiate(source, scope)
+      Upcasing.instantiate(source, scope)
     end
     
     it 'works as expected' do
@@ -14,7 +14,7 @@ module WLang
       instantiate("Hello ${who}{world}", {}).should eq("Hello WHO{world}")
     end
     
-    it "does not require a context" do
+    it "does not require a scope" do
       Upcasing.instantiate(hello_tpl).should eq("Hello WHO!")
     end
     

@@ -23,8 +23,8 @@ module WLang
       new(braces).send(:template, source)
     end
     
-    def self.instantiate(tpl, context = {}, braces = WLang::BRACES)
-      new(braces).send(:instantiate, tpl, context)
+    def self.instantiate(tpl, scope = {}, braces = WLang::BRACES)
+      new(braces).send(:instantiate, tpl, scope)
     end
     
     private
@@ -41,15 +41,15 @@ module WLang
     
     def template(source)
       compiled = eval(compile(source), TOPLEVEL_BINDING)
-      lambda do |context|
-        with_context(context) do
+      lambda do |scope|
+        with_scope(scope) do
           compiled.call(self, "")
         end
       end
     end
     
-    def instantiate(source, context)
-      template(source).call(context)
+    def instantiate(source, scope)
+      template(source).call(scope)
     end
     
     def compiler

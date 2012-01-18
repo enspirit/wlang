@@ -21,15 +21,15 @@ module WLang
         end
         
         def evaluate(what)
-          return @context if what.strip == "self"
-          @context.instance_eval(what)
+          return @scope if what.strip == "self"
+          @scope.instance_eval(what)
         end
         
-        def with_context(ctx)
-          old, @context = @context, Scope.factor(ctx)
+        def with_scope(scope)
+          old, @scope = @scope, Scope.factor(scope)
           yield
         ensure
-          @context = ctx
+          @scope = scope
         end
         
       end
