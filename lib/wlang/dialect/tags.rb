@@ -90,6 +90,22 @@ module WLang
           [fns[0...arity], fns[arity..-1]]
         end
         
+        def _(fn)
+          fn.call(self, "")
+        end
+
+        def evaluate(what)
+          return @context if what.strip == "self"
+          @context.instance_eval(what)
+        end
+
+        def with_context(ctx)
+          old, @context = @context, Scope.factor(ctx)
+          yield
+        ensure
+          @context = ctx
+        end
+        
       end # module InstanceMethods
       
       def self.included(mod)

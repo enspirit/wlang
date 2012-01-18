@@ -21,27 +21,8 @@ module WLang
       new(braces).send(:template, source)
     end
     
-    def instantiate(tpl, context = {})
-      @context = Scope.factor(context)
-      code = engine.call(tpl)
-      proc = eval(code)
-      proc.call(self, "")
-    end
-    
-    def _(fn)
-      fn.call(self, "")
-    end
-    
-    def evaluate(what)
-      return @context if what.strip == "self"
-      @context.instance_eval(what)
-    end
-    
-    def with_context(ctx)
-      old, @context = @context, ctx
-      yield
-    ensure
-      @context = ctx
+    def self.instantiate(tpl, context = {}, braces = WLang::BRACES)
+      new(braces).send(:instantiate, tpl, context)
     end
     
     private
@@ -62,6 +43,10 @@ module WLang
           proc.call(self, "")
         end
       end
+    end
+    
+    def instantiate(source, context)
+      template(source).call(context)
     end
     
     def engine

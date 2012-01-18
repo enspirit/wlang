@@ -2,10 +2,8 @@ require 'spec_helper'
 require 'fixtures/mustiche'
 describe Mustiche do
 
-  let(:mustiche){ Mustiche.new }
-
   def m(tpl, context = {})
-    mustiche.instantiate(tpl, context)
+    Mustiche.instantiate(tpl, context)
   end
 
   it '!{...} calls to_s on strings' do
