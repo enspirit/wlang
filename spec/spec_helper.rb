@@ -1,36 +1,52 @@
 require 'epath'
+$root_folder ||= Path.backfind('.[Rakefile]')
 
+# Require wlang
+$LOAD_PATH.unshift $root_folder/:lib
+require 'wlang'
+
+# RSpec helpers
 module Helpers
+  extend(self)
   
   def root_folder
-    @root_folder ||= Path.backfind('.[Rakefile]')
+    $root_folder
   end
   
   def spec_folder
     root_folder/:spec
   end
   
+  def fixtures_folder
+    spec_folder/:fixtures
+  end
+  
   def tpl_path(what)
     what = "#{what}.tpl" if what.is_a?(Symbol)
-    spec_folder/:fixtures/:templates/what
+    fixtures_folder/:templates/what
   end
   
   def tpl(what)
-    tpl_path.read
+    tpl_path(what).read
+  end
+  
+  # Load fixture dialects
+  spec_folder.glob("fixtures/dialect/*.rb").each do |f|
+    require f.expand_path
+  end
+  
+  fixtures_folder.glob("templates/*.tpl").each do |f|
+    name = f.basename.without_extension
+    define_method("#{name}_path".to_sym) do
+      fixtures_folder/:templates/f.basename
+    end
+    define_method("#{name}_tpl".to_sym) do
+      (fixtures_folder/:templates/f.basename).read
+    end
   end
   
 end
 include Helpers
-
-# Require wlang
-$LOAD_PATH.unshift root_folder/:lib
-$LOAD_PATH.unshift root_folder/:spec
-require 'wlang'
-
-# Load fixture dialects
-spec_folder.glob("fixtures/dialect/*.rb").each do |f|
-  require f.expand_path
-end
 
 # Configure rspec
 RSpec.configure do |c|

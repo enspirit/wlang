@@ -2,14 +2,8 @@ require 'spec_helper'
 module WLang
   describe Dialect, ".parse" do
     
-    let(:hello_path){
-      File.expand_path('../hello.tpl', __FILE__)
-    }
-    let(:hello_tpl){
-      File.read(hello_path)
-    }
     let(:expected){
-      [:template, [:fn, [:strconcat, [:static, "Hello "], [:wlang, "!", [:fn, [:static, "who"]]]]]]
+      [:template, [:fn, [:strconcat, [:static, "Hello "], [:wlang, "$", [:fn, [:static, "who"]]], [:static, "!"]]]]
     }
     
     def parse(s)
