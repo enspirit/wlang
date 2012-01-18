@@ -11,14 +11,18 @@ module WLang
       foo.dispatch("@", "", nil).should eq('(foo#link )')
       foo.dispatch("<", "", nil).should eq('(foo#less )')
     end
-
+    
     it 'dispatches correctly on a subclass' do
       bar.dispatch("!", "", nil).should eq("(foo#execution )")
       bar.dispatch("$", "", nil).should eq("(bar#escaping )")
       bar.dispatch("@", "", nil).should eq('(foo#link )')
       bar.dispatch("<", "", nil).should eq('(bar#less )')
     end
-
+    
+    it 'dispatches correctly on extra symbols' do
+      foo.dispatch("!!", "", nil).should eq('!(foo#execution )')
+    end
+    
     it 'dispatches correctly on unknown symbols' do
       foo.dispatch(">", "", lambda{|d,buf| d.should eq(foo); buf << "foo"}).should eq('>{foo}')
       bar.dispatch(">", "", lambda{|d,buf| d.should eq(bar); buf << "bar"}).should eq('>{bar}')

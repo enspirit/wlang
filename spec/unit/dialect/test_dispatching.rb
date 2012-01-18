@@ -4,15 +4,14 @@ module WLang
     include Dialect::Dispatching
     
     describe 'tag_dispatching_name' do
-      let(:c){ self.class }
       it "works with a single char" do
-        c.tag_dispatching_name("$").should eq(:_dtag_36)
+        tag_dispatching_name("$").should eq(:_dtag_36)
       end
       it "works with a multiple chars" do
-        c.tag_dispatching_name("!$").should eq(:_dtag_33_36)
+        tag_dispatching_name("!$").should eq(:_dtag_33_36)
       end
       it "works with an array" do
-        c.tag_dispatching_name(['!', '$']).should eq(:_dtag_33_36)
+        tag_dispatching_name(['!', '$']).should eq(:_dtag_33_36)
       end
     end
     

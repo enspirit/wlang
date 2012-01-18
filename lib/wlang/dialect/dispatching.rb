@@ -14,7 +14,7 @@ module WLang
           "#{prefix}_#{chars}".to_sym
         end
         
-        def find_dispatching_method(symbols, subject = new)
+        def find_dispatching_method(symbols, subject)
           extra, symbols, found = [], symbols.chars.to_a, nil
           begin
             meth = tag_dispatching_name(symbols)
@@ -66,6 +66,10 @@ module WLang
         end
         
         private
+        
+        def tag_dispatching_name(symbols)
+          self.class.tag_dispatching_name(symbols)
+        end
         
         def find_dispatching_method(symbols, subject = self)
           self.class.find_dispatching_method(symbols, subject)
