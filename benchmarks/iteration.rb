@@ -1,8 +1,6 @@
-$:.unshift File.expand_path('../../lib', __FILE__)
 $:.unshift File.expand_path('../../spec', __FILE__)
 require 'benchmark'
 require 'spec_helper'
-require 'fixtures/mustiche'
 
 tpl      = "*{1..10000}{!{self}}{, }"
 compiled = Mustiche.compile(tpl)

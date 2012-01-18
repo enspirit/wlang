@@ -34,15 +34,14 @@ module WLang
     end
     
     def compile(source)
-      engine.call(source)
+      compiler.call(parse(source))
     end
     
     def template(source)
-      compiled = compile(source)
-      proc     = eval(compiled, TOPLEVEL_BINDING)
+      compiled = eval(compile(source), TOPLEVEL_BINDING)
       lambda do |context|
         with_context(context) do
-          proc.call(self, "")
+          compiled.call(self, "")
         end
       end
     end
@@ -51,12 +50,11 @@ module WLang
       template(source).call(context)
     end
     
-    def engine
-      engine = Class.new(Temple::Engine)
-      engine.use WLang::Parser
-      engine.use WLang::Compiler, :dialect => self
-      engine.use WLang::Generator
-      engine.new
+    def compiler
+      Class.new(Temple::Engine) do
+        use WLang::Compiler, :dialect => self
+        use WLang::Generator
+      end.new
     end
     
   end # class Dialect

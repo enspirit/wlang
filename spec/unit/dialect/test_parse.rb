@@ -25,7 +25,7 @@ module WLang
     end
     
     it 'recognizes IO objects' do
-      File.open(hello_path, "r") do |f|
+      hello_io do |f|
         parse(f).should eq(expected)
       end
     end

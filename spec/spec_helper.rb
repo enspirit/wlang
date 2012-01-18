@@ -6,6 +6,7 @@ $LOAD_PATH.unshift $root_folder/:lib
 require 'wlang'
 
 # RSpec helpers
+require 'rspec'
 module Helpers
   extend(self)
   
@@ -37,11 +38,16 @@ module Helpers
   
   fixtures_folder.glob("templates/*.tpl").each do |f|
     name = f.basename.without_extension
-    define_method("#{name}_path".to_sym) do
+    define_method(:"#{name}_path") do
       fixtures_folder/:templates/f.basename
     end
-    define_method("#{name}_tpl".to_sym) do
-      (fixtures_folder/:templates/f.basename).read
+    define_method(:"#{name}_tpl") do
+      send(:"#{name}_path").read
+    end
+    define_method(:"#{name}_io") do |&b|
+      send(:"#{name}_path").open("r") do |io|
+        b.call(io)
+      end
     end
   end
   

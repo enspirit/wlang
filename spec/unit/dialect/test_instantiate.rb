@@ -2,16 +2,20 @@ require 'spec_helper'
 module WLang
   describe Dialect, "instantiate" do
     
+    def instantiate(source, ctx)
+      Upcasing.instantiate(source, ctx)
+    end
+    
     it 'works as expected' do
-      Upcasing.instantiate("Hello !{who}", {}).should eq("Hello WHO")
+      instantiate(hello_tpl, {}).should eq("Hello WHO!")
     end
     
     it 'do not eat extra blocks' do
-      Upcasing.instantiate("Hello !{who}{world}", {}).should eq("Hello WHO{world}")
+      instantiate("Hello ${who}{world}", {}).should eq("Hello WHO{world}")
     end
     
     it "does not require a context" do
-      Upcasing.instantiate("Hello !{who}").should eq("Hello WHO")
+      Upcasing.instantiate(hello_tpl).should eq("Hello WHO!")
     end
     
   end # describe Dialect
