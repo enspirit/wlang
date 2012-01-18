@@ -1,13 +1,13 @@
 $:.unshift File.expand_path('../../../lib', __FILE__)
-$:.unshift File.expand_path('../../../spec', __FILE__)
 require 'ruby-prof'
-require 'spec_helper'
+require 'wlang/mustang'
 
-tpl = Mustiche.template("*{1..10000}{!{self}}{, }")
+scope = {:range => (1..10000).map{|i| {:i => i}}}
+tpl = WLang::Mustang.compile('#{range}{!{i}}{, }')
 
 RubyProf.start
 
-tpl.call({})
+tpl.call(scope)
 
 result = RubyProf.stop
 printer = RubyProf::FlatPrinter.new(result)
