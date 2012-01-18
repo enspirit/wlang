@@ -2,7 +2,7 @@ require 'epath'
 $root_folder ||= Path.backfind('.[Rakefile]')
 
 # Require wlang
-$LOAD_PATH.unshift $root_folder/:lib
+$LOAD_PATH.unshift ($root_folder/:lib).to_s
 require 'wlang'
 
 # RSpec helpers
