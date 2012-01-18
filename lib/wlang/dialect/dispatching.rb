@@ -45,7 +45,7 @@ module WLang
             arity    = code.arity
             define_method(methname) do |buf, fns|
               args, rest = normalize_tag_fns(fns, arity)
-              buf << code.bind(self).call(*args)
+              buf << code.bind(self).call(*args).to_s
               flush_trailing_fns(buf, rest) unless rest.empty?
               buf
             end

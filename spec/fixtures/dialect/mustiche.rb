@@ -1,11 +1,11 @@
 class Mustiche < WLang::Dialect
 
   tag '!' do |fn|
-    evaluate(fn).to_s
+    evaluate(fn)
   end
 
   tag '$' do |fn|
-    Temple::Utils.escape_html evaluate(fn).to_s
+    Temple::Utils.escape_html evaluate(fn)
   end
 
   tag '*' do |fn1,fn2,fn3|
