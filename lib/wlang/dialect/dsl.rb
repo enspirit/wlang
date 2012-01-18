@@ -20,9 +20,9 @@ module WLang
           fn.call(self, "")
         end
         
-        def evaluate(what)
-          return @scope if what.strip == "self"
-          @scope.instance_eval(what)
+        def evaluate(what, dialect = self)
+          what = what.call(dialect, "") if what.is_a?(Proc)
+          what.strip == "self" ? @scope : @scope.instance_eval(what)
         end
         
         def with_scope(scope)
