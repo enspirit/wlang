@@ -26,8 +26,6 @@ module WLang
           what.strip == "self" ? @scope : @scope.instance_eval(what)
         end
         
-        public
-        
         def with_scope(scope)
           old, @scope = @scope, Scope.factor(scope)
           yield

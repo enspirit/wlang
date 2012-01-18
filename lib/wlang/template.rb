@@ -7,9 +7,9 @@ module WLang
     end
   
     def call(scope = {})
-      @dialect.with_scope(scope){
+      @dialect.send(:with_scope, scope) do
         super(@dialect, "")
-      }
+      end
     end
   
   end # class Template
