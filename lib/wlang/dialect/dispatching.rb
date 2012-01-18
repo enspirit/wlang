@@ -46,7 +46,8 @@ module WLang
             define_method(methname) do |buf, fns|
               args, rest = normalize_tag_fns(fns, arity)
               buf << code.bind(self).call(*args)
-              flush_trailing_fns(buf, rest)
+              flush_trailing_fns(buf, rest) unless rest.empty?
+              buf
             end
             dispatching_map[symbols] = ['', methname]
           else
