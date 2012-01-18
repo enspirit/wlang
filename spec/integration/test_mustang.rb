@@ -66,6 +66,9 @@ module WLang
         repo = [{:name => "resque"},{:name => "hub"},{:name => "rip"}]
         m('Hello #{repo}{<b>${name}</b>}', :repo => repo).should eq("Hello <b>resque</b><b>hub</b><b>rip</b>")
       end
+      it 'iterates on ranges' do
+        m('Hello #{range}{.}', :range => 1..10).should eq("Hello ..........")
+      end
       it 'passes the block to a lambda' do
         wrapped = lambda{|fn| "<b>#{fn.call}</b>"}
         scope   = {:wrapped => wrapped, :name => "World"}

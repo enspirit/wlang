@@ -19,7 +19,7 @@ module WLang
       case x = plus(fn1)
       when FalseClass, NilClass
         nil
-      when Array
+      when Array, Range
         x.inject(""){|buf,item|
           buf << with_scope(item){ instantiate(fn2) }
         }
