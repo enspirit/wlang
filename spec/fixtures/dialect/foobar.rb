@@ -1,9 +1,9 @@
 class Foo < WLang::Dialect
-
+  
   def _(fn)
     fn ? fn.call(self, "") : nil
   end
-
+  
   def execution(fn)
     "(foo#execution #{_ fn})"
   end
@@ -26,6 +26,7 @@ class Bar < Foo
   end
   
   tag "$", :escaping
-  tag "<" do |fn| "(bar#less #{_ fn})"; end
+  tag "<" do |fn| "(bar#less #{_ fn})";    end
+  tag ">" do |fn| "(bar#greater #{_ fn})"; end
 end
 
