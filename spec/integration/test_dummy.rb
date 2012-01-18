@@ -22,4 +22,22 @@ describe WLang::Dummy do
     dummy("Hello {who}!").should eq("Hello {who}!")
   end
   
+  context "documentation" do
+    let(:d){
+      dialect do
+        tag('$') do |fn| evaluate(fn)                end
+        tag('%') do |fn| yield_fn(fn, WLang::Dummy)  end
+      end
+    }
+    let(:tpl){%q{
+      Hello ${who}! This is wlang, a templating language which comes with
+      special tags such as %{${who}, +{who}, *{authors}{...}, etc.}
+    }.gsub(/^\s*/m,"").strip}
+    let(:expected){%q{
+      Hello world! This is wlang, a templating language which comes with
+      special tags such as ${who}, +{who}, *{authors}{...}, etc.
+    }.gsub(/^\s*/m,"").strip}
+    specify{ d.instantiate(tpl, :who => "world").should eq(expected) }
+  end
+  
 end
