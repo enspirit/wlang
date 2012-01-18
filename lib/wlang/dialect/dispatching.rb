@@ -4,6 +4,10 @@ module WLang
       
       module ClassMethods
         
+        def dispatching_map
+          @dispatching_map ||= {}
+        end
+        
         def tag_dispatching_name(symbols, prefix = "_dtag")
           symbols = symbols.chars unless symbols.is_a?(Array)
           chars   = symbols.map{|s| s.ord}.join("_")
@@ -11,17 +15,19 @@ module WLang
         end
         
         def find_dispatching_method(symbols, subject)
-          extra, symbols, found = [], symbols.chars.to_a, nil
-          begin
-            meth = tag_dispatching_name(symbols)
-            if subject.respond_to?(meth)
-              found = meth
-              break
-            else
-              extra << symbols.shift
-            end
-          end until symbols.empty?
-          [extra.join, found]
+          dispatching_map[symbols] ||= begin
+            extra, symbols, found = [], symbols.chars.to_a, nil
+            begin
+              meth = tag_dispatching_name(symbols)
+              if subject.respond_to?(meth)
+                found = meth
+                break
+              else
+                extra << symbols.shift
+              end
+            end until symbols.empty?
+            [extra.join, found]
+          end
         end
         
         private
@@ -42,6 +48,7 @@ module WLang
               buf << code.bind(self).call(*args)
               flush_trailing_fns(buf, rest)
             end
+            dispatching_map[symbols] = ['', methname]
           else
             raise "Unable to use #{code} for a tag"
           end
