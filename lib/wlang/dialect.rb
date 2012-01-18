@@ -23,8 +23,8 @@ module WLang
       new(options).send(:compile, source)
     end
     
-    def self.instantiate(tpl, scope = {}, options = {})
-      new(options).send(:instantiate, tpl, scope)
+    def self.instantiate(source, scope = {}, options = {})
+      compile(source, options).call(scope)
     end
     
     private
@@ -53,17 +53,6 @@ module WLang
       else
         msg = "No such compilation scheme #{options[:compile_as]}"
         raise ArgumentError, msg, caller
-      end
-    end
-    
-    def instantiate(source, scope)
-      case source
-      when Template
-        source.call(scope)
-      when Proc
-        with_scope(scope){ source.call(self, "") }
-      else
-        instantiate(compile(source), scope)
       end
     end
     
