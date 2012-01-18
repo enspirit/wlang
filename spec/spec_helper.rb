@@ -1,6 +1,11 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-$LOAD_PATH.unshift File.expand_path('../../test', __FILE__)
+require 'epath'
+root = Path.backfind('.[Rakefile]')
+
+$LOAD_PATH.unshift root/:lib
+$LOAD_PATH.unshift root/:spec
+
 require 'wlang'
-require 'fixtures/foobar'
-require 'fixtures/upcasing'
-require 'fixtures/mustiche'
+
+(root/:spec).glob("fixtures/dialect/*.rb").each do |f|
+  require f.expand_path
+end

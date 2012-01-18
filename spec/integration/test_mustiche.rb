@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'fixtures/mustiche'
 describe Mustiche do
 
   def m(tpl, context = {})
