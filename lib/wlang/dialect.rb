@@ -5,29 +5,35 @@ module WLang
     include Dialect::Dispatching
     include Dialect::DSL
     
-    attr_reader :braces
+    DEFAULT_OPTIONS = {
+      :braces     => WLang::BRACES,
+      :compile_as => :template
+    }
     
-    def initialize(braces = WLang::BRACES)
-      @braces = braces
+    def initialize(options = {})
+      options = {:compile_as => options} if options.is_a?(Symbol)
+      @options = DEFAULT_OPTIONS.merge(options)
     end
     
-    def self.parse(source, braces = WLang::BRACES)
-      new(braces).send(:parse, source)
+    def self.parse(source, options = {})
+      new(options).send(:parse, source)
     end
     
-    def self.compile(source, braces = WLang::BRACES)
-      new(braces).send(:compile, source)
+    def self.compile(source, options = {})
+      new(options).send(:compile, source)
     end
     
-    def self.template(source, braces = WLang::BRACES)
-      new(braces).send(:template, source)
-    end
-    
-    def self.instantiate(tpl, scope = {}, braces = WLang::BRACES)
-      new(braces).send(:instantiate, tpl, scope)
+    def self.instantiate(tpl, scope = {}, options = {})
+      new(options).send(:instantiate, tpl, scope)
     end
     
     private
+    
+    attr_reader :options
+    
+    def braces
+      options[:braces]
+    end
     
     def parse(source)
       source = File.read(source.to_path) if source.respond_to?(:to_path)
@@ -36,20 +42,29 @@ module WLang
     end
     
     def compile(source)
-      compiler.call(parse(source))
-    end
-    
-    def template(source)
-      compiled = eval(compile(source), TOPLEVEL_BINDING)
-      lambda do |scope|
-        with_scope(scope) do
-          compiled.call(self, "")
-        end
+      rubycode = compiler.call(parse(source))
+      case options[:compile_as]
+      when :source
+        rubycode
+      when :proc
+        eval(rubycode, TOPLEVEL_BINDING)
+      when :template
+        Template.new self, &eval(rubycode, TOPLEVEL_BINDING)
+      else
+        msg = "No such compilation scheme #{options[:compile_as]}"
+        raise ArgumentError, msg, caller
       end
     end
     
     def instantiate(source, scope)
-      template(source).call(scope)
+      case source
+      when Template
+        source.call(scope)
+      when Proc
+        with_scope(scope){ source.call(self, "") }
+      else
+        instantiate(compile(source), scope)
+      end
     end
     
     def compiler
