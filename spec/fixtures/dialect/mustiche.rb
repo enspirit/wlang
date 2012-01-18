@@ -1,22 +1,53 @@
 class Mustiche < WLang::Dialect
-
-  tag '!' do |fn|
-    evaluate(fn)
+  include Temple::Utils
+  
+  def plus(fn)
+    varname = instantiate(fn)
+    known?(varname) ? evaluate(varname) : nil
   end
-
-  tag '$' do |fn|
-    Temple::Utils.escape_html evaluate(fn)
+  tag '+', :plus
+  
+  def escape(fn)
+    escape_html plus(fn)
   end
-
-  tag '*' do |fn1,fn2,fn3|
-    buf = ""
-    evaluate(fn1).each do |val|
-      buf << instantiate(fn3) if fn3 and !buf.empty?
-      with_scope(val) do
-        buf << instantiate(fn2)
-      end
+  tag '$', :escape
+  tag '&', :escape
+  
+  def section(fn1, fn2)
+    case x = plus(fn1)
+    when FalseClass, NilClass
+      nil
+    when Array
+      x.inject(""){|buf,item|
+        buf << with_scope(item){ instantiate(fn2) }
+      }
+    when Proc
+      x.call lambda{ instantiate(fn2) }
+    else
+      with_scope(x){ instantiate(fn2) }
     end
-    buf
   end
-
+  tag '#', :section
+  
+  def inverted(fn1, fn2)
+    case x = plus(fn1)
+    when FalseClass, NilClass
+      instantiate(fn2)
+    when Array
+      instantiate(fn2) if x.empty?
+    end
+  end
+  tag '^', :inverted
+  
+  def comment(fn)
+  end
+  tag '!', :comment
+  
+  def partial(fn)
+    if x = plus(fn)
+      instantiate(x)
+    end
+  end
+  tag '>', :partial
+  
 end

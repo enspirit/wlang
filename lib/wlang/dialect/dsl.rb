@@ -17,8 +17,15 @@ module WLang
         protected
         
         def instantiate(fn, dialect = self)
-          dialect = dialect.new if dialect.is_a?(Class)
-          fn.call(dialect, "")
+          case fn
+          when Template
+            fn.call(@scope)
+          when Proc
+            dialect = dialect.new if dialect.is_a?(Class)
+            fn.call(dialect, "")
+          when String
+            self.class.instantiate(fn, @scope)
+          end
         end
         
         def evaluate(what, dialect = self)
@@ -31,6 +38,10 @@ module WLang
           yield
         ensure
           @scope = scope
+        end
+        
+        def known?(what)
+          @scope.respond_to?(what.to_sym)
         end
         
       end
