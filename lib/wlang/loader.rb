@@ -1,3 +1,3 @@
 require "citrus"
 require "temple"
-require "backports/basic_object" unless defined?(BasicObject) 
+require "backports/basic_object" unless defined?(BasicObject)
