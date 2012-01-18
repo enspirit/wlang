@@ -1,3 +1,4 @@
+require 'wlang'
 module WLang
   class Mustang < WLang::Dialect
     include Temple::Utils
