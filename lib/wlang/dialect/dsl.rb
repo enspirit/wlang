@@ -4,6 +4,8 @@ module WLang
       
       module ClassMethods
         
+        protected
+        
         def tag(symbols, method = nil, &block)
           define_tag_method(symbols, method || block)
         end
@@ -11,7 +13,9 @@ module WLang
       end
       
       module InstanceMethods
-
+        
+        protected
+        
         def _(fn)
           fn.call(self, "")
         end
