@@ -2,13 +2,13 @@ $:.unshift File.expand_path('../../spec', __FILE__)
 require 'benchmark'
 require 'spec_helper'
 
-tpl      = "*{1..10000}{!{self}}{, }"
+tpl      = "*{1..50000}{!{self}}{, }"
 compiled = Mustiche.compile(tpl)
 template = Mustiche.template(tpl)
 
 puts compiled
 
-Benchmark.bm do |x|
+Benchmark.bm(10) do |x|
   x.report(:wlang){
     template.call(nil)
   }
