@@ -36,8 +36,8 @@ string `" !"`.
 ## Example
 
 ```ruby
-tpl = WLang::Html.compile("Hello ${who}")
-# => #<Proc:0x8865d64@(irb):4 (lambda)>
+tpl = WLang::Mustang.compile("Hello ${who}")
+# => #<WLang::Template:0x8865d64@(irb):4 (lambda)>
 
 tpl.call(:who => "WLang & World")
 # => "Hello WLang &amp; World !"
@@ -45,7 +45,7 @@ tpl.call(:who => "WLang & World")
 
 ## Dialects through high-order functions
 
-High-order functions provide the semantics of the template tags. In the Html example 
+High-order functions provide the semantics of the template tags. In the Mustang example 
 above:
 
 * the high-order function `($ )` is of arity 1 (it takes a single argument, which 
@@ -54,9 +54,9 @@ above:
 * it evaluates `who` in the current scope and receives the string `"WLang & World"`
 * it escapes that string for HTML and returns the result
 
-A set of high-order functions mapped to tags is called a _Dialect_, such as `WLang::Html`. 
-One of the powerful features of WLang is that creating you own dialect is very simple. 
-Let take an example:
+A set of high-order functions mapped to tags is called a _Dialect_, such as `WLang::Mustang`,
+which is a dialect which mimics the famous Mustache templating language. One of the powerful 
+features of WLang is that creating you own dialect is very simple. Let take an example:
 
 ```ruby
 class Upcasing < WLang::Dialect
@@ -67,7 +67,6 @@ class Upcasing < WLang::Dialect
 
 end
 tpl = Upcasing.compile("Hello ${world}")
-tpl.call({ })
+tpl.call
 # => "Hello WORLD !"
 ```
-
