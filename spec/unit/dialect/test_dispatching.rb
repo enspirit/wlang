@@ -1,7 +1,7 @@
 require 'spec_helper'
 module WLang
-  describe Dialect::Tags do
-    include Dialect::Tags
+  describe Dialect::Dispatching do
+    include Dialect::Dispatching
     
     describe 'tag_dispatching_name' do
       let(:c){ self.class }

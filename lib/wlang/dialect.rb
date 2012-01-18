@@ -1,7 +1,7 @@
-require 'wlang/dialect/tags'
+require 'wlang/dialect/dispatching'
 module WLang
   class Dialect
-    include Dialect::Tags
+    include Dialect::Dispatching
     
     attr_reader :braces
     

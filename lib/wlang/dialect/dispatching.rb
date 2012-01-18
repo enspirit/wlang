@@ -1,6 +1,6 @@
 module WLang
   class Dialect
-    module Tags
+    module Dispatching
       
       module ClassMethods
         
@@ -109,10 +109,10 @@ module WLang
       end # module InstanceMethods
       
       def self.included(mod)
-        mod.instance_eval{ include(Tags::InstanceMethods) }
+        mod.instance_eval{ include(Dispatching::InstanceMethods) }
         mod.extend(ClassMethods)
       end
       
-    end # module Tags
+    end # module Dispatching
   end # class Dialect
 end # module WLang
