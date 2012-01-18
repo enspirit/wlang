@@ -31,22 +31,25 @@ The functional semantics of this template is as follows:
 
 That is, the compilation of this template yields a function that concatenates the
 string `"Hello"` with the result of the higher-order function `($ )` and then the
-string `" !"`.
+string `" !"`. Providing a concrete semantics to those high-order functions yields 
+so called WLang _dialects_.
 
-## Example
+## Example: the Mustang dialect
+
+The `WLang::Mustang` dialect mimics the excellent [Mustache](http://mustache.github.com/) 
+templating language by providing similar tags, such as `$`, `+`, `#`, `^`, etc.
+
+Mustache's `{{...}}` is available as `${...}` as illustrated below:
 
 ```ruby
-tpl = WLang::Mustang.compile("Hello ${who}")
-# => #<WLang::Template:0x8865d64@(irb):4 (lambda)>
+tpl = WLang::Mustang.compile("Hello ${who} !")
+# => #<WLang::Template:0x007fbc6302f720@<main>:0 (lambda)>
 
 tpl.call(:who => "WLang & World")
 # => "Hello WLang &amp; World !"
 ```
 
-## Dialects through high-order functions
-
-High-order functions provide the semantics of the template tags. In the Mustang example 
-above:
+In this example,
 
 * the high-order function `($ )` is of arity 1 (it takes a single argument, which 
   is another function)
@@ -54,19 +57,22 @@ above:
 * it evaluates `who` in the current scope and receives the string `"WLang & World"`
 * it escapes that string for HTML and returns the result
 
-A set of high-order functions mapped to tags is called a _Dialect_, such as `WLang::Mustang`,
-which is a dialect which mimics the famous Mustache templating language. One of the powerful 
-features of WLang is that creating you own dialect is very simple. Let take an example:
+See the documentation of the WLang::Mustang class for more information about this powerful
+dialect.
+
+## Creating your own dialect
+
+One of the most powerful features of WLang is that creating you own dialect is very simple. 
+Let take an example:
 
 ```ruby
 class Upcasing < WLang::Dialect
 
   tag '$' do |fn|
-    fn.call(self, "").upcase
+    instantiate(fn).upcase
   end
 
 end
-tpl = Upcasing.compile("Hello ${world}")
-tpl.call
+Upcasing.instantiate("Hello ${world}")
 # => "Hello WORLD !"
 ```
