@@ -7,8 +7,9 @@ module WLang
     end
   
     def call(scope = {})
-      @dialect.send(:with_scope, scope) do
-        super(@dialect, "")
+      d = @dialect.dup
+      d.send(:with_scope, scope) do
+        super(d, "")
       end
     end
   

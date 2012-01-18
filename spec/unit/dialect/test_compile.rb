@@ -39,5 +39,15 @@ module WLang
       lambda{ compile(hello_tpl, :none) }.should raise_error(ArgumentError)
     end
     
+    it 'returns a thread-safe template object' do
+      t = WLang.dialect{ tag('$'){|fn|
+        raise if defined?(@somevar)
+        @somevar = "World"
+      } }.compile('${who}')
+      2.times do 
+        lambda{ t.call }.should_not raise_error
+      end
+    end
+    
   end # describe Dialect
 end # module WLang
