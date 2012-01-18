@@ -124,6 +124,7 @@ Gem::Specification.new do |s|
   # for each development dependency. These gems are required for developers
   #
   s.add_development_dependency("ruby-prof", "~> 0.10.8")
+  s.add_development_dependency("mustache", "~> 0.99.4")
   s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
   s.add_development_dependency("rspec", "~> 2.8.0")

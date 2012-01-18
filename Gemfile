@@ -18,4 +18,5 @@ end
 
 group :profiling do
   gem "ruby-prof", "~> 0.10.8"
+  gem "mustache",  "~> 0.99.4"
 end
