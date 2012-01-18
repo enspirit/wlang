@@ -1,7 +1,7 @@
 grammar WLang::Grammar
   
   rule template
-    (strconcat ''){
+    (strconcat !.){
       [:template, [:fn, strconcat.value]]
     }
   end
