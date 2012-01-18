@@ -25,8 +25,8 @@ describe WLang::Dummy do
   context "documentation" do
     let(:d){
       dialect do
-        tag('$') do |fn| evaluate(fn)                end
-        tag('%') do |fn| yield_fn(fn, WLang::Dummy)  end
+        tag('$') do |fn| evaluate(fn)                   end
+        tag('%') do |fn| instantiate(fn, WLang::Dummy)  end
       end
     }
     let(:tpl){%q{

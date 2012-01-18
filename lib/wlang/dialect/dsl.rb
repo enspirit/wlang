@@ -16,11 +16,10 @@ module WLang
         
         protected
         
-        def _(fn, dialect = self)
+        def instantiate(fn, dialect = self)
           dialect = dialect.new if dialect.is_a?(Class)
           fn.call(dialect, "")
         end
-        alias :yield_fn :_
         
         def evaluate(what, dialect = self)
           what = what.call(dialect, "") if what.is_a?(Proc)
