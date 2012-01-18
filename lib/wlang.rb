@@ -22,9 +22,10 @@ module WLang
   #   d.instantiate("Hello ${who}!", :who => "world")
   #   # => "Hello world!"
   #
-  def self.dialect(&defn)
+  def dialect(&defn)
     Class.new(WLang::Dialect, &defn)
   end
+  module_function :dialect
   
 end # module WLang
 require 'wlang/scope'

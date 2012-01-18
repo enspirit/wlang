@@ -8,6 +8,7 @@ require 'wlang'
 # RSpec helpers
 require 'rspec'
 module Helpers
+  include WLang
   extend(self)
   
   def root_folder
@@ -36,6 +37,7 @@ module Helpers
     require f.expand_path
   end
   
+  # Install helper methods for templates
   fixtures_folder.glob("templates/*.tpl").each do |f|
     name = f.basename.without_extension
     define_method(:"#{name}_path") do
