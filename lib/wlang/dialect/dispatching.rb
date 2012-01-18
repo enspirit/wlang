@@ -6,11 +6,7 @@ module WLang
         
         def tag_dispatching_name(symbols, prefix = "_dtag")
           symbols = symbols.chars unless symbols.is_a?(Array)
-          chars = if RUBY_VERSION >= "1.9"
-            symbols.map{|s| s.ord}.join("_")
-          else
-            symbols.map{|s| s[0]}.join("_")
-          end
+          chars   = symbols.map{|s| s.ord}.join("_")
           "#{prefix}_#{chars}".to_sym
         end
         
