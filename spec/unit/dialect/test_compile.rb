@@ -30,8 +30,12 @@ module WLang
       compile(proc).should be_a(Template)
     end
     
-    specify 'returned template is instantiable' do
+    specify 'returned template is callable' do
       compile(hello_tpl).call.should eq("Hello WHO!")
+    end
+    
+    specify 'returned template is renderable' do
+      compile(hello_tpl).render.should eq("Hello WHO!")
     end
     
     it 'returns a thread-safe template object' do

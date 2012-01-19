@@ -4,7 +4,7 @@ module WLang
   describe Dummy do
 
   def dummy(tpl, scope = {})
-    Dummy.instantiate(tpl, scope)
+    Dummy.render(tpl, scope)
   end
 
   it 'returns the string when no tag at all' do
@@ -27,7 +27,7 @@ module WLang
     let(:d){
       dialect do
         tag('$') do |buf,fn| buf << evaluate(fn)                  end
-        tag('%') do |buf,fn| buf << WLang::Dummy.instantiate(fn)  end
+        tag('%') do |buf,fn| buf << WLang::Dummy.render(fn)  end
       end
     }
     let(:tpl){%q{
@@ -38,7 +38,7 @@ module WLang
       Hello world! This is wlang, a templating language which comes with
       special tags such as ${who}, +{who}, *{authors}{...}, etc.
     }.gsub(/^\s*/m,"").strip}
-    specify{ d.instantiate(tpl, :who => "world").should eq(expected) }
+    specify{ d.render(tpl, :who => "world").should eq(expected) }
   end
   
   end # describe Dummy

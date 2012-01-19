@@ -9,7 +9,7 @@ describe WLang do
     d = WLang::dialect do
       tag('$') do |buf, fn| buf << evaluate(fn) end
     end
-    d.instantiate("Hello ${who}!", :who => "world").should eq("Hello world!")
+    d.render("Hello ${who}!", :who => "world").should eq("Hello world!")
   end
   
 end

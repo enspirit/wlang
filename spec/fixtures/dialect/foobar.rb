@@ -1,7 +1,7 @@
 class Foo < WLang::Dialect
   
   def _(fn)
-    fn ? instantiate(fn) : nil
+    fn ? render(fn) : nil
   end
   
   def execution(buf, fn)

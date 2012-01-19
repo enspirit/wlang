@@ -21,7 +21,7 @@ module WLang
       new(options).send(:compile, source)
     end
     
-    def self.instantiate(source, scope = {}, buffer = "")
+    def self.render(source, scope = {}, buffer = "")
       compile(source).call(scope, buffer)
     end
     

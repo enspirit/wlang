@@ -42,10 +42,7 @@ templating language by providing similar tags, such as `$`, `+`, `#`, `^`, etc.
 Mustache's `{{...}}` is available as `${...}` as illustrated below:
 
 ```ruby
-tpl = WLang::Mustang.compile("Hello ${who} !")
-# => #<WLang::Template:0x007fbc6302f720@<main>:0 (lambda)>
-
-tpl.call(:who => "WLang & World")
+WLang::Mustang.render("Hello ${who} !", :who => "WLang & World")
 # => "Hello WLang &amp; World !"
 ```
 
@@ -69,10 +66,10 @@ Let take an example:
 class Upcasing < WLang::Dialect
 
   tag '$' do |buf, fn|
-    buf << instantiate(fn).upcase
+    buf << render(fn).upcase
   end
 
 end
-Upcasing.instantiate("Hello ${world}")
+Upcasing.render("Hello ${world}")
 # => "Hello WORLD !"
 ```

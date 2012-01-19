@@ -1,7 +1,7 @@
 class Upcasing < WLang::Dialect
   
   tag "$" do |buf, fn|
-    buf << instantiate(fn).upcase
+    buf << render(fn).upcase
   end
   
 end

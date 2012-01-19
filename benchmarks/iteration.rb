@@ -9,7 +9,7 @@ scope = { :range => (1..max).map{|i| {:i => i}} }
 
 Benchmark.bm(10) do |x|
   x.report(:wlang){
-    WLang::Mustang.instantiate('#{range}{${i}, }', scope)
+    WLang::Mustang.render('#{range}{${i}, }', scope)
   }
   x.report(:mustache){
     Mustache.render('{{#range}}{{i}}, {{/range}}', scope)

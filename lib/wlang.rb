@@ -19,7 +19,7 @@ module WLang
   #     tag('$') do |buf,fn| buf << evaluate(fn) end
   #     ...
   #   end
-  #   d.instantiate("Hello ${who}!", :who => "world")
+  #   d.render("Hello ${who}!", :who => "world")
   #   # => "Hello world!"
   #
   def dialect(&defn)

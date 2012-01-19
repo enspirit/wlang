@@ -10,8 +10,9 @@ module WLang
   
     def call(scope = {}, buffer = '')
       d = @dialect.dup
-      d.send(:instantiate, inner_proc, scope, buffer)
+      d.send(:render, inner_proc, scope, buffer)
     end
+    alias :render :call
   
   end # class Template
 end # module WLang

@@ -4,7 +4,7 @@ module WLang
   describe Mustang do
   
     def m(tpl, scope = {}, buffer = "")
-      Mustang.instantiate(tpl, scope, buffer)
+      Mustang.render(tpl, scope, buffer)
     end
   
     context '+{...} mimicing {{{ ... }}}' do

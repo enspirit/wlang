@@ -18,7 +18,7 @@ module WLang
         
         attr_reader :scope
         
-        def instantiate(fn, scope = nil, buffer = "")
+        def render(fn, scope = nil, buffer = "")
           case fn
           when Template
             fn.call(scope || @scope, buffer)
@@ -32,7 +32,7 @@ module WLang
         end
         
         def evaluate(what)
-          what = instantiate(what) unless what.is_a?(String)
+          what = render(what) unless what.is_a?(String)
           what.strip == "self" ? scope : scope.instance_eval(what)
         end
         
