@@ -15,7 +15,7 @@ module WLang
     end
     
     def self.to_ruby_code(source, options = {})
-      new(options).send(:debug, source)
+      new(options).send(:to_ruby_code, source)
     end
 
     def self.compile(source, options = {})
