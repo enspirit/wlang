@@ -37,11 +37,16 @@ module WLang
 
         def evaluate(what)
           what = render(what) unless what.is_a?(String)
-          what.strip == "self" ? scope : scope.instance_eval(what)
+          case scope
+          when Hash
+            scope[what] || scope[what.to_sym]
+          else
+            scope.respond_to?(what.to_sym) ? scope.send(what.to_sym) : nil
+          end
         end
 
         def with_scope(scope)
-          old, @scope = @scope, Scope.factor(scope)
+          old, @scope = @scope, scope
           res = yield
           @scope = scope
           res

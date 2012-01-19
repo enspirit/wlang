@@ -28,7 +28,6 @@ module WLang
   module_function :dialect
 
 end # module WLang
-require 'wlang/scope'
 require 'wlang/compiler'
 require 'wlang/template'
 require 'wlang/dialect'
