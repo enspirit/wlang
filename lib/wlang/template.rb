@@ -11,9 +11,7 @@ module WLang
   
     def call(scope = {}, buffer = '')
       d = @dialect.dup
-      d.send(:with_scope, scope) do
-        super(d, buffer)
-      end
+      d.send(:instantiate, inner_proc, scope, buffer)
     end
   
   end # class Template

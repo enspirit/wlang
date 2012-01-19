@@ -16,14 +16,16 @@ module WLang
         
         protected
         
-        def instantiate(fn, buffer = "")
+        attr_reader :scope
+        
+        def instantiate(fn, scope = @scope, buffer = "")
           case fn
           when Template
-            fn.call(@scope, buffer)
+            fn.call(scope, buffer)
           when Proc
-            fn.call(self, buffer)
+            with_scope(scope){ fn.call(self, buffer) }
           when String
-            self.class.instantiate(fn, @scope, buffer)
+            self.class.instantiate(fn, scope, buffer)
           end
         end
         
