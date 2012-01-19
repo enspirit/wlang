@@ -39,11 +39,11 @@ module WLang
       end # module Stack
 
       module ClassMethods
-        
+
         def scoping(name)
           include Scoping.const_get(name.to_s.capitalize.to_sym)
         end
-        
+
       end # module ClassMethods
 
       def self.included(mod)
