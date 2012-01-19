@@ -23,4 +23,16 @@ describe WLang do
     d.render('Hello ${world}!').should eq("Hello World!")
   end
 
+  it 'allows overriding super-dialect evaluation rules' do
+    d = WLang::dialect do
+      evaluator :nofail
+      tag('$') do |buf, fn| 
+        if x = evaluate(fn)
+          buf << x
+        end
+      end
+    end
+    d.render('Hello ${who}!').should eq("Hello !")
+  end
+
 end
