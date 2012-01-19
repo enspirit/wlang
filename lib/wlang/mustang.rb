@@ -2,26 +2,26 @@ require 'wlang'
 module WLang
   class Mustang < WLang::Dialect
     include Temple::Utils
-    
+
     def evaluate(what)
       super(what)
     rescue NameError, NoMethodError
       nil
     end
-  
+
     def plus(buf, fn)
       if x = evaluate(fn)
         buf << x.to_s
       end
     end
     tag '+', :plus
-  
+
     def escape(buf, fn)
       buf << escape_html(evaluate(fn))
     end
     tag '$', :escape
     tag '&', :escape
-  
+
     def section(buf, fn1, fn2)
       case x = evaluate(fn1)
       when FalseClass, NilClass
@@ -37,7 +37,7 @@ module WLang
       end
     end
     tag '#', :section
-  
+
     def inverted(buf, fn1, fn2)
       case x = evaluate(fn1)
       when FalseClass, NilClass
@@ -47,17 +47,17 @@ module WLang
       end
     end
     tag '^', :inverted
-  
+
     def comment(buf, fn)
     end
     tag '!', :comment
-  
+
     def partial(buf, fn)
       if x = Mustang.compile(evaluate(fn))
         render(x, scope, buf)
       end
     end
     tag '>', :partial
-  
+
   end # class Mustang
 end # module WLang

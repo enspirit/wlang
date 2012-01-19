@@ -10,11 +10,11 @@ module WLang
     def idgen
       options[:idgen] ? options[:idgen] : (@idgen ||= IdGen.new)
     end
-    
+
     def myid
       options[:myid] || 0
     end
-    
+
     def dialect
       options[:dialect] or raise "Dialect not set"
     end
@@ -26,22 +26,22 @@ module WLang
     def call(x)
       compile(x)
     end
-    
+
     def on_dispatch_dynamic(symbols, *procs)
       procs = procs.map{|p| call(p)}.join(', ')
       "d#{myid}.dispatch(#{symbols.inspect}, b#{myid}, #{procs})"
     end
-    
+
     def on_proc(code)
       id   = idgen.next
       gen  = ToRubyCode.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
       code = gen.call(code)
       "lambda{|d#{id},b#{id}| #{code} }"
     end
-    
+
     def on_dynamic(code)
       concat("#{code}.to_s")
     end
-    
+
   end # class ToRubyCode
 end # module WLang

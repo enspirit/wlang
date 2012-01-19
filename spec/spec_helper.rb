@@ -10,33 +10,33 @@ require 'rspec'
 module Helpers
   include WLang
   extend(self)
-  
+
   def root_folder
     $root_folder
   end
-  
+
   def spec_folder
     root_folder/:spec
   end
-  
+
   def fixtures_folder
     spec_folder/:fixtures
   end
-  
+
   def tpl_path(what)
     what = "#{what}.tpl" if what.is_a?(Symbol)
     fixtures_folder/:templates/what
   end
-  
+
   def tpl(what)
     tpl_path(what).read
   end
-  
+
   # Load fixture dialects
   spec_folder.glob("fixtures/dialect/*.rb").each do |f|
     require f.expand_path
   end
-  
+
   # Install helper methods for templates
   fixtures_folder.glob("templates/*.tpl").each do |f|
     name = f.basename.without_extension
@@ -52,7 +52,7 @@ module Helpers
       end
     end
   end
-  
+
 end
 include Helpers
 

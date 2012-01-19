@@ -2,11 +2,11 @@ require 'spec_helper'
 require 'wlang/mustang'
 module WLang
   describe Mustang do
-  
+
     def m(tpl, scope = {}, buffer = "")
       Mustang.render(tpl, scope, buffer)
     end
-  
+
     context '+{...} mimicing {{{ ... }}}' do
       it "renders nothing on nil" do
         m('Hello +{who}', :who => nil).should eq("Hello ")
@@ -24,7 +24,7 @@ module WLang
         m('Hello +{who}', :who => "<script>").should eq("Hello <script>")
       end
     end
-  
+
     context "${...} mimicing {{ ... }}" do
       it "renders nothing on nil" do
         m('Hello ${who}', :who => nil).should eq("Hello ")
@@ -42,13 +42,13 @@ module WLang
         m('Hello ${who}', :who => "<script>").should eq("Hello &lt;script&gt;")
       end
     end
-  
+
     context "&{...} mimicing {{ ... }}" do
       it "does escape html" do
         m('Hello &{who}', :who => "<script>").should eq("Hello &lt;script&gt;")
       end
     end
-  
+
     context '#{..1..}{..2..} mimicing {{#..1..}}..2..{{/..1..}} ' do
       it 'skips the section on false' do
         m('Hello #{present}{World}', :present => false).should eq("Hello ")
@@ -85,7 +85,7 @@ module WLang
         m('#{range}{.}', {:range => 1..10}, []).should eq(Array.new(10, '.'))
       end
     end
-  
+
     context "^{..1..}{..2..} mimicing {{^..1..}}..2..{{/..1..}}" do
       it 'renders the section on false' do
         m('Hello ^{missing}{World}', :missing => false).should eq("Hello World")
@@ -104,13 +104,13 @@ module WLang
         m('Hello ^{repo}{<b>${name}</b>}', :repo => repo).should eq("Hello ")
       end
     end
-  
+
     context "!{...} mimicing {{!...}}" do
       it 'skips the section altogether' do
         m('Hello !{this is a comment} world').should eq("Hello  world")
       end
     end
-  
+
     context '>{...} mimicing {{>...}}' do
       it 'renders the partial' do
         scope = {:who => "<b>${name}</b>", :name => "World"}
@@ -121,6 +121,6 @@ module WLang
         m("Hello >{who}", scope).should eq("Hello <b>World</b>")
       end
     end
-  
+
   end # describe Mustang
 end # module WLang

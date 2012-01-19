@@ -1,11 +1,11 @@
 require 'spec_helper'
 module WLang
   describe Grammar do
-    
+
     let(:grammar){ WLang::Grammar }
 
     context "parsing" do
-      
+
       subject{ 
         if defined?(trailing)
           grammar.parse(text, :root => rule, :consume => false) 
@@ -26,7 +26,7 @@ module WLang
         let(:text){ "}"       }
         it{ should_not be_nil }
       end
-      
+
       describe 'the symbols rule' do
         let(:rule){ :symbols }
         WLang::SYMBOLS.each do |sym|
@@ -44,7 +44,7 @@ module WLang
           it{ should_not be_nil }
         end
       end
-      
+
       describe 'the stop char rule' do
         let(:rule){ :stop_char  }
         describe 'on {' do
@@ -70,7 +70,7 @@ module WLang
         let(:text){ '{ hello }' }
         it{ should_not be_nil   }
       end
-          
+
       describe 'the wlang rule' do
         let(:rule){ :wlang      }
         describe 'on a single wlang block' do
@@ -82,7 +82,7 @@ module WLang
           it{ should_not be_nil   }
         end
       end
-      
+
       describe 'the static rule' do
         let(:rule){ :static       }
         describe 'on pure static text' do
@@ -95,7 +95,7 @@ module WLang
           it{ should_not be_nil      }
         end
       end
-      
+
       describe 'the non_static rule on a block' do
         describe 'on a block' do
           let(:rule){ :non_static   }
@@ -144,29 +144,29 @@ module WLang
       end
 
     end
-    
+
     context "value" do
-      
+
       subject{ grammar.parse(text, :root => rule).value }
-      
+
       describe 'the static rule' do
         let(:rule){ :static }
         let(:text){ "Hello world!" }
         it{ should eq([:static, text]) }
       end
-      
+
       describe 'the block rule' do
         let(:rule){ :block }
         let(:text){ "{ world }" }
         it{ should eq([:static, text]) }
       end
-      
+
       describe 'the wlang rule' do
         let(:rule){ :wlang }
         let(:text){ "${who}" }
         it{ should eq([:wlang, '$', [:fn, [:static, "who"]] ]) }
       end
-      
+
       describe 'the strconcat rule' do
         let(:rule){ :strconcat }
         describe "when a single match" do
@@ -185,7 +185,7 @@ module WLang
           }
         end
       end
-      
+
       describe 'the template rule' do
         let(:rule){ :template       }
         let(:text){ "Hello ${who}!" }
@@ -200,8 +200,8 @@ module WLang
           subject.should eq(expected) 
         }
       end
-      
+
     end
-    
+
   end
 end

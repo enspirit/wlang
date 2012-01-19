@@ -2,7 +2,7 @@ require 'spec_helper'
 module WLang
   describe Dialect::Dispatching do
     include Dialect::Dispatching
-    
+
     describe 'tag_dispatching_name' do
       it "works with a single char" do
         tag_dispatching_name("$").should eq(:_dtag_36)
@@ -14,7 +14,7 @@ module WLang
         tag_dispatching_name(['!', '$']).should eq(:_dtag_33_36)
       end
     end
-    
+
     describe 'find_dispatching_method' do
       let(:foo){ Foo.new }
       it 'works on exact matching' do
@@ -34,13 +34,13 @@ module WLang
         find_dispatching_method("@#", foo).should eq(['@#', nil])
       end
     end
-    
+
     def normalize_tag_fns(fns, arity)
       with_normalized_fns(fns, arity) do |args,rest|
         [args, rest]
       end
     end
-    
+
     it 'normalize_tag_fns' do
       normalize_tag_fns([], 0).should eq([[],nil])
       normalize_tag_fns([], 1).should eq([[nil],nil])
@@ -52,6 +52,6 @@ module WLang
       normalize_tag_fns([:a, :b], 2).should eq([[:a, :b],nil])
       normalize_tag_fns([:a, :b], 3).should eq([[:a, :b, nil],nil])
     end
-    
+
   end # describe Dialect
 end # module WLang

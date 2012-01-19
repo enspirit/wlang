@@ -40,6 +40,6 @@ module WLang
     }.gsub(/^\s*/m,"").strip}
     specify{ d.render(tpl, :who => "world").should eq(expected) }
   end
-  
+
   end # describe Dummy
 end # module WLang
