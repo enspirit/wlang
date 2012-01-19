@@ -1,8 +1,8 @@
 require 'spec_helper'
 module WLang
-  describe Compiler do
+  describe ToRubyAbstraction do
     
-    let(:compiler){ WLang::Compiler.new }
+    let(:compiler){ WLang::ToRubyAbstraction.new }
     
     subject{ compiler.call(source) }
     
@@ -42,5 +42,5 @@ module WLang
       it{ should eq(expected) }
     end
     
-  end # describe Compile
+  end # describe ToRubyAbstraction
 end # module WLang

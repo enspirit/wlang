@@ -1,5 +1,5 @@
 module WLang
-  class Compiler < Temple::Filter
+  class ToRubyAbstraction < Temple::Filter
     
     def on_template(fn)
       call(fn)
@@ -18,5 +18,5 @@ module WLang
       [:proc, call(code)]
     end
     
-  end # class Compiler
+  end # class ToRubyAbstraction
 end # module WLang

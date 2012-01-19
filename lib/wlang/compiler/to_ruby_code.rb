@@ -1,5 +1,5 @@
 module WLang
-  class Generator < Temple::Generator
+  class ToRubyCode < Temple::Generator
 
     class IdGen
       def initialize; @current = 0;  end
@@ -34,7 +34,7 @@ module WLang
     
     def on_proc(code)
       id   = idgen.next
-      gen  = Generator.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
+      gen  = ToRubyCode.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
       code = gen.call(code)
       "lambda{|d#{id},b#{id}| #{code} }"
     end
@@ -43,5 +43,5 @@ module WLang
       concat("#{code}.to_s")
     end
     
-  end # class Generator
+  end # class ToRubyCode
 end # module WLang

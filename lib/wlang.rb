@@ -29,8 +29,6 @@ module WLang
   
 end # module WLang
 require 'wlang/scope'
-require 'wlang/compiler/parser'
-require 'wlang/compiler/compiler'
-require 'wlang/compiler/generator'
+require 'wlang/compiler'
 require 'wlang/template'
 require 'wlang/dialect'

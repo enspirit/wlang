@@ -1,8 +1,8 @@
 require 'spec_helper'
 module WLang
-  describe Generator do
+  describe ToRubyCode do
     
-    let(:generator){ WLang::Generator.new }
+    let(:generator){ WLang::ToRubyCode.new }
     
     subject{ generator.call(source) }
     

@@ -10,7 +10,8 @@ module WLang
     }
     
     def initialize(options = {})
-      @options = DEFAULT_OPTIONS.merge(options)
+      @options  = DEFAULT_OPTIONS.merge(options)
+      @compiler = WLang::Compiler.new(self)
     end
     
     def self.parse(source, options = {})
@@ -34,35 +35,13 @@ module WLang
     end
     
     def parse(source)
-      source = File.read(source.to_path) if source.respond_to?(:to_path)
-      source = source.to_str if source.respond_to?(:to_str)
-      unless source.is_a?(String)
-        raise ArgumentError, "Unable to parse from #{source.class}"
-      end
-      WLang::Parser.new.call(source)
+      @compiler.parse(source)
     end
     
     def compile(source)
-      case source
-      when Template
-        source
-      when Proc
-        Template.new(self, source)
-      else
-        compile(eval(to_ruby_code(source)))
-      end
+      @compiler.compile(source)
     end
     
-    def to_ruby_code(source)
-      compiler.call(parse(source))
-    end
-    
-    def compiler
-      Class.new(Temple::Engine) do
-        use WLang::Compiler, :dialect => self
-        use WLang::Generator
-      end.new
-    end
     
   end # class Dialect
 end # module WLang
