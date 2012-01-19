@@ -1,32 +1,32 @@
 class Foo < WLang::Dialect
   
   def _(fn)
-    fn ? fn.call(self, "") : nil
+    fn ? instantiate(fn) : nil
   end
   
-  def execution(fn)
-    "(foo#execution #{_ fn})"
+  def execution(buf, fn)
+    buf << "(foo#execution #{_ fn})"
   end
   
-  def escaping(fn)
-    "(foo#escaping #{_ fn})"
+  def escaping(buf, fn)
+    buf << "(foo#escaping #{_ fn})"
   end
   
   tag "!", :execution
   tag "$", :escaping
-  tag "@"  do |fn| "(foo#link #{_ fn})";   end
-  tag "<"  do |fn| "(foo#less #{_ fn})";   end
-  tag '!@' do |fn| "(foo#bangat #{_ fn})"; end
+  tag "@"  do |buf,fn| buf << "(foo#link #{_ fn})";   end
+  tag "<"  do |buf,fn| buf << "(foo#less #{_ fn})";   end
+  tag '!@' do |buf,fn| buf << "(foo#bangat #{_ fn})"; end
 end
 
 class Bar < Foo
   
-  def escaping(fn)
-    "(bar#escaping #{_ fn})"
+  def escaping(buf, fn)
+    buf << "(bar#escaping #{_ fn})"
   end
   
   tag "$", :escaping
-  tag "<" do |fn| "(bar#less #{_ fn})";    end
-  tag ">" do |fn| "(bar#greater #{_ fn})"; end
+  tag "<" do |buf,fn| buf << "(bar#less #{_ fn})";    end
+  tag ">" do |buf,fn| buf << "(bar#greater #{_ fn})"; end
 end
 

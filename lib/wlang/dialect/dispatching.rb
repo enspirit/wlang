@@ -42,13 +42,13 @@ module WLang
             define_tag_method(symbols, rulename)
           when UnboundMethod
             methname = tag_dispatching_name(symbols, "_dtag")
-            arity    = code.arity
+            arity    = code.arity - 1
             define_method(methname) do |buf, fns|
               with_normalized_fns(fns, arity) do |args, rest|
-                buf << code.bind(self).call(*args).to_s
+                code.bind(self).call(buf, *args)
                 flush_trailing_fns(buf, rest) if rest
+                buf
               end
-              buf
             end
             dispatching_map[symbols] = ['', methname]
           else

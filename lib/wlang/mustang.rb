@@ -2,52 +2,61 @@ require 'wlang'
 module WLang
   class Mustang < WLang::Dialect
     include Temple::Utils
+    
+    def evaluate(what)
+      super(what)
+    rescue NameError, NoMethodError
+      nil
+    end
   
-    def plus(fn)
-      varname = instantiate(fn)
-      known?(varname) ? evaluate(varname) : nil
+    def plus(buf, fn)
+      if x = evaluate(fn)
+        buf << x.to_s
+      end
     end
     tag '+', :plus
   
-    def escape(fn)
-      escape_html plus(fn)
+    def escape(buf, fn)
+      buf << escape_html(evaluate(fn))
     end
     tag '$', :escape
     tag '&', :escape
   
-    def section(fn1, fn2)
-      case x = plus(fn1)
+    def section(buf, fn1, fn2)
+      case x = evaluate(fn1)
       when FalseClass, NilClass
         nil
       when Array, Range
-        x.inject(""){|buf,item|
-          buf << with_scope(item){ instantiate(fn2) }
+        x.each{|item|
+          with_scope(item){ 
+            buf << instantiate(fn2) 
+          }
         }
       when Proc
-        x.call lambda{ instantiate(fn2) }
+        buf << x.call(lambda{ instantiate(fn2) })
       else
-        with_scope(x){ instantiate(fn2) }
+        with_scope(x){ buf << instantiate(fn2) }
       end
     end
     tag '#', :section
   
-    def inverted(fn1, fn2)
-      case x = plus(fn1)
+    def inverted(buf, fn1, fn2)
+      case x = evaluate(fn1)
       when FalseClass, NilClass
-        instantiate(fn2)
+        buf << instantiate(fn2)
       when Array
-        instantiate(fn2) if x.empty?
+        buf << instantiate(fn2) if x.empty?
       end
     end
     tag '^', :inverted
   
-    def comment(fn)
+    def comment(buf, fn)
     end
     tag '!', :comment
   
-    def partial(fn)
-      if x = plus(fn)
-        instantiate(x)
+    def partial(buf, fn)
+      if x = evaluate(fn)
+        buf << instantiate(x)
       end
     end
     tag '>', :partial
