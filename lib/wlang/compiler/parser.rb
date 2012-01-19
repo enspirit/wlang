@@ -7,9 +7,19 @@ module WLang
 
     def call(input)
       return input if input.is_a?(Array)
+      parser.parse(parsing_source(input)).value
+    end
+
+    private
+
+    def parser
+      WLang::Grammar
+    end
+
+    def parsing_source(input)
       input = File.read(input.to_path) if input.respond_to?(:to_path)
       input = input.to_str if input.respond_to?(:to_str)
-      WLang::Grammar.parse(input).value
+      input
     end
 
   end # class Engine
