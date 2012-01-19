@@ -53,7 +53,7 @@ module WLang
     tag '!', :comment
   
     def partial(buf, fn)
-      if x = evaluate(fn)
+      if x = Mustang.compile(evaluate(fn))
         instantiate(x, scope, buf)
       end
     end

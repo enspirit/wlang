@@ -18,14 +18,16 @@ module WLang
         
         attr_reader :scope
         
-        def instantiate(fn, scope = @scope, buffer = "")
+        def instantiate(fn, scope = nil, buffer = "")
           case fn
           when Template
-            fn.call(scope, buffer)
+            fn.call(scope || @scope, buffer)
           when Proc
-            with_scope(scope){ fn.call(self, buffer) }
-          when String
-            self.class.instantiate(fn, scope, buffer)
+            if scope.nil?
+              fn.call(self, buffer)
+            else
+              with_scope(scope){ fn.call(self, buffer) }
+            end
           end
         end
         
