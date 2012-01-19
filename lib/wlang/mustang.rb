@@ -28,14 +28,14 @@ module WLang
         nil
       when Array, Range
         x.each{|item|
-          with_scope(item){ 
-            buf << instantiate(fn2) 
+          with_scope(item){
+            instantiate(fn2, buf)
           }
         }
       when Proc
         buf << x.call(lambda{ instantiate(fn2) })
       else
-        with_scope(x){ buf << instantiate(fn2) }
+        with_scope(x){ instantiate(fn2, buf) }
       end
     end
     tag '#', :section
@@ -43,9 +43,9 @@ module WLang
     def inverted(buf, fn1, fn2)
       case x = evaluate(fn1)
       when FalseClass, NilClass
-        buf << instantiate(fn2)
+        instantiate(fn2, buf)
       when Array
-        buf << instantiate(fn2) if x.empty?
+        instantiate(fn2, buf) if x.empty?
       end
     end
     tag '^', :inverted
@@ -56,7 +56,7 @@ module WLang
   
     def partial(buf, fn)
       if x = evaluate(fn)
-        buf << instantiate(x)
+        instantiate(x, buf)
       end
     end
     tag '>', :partial

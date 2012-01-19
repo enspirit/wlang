@@ -16,14 +16,14 @@ module WLang
         
         protected
         
-        def instantiate(fn)
+        def instantiate(fn, buffer = "")
           case fn
           when Template
-            fn.call(@scope)
+            fn.call(@scope, buffer)
           when Proc
-            fn.call(self, "")
+            fn.call(self, buffer)
           when String
-            self.class.instantiate(fn, @scope)
+            self.class.instantiate(fn, @scope, buffer)
           end
         end
         

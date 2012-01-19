@@ -3,8 +3,8 @@ require 'wlang/mustang'
 module WLang
   describe Mustang do
   
-    def m(tpl, scope = {})
-      Mustang.instantiate(tpl, scope)
+    def m(tpl, scope = {}, buffer = "")
+      Mustang.instantiate(tpl, scope, buffer)
     end
   
     context '+{...} mimicing {{{ ... }}}' do
@@ -80,6 +80,9 @@ module WLang
       it 'use a Struct a a new scope' do
         person = Struct.new(:name).new("World")
         m('Hello #{person}{${name}}', :person => person).should eq("Hello World")
+      end
+      it 'outputs frequently when iterating' do
+        m('#{range}{.}', {:range => 1..10}, []).should eq(Array.new(10, '.'))
       end
     end
   
