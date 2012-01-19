@@ -15,14 +15,6 @@ module WLang
       options[:myid] || 0
     end
 
-    def dialect
-      options[:dialect] or raise "Dialect not set"
-    end
-
-    def braces
-      ["{", "}"]
-    end
-
     def call(x)
       compile(x)
     end
@@ -46,10 +38,6 @@ module WLang
       gen  = ToRubyCode.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
       code = gen.call(code)
       "lambda{|d#{id},b#{id}| #{code} }"
-    end
-
-    def on_dynamic(code)
-      concat("#{code}.to_s")
     end
 
   end # class ToRubyCode
