@@ -22,8 +22,8 @@ module WLang
   #   d.render("Hello ${who}!", :who => "world")
   #   # => "Hello world!"
   #
-  def dialect(&defn)
-    Class.new(WLang::Dialect, &defn)
+  def dialect(superdialect = WLang::Dialect, &defn)
+    Class.new(superdialect, &defn)
   end
   module_function :dialect
 
