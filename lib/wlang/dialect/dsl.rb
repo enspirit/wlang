@@ -29,9 +29,9 @@ module WLang
           end
         end
         
-        def evaluate(what, dialect = self)
-          what = what.call(dialect, "") if what.is_a?(Proc)
-          what.strip == "self" ? @scope : @scope.instance_eval(what)
+        def evaluate(what)
+          what = instantiate(what) unless what.is_a?(String)
+          what.strip == "self" ? scope : scope.instance_eval(what)
         end
         
         def with_scope(scope)
