@@ -47,7 +47,7 @@ module WLang
       when Template
         source
       when Proc
-        Template.new(self, &source)
+        Template.new(self, source)
       else
         compile(eval(to_ruby_code(source)))
       end

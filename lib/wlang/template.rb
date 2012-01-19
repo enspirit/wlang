@@ -1,12 +1,11 @@
 module WLang
-  class Template < Proc
+  class Template
   
     attr_reader :dialect, :inner_proc
   
-    def initialize(dialect, &inner_proc)
+    def initialize(dialect, inner_proc)
       @dialect    = dialect
       @inner_proc = inner_proc
-      super(&inner_proc)
     end
   
     def call(scope = {}, buffer = '')
