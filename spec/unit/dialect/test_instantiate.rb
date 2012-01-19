@@ -2,29 +2,31 @@ require 'spec_helper'
 module WLang
   describe Dialect, "instantiate" do
     
-    def instantiate(source, scope = {})
-      scope.nil? ? Upcasing.instantiate(source) : Upcasing.instantiate(source, scope)
-    end
+    U = Upcasing
     let(:expected){ "Hello WHO!" }
     
     it 'works as expected' do
-      instantiate(hello_tpl, {}).should eq(expected)
+      U.instantiate(hello_tpl).should eq(expected)
     end
     
     it 'do not eat extra blocks' do
-      instantiate("Hello ${who}{world}", {}).should eq("Hello WHO{world}")
+      U.instantiate("Hello ${who}{world}").should eq("Hello WHO{world}")
     end
     
-    it "does not require a scope" do
-      instantiate(hello_tpl).should eq(expected)
+    it "accepts an optional scope" do
+      U.instantiate(hello_tpl, {}).should eq(expected)
     end
     
     it 'accepts a :to_path object' do
-      instantiate(hello_path).should eq(expected)
+      U.instantiate(hello_path).should eq(expected)
     end
     
     it 'accepts an IO instance' do
-      hello_io{|io| instantiate(io)}.should eq(expected)
+      hello_io{|io| U.instantiate(io)}.should eq(expected)
+    end
+    
+    it 'supports specifying the buffer' do
+      U.instantiate(hello_tpl, {}, []).should eq(["Hello ", "WHO", "!"])
     end
     
   end # describe Dialect

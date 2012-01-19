@@ -9,10 +9,10 @@ module WLang
       super(&inner_proc)
     end
   
-    def call(scope = {})
+    def call(scope = {}, buffer = '')
       d = @dialect.dup
       d.send(:with_scope, scope) do
-        super(d, "")
+        super(d, buffer)
       end
     end
   
