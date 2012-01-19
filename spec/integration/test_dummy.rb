@@ -26,7 +26,7 @@ module WLang
   context "documentation" do
     let(:d){
       dialect do
-        tag('$') do |buf,fn| buf << evaluate(fn)                  end
+        tag('$') do |buf,fn| buf << evaluate(fn)             end
         tag('%') do |buf,fn| buf << WLang::Dummy.render(fn)  end
       end
     }
