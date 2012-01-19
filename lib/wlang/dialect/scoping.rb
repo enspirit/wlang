@@ -33,10 +33,22 @@ module WLang
         end
 
         def each_scope
-          scope.each
+          scope.reverse.each
         end
 
       end # module Stack
+
+      module ClassMethods
+        
+        def scoping(name)
+          include Scoping.const_get(name.to_s.capitalize.to_sym)
+        end
+        
+      end # module ClassMethods
+
+      def self.included(mod)
+        mod.extend(ClassMethods)
+      end
 
     end # module Scoping
   end # class Dialect

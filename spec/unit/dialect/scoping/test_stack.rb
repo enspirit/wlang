@@ -13,12 +13,12 @@ module WLang
           end
         end
 
-        it 'has only one scope at a time' do
+        it 'uses scopes in the reverse order' do
           each_scope.to_a.should eq([])
           with_scope(1) do
             each_scope.to_a.should eq([1])
             with_scope(2) do
-              each_scope.to_a.should eq([1, 2])
+              each_scope.to_a.should eq([2, 1])
             end
           end
         end
