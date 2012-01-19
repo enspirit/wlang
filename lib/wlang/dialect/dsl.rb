@@ -16,13 +16,12 @@ module WLang
         
         protected
         
-        def instantiate(fn, dialect = self)
+        def instantiate(fn)
           case fn
           when Template
             fn.call(@scope)
           when Proc
-            dialect = dialect.new if dialect.is_a?(Class)
-            fn.call(dialect, "")
+            fn.call(self, "")
           when String
             self.class.instantiate(fn, @scope)
           end
