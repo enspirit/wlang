@@ -9,8 +9,15 @@ module WLang
     end
 
     def call(scope = {}, buffer = '')
-      d = @dialect.dup
-      d.send(:render, inner_proc, scope, buffer)
+      case i = inner_proc
+      when String
+        buffer << i
+      else
+        @dialect.dup.tap{|d|
+          d.send(:render, i, scope, buffer)
+        }
+        buffer
+      end
     end
     alias :render :call
 

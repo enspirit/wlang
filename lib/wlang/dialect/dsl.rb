@@ -28,6 +28,10 @@ module WLang
             else
               with_scope(scope){ fn.call(self, buffer) }
             end
+          when String
+            buffer << fn
+          else
+            raise ArgumentError, "Unable to render #{fn}"
           end
         end
 
