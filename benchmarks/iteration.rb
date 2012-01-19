@@ -4,7 +4,7 @@ require 'benchmark'
 require 'erb'
 require 'mustache'
 
-max      = 20000
+max      = 50000
 scope = { :range => (1..max).map{|i| {:i => i}} }
 
 Benchmark.bm(10) do |x|
