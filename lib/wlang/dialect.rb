@@ -1,4 +1,5 @@
 require 'wlang/dialect/dispatching'
+require 'wlang/dialect/scoping'
 require 'wlang/dialect/evaluation'
 require 'wlang/dialect/dsl'
 module WLang
