@@ -51,7 +51,7 @@ module WLang
       context 'with a dialect' do
 
         let(:dialect){
-          WLang::dialect{ tag('$') do |buf,fn| instantiate(fn, buf).upcase end }.new
+          WLang::dialect{ tag('$') do |buf,fn| instantiate(fn, buf).upcase end }.factor
         }
 
         let(:hello_dollar){[

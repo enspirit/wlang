@@ -2,8 +2,8 @@ require 'spec_helper'
 module WLang
   describe Dialect, "dispatch" do
 
-    let(:foo){ Foo.new }
-    let(:bar){ Bar.new }
+    let(:foo){ Foo.factor }
+    let(:bar){ Bar.factor }
 
     it 'dispatches correctly on a class' do
       foo.dispatch("!", "", []).should eq("(foo#execution )")

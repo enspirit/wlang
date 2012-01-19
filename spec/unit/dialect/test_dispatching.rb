@@ -16,22 +16,21 @@ module WLang
     end
 
     describe 'find_dispatching_method' do
-      let(:foo){ Foo.new }
       it 'works on exact matching' do
-        find_dispatching_method("!", foo).should eq(['', :_dtag_33])
-        find_dispatching_method("$", foo).should eq(['', :_dtag_36])
+        Foo.find_dispatching_method("!").should eq(['', :_dtag_33])
+        Foo.find_dispatching_method("$").should eq(['', :_dtag_36])
       end
       it 'takes the most specific' do
-        find_dispatching_method("@", foo).should eq(['', :_dtag_64])
-        find_dispatching_method("!@", foo).should eq(['', :_dtag_33_64])
+        Foo.find_dispatching_method("@").should eq(['', :_dtag_64])
+        Foo.find_dispatching_method("!@").should eq(['', :_dtag_33_64])
       end
       it 'recognizes extras' do
-        find_dispatching_method("@@", foo).should eq(['@', :_dtag_64])
-        find_dispatching_method("@!", foo).should eq(['@', :_dtag_33])
+        Foo.find_dispatching_method("@@").should eq(['@', :_dtag_64])
+        Foo.find_dispatching_method("@!").should eq(['@', :_dtag_33])
       end
       it 'recognizes missings' do
-        find_dispatching_method("#", foo).should eq(['#', nil])
-        find_dispatching_method("@#", foo).should eq(['@#', nil])
+        Foo.find_dispatching_method("#").should eq(['#', nil])
+        Foo.find_dispatching_method("@#").should eq(['@#', nil])
       end
     end
 

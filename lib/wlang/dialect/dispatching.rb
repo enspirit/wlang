@@ -14,7 +14,7 @@ module WLang
           "#{prefix}_#{chars}".to_sym
         end
 
-        def find_dispatching_method(symbols, subject)
+        def find_dispatching_method(symbols, subject = new)
           dispatching_map[symbols] ||= begin
             extra, symbols, found = [], symbols.chars.to_a, nil
             begin

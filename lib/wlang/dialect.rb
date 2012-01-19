@@ -12,42 +12,42 @@ module WLang
     scoping   :strict
     evaluator :hash, :send
 
-    DEFAULT_OPTIONS = {
-      :braces => WLang::BRACES,
-    }
+    class << self
 
-    def initialize(options = {})
-      @options  = DEFAULT_OPTIONS.merge(options)
-      @compiler = WLang::Compiler.new(self)
+      def factor(options = {})
+        d = new(default_options.merge(options))
+        yield(d) if block_given?
+        d
+      end
+
+      def default_options
+        {:braces => WLang::BRACES}
+      end
+
+      def to_ruby_code(source, options = {})
+        factor(options).compiler.to_ruby_code(source)
+      end
+
+      def compile(source, options = {})
+        factor(options).compiler.compile(source)
+      end
+
+      def render(source, scope = {}, buffer = "")
+        compile(source).call(scope, buffer)
+      end
+
     end
-
-    def self.to_ruby_code(source, options = {})
-      new(options).send(:to_ruby_code, source)
-    end
-
-    def self.compile(source, options = {})
-      new(options).send(:compile, source)
-    end
-
-    def self.render(source, scope = {}, buffer = "")
-      compile(source).call(scope, buffer)
-    end
-
-    def braces
-      options[:braces]
-    end
-
-    private
 
     attr_reader :options
+    def braces; options[:braces]; end
 
-    def compile(source)
-      @compiler.compile(source)
-    end
+    attr_reader :compiler
 
-    def to_ruby_code(source)
-      @compiler.to_ruby_code(source)
+    def initialize(options = {})
+      @options  = options
+      @compiler = WLang::Compiler.new(self)
     end
+    private_class_method :new
 
   end # class Dialect
 end # module WLang
