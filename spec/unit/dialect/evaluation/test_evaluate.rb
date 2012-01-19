@@ -59,6 +59,15 @@ module WLang
           end
         end
 
+        context 'with a nofail evaluator' do
+          include Evaluation
+          evaluator :nofail
+
+          it 'returns nil when not found' do
+            evaluate("who").should be_nil
+          end
+        end
+
         context 'with a chain' do
           include Evaluation
           evaluator :hash, :send

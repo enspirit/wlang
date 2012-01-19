@@ -3,11 +3,7 @@ module WLang
   class Mustang < WLang::Dialect
     include Temple::Utils
 
-    def evaluate(what)
-      super(what)
-    rescue NameError, NoMethodError
-      nil
-    end
+    evaluator :hash, :send, :nofail
 
     def plus(buf, fn)
       if x = evaluate(fn)

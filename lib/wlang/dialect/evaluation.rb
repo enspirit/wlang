@@ -25,6 +25,11 @@ module WLang
         end
         module_function :send_evaluator
 
+        def nofail_evaluator
+          lambda{|scope,expr| [true, nil]}
+        end
+        module_function :nofail_evaluator
+
       end # module Strategies
 
       module ClassMethods
