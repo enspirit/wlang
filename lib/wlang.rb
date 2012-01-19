@@ -31,5 +31,4 @@ end # module WLang
 require 'wlang/compiler'
 require 'wlang/template'
 require 'wlang/scoping'
-require 'wlang/evaluation'
 require 'wlang/dialect'
