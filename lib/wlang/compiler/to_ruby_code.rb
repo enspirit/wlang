@@ -34,6 +34,10 @@ module WLang
         "d#{myid}.#{meth}(b#{myid}, [#{procs}])"
       end
 
+      def on_arg(code)
+        code.inspect
+      end
+
       def on_proc(code)
         id   = idgen.next
         gen  = ToRubyCode.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
