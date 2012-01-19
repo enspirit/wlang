@@ -1,7 +1,7 @@
 module WLang
   class Compiler
     class Filter < Temple::Filter
-      
+
       def self.recurse_on(*kinds)
         kinds.each do |kind|
           define_method(:"on_#{kind}") do |*args|
@@ -11,7 +11,7 @@ module WLang
           end
         end
       end
-      
+
     end # class Filter
   end # class Compiler
 end # module WLang

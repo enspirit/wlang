@@ -22,7 +22,7 @@ module WLang
       end
 
       private
-    
+
       def dispatch_no_dialect(symbols, fns)
         fns.inject([:dispatch, :dynamic, symbols]) do |rw, fn|
           rw << call(fn)
