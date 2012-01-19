@@ -21,7 +21,7 @@ module WLang
       else
         code = to_ruby_code(source)
         proc = eval(code, TOPLEVEL_BINDING)
-        compile(proc)
+        Template.new(@dialect, proc)
       end
     end
 
