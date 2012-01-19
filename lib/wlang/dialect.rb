@@ -6,12 +6,10 @@ module WLang
     include Dialect::DSL
     
     DEFAULT_OPTIONS = {
-      :braces     => WLang::BRACES,
-      :compile_as => :template
+      :braces => WLang::BRACES,
     }
     
     def initialize(options = {})
-      options = {:compile_as => options} if options.is_a?(Symbol)
       @options = DEFAULT_OPTIONS.merge(options)
     end
     
@@ -38,22 +36,25 @@ module WLang
     def parse(source)
       source = File.read(source.to_path) if source.respond_to?(:to_path)
       source = source.to_str if source.respond_to?(:to_str)
+      unless source.is_a?(String)
+        raise ArgumentError, "Unable to parse from #{source.class}"
+      end
       WLang::Parser.new.call(source)
     end
     
     def compile(source)
-      rubycode = compiler.call(parse(source))
-      case options[:compile_as]
-      when :source
-        rubycode
-      when :proc
-        eval(rubycode, TOPLEVEL_BINDING)
-      when :template
-        Template.new self, &eval(rubycode, TOPLEVEL_BINDING)
+      case source
+      when Template
+        source
+      when Proc
+        Template.new(self, &source)
       else
-        msg = "No such compilation scheme #{options[:compile_as]}"
-        raise ArgumentError, msg, caller
+        compile(eval(to_ruby_code(source)))
       end
+    end
+    
+    def to_ruby_code(source)
+      compiler.call(parse(source))
     end
     
     def compiler
