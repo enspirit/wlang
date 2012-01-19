@@ -1,4 +1,5 @@
 require 'wlang/compiler/parser'
+require 'wlang/compiler/filter'
 require 'wlang/compiler/dispatcher'
 require 'wlang/compiler/to_ruby_abstraction'
 require 'wlang/compiler/to_ruby_code'

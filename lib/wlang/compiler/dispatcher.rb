@@ -1,23 +1,9 @@
 module WLang
-  class Dispatcher < Temple::Filter
+  class Dispatcher < Compiler::Filter
 
-    def dialect
-      options[:dialect]
-    end
+    def dialect; options[:dialect]; end
 
-    def on_template(fn)
-      [:template, call(fn)]
-    end
-
-    def on_strconcat(*fns)
-      fns.inject([:strconcat]) do |rw,fn|
-        rw << call(fn)
-      end
-    end
-
-    def on_fn(sub)
-      [:fn, call(sub)]
-    end
+    recurse_on :template, :strconcat, :fn
 
     def on_wlang(symbols, *fns)
       if dialect
@@ -35,7 +21,7 @@ module WLang
     end
 
     private
-
+    
     def dispatch_no_dialect(symbols, fns)
       fns.inject([:dispatch, :dynamic, symbols]) do |rw, fn|
         rw << call(fn)
