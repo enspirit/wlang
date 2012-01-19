@@ -9,19 +9,19 @@ module WLang
     include Dialect::Evaluation
     include Dialect::Tags
 
-    scoping   :strict
-    evaluator :hash, :send
-
     class << self
 
       def factor(options = {})
-        d = new(default_options.merge(options))
-        yield(d) if block_given?
-        d
+        options = default_options.merge(options)
+        Class.new(self).tap do |c|
+          c.scoping    options[:scoping]   || :strict
+          c.evaluator  options[:evaluator] || [:hash, :send]
+        end.new(options)
       end
 
-      def default_options
-        {:braces => WLang::BRACES}
+      def default_options(options = {})
+        @default_options ||= (superclass.default_options.dup rescue {})
+        @default_options.merge!(options)
       end
 
       def to_ruby_code(source, options = {})
@@ -38,6 +38,10 @@ module WLang
 
     end
 
+    default_options :scoping   => :strict,
+                    :evaluator => [:hash, :send],
+                    :braces    => WLang::BRACES
+
     attr_reader :options
     def braces; options[:braces]; end
 
@@ -47,7 +51,7 @@ module WLang
       @options  = options
       @compiler = WLang::Compiler.new(self)
     end
-    private_class_method :new
+    #private_class_method :new
 
   end # class Dialect
 end # module WLang

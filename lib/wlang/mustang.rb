@@ -2,8 +2,6 @@ require 'wlang'
 module WLang
   class Mustang < WLang::Dialect
 
-    evaluator :hash, :send, :nofail
-
     module HighOrderFunctions
 
       def plus(buf, fn)
@@ -51,6 +49,9 @@ module WLang
 
     end
     include HighOrderFunctions
+
+    default_options :evaluator => [:hash, :send, :nofail],
+                    :scoping   => :strict
 
     tag '+', :plus
     tag '$', :escape

@@ -4,4 +4,10 @@ class Upcasing < WLang::Dialect
     buf << render(fn).upcase
   end
 
+  tag "#" do |buf, fn|
+    if x = evaluate(fn)
+      buf << x
+    end
+  end
+
 end

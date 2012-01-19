@@ -35,7 +35,7 @@ module WLang
       module ClassMethods
 
         def evaluator(*names)
-          chain = names.map{|name| Strategies.send("#{name}_evaluator")}
+          chain = names.flatten.map{|name| Strategies.send("#{name}_evaluator")}
           define_method(:evaluation_chain) do
             chain
           end

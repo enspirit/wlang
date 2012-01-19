@@ -24,15 +24,21 @@ describe WLang do
   end
 
   it 'allows overriding super-dialect evaluation rules' do
-    d = WLang::dialect do
-      evaluator :nofail
-      tag('$') do |buf, fn| 
-        if x = evaluate(fn)
-          buf << x
-        end
-      end
+    d = WLang::dialect(Upcasing) do
+      default_options :evaluator => [:nofail]
     end
-    d.render('Hello ${who}!').should eq("Hello !")
+    d.render('Hello #{who}!').should eq("Hello !")
+  end
+
+  it 'does not override the super-dialect evaluation rules' do
+    d = WLang::dialect(Upcasing) do
+      default_options :evaluator => [:nofail]
+    end
+    lambda{ Upcasing.render('Hello #{who}!') }.should raise_error(NameError)
+  end
+
+  it 'allows overriding super-dialect evaluation rules at compile time' do
+    Upcasing.compile('Hello #{who}!', :evaluator => [:nofail]).render.should eq("Hello !")
   end
 
 end
