@@ -2,15 +2,15 @@ module WLang
   class ToRubyAbstraction < Temple::Filter
 
     def on_template(fn)
-      call(fn)
+      [:template, call(fn)]
     end
 
     def on_strconcat(*cases)
       [:multi] + cases.map{|c| call(c)}
     end
 
-    def on_wlang(symbols, *fns)
-      fns.inject([ :dispatch, :dynamic, symbols ]) do |rw,fn|
+    def on_dispatch(kind, to, *fns)
+      fns.inject [:dispatch, kind, to] do |rw,fn|
         rw << call(fn)
       end
     end

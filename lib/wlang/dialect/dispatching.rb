@@ -60,7 +60,7 @@ module WLang
 
       module InstanceMethods
 
-        def dispatch(symbols, buf, *fns)
+        def dispatch(symbols, buf, fns)
           extra, meth = find_dispatching_method(symbols)
           buf << extra unless extra.empty?
           if meth
@@ -70,14 +70,14 @@ module WLang
           end
         end
 
+        def find_dispatching_method(symbols, subject = self)
+          self.class.find_dispatching_method(symbols, subject)
+        end
+
         private
 
         def tag_dispatching_name(symbols)
           self.class.tag_dispatching_name(symbols)
-        end
-
-        def find_dispatching_method(symbols, subject = self)
-          self.class.find_dispatching_method(symbols, subject)
         end
 
         def with_normalized_fns(fns, arity)

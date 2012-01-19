@@ -1,4 +1,5 @@
 require 'wlang/compiler/parser'
+require 'wlang/compiler/dispatcher'
 require 'wlang/compiler/to_ruby_abstraction'
 require 'wlang/compiler/to_ruby_code'
 module WLang
@@ -22,17 +23,18 @@ module WLang
         compile(proc)
       end
     end
-    
+
     def to_ruby_code(source)
       engine.call(source)
     end
 
     def engine
-      Class.new(Temple::Engine) do
-        use WLang::Parser
-        use WLang::ToRubyAbstraction, :dialect => @dialect
-        use WLang::ToRubyCode
-      end.new
+      Class.new(Temple::Engine).tap{|c|
+        c.use WLang::Parser
+        c.use WLang::Dispatcher, :dialect => @dialect
+        c.use WLang::ToRubyAbstraction
+        c.use WLang::ToRubyCode
+      }.new
     end
 
   end # class Compiler

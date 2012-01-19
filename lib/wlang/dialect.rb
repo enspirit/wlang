@@ -13,7 +13,7 @@ module WLang
       @options  = DEFAULT_OPTIONS.merge(options)
       @compiler = WLang::Compiler.new(self)
     end
-    
+
     def self.to_ruby_code(source, options = {})
       new(options).send(:to_ruby_code, source)
     end
@@ -26,13 +26,13 @@ module WLang
       compile(source).call(scope, buffer)
     end
 
-    private
-
-    attr_reader :options
-
     def braces
       options[:braces]
     end
+
+    private
+
+    attr_reader :options
 
     def compile(source)
       @compiler.compile(source)

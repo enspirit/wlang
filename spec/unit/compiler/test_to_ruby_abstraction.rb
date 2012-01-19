@@ -2,44 +2,55 @@ require 'spec_helper'
 module WLang
   describe ToRubyAbstraction do
 
-    let(:compiler){ WLang::ToRubyAbstraction.new }
-
-    subject{ compiler.call(source) }
-
-    describe '[:static, ...]' do
-      let(:source)  { [:static, "Hello world"] }
-      let(:expected){ [:static, "Hello world"] }
-      it{ should eq(expected) }
+    def optimize(source)
+      WLang::ToRubyAbstraction.new.call(source)
     end
 
-    describe '[:strconcat, ...] should transform [:strconcat, ...] as [:multi, ...]' do
-      let(:source)  { [:strconcat, [:static, "Hello "], [:static, "world"]] }
-      let(:expected){ [:multi,     [:static, "Hello "], [:static, "world"]] }
-      it{ should eq(expected) }
+    let(:hello){[
+      [:static, "Hello world"],
+      [:static, "Hello world"]
+    ]}
+    let(:strconcat){[
+      [:strconcat, [:static, "Hello "], [:static, "world"]],
+      [:multi,     [:static, "Hello "], [:static, "world"]]
+    ]}
+
+    it 'let [:static, ...] unchanged' do
+      optimize(hello.first).should eq(hello.last)
     end
 
-    describe '[:strconcat, ...] should recurse one children' do
-      let(:source)  { [:strconcat, [:strconcat, [:static, "Hello "], [:static, "world"]], [:static, "!"]] }
-      let(:expected){ [:multi,     [:multi,     [:static, "Hello "], [:static, "world"]], [:static, "!"]] }
-      it{ should eq(expected) }
+    it 'transforms :strconcat to :mutli' do
+      optimize(strconcat.first).should eq(strconcat.last)
     end
 
-    describe '[:fn, ...]' do
-      let(:source)  { [:fn,   [:static, "Hello world"]] }
-      let(:expected){ [:proc, [:static, "Hello world"]] }
-      it{ should eq(expected) }
+    it 'recurses on :strconcat' do
+      source   = [:strconcat, strconcat.first]
+      expected = [:multi,     strconcat.last]
+      optimize(source).should eq(expected)
     end
 
-    describe "[:template, ...] should compile the inner function" do
-      let(:source)  { [:template, [:fn, [:static, "Hello world!"]]]          }
-      let(:expected){ [:proc, [:static, "Hello world!"]] }
-      it{ should eq(expected) }
+    it 'transforms :fn to :proc' do
+      source   = [:fn, hello.first]
+      expected = [:proc, hello.last]
+      optimize(source).should eq(expected)
     end
 
-    describe '[:wlang, ...]' do
-      let(:source)  { [:wlang, "$", [:fn, [:static, "Hello world"]]] }
-      let(:expected){ [:dispatch, :dynamic, "$", [:proc, [:static, "Hello world"]]] }
-      it{ should eq(expected) }
+    it 'recurses on :fn' do
+      source   = [:fn, strconcat.first]
+      expected = [:proc, strconcat.last]
+      optimize(source).should eq(expected)
+    end
+
+    it "recurses on :template" do
+      source   = [:template, strconcat.first]
+      expected = [:template, strconcat.last]
+      optimize(source).should eq(expected)
+    end
+
+    it 'recurses on :dispatch' do
+      source   = [:dispatch, :static, :meth, [:fn, strconcat.first]]
+      expected = [:dispatch, :static, :meth, [:proc, strconcat.last]]
+      optimize(source).should eq(expected)
     end
 
   end # describe ToRubyAbstraction
