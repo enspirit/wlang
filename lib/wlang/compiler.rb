@@ -31,10 +31,10 @@ module WLang
 
     def engine
       Class.new(Temple::Engine).tap{|c|
-        c.use WLang::Parser
-        c.use WLang::Dispatcher, :dialect => @dialect
-        c.use WLang::ToRubyAbstraction
-        c.use WLang::ToRubyCode
+        c.use Parser
+        c.use Dispatcher, :dialect => @dialect
+        c.use ToRubyAbstraction
+        c.use ToRubyCode
       }.new
     end
 
