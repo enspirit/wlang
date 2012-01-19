@@ -1,13 +1,13 @@
 require 'wlang/dialect/dispatching'
 require 'wlang/dialect/scoping'
 require 'wlang/dialect/evaluation'
-require 'wlang/dialect/dsl'
+require 'wlang/dialect/tags'
 module WLang
   class Dialect
     include Dialect::Dispatching
     include Dialect::Scoping
     include Dialect::Evaluation
-    include Dialect::DSL
+    include Dialect::Tags
 
     scoping   :strict
     evaluator :hash, :send

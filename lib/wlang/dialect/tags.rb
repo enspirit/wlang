@@ -1,6 +1,6 @@
 module WLang
   class Dialect
-    module DSL
+    module Tags
 
       module ClassMethods
 
@@ -40,6 +40,6 @@ module WLang
         mod.extend(ClassMethods)
       end
 
-    end # module DSL
+    end # module Tags
   end # class Dialect
 end # module WLang
