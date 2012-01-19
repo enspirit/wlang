@@ -11,11 +11,6 @@ module WLang
     end
     
     def parse(source)
-      source = File.read(source.to_path) if source.respond_to?(:to_path)
-      source = source.to_str if source.respond_to?(:to_str)
-      unless source.is_a?(String)
-        raise ArgumentError, "Unable to parse from #{source.class}"
-      end
       WLang::Parser.new.call(source)
     end
     

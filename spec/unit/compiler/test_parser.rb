@@ -2,19 +2,23 @@ require 'spec_helper'
 module WLang
   describe Parser do
     
-    let(:parser){ WLang::Parser.new }
-
+    def parse(input)
+      WLang::Parser.new.call(input)
+    end
+    
+    let(:expected) {
+      [:template,
+        [:fn, 
+          [:strconcat,
+            [:static, "Hello "],
+            [:wlang,  "$",
+              [:fn, 
+                [:static, "who"]]],
+            [:static, "!"]]]]
+    }
+    
     it 'should parse "Hello ${world}!" as expected' do
-      expected = \
-        [:template,
-          [:fn, 
-            [:strconcat,
-              [:static, "Hello "],
-              [:wlang,  "$",
-                [:fn, 
-                  [:static, "world"]]],
-              [:static, "!"]]]]
-      parser.call("Hello ${world}!").should eq(expected)
+      parse(hello_tpl).should eq(expected)
     end
     
     it 'should support high-order wlang' do
@@ -26,7 +30,7 @@ module WLang
               [:wlang, "$", 
                 [:fn, 
                   [:static, "who"]]]]]]]
-      parser.call("${${who}}").should eq(expected)
+      parse("${${who}}").should eq(expected)
     end
     
     it 'should support mutli-block functions' do
@@ -36,7 +40,19 @@ module WLang
           [:wlang,  "$",
             [:fn, [:static, "first" ]],
             [:fn, [:static, "second"]]]]]
-      parser.call("${first}{second}").should eq(expected)
+      parse("${first}{second}").should eq(expected)
+    end
+    
+    it 'should be idempotent' do
+      parse(parse(hello_tpl)).should eq(expected)
+    end
+    
+    it 'should support a path-like object' do
+      parse(hello_path).should eq(expected)
+    end
+    
+    it 'should support an IO object' do
+      hello_io{|io| parse(io)}.should eq(expected)
     end
     
   end
