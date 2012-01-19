@@ -3,7 +3,7 @@ module WLang
     class ProcCallRemoval < Filter
 
       recurse_on :template, :strconcat, :dispatch
-    
+
       def on_fn(core)
         if core.first == :static
           [:arg, core.last]

@@ -1,0 +1,1 @@
+require 'wlang/scoping/strict'
