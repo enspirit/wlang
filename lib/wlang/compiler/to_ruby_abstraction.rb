@@ -9,9 +9,10 @@ module WLang
       [:multi] + cases.map{|c| call(c)}
     end
 
-    def on_wlang(symbols, *functions)
-      args = functions.map{|f| call(f)}
-      [ :dispatch, :dynamic, symbols ] + args
+    def on_wlang(symbols, *fns)
+      fns.inject([ :dispatch, :dynamic, symbols ]) do |rw,fn|
+        rw << call(fn)
+      end
     end
 
     def on_fn(code)
