@@ -14,10 +14,6 @@ module WLang
       @compiler = WLang::Compiler.new(self)
     end
     
-    def self.parse(source, options = {})
-      new(options).send(:parse, source)
-    end
-    
     def self.compile(source, options = {})
       new(options).send(:compile, source)
     end
@@ -34,14 +30,9 @@ module WLang
       options[:braces]
     end
     
-    def parse(source)
-      @compiler.parse(source)
-    end
-    
     def compile(source)
       @compiler.compile(source)
     end
-    
     
   end # class Dialect
 end # module WLang

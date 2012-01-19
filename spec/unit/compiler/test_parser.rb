@@ -43,16 +43,26 @@ module WLang
       parse("${first}{second}").should eq(expected)
     end
     
-    it 'should be idempotent' do
+    it 'is idempotent' do
       parse(parse(hello_tpl)).should eq(expected)
     end
     
-    it 'should support a path-like object' do
+    it 'supports a path-like object' do
       parse(hello_path).should eq(expected)
     end
     
-    it 'should support an IO object' do
+    it 'supports an IO object' do
       hello_io{|io| parse(io)}.should eq(expected)
+    end
+    
+    it 'recognizes objects that respond to :to_path' do
+      s = Struct.new(:to_path).new(hello_path)
+      parse(s).should eq(expected)
+    end
+    
+    it 'recognizes objects that respond to :to_str' do
+      s = Struct.new(:to_str).new(hello_tpl)
+      parse(s).should eq(expected)
     end
     
   end
