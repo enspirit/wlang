@@ -68,8 +68,8 @@ Let take an example:
 ```ruby
 class Upcasing < WLang::Dialect
 
-  tag '$' do |fn|
-    instantiate(fn).upcase
+  tag '$' do |buf, fn|
+    buf << instantiate(fn).upcase
   end
 
 end

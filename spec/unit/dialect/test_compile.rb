@@ -35,7 +35,7 @@ module WLang
     end
     
     it 'returns a thread-safe template object' do
-      t = WLang.dialect{ tag('$'){|fn|
+      t = WLang.dialect{ tag('$'){|buf,fn|
         raise if defined?(@somevar)
         @somevar = "World"
       } }.compile('${who}')

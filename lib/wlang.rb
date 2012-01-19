@@ -16,7 +16,7 @@ module WLang
   # Example:
   #
   #   d = WLang::dialect do
-  #     tag('$') do |fn| evaluate(fn) end
+  #     tag('$') do |buf,fn| buf << evaluate(fn) end
   #     ...
   #   end
   #   d.instantiate("Hello ${who}!", :who => "world")
