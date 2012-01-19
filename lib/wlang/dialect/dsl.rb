@@ -36,9 +36,9 @@ module WLang
         
         def with_scope(scope)
           old, @scope = @scope, Scope.factor(scope)
-          yield
-        ensure
+          res = yield
           @scope = scope
+          res
         end
         
         def known?(what)
