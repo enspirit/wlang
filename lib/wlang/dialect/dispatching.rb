@@ -95,7 +95,7 @@ module WLang
           start, stop = braces
           fns.each do |fn|
             buf << start
-            fn.call(self, buf)
+            render(fn, nil, buf)
             buf << stop
           end
           buf
