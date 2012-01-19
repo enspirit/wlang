@@ -5,7 +5,12 @@ require 'wlang/dialect/dsl'
 module WLang
   class Dialect
     include Dialect::Dispatching
+    include Dialect::Scoping
+    include Dialect::Evaluation
     include Dialect::DSL
+
+    scoping   :strict
+    evaluator :hash, :send
 
     DEFAULT_OPTIONS = {
       :braces => WLang::BRACES,

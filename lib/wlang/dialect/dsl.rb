@@ -16,8 +16,6 @@ module WLang
 
         protected
 
-        attr_reader :scope
-
         def render(fn, scope = nil, buffer = "")
           case fn
           when Template
@@ -33,27 +31,6 @@ module WLang
           else
             raise ArgumentError, "Unable to render #{fn}"
           end
-        end
-
-        def evaluate(what)
-          what = render(what) unless what.is_a?(String)
-          case scope
-          when Hash
-            scope[what] || scope[what.to_sym]
-          else
-            scope.respond_to?(what.to_sym) ? scope.send(what.to_sym) : nil
-          end
-        end
-
-        def with_scope(scope)
-          old, @scope = @scope, scope
-          res = yield
-          @scope = scope
-          res
-        end
-
-        def known?(what)
-          @scope.respond_to?(what.to_sym)
         end
 
       end
