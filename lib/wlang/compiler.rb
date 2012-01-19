@@ -17,10 +17,14 @@ module WLang
       when Proc
         Template.new(@dialect, source)
       else
-        code = engine.call(source)
+        code = to_ruby_code(source)
         proc = eval(code, TOPLEVEL_BINDING)
         compile(proc)
       end
+    end
+    
+    def to_ruby_code(source)
+      engine.call(source)
     end
 
     def engine

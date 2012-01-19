@@ -13,6 +13,10 @@ module WLang
       @options  = DEFAULT_OPTIONS.merge(options)
       @compiler = WLang::Compiler.new(self)
     end
+    
+    def self.to_ruby_code(source, options = {})
+      new(options).send(:debug, source)
+    end
 
     def self.compile(source, options = {})
       new(options).send(:compile, source)
@@ -32,6 +36,10 @@ module WLang
 
     def compile(source)
       @compiler.compile(source)
+    end
+
+    def to_ruby_code(source)
+      @compiler.to_ruby_code(source)
     end
 
   end # class Dialect
