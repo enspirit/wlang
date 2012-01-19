@@ -44,14 +44,11 @@ module WLang
             methname = tag_dispatching_name(symbols, "_dtag")
             arity    = code.arity
             define_method(methname) do |buf, fns|
-              if fns.size == arity
-                buf << code.bind(self).call(*fns).to_s
-              else
-                args, rest = normalize_tag_fns(fns, arity)
+              with_normalized_fns(fns, arity) do |args, rest|
                 buf << code.bind(self).call(*args).to_s
-                flush_trailing_fns(buf, rest) unless rest.empty?
-                buf
+                flush_trailing_fns(buf, rest) if rest
               end
+              buf
             end
             dispatching_map[symbols] = ['', methname]
           else
@@ -83,9 +80,15 @@ module WLang
           self.class.find_dispatching_method(symbols, subject)
         end
         
-        def normalize_tag_fns(fns, arity)
-          fns.fill(nil, fns.length, arity - fns.length)
-          [fns[0...arity], fns[arity..-1]]
+        def with_normalized_fns(fns, arity)
+          if fns.size == arity
+            yield(fns, nil) 
+          elsif fns.size < arity
+            yield(fns.fill(nil, fns.size, arity - fns.size), nil)
+          else
+            fns.fill(nil, fns.length, arity - fns.length)
+            yield(fns[0...arity], fns[arity..-1])
+          end
         end
         
         def flush_trailing_fns(buf, fns)
