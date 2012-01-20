@@ -1,66 +1,81 @@
 require File.expand_path('../spec_helper', __FILE__)
 describe WLang do
 
-  it "should have a version number" do
+  it "has a version number" do
     WLang.const_defined?(:VERSION).should be_true
   end
 
-  it 'allows building on-the-fly dialects' do
-    d = WLang::dialect do
+  let(:d){
+    WLang::dialect do
       tag('$') do |buf, fn| 
-        buf << evaluate(fn)
+        if x = evaluate(fn)
+          buf << x.to_s
+        end
       end
     end
-    d.render("Hello ${who}!", :who => "world").should eq("Hello world!")
+  }
+
+  it 'allows building on-the-fly dialects' do
+    d.render(hello_tpl, :who => "world").should eq("Hello world!")
   end
 
   ### overriding
 
   it 'allows overriding super-dialect tags' do
-    d = WLang::dialect(Upcasing) do
+    e = WLang::dialect(d) do
       tag('$') do |buf, fn1| 
         buf << render(fn1).capitalize
       end
     end
-    d.render('Hello ${world}!').should eq("Hello World!")
+    e.render(hello_tpl).should eq("Hello Who!")
   end
 
   it 'allows overriding super-dialect evaluation rules' do
-    d = WLang::dialect(Upcasing) do
+    e = WLang::dialect(d) do
       default_options :evaluator => [:nofail]
     end
-    d.render('Hello #{who}!').should eq("Hello !")
+    e.render(hello_tpl).should eq("Hello !")
   end
 
   it 'does not override the super-dialect evaluation rules' do
-    d = WLang::dialect(Upcasing) do
+    e = WLang::dialect(d) do
       default_options :evaluator => [:nofail]
     end
-    lambda{ Upcasing.render('Hello #{who}!') }.should raise_error(NameError)
+    lambda{ d.render(hello_tpl) }.should raise_error(NameError)
   end
 
   it 'allows overriding super-dialect evaluation rules at compile time' do
-    Upcasing.compile('Hello #{who}!', :evaluator => [:nofail]).render.should eq("Hello !")
+    d.compile(hello_tpl, :evaluator => [:nofail]).render.should eq("Hello !")
+  end
+
+  ### default scoping
+  
+  it 'allows a hash for scoping by default' do
+    d.render(hello_tpl, :who => "World").should eq("Hello World!")
+  end
+  
+  it 'allows binding for scoping by default' do
+    pending{
+      who = "World"
+      d.render(hello_tpl, binding).should eq("Hello World!")
+    }
   end
 
   ### high-order and multi-dialects
 
   it 'allows high-order constructions' do
-    d = WLang::dialect do
-      tag '!' do |buf,fn| buf << evaluate(fn).to_s; end
-    end
     scope = {:who => :world, :world => "World"}
-    d.render('Hello !{!{who}}!', scope).should eq("Hello World!")
+    d.render('Hello ${${who}}!', scope).should eq("Hello World!")
   end
   
   it 'allows switching the current dialect' do
-    d = WLang::dialect do
+    e = WLang::dialect do
       tag '!', [Upcasing] do |buf,fn|
         buf << evaluate(Upcasing.render(fn)).to_s;
       end
     end
     scope = {:WHO => "World"}
-    d.render('Hello !{${who}}!', scope).should eq("Hello World!")
+    e.render('Hello !{${who}}!', scope).should eq("Hello World!")
   end
   
 end
