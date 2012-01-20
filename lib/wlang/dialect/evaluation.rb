@@ -25,6 +25,22 @@ module WLang
         end
         module_function :send_evaluator
 
+        def eval_evaluator
+          lambda{|scope,expr|
+            begin
+              val = if scope.is_a?(Binding)
+                eval(expr.to_s, scope)
+              else              
+                scope.instance_eval(expr.to_s)
+              end
+              [true, val]
+            rescue NameError, NoMethodError
+              nil
+            end
+          }
+        end
+        module_function :eval_evaluator
+
         def nofail_evaluator
           lambda{|scope,expr| [true, nil]}
         end
