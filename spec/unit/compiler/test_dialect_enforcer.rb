@@ -154,9 +154,9 @@ module WLang
           ] 
         optimize(source).should eq(expected)
       end
-      
+
       ### dialect switching
-      
+
       it 'introduce dialect switching mechanism' do
         source   = [:wlang, '%', hello_fn.first]
         expected = [:wlang, '%', [:modulo, WLang::Dummy, hello_fn.last]] 

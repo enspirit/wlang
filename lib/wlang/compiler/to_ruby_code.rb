@@ -32,7 +32,7 @@ module WLang
       def on_arg(code)
         code.inspect
       end
-      
+
       def on_modulo(dialect, fn)
         if fn.first == :arg
           call(fn)

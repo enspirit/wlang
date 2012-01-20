@@ -49,11 +49,11 @@ describe WLang do
   end
 
   ### default scoping
-  
+
   it 'allows a hash for scoping by default' do
     d.render(hello_tpl, :who => "World").should eq("Hello World!")
   end
-  
+
   it 'allows binding for scoping by default' do
     who = "World"
     d.render(hello_tpl, binding).should eq("Hello World!")
@@ -65,7 +65,7 @@ describe WLang do
     scope = {:who => :world, :world => "World"}
     d.render('Hello ${${who}}!', scope).should eq("Hello World!")
   end
-  
+
   it 'allows switching the current dialect' do
     e = WLang::dialect do
       tag '!', [Upcasing] do |buf,fn|
@@ -75,5 +75,5 @@ describe WLang do
     scope = {:WHO => "World"}
     e.render('Hello !{${who}}!', scope).should eq("Hello World!")
   end
-  
+
 end

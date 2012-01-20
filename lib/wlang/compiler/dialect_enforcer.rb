@@ -37,14 +37,14 @@ module WLang
           end
         end
       end
-      
+
       def rewrite_missing_fns(symbols, fns, count)
         count.times do
           fns << [:arg, nil]
         end
         call([:wlang, symbols] + fns)
       end
-      
+
       def rewrite_trailing_fns(symbols, fns, trailing)
         wlanged = call([:wlang, symbols] + fns)
         trailing.inject [:strconcat, wlanged] do |rw,fn|

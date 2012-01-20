@@ -18,7 +18,7 @@ module WLang
         it 'works with to_sym match' do
           ev({:who => "World"}, "who").should eq([true, "World"])
         end
-        
+
         it 'supports hash-like objects' do
           h = Object.new.tap{|o|
             def o.has_key?(k) true; end

@@ -5,5 +5,3 @@ Benchmark.bm(10) do |x|
     WLang::Mustang.compile("*{1..10000}{!{self}}{, }")
   end
 end
-
-

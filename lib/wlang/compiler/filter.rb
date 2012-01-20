@@ -1,7 +1,7 @@
 module WLang
   class Compiler
     class Filter < Temple::Filter
-      
+
       module ClassMethods
 
         def recurse_on(*kinds)
@@ -11,10 +11,10 @@ module WLang
             end
           end
         end
-        
+
       end
       extend ClassMethods
-      
+
       module InstanceMethods
 
         def recurse(kind, *args)
@@ -25,14 +25,14 @@ module WLang
 
       end
       include InstanceMethods
-      
+
       module Helpers
-        
+
         def self.included(mod)
           mod.instance_eval{ include(Filter::InstanceMethods) }
           mod.extend(Filter::ClassMethods)
         end
-        
+
       end # module Helpers
 
     end # class Filter
