@@ -1,7 +1,7 @@
 require 'spec_helper'
 module WLang
   describe Dialect::Dispatching do
-    include Dialect::Dispatching
+    include Dialect::Dispatching::ClassMethods
 
     describe 'tag_dispatching_name' do
       it "works with a single char" do

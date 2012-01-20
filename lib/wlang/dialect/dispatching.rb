@@ -28,12 +28,6 @@ module WLang
 
       module InstanceMethods
 
-        private
-
-        def tag_dispatching_name(symbols)
-          self.class.tag_dispatching_name(symbols)
-        end
-
       end # module InstanceMethods
 
       def self.included(mod)
