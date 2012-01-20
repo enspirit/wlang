@@ -75,7 +75,7 @@ module WLang
             end
           end until symbols.empty?
         end
-        found = found.name if found && kind == :name
+        found = found.name.to_sym if found && kind == :name
         [extra.join, found]
       end
 
