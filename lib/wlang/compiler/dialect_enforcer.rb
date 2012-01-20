@@ -22,27 +22,31 @@ module WLang
 
       def rewrite_known_tag(meth, symbols, fns)
         argsize, arity = fns.size, meth.arity - 1
-        optimized = nil
         if argsize > arity                    
-          # trailing blocks here ${...}{xxx}
-          fns, trailing = fns[0...arity], fns[arity..-1]
-          wlanged = call([:wlang, symbols] + fns)
-          optimized = [:strconcat, wlanged]
-          trailing.inject optimized do |rw,fn|
-            rw << [:static, '{']
-            rw << call(fn.last)
-            rw << [:static, '}']
-          end
-        else argsize < arity
-          # possibly missing blocks in here *{...}
-          optimized = fns.inject [:wlang, symbols] do |rw,fn|
+          rewrite_trailing_fns(symbols, fns[0...arity], fns[arity..-1]) 
+        elsif argsize < arity
+          rewrite_missing_fns(symbols, fns, arity - argsize)
+        else
+          fns.inject [:wlang, symbols] do |rw,fn|
             rw << call(fn)
           end
-          (arity - argsize).times do 
-            optimized << [:arg, nil]
-          end
         end
-        optimized
+      end
+      
+      def rewrite_missing_fns(symbols, fns, count)
+        count.times do
+          fns << [:arg, nil]
+        end
+        call([:wlang, symbols] + fns)
+      end
+      
+      def rewrite_trailing_fns(symbols, fns, trailing)
+        wlanged = call([:wlang, symbols] + fns)
+        trailing.inject [:strconcat, wlanged] do |rw,fn|
+          rw << [:static, '{']
+          rw << call(fn.last)
+          rw << [:static, '}']
+        end
       end
 
       def rewrite_extra_symbols(extra, symbols, fns)
