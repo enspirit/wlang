@@ -18,6 +18,14 @@ module WLang
         it 'works with to_sym match' do
           ev({:who => "World"}, "who").should eq([true, "World"])
         end
+        
+        it 'supports hash-like objects' do
+          h = Object.new.tap{|o|
+            def o.has_key?(k) true; end
+            def o.[](k) "World"; end
+          }
+          ev(h, "who").should eq([true, "World"])
+        end
 
         it 'return nil when not a Hash' do
           ev(nil, "who").should be_nil

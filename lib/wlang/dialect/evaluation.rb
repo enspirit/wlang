@@ -6,7 +6,7 @@ module WLang
 
         def hash_evaluator
           lambda{|scope,expr|
-            return nil unless scope.is_a?(Hash)
+            return nil unless scope.respond_to?(:has_key?)
             if scope.has_key?(expr)
               [true, scope[expr]] 
             elsif scope.has_key?(sym = expr.to_sym)
