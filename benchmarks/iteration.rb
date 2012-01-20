@@ -1,8 +1,4 @@
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'wlang/mustang'
-require 'benchmark'
-require 'erb'
-require 'mustache'
+require_relative 'commons'
 
 max      = 50000
 scope = { :range => (1..max).map{|i| {:i => i}} }
