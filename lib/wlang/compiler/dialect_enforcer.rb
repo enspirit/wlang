@@ -8,11 +8,17 @@ module WLang
 
       def on_wlang(symbols, *fns)
         extra, meth = find_dispatching_method(symbols, :unbound_method)
-        if meth && (extra.nil? or extra.empty?)
-          rewrite_known_tag(meth, symbols, fns)
-        elsif meth
-          symbols = symbols[extra.length..-1]
-          rewrite_extra_symbols(extra, symbols, fns)
+        if meth
+          argsize, arity = fns.size, meth.arity - 1
+          if extra.size > 0
+            rewrite_extra_symbols(extra, symbols[extra.length..-1], fns)
+          elsif argsize > arity
+            rewrite_trailing_fns(symbols, fns[0...arity], fns[arity..-1])
+          elsif argsize < arity
+            rewrite_missing_fns(symbols, fns, arity - argsize)
+          else 
+            enforce_sub_dialects(symbols, fns)
+          end
         else
           rewrite_unknown_tag(symbols, fns)
         end
@@ -20,16 +26,9 @@ module WLang
 
       private
 
-      def rewrite_known_tag(meth, symbols, fns)
-        argsize, arity = fns.size, meth.arity - 1
-        if argsize > arity                    
-          rewrite_trailing_fns(symbols, fns[0...arity], fns[arity..-1]) 
-        elsif argsize < arity
-          rewrite_missing_fns(symbols, fns, arity - argsize)
-        else
-          fns.inject [:wlang, symbols] do |rw,fn|
-            rw << call(fn)
-          end
+      def enforce_sub_dialects(symbols, fns)
+        fns.inject [:wlang, symbols] do |rw,fn|
+          rw << call(fn)
         end
       end
       
