@@ -1,4 +1,4 @@
-require_relative 'commons'
+require File.expand_path('../commons', __FILE__)
 
 MUSTACHE = <<-EOF
 <table>
@@ -39,13 +39,13 @@ People = Struct.new(:name, :score)
 Benchmark.bm(10) do |x|
   people = (1..max).map{|i| People.new("People#{i}", rand)}
   scope  = {:people => people}
-  x.report(:wlang){
+  x.report("mustang"){
     mustang = WLang::Mustang.render(MUSTANG, scope)
   }
-  x.report(:mustache){
+  x.report("mustache"){
     mustache = Mustache.render(MUSTACHE, scope)
   }
-  x.report(:erb){
+  x.report("erb"){
     erb = ERB.new(TERB).result(binding)
   }
 end
