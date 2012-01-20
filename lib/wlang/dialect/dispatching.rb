@@ -22,11 +22,22 @@ module WLang
           else
             raise "Unable to use #{code} for a tag"
           end
+          dialects_info_name = tag_dispatching_name(symbols, "_diatag")
+          define_method(dialects_info_name) do dialects end
         end
 
       end # module ClassMethods
 
       module InstanceMethods
+
+        def dialects_for(symbols)
+          info = Dialect.tag_dispatching_name(symbols, "_diatag")
+          if respond_to?(info)
+            send(info)
+          else
+            raise ArgumentError, "No tag for #{symbols}"
+          end
+        end
 
       end # module InstanceMethods
 
