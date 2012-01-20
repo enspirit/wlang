@@ -10,9 +10,7 @@ module WLang
     end
 
     it 'do not eat extra blocks' do
-      pending {
-        U.render("Hello ${who}{world}").should eq("Hello WHO{world}")
-      }
+      U.render("Hello ${who}{world}").should eq("Hello WHO{world}")
     end
 
     it "accepts an optional scope" do

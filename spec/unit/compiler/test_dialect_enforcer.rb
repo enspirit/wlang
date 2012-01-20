@@ -8,8 +8,9 @@ module WLang
 
       let(:dialect){
         WLang::dialect{ 
-          tag('$')  do |buf,fn| buf << "$"  end 
-          tag('!$') do |buf,fn| buf << "!$" end 
+          tag('$')  do |buf,fn| buf << "$"  end
+          tag('!$') do |buf,fn| buf << "!$" end
+          tag('*')  do |buf,fn1,fn2|        end
         }.factor
       }
 
@@ -36,18 +37,20 @@ module WLang
         DialectEnforcer.new(:dialect => dialect).call(source)
       end
 
-      let(:hello_fn){[
-        [:fn, [:static, "hello"]],
-        [:fn, [:static, "hello"]]
-      ]}
       let(:unknown){[
         [:wlang, '!', [:fn, [:static, "hello"]]],
         [:strconcat, [:static, "!"], [:static, "{"], [:static, "hello"], [:static, "}"]]
+      ]}
+      let(:hello_fn){[
+        [:fn, unknown.first],
+        [:fn, unknown.last]
       ]}
       let(:hello_dollar){[
         [:wlang, '$', hello_fn.first],
         [:wlang, '$', hello_fn.last]
       ]}
+
+      ### recursion rules
 
       it 'recurses on template' do
         source   = [:template, hello_dollar.first]
@@ -71,6 +74,8 @@ module WLang
         optimize(source).should eq(expected)
       end
 
+      ### exact symbols
+
       it 'optimizes on exact symbols' do
         optimize(hello_dollar.first).should eq(hello_dollar.last)
       end
@@ -80,6 +85,8 @@ module WLang
         expected = [:strconcat, [:static, "@"], hello_dollar.last]
         optimize(source).should eq(expected)
       end
+
+      ### unknown tags
 
       it 'recognizes unknown tags' do
         optimize(unknown.first).should eq(unknown.last)
@@ -91,13 +98,39 @@ module WLang
         optimize(source).should eq(expected)
       end
 
+      ### high-order wlang
+
       it 'applies dynamic dispatching on high-order wlang' do
         source   = [:wlang, '$', [:fn, hello_dollar.first]]
         expected = [:wlang, '$', [:fn, hello_dollar.last]]
         optimize(source).should eq(expected)
       end
 
-      it 'detects extra blocks' do
+      ### arity 2
+
+      it 'supports tags of arity 2' do
+        source   = [:wlang, '*', hello_fn.first, hello_fn.first]
+        expected = [:wlang, '*', hello_fn.last, hello_fn.last]
+        optimize(source).should eq(expected)
+      end
+
+      ### missing blocks
+
+      it 'detects missing blocks on arity 1' do
+        source   = [:wlang, '$']
+        expected = [:wlang, '$', [:arg, nil]]
+        optimize(source).should eq(expected)
+      end
+
+      it 'detects missing blocks on arity 2' do
+        source   = [:wlang, '*', hello_fn.first]
+        expected = [:wlang, '*', hello_fn.last, [:arg, nil]]
+        optimize(source).should eq(expected)
+      end
+
+      ### trailing blocks
+
+      it 'detects trailing blocks' do
         source   = [:wlang, '$', hello_fn.first, hello_fn.first]
         expected = \
           [:strconcat,
@@ -106,9 +139,19 @@ module WLang
             hello_fn.last.last,
             [:static, '}']
           ] 
-        pending{
-          optimize(source).should eq(expected)
-        }
+        optimize(source).should eq(expected)
+      end
+
+      it 'detects trailing blocks on arity 2' do
+        source   = [:wlang, '*', hello_fn.first, hello_fn.first, hello_fn.first]
+        expected = \
+          [:strconcat,
+            [:wlang, '*', hello_fn.last, hello_fn.last],
+            [:static, '{'],
+            hello_fn.last.last,
+            [:static, '}']
+          ] 
+        optimize(source).should eq(expected)
       end
 
     end # describe DialectEnforcer

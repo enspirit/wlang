@@ -9,7 +9,7 @@ module WLang
       def on_wlang(symbols, *fns)
         extra, meth = find_dispatching_method(symbols, :unbound_method)
         if meth && (extra.nil? or extra.empty?)
-          rewrite_known_tag(symbols, fns)
+          rewrite_known_tag(meth, symbols, fns)
         elsif meth
           symbols = symbols[extra.length..-1]
           rewrite_extra_symbols(extra, symbols, fns)
@@ -20,10 +20,29 @@ module WLang
 
       private
 
-      def rewrite_known_tag(symbols, fns)
-        fns.inject [:wlang, symbols] do |rw, fn|
-          rw << call(fn)
+      def rewrite_known_tag(meth, symbols, fns)
+        argsize, arity = fns.size, meth.arity - 1
+        optimized = nil
+        if argsize > arity                    
+          # trailing blocks here ${...}{xxx}
+          fns, trailing = fns[0...arity], fns[arity..-1]
+          wlanged = call([:wlang, symbols] + fns)
+          optimized = [:strconcat, wlanged]
+          trailing.inject optimized do |rw,fn|
+            rw << [:static, '{']
+            rw << call(fn.last)
+            rw << [:static, '}']
+          end
+        else argsize < arity
+          # possibly missing blocks in here *{...}
+          optimized = fns.inject [:wlang, symbols] do |rw,fn|
+            rw << call(fn)
+          end
+          (arity - argsize).times do 
+            optimized << [:arg, nil]
+          end
         end
+        optimized
       end
 
       def rewrite_extra_symbols(extra, symbols, fns)
