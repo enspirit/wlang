@@ -14,6 +14,8 @@ describe WLang do
     d.render("Hello ${who}!", :who => "world").should eq("Hello world!")
   end
 
+  ### overriding
+
   it 'allows overriding super-dialect tags' do
     d = WLang::dialect(Upcasing) do
       tag('$') do |buf, fn1| 
@@ -41,4 +43,24 @@ describe WLang do
     Upcasing.compile('Hello #{who}!', :evaluator => [:nofail]).render.should eq("Hello !")
   end
 
+  ### high-order and multi-dialects
+
+  it 'allows high-order constructions' do
+    d = WLang::dialect do
+      tag '!' do |buf,fn| buf << evaluate(fn).to_s; end
+    end
+    scope = {:who => :world, :world => "World"}
+    d.render('Hello !{!{who}}!', scope).should eq("Hello World!")
+  end
+  
+  it 'allows switching the current dialect' do
+    d = WLang::dialect do
+      tag '!', [Upcasing] do |buf,fn|
+        buf << evaluate(Upcasing.render(fn)).to_s;
+      end
+    end
+    scope = {:WHO => "World"}
+    d.render('Hello !{${who}}!', scope).should eq("Hello World!")
+  end
+  
 end
