@@ -14,8 +14,8 @@ module WLang
       end
 
       it 'compiles [:dispatch, ...]' do
-        source   = [:dispatch, :_dtag_36, [:proc, [:static, "Hello world"]]]
-        expected = %q{d0._dtag_36(b0, [lambda{|d1,b1| b1 << ("Hello world") }])}
+        source   = [:dispatch, :_tag_36, [:proc, [:static, "Hello world"]]]
+        expected = %q{d0._tag_36(b0, lambda{|d1,b1| b1 << ("Hello world") })}
         generate(source).should eq(expected)
       end
 

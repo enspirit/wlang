@@ -26,7 +26,7 @@ module WLang
 
       def on_dispatch(meth, *procs)
         procs = procs.map{|p| call(p)}.join(', ')
-        "d#{myid}.#{meth}(b#{myid}, [#{procs}])"
+        "d#{myid}.#{meth}(b#{myid}, #{procs})"
       end
 
       def on_arg(code)

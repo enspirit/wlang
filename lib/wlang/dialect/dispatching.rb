@@ -4,57 +4,35 @@ module WLang
 
       module ClassMethods
 
-        def dispatching_map
-          @dispatching_map ||= {}
-        end
-
-        def tag_dispatching_name(symbols, prefix = "_dtag")
+        def tag_dispatching_name(symbols, prefix = "_tag")
           symbols = symbols.chars unless symbols.is_a?(Array)
           chars   = symbols.map{|s| s.ord}.join("_")
           "#{prefix}_#{chars}".to_sym
         end
 
         def find_dispatching_method(symbols, subject = new)
-          dispatching_map[symbols] ||= begin
-            extra, symbols, found = [], symbols.chars.to_a, nil
-            begin
-              meth = tag_dispatching_name(symbols)
-              if subject.respond_to?(meth)
-                found = meth
-                break
-              else
-                extra << symbols.shift
-              end
-            end until symbols.empty?
-            [extra.join, found]
-          end
+          extra, symbols, found = [], symbols.chars.to_a, nil
+          begin
+            meth = tag_dispatching_name(symbols)
+            if subject.respond_to?(meth)
+              found = meth
+              break
+            else
+              extra << symbols.shift
+            end
+          end until symbols.empty?
+          [extra.join, found]
         end
 
         private
 
         def define_tag_method(symbols, code)
+          rulename = tag_dispatching_name(symbols, "_tag")
           case code
           when Symbol
-            define_tag_method(symbols, instance_method(code))
+            module_eval %Q{ alias :#{rulename} #{code} }
           when Proc
-            rulename = tag_dispatching_name(symbols, "_tag")
             define_method(rulename, code)
-            define_tag_method(symbols, rulename)
-          when UnboundMethod
-            methname = tag_dispatching_name(symbols, "_dtag")
-            arity    = code.arity - 1
-            define_method(methname) do |buf, fns|
-              if fns.size == arity
-                code.bind(self).call(buf, *fns)
-              else
-                with_normalized_fns(fns, arity) do |args, rest|
-                  code.bind(self).call(buf, *args)
-                  flush_trailing_fns(buf, rest) if rest
-                  buf
-                end
-              end
-            end
-            dispatching_map[symbols] = ['', methname]
           else
             raise "Unable to use #{code} for a tag"
           end

@@ -50,7 +50,7 @@ module WLang
 
       it 'transforms :wlang to :dispatch' do
         source   = [:wlang, '$', [:fn, strconcat.first]]
-        expected = [:dispatch, :_dtag_36, [:proc, strconcat.last]]
+        expected = [:dispatch, :_tag_36, [:proc, strconcat.last]]
         optimize(source).should eq(expected)
       end
 
