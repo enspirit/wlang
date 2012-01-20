@@ -39,7 +39,7 @@ module WLang
         else
           id   = idgen.next
           code = call(fn)
-          "Proc.new{|d#{id},b#{id}| #{code}.call(#{dialect}.factor, b#{id}) }"
+          "Proc.new{|d#{id},b#{id}| #{code}.call(#{dialect}.factor(d#{id}.options), b#{id}) }"
         end
       end
 
