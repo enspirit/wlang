@@ -64,16 +64,6 @@ module WLang
 
       module InstanceMethods
 
-        def dispatch(symbols, buf, fns)
-          extra, meth = find_dispatching_method(symbols)
-          buf << extra unless extra.empty?
-          if meth
-            send(meth, buf, fns)
-          else
-            flush_trailing_fns(buf, fns)
-          end
-        end
-
         def find_dispatching_method(symbols, subject = self)
           self.class.find_dispatching_method(symbols, subject)
         end
