@@ -72,6 +72,20 @@ module WLang
         optimize(source).should eq(expected)
       end
 
+      it 'detects extra blocks' do
+        source   = [:wlang, '$', hello_fn.first, hello_fn.first]
+        expected = \
+          [:strconcat,
+            [:wlang, '$', hello_fn.last],
+            [:static, '{'],
+            hello_fn.last.last,
+            [:static, '}']
+          ] 
+        pending{
+          optimize(source).should eq(expected)
+        }
+      end
+
     end # describe DialectEnforcer
   end # class Compiler
 end # module WLang
