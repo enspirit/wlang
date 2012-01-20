@@ -37,7 +37,7 @@ module WLang
         id   = idgen.next
         gen  = ToRubyCode.new(:buffer => "b#{id}", :idgen => idgen, :myid => id)
         code = gen.call(code)
-        "lambda{|d#{id},b#{id}| #{code} }"
+        "Proc.new{|d#{id},b#{id}| #{code} }"
       end
 
     end # class ToRubyCode

@@ -1,6 +1,5 @@
-$:.unshift File.expand_path('../../../lib', __FILE__)
+require File.expand_path('../../commons', __FILE__)
 require 'ruby-prof'
-require 'wlang/mustang'
 
 scope = {:range => (1..10000).map{|i| {:i => i}}}
 tpl = WLang::Mustang.compile('#{range}{+{i}}')
