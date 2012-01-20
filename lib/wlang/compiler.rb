@@ -3,6 +3,7 @@ require 'wlang/compiler/filter'
 require 'wlang/compiler/dialect_enforcer'
 require 'wlang/compiler/proc_call_removal'
 require 'wlang/compiler/to_ruby_abstraction'
+require 'wlang/compiler/static_merger'
 require 'wlang/compiler/to_ruby_code'
 module WLang
   class Compiler
@@ -36,6 +37,7 @@ module WLang
         c.use DialectEnforcer, :dialect => @dialect
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
+        c.use StaticMerger
         c.use ToRubyCode
       }.new
     end
