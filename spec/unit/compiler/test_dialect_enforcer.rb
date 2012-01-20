@@ -1,11 +1,36 @@
 require 'spec_helper'
 module WLang
   class Compiler
+    class DialectEnforcer 
+      public :find_dispatching_method 
+    end
     describe DialectEnforcer do
 
       let(:dialect){
-        WLang::dialect{ tag('$') do |buf,fn| instantiate(fn, buf).upcase end }.factor
+        WLang::dialect{ 
+          tag('$')  do |buf,fn| buf << "$"  end 
+          tag('!$') do |buf,fn| buf << "!$" end 
+        }.factor
       }
+
+      describe 'find_dispatching_method' do
+        let(:e){ DialectEnforcer.new(:dialect => dialect) }
+        it 'works on exact matching' do
+          e.find_dispatching_method("$").should eq(['', :_tag_36])
+        end
+        it 'takes the most specific' do
+          e.find_dispatching_method("$").should eq(['', :_tag_36])
+          e.find_dispatching_method("!$").should eq(['', :_tag_33_36])
+        end
+        it 'recognizes extras' do
+          e.find_dispatching_method("@$").should eq(['@', :_tag_36])
+          e.find_dispatching_method("@!$").should eq(['@', :_tag_33_36])
+        end
+        it 'recognizes missings' do
+          e.find_dispatching_method("#").should eq(['#', nil])
+          e.find_dispatching_method("@#").should eq(['@#', nil])
+        end
+      end
 
       def optimize(source)
         DialectEnforcer.new(:dialect => dialect).call(source)
@@ -50,9 +75,9 @@ module WLang
         optimize(hello_dollar.first).should eq(hello_dollar.last)
       end
 
-      it 'detects extract symbols' do
-        source   = [:wlang, '!$', hello_fn.first]
-        expected = [:strconcat, [:static, "!"], hello_dollar.last]
+      it 'detects extra symbols' do
+        source   = [:wlang, '@$', hello_fn.first]
+        expected = [:strconcat, [:static, "@"], hello_dollar.last]
         optimize(source).should eq(expected)
       end
 

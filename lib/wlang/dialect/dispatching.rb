@@ -10,20 +10,6 @@ module WLang
           "#{prefix}_#{chars}".to_sym
         end
 
-        def find_dispatching_method(symbols, subject = new)
-          extra, symbols, found = [], symbols.chars.to_a, nil
-          begin
-            meth = tag_dispatching_name(symbols)
-            if subject.respond_to?(meth)
-              found = meth
-              break
-            else
-              extra << symbols.shift
-            end
-          end until symbols.empty?
-          [extra.join, found]
-        end
-
         private
 
         def define_tag_method(symbols, code)
@@ -41,10 +27,6 @@ module WLang
       end # module ClassMethods
 
       module InstanceMethods
-
-        def find_dispatching_method(symbols, subject = self)
-          self.class.find_dispatching_method(symbols, subject)
-        end
 
         private
 

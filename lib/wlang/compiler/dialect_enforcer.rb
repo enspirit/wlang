@@ -7,7 +7,7 @@ module WLang
       recurse_on :template, :strconcat, :fn
 
       def on_wlang(symbols, *fns)
-        extra, meth = dialect.find_dispatching_method(symbols)
+        extra, meth = find_dispatching_method(symbols, :unbound_method)
         if meth && (extra.nil? or extra.empty?)
           rewrite_known_tag(symbols, fns)
         elsif meth
@@ -41,6 +41,23 @@ module WLang
           rw << call(fn.last)
           rw << [:static, stop]
         end
+      end
+
+      def find_dispatching_method(symbols, kind = :name)
+        extra, symbols, found = [], symbols.chars.to_a, nil
+        dialect.tap do |d|
+          begin
+            meth = Dialect.tag_dispatching_name(symbols)
+            if d.respond_to?(meth)
+              found = d.class.instance_method(meth)
+              break
+            else
+              extra << symbols.shift
+            end
+          end until symbols.empty?
+        end
+        found = found.name if found && kind == :name
+        [extra.join, found]
       end
 
     end # class DialectEnforcer
