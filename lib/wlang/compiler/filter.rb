@@ -5,12 +5,12 @@ module WLang
       def self.recurse_on(*kinds)
         kinds.each do |kind|
           define_method(:"on_#{kind}") do |*args|
-            recurse(kind, args)
+            recurse(kind, *args)
           end
         end
       end
       
-      def recurse(kind, args)
+      def recurse(kind, *args)
         args.inject [kind] do |rw,arg|
           rw << (arg.is_a?(Array) ? call(arg) : arg)
         end
