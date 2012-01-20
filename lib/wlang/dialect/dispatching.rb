@@ -52,27 +52,6 @@ module WLang
           self.class.tag_dispatching_name(symbols)
         end
 
-        def with_normalized_fns(fns, arity)
-          if fns.size == arity
-            yield(fns, nil) 
-          elsif fns.size < arity
-            yield(fns.fill(nil, fns.size, arity - fns.size), nil)
-          else
-            fns.fill(nil, fns.length, arity - fns.length)
-            yield(fns[0...arity], fns[arity..-1])
-          end
-        end
-
-        def flush_trailing_fns(buf, fns)
-          start, stop = braces
-          fns.each do |fn|
-            buf << start
-            render(fn, nil, buf)
-            buf << stop
-          end
-          buf
-        end
-
       end # module InstanceMethods
 
       def self.included(mod)
