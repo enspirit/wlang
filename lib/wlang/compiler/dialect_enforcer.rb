@@ -27,13 +27,10 @@ module WLang
       private
 
       def enforce_sub_dialects(symbols, fns)
-        if ds = dialect.dialects_for(symbols)
-          fns = fns.zip(ds).map do |fn, d|
-            DialectEnforcer.new(:dialect => d.factor).call(fn)
-          end
-          [:wlang, symbols] + fns
-        else
-          recurse(:wlang, symbols, *fns)
+        ds = dialect.dialects_for(symbols) || []
+        fns.zip(ds).inject [:wlang, symbols] do |rw, (fn, d)|
+          enforcer = d ? DialectEnforcer.new(:dialect => d.factor) : self
+          rw << enforcer.call(fn)
         end
       end
       
