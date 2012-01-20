@@ -32,6 +32,16 @@ module WLang
       def on_arg(code)
         code.inspect
       end
+      
+      def on_modulo(dialect, fn)
+        if fn.first == :arg
+          call(fn)
+        else
+          id   = idgen.next
+          code = call(fn)
+          "Proc.new{|d#{id},b#{id}| #{code}.call(#{dialect}.factor, b#{id}) }"
+        end
+      end
 
       def on_proc(code)
         id   = idgen.next

@@ -2,7 +2,7 @@ module WLang
   class Compiler
     class ToRubyAbstraction < Filter
 
-      recurse_on :template
+      recurse_on :template, :modulo
 
       def on_strconcat(*cases)
         [:multi] + cases.map{|c| call(c)}

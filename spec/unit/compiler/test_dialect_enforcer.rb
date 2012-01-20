@@ -11,6 +11,7 @@ module WLang
           tag('$')  do |buf,fn| buf << "$"  end
           tag('!$') do |buf,fn| buf << "!$" end
           tag('*')  do |buf,fn1,fn2|        end
+          tag('%', [WLang::Dummy]) do |buf, fn| end
         }.factor
       }
 
@@ -151,6 +152,14 @@ module WLang
             hello_fn.last.last,
             [:static, '}']
           ] 
+        optimize(source).should eq(expected)
+      end
+      
+      ### dialect switching
+      
+      it 'introduce dialect switching mechanism' do
+        source   = [:wlang, '%', hello_fn.first]
+        expected = [:wlang, '%', [:modulo, WLang::Dummy, hello_fn.last]] 
         optimize(source).should eq(expected)
       end
 

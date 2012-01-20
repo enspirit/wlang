@@ -1,4 +1,5 @@
 require 'wlang'
+require 'wlang/dummy'
 module WLang
   class Mustang < WLang::Dialect
 
@@ -59,8 +60,8 @@ module WLang
     tag '#', :section
     tag '*', :section
     tag '^', :inverted
-    tag '!', :comment
     tag '>', :partial
+    tag '!', [WLang::Dummy], :comment
 
   end # class Mustang
 end # module WLang

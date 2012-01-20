@@ -29,8 +29,12 @@ module WLang
       def enforce_sub_dialects(symbols, fns)
         ds = dialect.dialects_for(symbols) || []
         fns.zip(ds).inject [:wlang, symbols] do |rw, (fn, d)|
-          enforcer = d ? DialectEnforcer.new(:dialect => d.factor) : self
-          rw << enforcer.call(fn)
+          if d
+            enforcer = DialectEnforcer.new(:dialect => d.factor)
+            rw << [:modulo, d, enforcer.call(fn)]
+          else
+            rw << call(fn)
+          end
         end
       end
       

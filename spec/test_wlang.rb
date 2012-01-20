@@ -73,9 +73,7 @@ describe WLang do
       end
     end
     scope = {:WHO => "World"}
-    pending{
-      e.render('Hello !{${who}}!', scope).should eq("Hello World!")
-    }
+    e.render('Hello !{${who}}!', scope).should eq("Hello World!")
   end
   
 end
