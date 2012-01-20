@@ -1,5 +1,6 @@
 require 'wlang/compiler/parser'
 require 'wlang/compiler/filter'
+require 'wlang/compiler/dialect_enforcer'
 require 'wlang/compiler/dispatcher'
 require 'wlang/compiler/proc_call_removal'
 require 'wlang/compiler/to_ruby_abstraction'
