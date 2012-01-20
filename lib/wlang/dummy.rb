@@ -14,8 +14,17 @@ module WLang
   #
   #     require 'wlang/dummy'
   #     class MyDialect < WLang::Dialect
-  #       tag('$') do |buf,fn| buf << evaluate(fn)            end
-  #       tag('%') do |buf,fn| buf << WLang::Dummy.render(fn) end
+  #
+  #       def dollar(buf, fn)
+  #         buf << evaluate(fn)
+  #       end
+  #       
+  #       def no_wlang(buf, fn)
+  #         render(fn)
+  #       end
+  #
+  #       tag '$', :dollar
+  #       tag '%', [WLang::Dummy], :no_wlang
   #     end
   #
   class Dummy < Dialect

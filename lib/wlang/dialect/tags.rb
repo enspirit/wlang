@@ -6,8 +6,13 @@ module WLang
 
         protected
 
-        def tag(symbols, method = nil, &block)
-          define_tag_method(symbols, method || block)
+        def tag(symbols, dialects = nil, method = nil, &block)
+          if block
+            tag(symbols, dialects, block)
+          else
+            dialects, method = nil, dialects if method.nil?
+            define_tag_method(symbols, dialects, method)
+          end
         end
 
       end

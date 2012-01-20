@@ -12,7 +12,7 @@ module WLang
 
         private
 
-        def define_tag_method(symbols, code)
+        def define_tag_method(symbols, dialects, code)
           rulename = tag_dispatching_name(symbols, "_tag")
           case code
           when Symbol

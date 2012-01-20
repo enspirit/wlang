@@ -26,8 +26,14 @@ module WLang
   context "documentation" do
     let(:d){
       dialect do
-        tag('$') do |buf,fn| buf << evaluate(fn)             end
-        tag('%') do |buf,fn| buf << WLang::Dummy.render(fn)  end
+        def dollar(buf, fn)
+          buf << evaluate(fn)
+        end
+        def no_wlang(buf, fn)
+          buf << render(fn)
+        end
+        tag '$', :dollar
+        tag '%', [WLang::Dummy], :no_wlang
       end
     }
     let(:tpl){%q{
@@ -38,9 +44,7 @@ module WLang
       Hello world! This is wlang, a templating language which comes with
       special tags such as ${who}, +{who}, *{authors}{...}, etc.
     }.gsub(/^\s*/m,"").strip}
-    pending  {
-      specify{ d.render(tpl, :who => "world").should eq(expected) }
-    }
+    specify{ d.render(tpl, :who => "world").should eq(expected) }
   end
 
   end # describe Dummy
