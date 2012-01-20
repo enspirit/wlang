@@ -57,6 +57,7 @@ module WLang
     tag '$', :escape
     tag '&', :escape
     tag '#', :section
+    tag '*', :section
     tag '^', :inverted
     tag '!', :comment
     tag '>', :partial
