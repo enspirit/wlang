@@ -55,10 +55,8 @@ describe WLang do
   end
   
   it 'allows binding for scoping by default' do
-    pending{
-      who = "World"
-      d.render(hello_tpl, binding).should eq("Hello World!")
-    }
+    who = "World"
+    d.render(hello_tpl, binding).should eq("Hello World!")
   end
 
   ### high-order and multi-dialects

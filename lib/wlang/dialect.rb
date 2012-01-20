@@ -14,8 +14,8 @@ module WLang
       def factor(options = {})
         options = default_options.merge(options)
         Class.new(self).tap do |c|
-          c.scoping    options[:scoping]   || :strict
-          c.evaluator  options[:evaluator] || [:hash, :send]
+          c.scoping    options[:scoping]
+          c.evaluator  options[:evaluator]
         end.new(options)
       end
 
@@ -39,7 +39,7 @@ module WLang
     end
 
     default_options :scoping   => :strict,
-                    :evaluator => [:hash, :send],
+                    :evaluator => [:hash, :send, :eval],
                     :braces    => WLang::BRACES
 
     attr_reader :options
