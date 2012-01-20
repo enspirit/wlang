@@ -2,7 +2,7 @@ module WLang
   class Compiler
     class ToRubyAbstraction < Filter
 
-      recurse_on :template, :dispatch
+      recurse_on :template
 
       def on_strconcat(*cases)
         [:multi] + cases.map{|c| call(c)}
@@ -10,6 +10,13 @@ module WLang
 
       def on_fn(code)
         [:proc, call(code)]
+      end
+
+      def on_wlang(symbols, *fns)
+        meth = Dialect.tag_dispatching_name(symbols)
+        fns.inject [:dispatch, meth] do |rw, fn|
+          rw << call(fn)
+        end
       end
 
     end # class ToRubyAbstraction

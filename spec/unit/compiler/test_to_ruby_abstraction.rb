@@ -20,7 +20,7 @@ module WLang
         optimize(hello.first).should eq(hello.last)
       end
 
-      it 'transforms :strconcat to :mutli' do
+      it 'transforms :strconcat to :multi' do
         optimize(strconcat.first).should eq(strconcat.last)
       end
 
@@ -48,9 +48,9 @@ module WLang
         optimize(source).should eq(expected)
       end
 
-      it 'recurses on :dispatch' do
-        source   = [:dispatch, :static, :meth, [:fn, strconcat.first]]
-        expected = [:dispatch, :static, :meth, [:proc, strconcat.last]]
+      it 'transforms :wlang to :dispatch' do
+        source   = [:wlang, '$', [:fn, strconcat.first]]
+        expected = [:dispatch, :_dtag_36, [:proc, strconcat.last]]
         optimize(source).should eq(expected)
       end
 

@@ -3,20 +3,20 @@ module WLang
   class Compiler
     describe ToRubyCode do
 
-      let(:generator){ ToRubyCode.new }
-
-      subject{ generator.call(source) }
-
-      describe '[:proc, ...]' do
-        let(:source)  { [:proc, [:static, "Hello world"]] }
-        let(:expected){ %q{lambda{|d1,b1| b1 << ("Hello world") }} }
-        it{ should eq(expected) }
+      def generate(source)
+        ToRubyCode.new.call(source)
       end
 
-      describe '[:dispatch, :dynamic, ...] with a single fn' do
-        let(:source)  { [:dispatch, :dynamic, "$", [:proc, [:static, "Hello world"]]]      }
-        let(:expected){ %q{d0.dispatch("$", b0, [lambda{|d1,b1| b1 << ("Hello world") }])} }
-        it{ should eq(expected) }
+      it 'compiles [:proc, ...]' do
+        source   = [:proc, [:static, "Hello world"]]
+        expected = %q{lambda{|d1,b1| b1 << ("Hello world") }}
+        generate(source).should eq(expected)
+      end
+
+      it 'compiles [:dispatch, ...]' do
+        source   = [:dispatch, :_dtag_36, [:proc, [:static, "Hello world"]]]
+        expected = %q{d0._dtag_36(b0, [lambda{|d1,b1| b1 << ("Hello world") }])}
+        generate(source).should eq(expected)
       end
 
     end # describe ToRubyCode

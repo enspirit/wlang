@@ -24,12 +24,7 @@ module WLang
         call(fn)
       end
 
-      def on_dispatch_dynamic(symbols, *procs)
-        procs = procs.map{|p| call(p)}.join(', ')
-        "d#{myid}.dispatch(#{symbols.inspect}, b#{myid}, [#{procs}])"
-      end
-
-      def on_dispatch_static(meth, *procs)
+      def on_dispatch(meth, *procs)
         procs = procs.map{|p| call(p)}.join(', ')
         "d#{myid}.#{meth}(b#{myid}, [#{procs}])"
       end

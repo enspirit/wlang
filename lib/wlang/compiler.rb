@@ -1,7 +1,6 @@
 require 'wlang/compiler/parser'
 require 'wlang/compiler/filter'
 require 'wlang/compiler/dialect_enforcer'
-require 'wlang/compiler/dispatcher'
 require 'wlang/compiler/proc_call_removal'
 require 'wlang/compiler/to_ruby_abstraction'
 require 'wlang/compiler/to_ruby_code'
@@ -34,7 +33,7 @@ module WLang
     def engine
       Class.new(Temple::Engine).tap{|c|
         c.use Parser
-        c.use Dispatcher, :dialect => @dialect
+        c.use DialectEnforcer, :dialect => @dialect
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
         c.use ToRubyCode
