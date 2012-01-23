@@ -1,7 +1,7 @@
 module WLang
   class Compiler
     class StaticMerger < Filter
-      
+
       def on_strconcat(*exps)
         result = [:strconcat]
         text = nil

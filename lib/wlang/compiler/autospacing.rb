@@ -1,7 +1,7 @@
 module WLang
   class Compiler
     class Autospacing < Filter
-      
+
       def on_strconcat(*exps)
         optimized = []
         exps.each_with_index do |exp,i|
