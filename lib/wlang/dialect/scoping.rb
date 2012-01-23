@@ -32,8 +32,8 @@ module WLang
           scope.pop
         end
 
-        def each_scope
-          scope.reverse.each
+        def each_scope(&blk)
+          scope.reverse.each(&blk)
         end
 
       end # module Stack

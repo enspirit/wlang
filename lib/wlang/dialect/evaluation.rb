@@ -74,12 +74,12 @@ module WLang
             expr = render(expr) 
           end
           each_evaluator do |evaluator|
-            each_scope do |scope|
-              found, value = evaluator.call(scope,expr)
+            each_scope do |s|
+              found, value = evaluator.call(s,expr)
               return value if found
             end
           end
-          raise NameError, "Unable to find #{expr}"
+          raise NameError, "Unable to evaluate expression '#{expr}' on #{scope.inspect}"
         end
 
       end # module InstanceMethods

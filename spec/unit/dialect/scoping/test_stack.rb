@@ -23,6 +23,14 @@ module WLang
           end
         end
 
+        it 'yields scope when requested' do
+          seen = []
+          with_scope(1) do
+            each_scope do |s| seen << s; end
+          end
+          seen.should eq([1])
+        end
+
       end # describe Stack
     end # module Scoping
   end # class Dialect
