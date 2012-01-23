@@ -26,15 +26,6 @@ module WLang
       end
       include InstanceMethods
 
-      module Helpers
-
-        def self.included(mod)
-          mod.instance_eval{ include(Filter::InstanceMethods) }
-          mod.extend(Filter::ClassMethods)
-        end
-
-      end # module Helpers
-
     end # class Filter
   end # class Compiler
 end # module WLang
