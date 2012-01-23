@@ -56,6 +56,8 @@ module WLang
         c.use Parser
         c.use DialectEnforcer, :dialect => @dialect
         c.use Autospacing if options[:autospacing]
+        c.use StrconcatFlattener
+        c.use StaticMerger
       }
     end
 
@@ -65,9 +67,9 @@ module WLang
         c.use DialectEnforcer, :dialect => @dialect
         c.use Autospacing if options[:autospacing]
         c.use StrconcatFlattener
+        c.use StaticMerger
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
-        c.use StaticMerger
         c.use ToRubyCode if gencode
       }.new
     end

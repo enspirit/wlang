@@ -1,9 +1,28 @@
 module WLang
   class Compiler
-    class StaticMerger < Temple::Filters::StaticMerger
-      include Filter::Helpers
+    class StaticMerger < Filter
+      recurse_on :template, :fn, :wlang, :modulo
+      
+      def on_strconcat(*exps)
+        result = [:strconcat]
+        text = nil
 
-      recurse_on :template, :modulo, :dispatch, :proc
+        exps.each do |exp|
+          if exp.first == :static
+            if text
+              text << exp.last
+            else
+              text = exp.last.dup
+              result << [:static, text]
+            end
+          else
+            result << compile(exp)
+            text = nil
+          end
+        end
+
+        result
+      end
 
     end # class StaticMerger
   end # class Compiler

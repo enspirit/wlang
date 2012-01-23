@@ -8,15 +8,15 @@ module WLang
       end
 
       let(:trailing){[
-        [:multi, [:static, "{"], [:static, "Hello world"], [:static, "}"]],
-        [:multi, [:static, "{Hello world}"]]
+        [:strconcat, [:static, "{"], [:static, "Hello world"], [:static, "}"]],
+        [:strconcat, [:static, "{Hello world}"]]
       ]}
 
       it 'optimize result of trailing blocks' do
         optimize(trailing.first).should eq(trailing.last)
       end
 
-      [:template, :modulo, :dispatch, :proc].each do |kind|
+      [:template, :modulo, :wlang, :fn].each do |kind|
 
         it "recurses on :#{kind}" do
           optimize([kind, trailing.first]).should eq([kind, trailing.last])
