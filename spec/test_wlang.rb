@@ -76,4 +76,15 @@ describe WLang do
     e.render('Hello !{${who}}!', scope).should eq("Hello World!")
   end
 
+  ### autospacing
+
+  it 'has magic spacing on loops' do
+    e = WLang::dialect do
+      tag '$' do |buf,fn| buf << render(fn) end
+    end
+    source   = "${\n  hello world\n}"
+    expected = "hello world"
+    e.render(source).should eq(expected)
+  end
+
 end

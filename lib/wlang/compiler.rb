@@ -1,6 +1,7 @@
 require 'wlang/compiler/parser'
 require 'wlang/compiler/filter'
 require 'wlang/compiler/dialect_enforcer'
+require 'wlang/compiler/autospacing'
 require 'wlang/compiler/proc_call_removal'
 require 'wlang/compiler/to_ruby_abstraction'
 require 'wlang/compiler/multi_flattener'
@@ -40,6 +41,7 @@ module WLang
       Class.new(Temple::Engine).tap{|c|
         c.use Parser
         c.use DialectEnforcer, :dialect => @dialect
+        c.use Autospacing
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
         c.use MultiFlattener
