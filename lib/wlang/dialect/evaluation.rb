@@ -71,7 +71,6 @@ module WLang
 
         def evaluate(expr)
           expr = render(expr) unless expr.is_a?(String) or expr.is_a?(Symbol)
-          expr = expr.strip if expr.is_a?(String)
           each_evaluator do |evaluator|
             each_scope do |s|
               found, value = evaluator.call(s,expr)
