@@ -1,53 +1,51 @@
 module WLang
   class Compiler
     class Autospacing < Filter
-
-      def optimize?(code)
-        case code.first
-        when :static
-          true
-        when :strconcat
-          code[1].first  == :static and 
-          code[-1].first == :static
-        else
-          false
+      
+      def on_strconcat(*exps)
+        optimized = []
+        exps.each_with_index do |exp,i|
+          optimized[i] = call(exp)
+          if exp.first == :wlang and multiline?(exp) and i != 0
+            optimized[i-1] = RightStrip.new.call(optimized[i-1])
+          end
         end
+        [:strconcat] + optimized
       end
 
-      def on_fn(code)
-        if optimize?(code)
-          code = Strip.new(:left => true).call(code)
-          code = Strip.new(:left => false).call(code)
-          code = Unindent.new.call(code)
-          [:fn, call(code)]
-        else
-          recurse(:fn, *[code])
+      def on_wlang(symbols, *fns)
+        fns.inject [:wlang, symbols] do |rw,fn|
+          fn = Unindent.new.call(fn)
+          fn = RightStrip.new.call(fn)
+          rw << call(fn)
         end
       end
 
       private
 
-      class Strip < Filter
-
-        def left?
-          !!options[:left]
+      def multiline?(who)
+        case who.first
+        when :static
+          who.last =~ /\n/
+        when :wlang
+          who[2..-1].any?{|s| multiline?(s)}
+        else
+          who[1..-1].any?{|s| multiline?(s)}
         end
+      end
 
-        def on_strconcat(*blks)
-          if left?
-            blks.unshift call(blks.shift)
-          else
-            blks.push call(blks.pop)
-          end
-          [:strconcat] + blks
+      class RightStrip < Filter
+
+        def on_strconcat(*exps)
+          exps[-1] = call(exps[-1])
+          [:strconcat] + exps
         end
 
         def on_static(text)
-          rx = left? ? /\A\s*\n/ : /\n\s*\Z/
-          [:static, text.gsub(rx, '')]
+          [:static, text.gsub(/\s+\Z/m, '')]
         end
 
-      end # class Strip
+      end # class RightStrip
 
       class Unindent < Filter
 
