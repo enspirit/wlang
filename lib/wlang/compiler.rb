@@ -16,6 +16,10 @@ module WLang
       @dialect = dialect
     end
 
+    def options
+      dialect.options
+    end
+
     def compile(source)
       case source
       when Template
@@ -34,14 +38,22 @@ module WLang
     end
 
     def ast(source)
-      engine(false).call(source)
+      parser.new.call(source)
+    end
+
+    def parser
+      Class.new(Temple::Engine).tap{|c|
+        c.use Parser
+        c.use DialectEnforcer, :dialect => @dialect
+        c.use Autospacing if options[:autospacing]
+      }
     end
 
     def engine(gencode = true)
       Class.new(Temple::Engine).tap{|c|
         c.use Parser
         c.use DialectEnforcer, :dialect => @dialect
-        c.use Autospacing
+        c.use Autospacing if options[:autospacing]
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
         c.use MultiFlattener

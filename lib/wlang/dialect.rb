@@ -24,12 +24,16 @@ module WLang
         @default_options.merge!(options)
       end
 
-      def to_ruby_code(source, options = {})
-        factor(options).compiler.to_ruby_code(source)
+      def compiler(options = {})
+        factor(options).compiler
       end
 
       def compile(source, options = {})
-        factor(options).compiler.compile(source)
+        compiler(options).compile(source)
+      end
+
+      def to_ruby_code(source, options = {})
+        compiler(options).to_ruby_code(source)
       end
 
       def render(source, scope = {}, buffer = "")
@@ -38,9 +42,10 @@ module WLang
 
     end
 
-    default_options :scoping   => :strict,
-                    :evaluator => [:hash, :send, :eval],
-                    :braces    => WLang::BRACES
+    default_options :scoping     => :strict,
+                    :evaluator   => [:hash, :send, :eval],
+                    :braces      => WLang::BRACES,
+                    :autospacing => false
 
     attr_reader :options
     def braces; options[:braces]; end

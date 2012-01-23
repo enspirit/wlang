@@ -21,7 +21,7 @@ module WLang
           code = Strip.new(:left => true).call(code)
           code = Strip.new(:left => false).call(code)
           code = Unindent.new.call(code)
-          [:fn, code]
+          [:fn, call(code)]
         else
           recurse(:fn, *[code])
         end

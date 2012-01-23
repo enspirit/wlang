@@ -80,6 +80,7 @@ describe WLang do
 
   it 'handles magic spacing on a static block' do
     e = WLang::dialect do
+      default_options :autospacing => true
       tag '$' do |buf,fn| buf << render(fn) end
     end
     source   = "${\n  hello world\n}"
@@ -89,6 +90,7 @@ describe WLang do
 
   it 'handles magic spacing on a wlang block' do
     e = WLang::dialect do
+      default_options :autospacing => true
       tag '$' do |buf,fn| buf << render(fn) end
     end
     source   = "${\n  ${name}\n  ${score}\n}"
