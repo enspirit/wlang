@@ -32,7 +32,11 @@ module WLang
       engine.call(source)
     end
 
-    def engine
+    def ast(source)
+      engine(false).call(source)
+    end
+
+    def engine(gencode = true)
       Class.new(Temple::Engine).tap{|c|
         c.use Parser
         c.use DialectEnforcer, :dialect => @dialect
@@ -40,7 +44,7 @@ module WLang
         c.use ToRubyAbstraction
         c.use MultiFlattener
         c.use StaticMerger
-        c.use ToRubyCode
+        c.use ToRubyCode if gencode
       }.new
     end
 
