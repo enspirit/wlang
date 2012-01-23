@@ -78,12 +78,21 @@ describe WLang do
 
   ### autospacing
 
-  it 'has magic spacing on loops' do
+  it 'handles magic spacing on a static block' do
     e = WLang::dialect do
       tag '$' do |buf,fn| buf << render(fn) end
     end
     source   = "${\n  hello world\n}"
     expected = "hello world"
+    e.render(source).should eq(expected)
+  end
+
+  it 'handles magic spacing on a wlang block' do
+    e = WLang::dialect do
+      tag '$' do |buf,fn| buf << render(fn) end
+    end
+    source   = "${\n  ${name}\n  ${score}\n}"
+    expected = "name\nscore"
     e.render(source).should eq(expected)
   end
 
