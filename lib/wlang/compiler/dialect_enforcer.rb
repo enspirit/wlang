@@ -4,8 +4,6 @@ module WLang
 
       def dialect; options[:dialect]; end
 
-      recurse_on :template, :strconcat, :fn
-
       def on_wlang(symbols, *fns)
         extra, meth = find_dispatching_method(symbols, :unbound_method)
         if meth

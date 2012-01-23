@@ -2,8 +2,6 @@ module WLang
   class Compiler
     class Autospacing < Filter
 
-      recurse_on :template, :strconcat, :wlang
-
       def optimize?(code)
         case code.first
         when :static
@@ -30,7 +28,6 @@ module WLang
       private
 
       class Strip < Filter
-        recurse_on :template, :wlang
 
         def left?
           !!options[:left]
@@ -53,7 +50,6 @@ module WLang
       end # class Strip
 
       class Unindent < Filter
-        recurse_on :template, :wlang, :fn, :strconcat
 
         def on_static(text)
           [:static, text.gsub(/^  /m, '')]

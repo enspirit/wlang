@@ -1,7 +1,6 @@
 module WLang
   class Compiler
     class StrconcatFlattener < Filter
-      recurse_on :template, :fn, :wlang, :modulo
 
       def on_strconcat(*children)
         if children.size == 1

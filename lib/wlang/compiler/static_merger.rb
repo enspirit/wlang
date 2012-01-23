@@ -1,7 +1,6 @@
 module WLang
   class Compiler
     class StaticMerger < Filter
-      recurse_on :template, :fn, :wlang, :modulo
       
       def on_strconcat(*exps)
         result = [:strconcat]

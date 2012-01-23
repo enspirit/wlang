@@ -26,6 +26,7 @@ module WLang
       end
       include InstanceMethods
 
+      recurse_on :template, :fn, :wlang, :strconcat, :modulo, :static
     end # class Filter
   end # class Compiler
 end # module WLang
