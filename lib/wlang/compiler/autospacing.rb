@@ -31,11 +31,11 @@ module WLang
 
       class Strip < Filter
         recurse_on :template, :wlang
-        
+
         def left?
           !!options[:left]
         end
-        
+
         def on_strconcat(*blks)
           if left?
             blks.unshift call(blks.shift)
@@ -44,21 +44,21 @@ module WLang
           end
           [:strconcat] + blks
         end
-        
+
         def on_static(text)
           rx = left? ? /\A\s*\n/ : /\n\s*\Z/
           [:static, text.gsub(rx, '')]
         end
-        
+
       end # class Strip
-      
+
       class Unindent < Filter
         recurse_on :template, :wlang, :fn, :strconcat
-        
+
         def on_static(text)
           [:static, text.gsub(/^  /m, '')]
         end
-        
+
       end # class Unindent
 
     end # class Autospacing

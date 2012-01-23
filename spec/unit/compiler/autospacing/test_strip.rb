@@ -26,7 +26,7 @@ module WLang
           expected = [:static, "  Hello World"]
           optimize(source, true).should eq(expected)
         end
-        
+
         it 'strips the first :static of a :strconcat' do
           source   = [:strconcat, [:static, "\n  Hello\n"], [:static, "  World\n"]]
           expected = [:strconcat, [:static, "  Hello\n"], [:static, "  World\n"]]
@@ -34,7 +34,6 @@ module WLang
         end
 
       end # on left
-
 
       context "on right" do
 
@@ -55,7 +54,7 @@ module WLang
           expected = [:static, "  Hello World"]
           optimize(source, false).should eq(expected)
         end
-        
+
         it 'strips the last :static of a :strconcat' do
           source   = [:strconcat, [:static, "\n  Hello\n"], [:static, "  World\n  "]]
           expected = [:strconcat, [:static, "\n  Hello\n"], [:static, "  World"]]
