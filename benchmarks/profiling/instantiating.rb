@@ -2,7 +2,7 @@ require File.expand_path('../../commons', __FILE__)
 require 'ruby-prof'
 
 scope = {:range => (1..10000).map{|i| {:i => i}}}
-tpl = WLang::Mustang.compile('#{range}{+{i}}')
+tpl = WLang::Html.compile('*{range}{${i}}')
 
 RubyProf.start
 

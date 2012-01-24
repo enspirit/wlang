@@ -14,6 +14,10 @@ Viiite.bench do |b|
     tpl = templates/"table.mustang"
     WLang::Mustang.render(tpl, scope)
   }
+  b.report(:html){
+    tpl = templates/"table.mustang"
+    WLang::Html.render(tpl, scope)
+  }
   b.report(:mutache){
     tpl = templates/"table.mustache"
      Mustache.render(tpl.read, scope)
