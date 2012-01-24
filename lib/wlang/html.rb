@@ -12,6 +12,7 @@ module WLang
       
       def to_html(val)
         val = val.to_html if val.respond_to?(:to_html)
+        val = to_html(val.call) if val.is_a?(Proc)
         val.to_s
       end
       private :to_html
@@ -27,42 +28,34 @@ module WLang
     module HighOrderFunctions
 
       def bang(buf, fn)
-        buf << value_of(fn).to_s
+        val = value_of(fn).to_s
+        render(val, nil, buf)
       end
 
       def plus(buf, fn)
-        case val = value_of(fn)
-        when Proc
-          render(to_html(val.call), nil, buf)
-        when Template
-          render(val, nil, buf)
-        else
-          render(to_html(val), nil, buf)
-        end
+        val = value_of(fn)
+        val = to_html(val) unless val.is_a?(Template)
+        render(val, nil, buf)
       end
 
       def dollar(buf, fn)
-        buf << escape_html(plus("", fn)) 
+        val = escape_html(plus("", fn)) 
+        render(val, nil, buf)
       end
       
       def ampersand(buf, fn)
-        buf << escape_html(render(fn))
+        val = escape_html(render(fn))
+        render(val, nil, buf)
       end
       
       def question(buf, fn_if, fn_then, fn_else)
-        if value_of(fn_if)
-          render(fn_then, nil, buf)
-        else
-          render(fn_else, nil, buf) if fn_else
-        end
+        val = value_of(fn_if) ? fn_then : fn_else
+        render(val, nil, buf) if val
       end
       
       def caret(buf, fn_if, fn_then, fn_else)
-        if value_of(fn_if)
-          render(fn_else, nil, buf) if fn_else
-        else
-          render(fn_then, nil, buf)
-        end
+        val = value_of(fn_if) ? fn_else : fn_then
+        render(val, nil, buf) if val
       end
 
     end
