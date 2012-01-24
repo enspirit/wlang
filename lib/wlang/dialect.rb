@@ -1,3 +1,4 @@
+require 'wlang/dialect/scope'
 require 'wlang/dialect/dispatching'
 require 'wlang/dialect/scoping'
 require 'wlang/dialect/evaluation'
