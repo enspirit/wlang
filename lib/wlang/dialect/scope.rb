@@ -15,7 +15,11 @@ module WLang
       end
       
       def each_frame(&blk)
-        blk.call(@subject)
+        if @subject.is_a?(Scope)
+          @subject.each_frame(&blk)
+        else
+          blk.call(@subject)
+        end
         @parent.each_frame(&blk) if @parent
       end
       

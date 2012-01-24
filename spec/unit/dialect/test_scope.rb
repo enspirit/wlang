@@ -12,6 +12,18 @@ module WLang
         s.should be_a(Scope)
         s.to_a.should eq([0])
       end
+      
+      it 'allows pushing Scope objects' do
+        s = Scope.new(0)
+        s = s.push(1)
+        s = s.push(Scope.new(2).push(3))
+        s = s.push(4)
+        s.to_a.should eq([4, 3, 2, 1, 0])
+        s = s.pop
+        s.to_a.should eq([3, 2, 1, 0])
+        s = s.pop
+        s.to_a.should eq([1, 0])
+      end
 
     end # describe Scope
   end # class Dialect

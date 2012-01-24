@@ -13,9 +13,9 @@ module WLang
       when String
         buffer << i
       else
-        @dialect.dup.tap{|d|
+        @dialect.dup.tap do |d|
           d.send(:render, i, scope, buffer)
-        }
+        end
         buffer
       end
     end

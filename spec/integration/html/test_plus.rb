@@ -20,9 +20,7 @@ module WLang
     it 'renders the partial if a Template' do
       who   = "World"
       hello = Html.compile("Hello +{who}")
-      pending{
-        render("+{hello}!", binding).should eq("Hello World!")
-      }
+      render("+{hello}!", binding).should eq("Hello World!")
     end
 
   end
