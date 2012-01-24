@@ -3,28 +3,36 @@ require 'wlang/dummy'
 module WLang
   class Html < WLang::Dialect
 
-    module HighOrderFunctions
+    module Helpers
 
       def value_of(fn)
         evaluate(render(fn).to_s.strip)
       end
       private :value_of
+      
+      def to_html(val)
+        val = val.to_html if val.respond_to?(:to_html)
+        val.to_s
+      end
+      private :to_html
+
+    end
+    include Helpers
+
+    module HighOrderFunctions
 
       def bang(buf, fn)
         buf << value_of(fn).to_s
       end
 
       def plus(buf, fn)
-        val = value_of(fn)
-        case val
+        case val = value_of(fn)
+        when Proc
+          render(to_html(val.call), nil, buf)
         when Template
           render(val, nil, buf)
         else
-          if val.respond_to?(:to_html)
-            buf << val.to_html
-          else
-            buf << val.to_s
-          end
+          render(to_html(val), nil, buf)
         end
       end
 
