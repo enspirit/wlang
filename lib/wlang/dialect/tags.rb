@@ -22,9 +22,10 @@ module WLang
         protected
 
         def render(fn, scope = nil, buffer = "")
-          return buffer << fn if fn.is_a?(String)
           if scope.nil?
             case fn
+            when String
+              buffer << fn
             when Proc
               fn.call(self, buffer)
             when Template
