@@ -1,8 +1,11 @@
 require File.expand_path('../../commons', __FILE__)
 require 'ruby-prof'
 
-scope = {:range => (1..10000).map{|i| {:i => i}}}
-tpl = WLang::Html.compile('*{range}{${i}}')
+People = Struct.new(:name, :score)
+people = (1..10000).map{|i| People.new("People#{i}", rand)}
+scope  = {:people => people}
+
+tpl = WLang::Html.compile Path.dir/"../templates/table.mustang"
 
 RubyProf.start
 
