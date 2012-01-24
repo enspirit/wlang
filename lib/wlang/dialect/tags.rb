@@ -22,19 +22,17 @@ module WLang
         protected
 
         def render(fn, scope = nil, buffer = "")
-          case fn
-          when Template
-            fn.call(scope || @scope, buffer)
-          when Proc
-            if scope.nil?
+          return buffer << fn if fn.is_a?(String)
+          if scope.nil?
+            if fn.is_a?(Proc)
               fn.call(self, buffer)
+            elsif fn.is_a?(Template)
+              fn.call(@scope, buffer)
             else
-              with_scope(scope){ fn.call(self, buffer) }
+              raise ArgumentError, "Unable to render #{fn}"
             end
-          when String
-            buffer << fn
           else
-            raise ArgumentError, "Unable to render #{fn}"
+            with_scope(scope){ render(fn, nil, buffer) }
           end
         end
 
