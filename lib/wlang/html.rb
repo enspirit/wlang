@@ -15,6 +15,11 @@ module WLang
         val.to_s
       end
       private :to_html
+      
+      def escape_html(val)
+        Temple::Utils.escape_html(val)
+      end
+      private :escape_html
 
     end
     include Helpers
@@ -37,9 +42,11 @@ module WLang
       end
 
       def dollar(buf, fn)
-        val = plus("", fn)
-        val = Temple::Utils.escape_html(val) 
-        buf << val
+        buf << escape_html(plus("", fn)) 
+      end
+      
+      def ampersand(buf, fn)
+        buf << escape_html(render(fn))
       end
 
     end
@@ -48,6 +55,7 @@ module WLang
     tag '!', :bang
     tag '+', :plus
     tag '$', :dollar
+    tag '&', :ampersand
 
   end # class Html
 end # module WLang
