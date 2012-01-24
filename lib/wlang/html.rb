@@ -36,7 +36,7 @@ module WLang
         end
       end
 
-      def escape(buf, fn)
+      def dollar(buf, fn)
         val = plus("", fn)
         val = Temple::Utils.escape_html(val) 
         buf << val
@@ -47,7 +47,7 @@ module WLang
 
     tag '!', :bang
     tag '+', :plus
-    tag '$', :escape
+    tag '$', :dollar
 
   end # class Html
 end # module WLang
