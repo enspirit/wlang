@@ -2,34 +2,27 @@ module WLang
   class Dialect
     class Scope
       
-      def initialize
-        @stack = []
-      end
-      
-      def self.coerce(x)
-        if x.is_a?(Scope)
-          x
-        else
-          Scope.new.push(x)
-        end
+      def initialize(subject, parent = nil)
+        @subject, @parent = subject, parent
       end
       
       def push(x)
-        @stack.push(x)
-        self
+        Scope.new(x, self)
       end
       
       def pop
-        @stack.pop
-        self
+        @parent
       end
       
       def each_frame(&blk)
-        @stack.reverse_each(&blk)
+        blk.call(@subject)
+        @parent.each_frame(&blk) if @parent
       end
       
       def to_a
-        @stack.dup
+        seen = []
+        each_frame{|f| seen << f}
+        seen
       end
       
     end # class Scope

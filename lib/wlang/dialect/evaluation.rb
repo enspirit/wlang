@@ -33,7 +33,7 @@ module WLang
 
       def evaluate(expr)
         expr = render(expr) unless expr.is_a?(String) or expr.is_a?(Symbol)
-        each_scope do |s|
+        each_scope_frame do |s|
           catch(:fail){ return evaluate_through_hash(s,expr) }
           catch(:fail){ return evaluate_through_send(s,expr) }
           catch(:fail){ return evaluate_through_eval(s,expr) }

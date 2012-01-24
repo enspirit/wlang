@@ -3,18 +3,18 @@ module WLang
     module Scoping
 
       def scope
-        @scope ||= []
+        @scope ||= Scope.new({})
       end
 
       def with_scope(x)
-        scope.push x
+        @scope = scope.push(x)
         yield
       ensure
-        scope.pop
+        @scope = scope.pop
       end
 
-      def each_scope(&blk)
-        scope.reverse.each(&blk)
+      def each_scope_frame(&blk)
+        scope.each_frame(&blk)
       end
 
     end # module Scoping
