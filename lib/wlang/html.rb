@@ -77,7 +77,7 @@ module WLang
       
       def sharp(buf, who_fn, then_fn)
         val = value_of(who_fn)
-        if val and not(val.respond_to?(:empty?) && val.empty?)
+        if val and not(val.respond_to?(:empty?) and val.empty?)
           render(then_fn, val, buf)
         end
       end
