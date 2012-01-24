@@ -37,7 +37,9 @@ module WLang
       end
 
       def escape(buf, fn)
-        buf << Temple::Utils.escape_html(plus("", fn))
+        val = plus("", fn)
+        val = Temple::Utils.escape_html(val) 
+        buf << val
       end
 
     end
