@@ -68,10 +68,24 @@ module WLang
           first = false
         end
       end
+      
+      def greater(buf, fn)
+        val = value_of(fn)
+        val = Html.compile(val) unless Template === val
+        render(val, nil, buf)
+      end
+      
+      def sharp(buf, who_fn, then_fn)
+        val = value_of(who_fn)
+        if val and not(val.respond_to?(:empty?) && val.empty?)
+          render(then_fn, val, buf)
+        end
+      end
 
     end
     include HighOrderFunctions
 
+    default_options :autospacing => true
     tag '!', :bang
     tag '+', :plus
     tag '$', :dollar
@@ -79,6 +93,8 @@ module WLang
     tag '?', :question
     tag '^', :caret
     tag '*', :star
+    tag '>', :greater
+    tag '#', :sharp
 
   end # class Html
 end # module WLang

@@ -67,8 +67,8 @@ module WLang
       end
 
       # dialect
-      require 'wlang/mustang'
-      @dialect       = WLang::Mustang
+      require 'wlang/html'
+      @dialect       = WLang::Html
 
       # template and context
       @template      = File.read(@tpl_file)
