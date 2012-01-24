@@ -48,6 +48,22 @@ module WLang
       def ampersand(buf, fn)
         buf << escape_html(render(fn))
       end
+      
+      def question(buf, fn_if, fn_then, fn_else)
+        if value_of(fn_if)
+          render(fn_then, nil, buf)
+        else
+          render(fn_else, nil, buf) if fn_else
+        end
+      end
+      
+      def caret(buf, fn_if, fn_then, fn_else)
+        if value_of(fn_if)
+          render(fn_else, nil, buf) if fn_else
+        else
+          render(fn_then, nil, buf)
+        end
+      end
 
     end
     include HighOrderFunctions
@@ -56,6 +72,8 @@ module WLang
     tag '+', :plus
     tag '$', :dollar
     tag '&', :ampersand
+    tag '?', :question
+    tag '^', :caret
 
   end # class Html
 end # module WLang
