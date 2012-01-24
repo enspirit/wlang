@@ -15,7 +15,7 @@ module WLang
       end
       
       def each_frame(&blk)
-        if @subject.is_a?(Scope)
+        if @subject.respond_to?(:each_frame)
           @subject.each_frame(&blk)
         else
           blk.call(@subject)
