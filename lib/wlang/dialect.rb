@@ -12,10 +12,7 @@ module WLang
     class << self
 
       def factor(options = {})
-        options = default_options.merge(options)
-        Class.new(self).tap do |c|
-          c.scoping    options[:scoping]
-        end.new(options)
+        new(default_options.merge(options))
       end
 
       def default_options(options = {})
@@ -41,8 +38,7 @@ module WLang
 
     end
 
-    default_options :scoping     => :strict,
-                    :braces      => WLang::BRACES,
+    default_options :braces      => WLang::BRACES,
                     :autospacing => false
 
     attr_reader :options

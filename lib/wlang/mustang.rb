@@ -57,8 +57,6 @@ module WLang
       nil
     end
 
-    default_options :scoping   => :strict
-
     tag '+', :plus
     tag '$', :escape
     tag '&', :escape

@@ -35,7 +35,6 @@ module WLang
     end
     include HighOrderFunctions
 
-    default_options :scoping   => :stack
     tag '!', :bang
     tag '+', :plus
     tag '$', :escape
