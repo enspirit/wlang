@@ -9,7 +9,6 @@ module WLang
       def with_scope(x)
         @scope = scope.push(x)
         yield
-      ensure
         @scope = scope.pop
       end
 
