@@ -15,7 +15,6 @@ module WLang
         options = default_options.merge(options)
         Class.new(self).tap do |c|
           c.scoping    options[:scoping]
-          c.evaluator  options[:evaluator]
         end.new(options)
       end
 
@@ -43,7 +42,6 @@ module WLang
     end
 
     default_options :scoping     => :strict,
-                    :evaluator   => [:hash, :send, :eval],
                     :braces      => WLang::BRACES,
                     :autospacing => false
 

@@ -51,8 +51,13 @@ module WLang
     end
     include HighOrderFunctions
 
-    default_options :evaluator => [:hash, :send, :nofail],
-                    :scoping   => :strict
+    def evaluate(expr)
+      super
+    rescue
+      nil
+    end
+
+    default_options :scoping   => :strict
 
     tag '+', :plus
     tag '$', :escape

@@ -32,20 +32,16 @@ describe WLang do
 
   it 'allows overriding super-dialect evaluation rules' do
     e = WLang::dialect(d) do
-      default_options :evaluator => [:nofail]
+      def evaluate(expr); super rescue ""; end
     end
     e.render(hello_tpl).should eq("Hello !")
   end
 
   it 'does not override the super-dialect evaluation rules' do
     e = WLang::dialect(d) do
-      default_options :evaluator => [:nofail]
+      def evaluate(expr); super rescue ""; end
     end
     lambda{ d.render(hello_tpl) }.should raise_error(NameError)
-  end
-
-  it 'allows overriding super-dialect evaluation rules at compile time' do
-    d.compile(hello_tpl, :evaluator => [:nofail]).render.should eq("Hello !")
   end
 
   ### default scoping
