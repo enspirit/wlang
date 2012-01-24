@@ -58,6 +58,17 @@ module WLang
         render(val, nil, buf) if val
       end
 
+      def star(buf, coll_fn, elm_fn, between_fn)
+        collection, first = value_of(coll_fn), true
+        collection.each do |elm|
+          unless first
+            render(between_fn, elm, buf) if between_fn 
+          end
+          render(elm_fn, elm, buf)
+          first = false
+        end
+      end
+
     end
     include HighOrderFunctions
 
@@ -67,6 +78,7 @@ module WLang
     tag '&', :ampersand
     tag '?', :question
     tag '^', :caret
+    tag '*', :star
 
   end # class Html
 end # module WLang
