@@ -10,9 +10,6 @@ module WLang
         raise "Unable to pop from root scope"
       end
 
-      def each_frame(&blk)
-      end
-
       def fetch(key)
         throw :fail
       end

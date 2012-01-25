@@ -3,7 +3,7 @@ require File.expand_path('../commons', __FILE__)
 Viiite.bench do |b|
 
   People = Struct.new(:name, :score)
-  people = (1..10000).map{|i| People.new("People#{i}", rand)}
+  people = (1..20000).map{|i| People.new("People#{i}", rand)}
   scope  = {:people => people}
 
   templates = Path.dir/:templates
