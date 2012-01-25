@@ -3,8 +3,8 @@ module WLang
     class ObjectScope < Scope
 
       def fetch(k, &blk)
-        return subject if k == :self
         s = subject
+        return s if k == :self
         if s.respond_to?(:has_key?)
           return s[k] if s.has_key?(k)
           return s[k.to_s] if s.has_key?(k.to_s)
