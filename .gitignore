@@ -5,3 +5,4 @@ doc/api
 .yardoc
 .bundle
 .rbx
+benchmarks/.cache
