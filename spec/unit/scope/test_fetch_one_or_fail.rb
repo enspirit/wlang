@@ -4,7 +4,7 @@ module WLang
     public :fetch_one_or_fail
   end
   describe Scope, "fetch_one_or_fail" do
-    
+
     def f(s, k)
       Scope.root.fetch_one_or_fail(s,k)
     end
@@ -22,7 +22,7 @@ module WLang
         f(subj, :self).should eq(subj)
       end
     end
-    
+
     context "on a Binding" do
       it 'evaluates correctly when found' do
         who = "World"

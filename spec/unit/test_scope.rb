@@ -13,7 +13,7 @@ module WLang
       s = s.pop
       s.evaluate(:who).should eq("World")
     end
-    
+
     it 'has a `with` helper' do
       scope.with(:who => "World2") do |s|
         s.evaluate(:who).should eq("World2")
@@ -31,15 +31,15 @@ module WLang
     it 'evaluates `self` accurately' do
       scope.evaluate(:self).should eq(:who => "World")
     end
-    
+
     it 'evaluates dot expressions correctly' do
       scope.evaluate("who.upcase").should eq("WORLD")
     end
-    
+
     it 'fails when not found' do
       lambda{ scope.evaluate(:nosuchone) }.should throw_symbol(:fail)
     end
-    
+
     it 'supports a default value instead of fail' do
       scope.evaluate(:nosuchone, 12).should eq(12)
     end

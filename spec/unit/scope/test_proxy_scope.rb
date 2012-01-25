@@ -7,7 +7,7 @@ module WLang
         proxy = Scope.proxy(Scope.normal(:who => "World"))
         proxy.fetch(:who).should eq("World")
       end
-      
+
       it 'delegates fetch to its parent when not found' do
         proxy  = Scope.proxy(Scope.root, Scope.normal(:who => "World"))
         proxy.fetch(:who).should eq("World")

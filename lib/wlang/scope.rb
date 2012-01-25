@@ -32,7 +32,7 @@ module WLang
     def pop
       @parent
     end
-    
+
     def with(x)
       yield(self.push(x))
     end
@@ -60,13 +60,13 @@ module WLang
     end
 
     private
-    
+
     def fetch_on_binding(s,k)
       s.eval(k.to_s)
     rescue NameError, NoMethodError
       block_given? ? yield(s,k) : throw(:fail)
     end
-    
+
     def fetch_on_hash(s, k)
       if k == :self
         s
