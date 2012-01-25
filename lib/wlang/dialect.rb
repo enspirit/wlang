@@ -1,12 +1,9 @@
-require 'wlang/dialect/scope'
 require 'wlang/dialect/dispatching'
-require 'wlang/dialect/scoping'
 require 'wlang/dialect/evaluation'
 require 'wlang/dialect/tags'
 module WLang
   class Dialect
     include Dialect::Dispatching
-    include Dialect::Scoping
     include Dialect::Evaluation
     include Dialect::Tags
 
@@ -51,7 +48,6 @@ module WLang
       @options  = options
       @compiler = WLang::Compiler.new(self)
     end
-    #private_class_method :new
 
   end # class Dialect
 end # module WLang

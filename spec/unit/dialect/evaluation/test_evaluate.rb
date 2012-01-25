@@ -3,7 +3,6 @@ module WLang
   class Dialect
     describe Evaluation, "evaluate" do
       include Evaluation
-      include Scoping
 
       let(:struct){ Struct.new(:who) }
 

@@ -29,10 +29,6 @@ module WLang
       render("!{hello}", binding).should eq("World")
     end
 
-    it 'supports ruby literals' do
-      render("!{1..10}", {}).should eq((1..10).to_s)
-    end
-
     it 'supports chain invocations' do
       s = Struct.new(:hello).new("World")
       render("!{s.hello}", binding).should eq("World")
