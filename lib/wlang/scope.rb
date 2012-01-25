@@ -12,11 +12,8 @@ module WLang
       @root ||= RootScope.new
     end
 
-    HashLike = lambda{|o| o.respond_to?(:has_key?)}
     def self.coerce(arg, parent = root)
       clazz = case arg
-      when HashLike
-        HashLikeScope
       when Binding
         BindingScope
       when Scope
@@ -57,6 +54,5 @@ module WLang
 end # module WLang
 require 'wlang/scope/root_scope'
 require 'wlang/scope/proxy_scope'
-require 'wlang/scope/hash_like_scope'
 require 'wlang/scope/object_scope'
 require 'wlang/scope/binding_scope'

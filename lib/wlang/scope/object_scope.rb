@@ -5,11 +5,12 @@ module WLang
       def fetch(k, &blk)
         return subject if k == :self
         s = subject
-        if s.respond_to?(k)
-          s.send(k)
-        else
-          parent.fetch(k, &blk)
+        if s.respond_to?(:has_key?)
+          return s[k] if s.has_key?(k)
+          return s[k.to_s] if s.has_key?(k.to_s)
         end
+        return s.send(k) if s.respond_to?(k)
+        parent.fetch(k, &blk)
       rescue NameError
         parent.fetch(k, &blk)
       end
