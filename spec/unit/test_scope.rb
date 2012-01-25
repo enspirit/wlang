@@ -2,7 +2,7 @@ require 'spec_helper'
 module WLang
   describe Scope do
 
-    let(:scope){ Scope.normal({:who => "World"}) }
+    let(:scope){ Scope.coerce({:who => "World"}) }
 
     it 'acts like a stack' do
       s = scope
@@ -22,7 +22,7 @@ module WLang
     end
 
     it 'allows pushing scopes' do
-      scope.with Scope.normal(:other => "World2") do |s|
+      scope.with Scope.coerce(:other => "World2") do |s|
         s.evaluate(:other).should eq("World2")
         s.evaluate(:who).should eq("World")
       end

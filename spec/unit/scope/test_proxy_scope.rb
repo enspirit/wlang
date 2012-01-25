@@ -4,17 +4,17 @@ module WLang
     describe ProxyScope do
 
       it 'delegates fetch to its subject' do
-        proxy = Scope.proxy(Scope.normal(:who => "World"))
+        proxy = Scope.coerce(Scope.coerce(:who => "World"))
         proxy.fetch(:who).should eq("World")
       end
 
       it 'delegates fetch to its parent when not found' do
-        proxy  = Scope.proxy(Scope.root, Scope.normal(:who => "World"))
+        proxy  = Scope.coerce(Scope.root, Scope.coerce(:who => "World"))
         proxy.fetch(:who).should eq("World")
       end
 
       it 'fetches `self` correctly' do
-        Scope.proxy(Scope.normal(12)).fetch(:self).should eq(12)
+        Scope.coerce(Scope.coerce(12)).fetch(:self).should eq(12)
       end
 
     end # describe ProxyScope

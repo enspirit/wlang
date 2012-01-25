@@ -2,11 +2,10 @@ module WLang
   class Scope
     class ProxyScope < Scope
 
-      def fetch(key)
-        catch :fail do
-          return subject.fetch(key)
+      def fetch(key, &blk)
+        subject.fetch(key) do 
+          parent.fetch(key, &blk)
         end
-        parent.fetch(key)
       end
 
     end # class ProxyScope
