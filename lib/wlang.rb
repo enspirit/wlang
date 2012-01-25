@@ -31,3 +31,4 @@ end # module WLang
 require 'wlang/compiler'
 require 'wlang/template'
 require 'wlang/dialect'
+require 'wlang/scope'
