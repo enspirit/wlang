@@ -22,6 +22,23 @@ module WLang
         f(subj, :self).should eq(subj)
       end
     end
+    
+    context "on a Binding" do
+      it 'evaluates correctly when found' do
+        who = "World"
+        f(binding, :who).should eq("World")
+      end
+      it 'throws :fail when not found' do
+        lambda{ f(binding, :no_such_one) }.should throw_symbol(:fail)
+      end
+      it 'evaluates `self` correctly' do
+        o = Object.new
+        x = o.instance_eval do
+          Scope.root.fetch_one_or_fail(binding, :self)
+        end
+        x.should eq(o)
+      end
+    end
 
     context "on a hash" do
       it 'evaluates correctly when found' do

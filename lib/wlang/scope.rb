@@ -61,18 +61,54 @@ module WLang
 
     private
     
-    def fetch_one_or_fail(s,k)
-      return s if k == :self
-      if s.respond_to?(:has_key?)
-        return s[k] if s.has_key?(k)
-        return s[k.to_s] if s.has_key?(k.to_s)
+    def fetch_on_binding(s,k)
+      s.eval(k.to_s)
+    rescue NameError, NoMethodError
+      block_given? ? yield(s,k) : throw(:fail)
+    end
+    
+    def fetch_on_hash(s, k)
+      if k == :self
+        s
+      elsif s.has_key?(k)
+        s[k]
+      elsif s.has_key?(k.to_s)
+        s[k.to_s]
+      else
+        block_given? ? yield(s,k) : throw(:fail)
       end
-      if s.respond_to?(k)
-        return s.send(k)
-      end
-      throw :fail
     end
 
+    def fetch_on_object(s,k)
+      if k == :self
+        return s
+      elsif s.respond_to?(k)
+        s.send(k)
+      else
+        block_given? ? yield(s,k) : throw(:fail)
+      end
+    rescue ArgumentError
+      block_given? ? yield(s,k) : throw(:fail)
+    end
+
+    def fetch_one_or_fail(s,k)
+      case s
+      when Binding
+        fetch_on_binding(s,k)
+      when HashLike
+        fetch_on_hash(s,k) do
+          fetch_on_object(s,k)
+        end
+      else
+        fetch_on_object(s,k)
+      end
+    end
+
+    HashLike = Object.new.tap{|o|
+      def o.===(arg)
+        arg.respond_to?(:has_key?)
+      end
+    }
   end # class Scope
 end # module WLang
 require 'wlang/scope/root_scope'
