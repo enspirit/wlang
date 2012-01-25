@@ -11,7 +11,7 @@ module WLang
       end
 
       def fetch(key)
-        block_given? ? yield(key) : throw(:fail)
+        block_given? ? yield : throw(:fail)
       end
 
     end # class RootScope

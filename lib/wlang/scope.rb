@@ -37,15 +37,13 @@ module WLang
     end
 
     def evaluate(expr, *default)
-      case expr
-      when Symbol
-        fetch(expr) do
-          default.empty? ? throw(:fail) : default.first
-        end
+      unfound = lambda{ default.empty? ? throw(:fail) : default.first }
+      if expr.to_s.index('.').nil?
+        fetch(expr.to_sym, &unfound)
       else
-        keys = expr.to_s.split('.').map(&:to_sym)
+        keys = expr.split('.').map(&:to_sym)
         keys.inject(self){|scope,key|
-          Scope.coerce(scope.fetch(key))
+          Scope.coerce(scope.fetch(key, &unfound))
         }.subject
       end
     end
