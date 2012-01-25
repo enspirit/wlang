@@ -37,10 +37,6 @@ module WLang
       yield(self.push(x))
     end
 
-    def each_frame(&blk)
-      @parent.each_frame(&blk)
-    end
-
     def evaluate(expr, *default)
       case expr
       when Symbol

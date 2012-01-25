@@ -4,7 +4,7 @@ module WLang
 
       def each_frame(&blk)
         blk.call(subject)
-        super
+        parent.each_frame(&blk)
       end
 
       def fetch(key)
