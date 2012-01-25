@@ -9,14 +9,14 @@ module WLang
         evaluate(render(fn).to_s.strip)
       end
       private :value_of
-      
+
       def to_html(val)
         val = val.to_html if val.respond_to?(:to_html)
         val = to_html(val.call) if val.is_a?(Proc)
         val.to_s
       end
       private :to_html
-      
+
       def escape_html(val)
         Temple::Utils.escape_html(val)
       end
@@ -42,17 +42,17 @@ module WLang
         val = escape_html(plus("", fn)) 
         render(val, nil, buf)
       end
-      
+
       def ampersand(buf, fn)
         val = escape_html(render(fn))
         render(val, nil, buf)
       end
-      
+
       def question(buf, fn_if, fn_then, fn_else)
         val = value_of(fn_if) ? fn_then : fn_else
         render(val, nil, buf) if val
       end
-      
+
       def caret(buf, fn_if, fn_then, fn_else)
         val = value_of(fn_if) ? fn_else : fn_then
         render(val, nil, buf) if val
@@ -68,13 +68,13 @@ module WLang
           first = false
         end
       end
-      
+
       def greater(buf, fn)
         val = value_of(fn)
         val = Html.compile(val) unless Template === val
         render(val, nil, buf)
       end
-      
+
       def sharp(buf, who_fn, then_fn)
         val = value_of(who_fn)
         if val and not(val.respond_to?(:empty?) and val.empty?)

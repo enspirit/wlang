@@ -2,7 +2,7 @@ require 'spec_helper'
 module WLang
   class Dialect
     describe Scope do
-      
+
       it 'behaves like a stack' do
         s = Scope.new(0)
         s = s.push(1)
@@ -12,7 +12,7 @@ module WLang
         s.should be_a(Scope)
         s.to_a.should eq([0])
       end
-      
+
       it 'allows pushing Scope objects' do
         s = Scope.new(0)
         s = s.push(1)

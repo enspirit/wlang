@@ -7,11 +7,11 @@ module WLang
         super
       end
 
-      def fetch(expr)
+      def fetch(key)
         catch :fail do
-          return subject.fetch(expr)
+          return subject.fetch(key)
         end
-        super
+        parent.fetch(key)
       end
 
     end # class ProxyScope

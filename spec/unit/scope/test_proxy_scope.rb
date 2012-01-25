@@ -3,15 +3,18 @@ module WLang
   class Scope
     describe ProxyScope do
 
-      let(:scope){ NormalScope.new(subject, RootScope.new) }
-      let(:proxy){ ProxyScope.new(scope, RootScope.new)    }
-      let(:subject){ {:who => "World"} }
+      it 'delegates fetch to its subject' do
+        proxy = Scope.proxy(Scope.normal(:who => "World"))
+        proxy.fetch(:who).should eq("World")
+      end
+      
+      it 'delegates fetch to its parent when not found' do
+        proxy  = Scope.proxy(Scope.root, Scope.normal(:who => "World"))
+        proxy.fetch(:who).should eq("World")
+      end
 
-      it 'delegates evaluation to its subject' do
-        scope.evaluate('who').should eq("World")
-        scope.evaluate('who.upcase').should eq("WORLD")
-        lambda{ scope.evaluate('nosuchone') }.should throw_symbol(:fail)
-        scope.frames.should eq([subject])
+      it 'fetches `self` correctly' do
+        Scope.proxy(Scope.normal(12)).fetch(:self).should eq(12)
       end
 
     end # describe ProxyScope

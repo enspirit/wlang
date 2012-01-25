@@ -13,7 +13,7 @@ module WLang
       def each_frame(&blk)
       end
 
-      def fetch(expr)
+      def fetch(key)
         throw :fail
       end
 

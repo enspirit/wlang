@@ -24,7 +24,7 @@ module WLang
         render("+{hello}", binding).should eq("<h1>World</h1>")
       end
     end
-    
+
     context "on a Template" do
       it 'renders as a partial' do
         who   = "World"
@@ -32,7 +32,7 @@ module WLang
         render("+{hello}!", binding).should eq("Hello World!")
       end
     end
-    
+
     context "on a Proc" do
       it 'calls it if of arity 0' do
         hello = Proc.new{ "World" }

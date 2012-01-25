@@ -15,7 +15,7 @@ module WLang
     it 'works with Numbers' do
       render("!{hello}", {:hello => 12}).should eq("12")
     end
-    
+
     it 'does not escape html' do
       render("!{hello}", {:hello => "<script>"}).should eq("<script>")
     end

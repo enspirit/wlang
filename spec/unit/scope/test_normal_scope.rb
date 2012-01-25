@@ -3,37 +3,22 @@ module WLang
   class Scope
     describe NormalScope do
 
-      shared_examples_for "A NormalScope" do
-        it 'evaluates correctly when found' do
-          scope.evaluate('who').should eq("World")
-        end
-        it 'supports dot expressions' do
-          scope.evaluate('who.upcase').should eq("WORLD")
-        end
-        it 'throws :fail when not found' do
-          lambda{ scope.evaluate('nosuchone') }.should throw_symbol(:fail)
-        end
-        it 'implements frames accurately' do
-          scope.frames.should eq([subject])
-        end
+      it 'fetches correctly on a Hash' do
+        Scope.normal(:who => "World").fetch(:who).should eq("World")
       end
 
-      let(:scope){ NormalScope.new(subject, RootScope.new) }
-
-      context "on a hash" do
-        let(:subject){ {:who => "World", :values => ""} }
-        it_should_behave_like "A NormalScope"
-        it 'falls back to hash methods' do
-          scope.evaluate('keys').should eq([:who, :values])
-        end
-        it 'gives priority to keys' do
-          scope.evaluate('values').should eq("")
-        end
+      it 'fetches correctly on a Object' do
+        subj = Struct.new(:who).new("World")
+        Scope.normal(subj).fetch(:who).should eq("World")
       end
 
-      context "on a poro" do
-        subject{ Struct.new(:who).new("World") }
-        it_should_behave_like "A NormalScope"
+      it 'delegates to its parent when not found' do
+        parent = Scope.normal(:who => "World")
+        Scope.normal(Scope.root, parent).fetch(:who).should eq("World")
+      end
+
+      it 'fetches `self` correctly' do
+        Scope.normal(12).fetch(:self).should eq(12)
       end
 
     end # describe NormalScope

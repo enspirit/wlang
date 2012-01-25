@@ -5,12 +5,12 @@ module WLang
 
       let(:scope){ RootScope.new }
 
-      it 'throws on evaluation' do
-        lambda{ scope.evaluate('who') }.should throw_symbol(:fail)
+      it 'throws on fetch' do
+        lambda{ scope.fetch(:who) }.should throw_symbol(:fail)
       end
 
-      it 'has empty frames' do
-        scope.frames.should eq([])
+      it 'throws on fetch even on `self`' do
+        lambda{ scope.fetch(:self) }.should throw_symbol(:fail)
       end
 
       it 'raises on pop' do
