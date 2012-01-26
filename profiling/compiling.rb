@@ -1,9 +1,9 @@
-require File.expand_path('../../commons', __FILE__)
+require File.expand_path('../../benchmarks/viiite_helper', __FILE__)
 require 'ruby-prof'
 
 RubyProf.start
 
-WLang::Mustang.compile("*{1..10000}{!{self}}{, }")
+WLang::Html.compile template("table.wlang2")
 
 result = RubyProf.stop
 printer = RubyProf::FlatPrinter.new(result)
