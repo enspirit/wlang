@@ -13,11 +13,38 @@ This is the README of wlang2, a fresh new implementation of the [wlang templatin
 * http://rubygems.org/gems/wlang
 * http://revision-zero.org/wlang
 
+## A user-defined templating engine
+
+WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mustache or whatever:
+
+```ruby
+WLang::Html.render "Hello to ${who}!", who: "you & the world"
+# => "Hello you &amp; the world!"
+```
+
+To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features.
+
+WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever. WLang helps there because you can create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
+
+```ruby
+class Upcasing < WLang::Dialect
+
+  def highlight(buf, fn)
+    buf << render(evaluate(fn)).upcase
+  end
+
+  tag '$', :highlight
+
+end
+Upcasing.render("Hello ${who}!"), who: "you & the world"
+# => "Hello YOU & THE WORLD !"
+```
+
+WLang already provides a few useful dialects, such as WLang::Mustang (mimicing mustache) and WLang::Html (a bit more powerful in my opinion). If they don't match your needs, it is up to you to define you own dialect for making your generation task easy. Have a look at the implementation of WLang's ones, it's pretty simple to get started!
+
 ## Abstract semantics
 
-WLang is a templating engine with a powerful semantics in terms of concatenation
-of strings and high-order functions (i.e. functions that take other functions as
-parameters). Let take the following template as an example:
+WLang has a powerful semantics in terms of concatenation of strings and high-order functions (i.e. functions that take other functions as parameters). Let take the following template as an example:
 
 ```
 Hello ${who} !
@@ -32,44 +59,42 @@ The functional semantics of this template is as follows:
 That is, the compilation of this template yields a function that concatenates the
 string `"Hello"` with the result of the higher-order function `($ )` and then the
 string `" !"`. Providing a concrete semantics to those high-order functions yields 
-so called WLang _dialects_.
+so called WLang _dialects_, as we've seen before.
 
-## Example: the Mustang dialect
+## Higher-order constructs
 
-The `WLang::Mustang` dialect mimics the excellent [Mustache](http://mustache.github.com/) 
-templating language by providing similar tags, such as `$`, `+`, `#`, `^`, etc.
+Higher constructs, a feature that distinguishes WLang from most templating engines, come from the fact that higher-level constructions just work fine. For instance,
 
-Mustache's `{{...}}` is available as `${...}` as illustrated below:
-
-```ruby
-WLang::Mustang.render("Hello ${who} !", :who => "WLang & World")
-# => "Hello WLang &amp; World !"
+```
+Hello ${${var}} !
 ```
 
-In this example,
+yields the following abstract function:
 
-* the high-order function `($ )` is of arity 1 (it takes a single argument, which 
-  is another function)
-* `($ )` calls its first argument, and receives the string `"who"`
-* it evaluates `who` in the current scope and receives the string `"WLang & World"`
-* it escapes that string for HTML and returns the result
+```clojure
+(fn (concat "Hello", ($ ($ (fn "var"))), " !"))
+```
 
-See the documentation of the WLang::Mustang class for more information about this powerful
-dialect.
+Let assume the following implementation of `($ ...)`:
 
-## Creating your own dialect
-
-One of the most powerful features of WLang is that creating you own dialect is very simple. 
-Let take an example:
 
 ```ruby
-class Upcasing < WLang::Dialect
+class HighLevelDialect < WLang::Dialect
 
-  tag '$' do |buf, fn|
-    buf << render(fn).upcase
+  def simple_eval(buf, fn)
+    buf << evaluate(fn).to_s
   end
 
+  tag '$', :simple_eval
+
 end
-Upcasing.render("Hello ${world}")
-# => "Hello WORLD !"
 ```
+
+Then, the following works:
+
+```ruby
+HighLevelDialect.render "Hello ${${var}}!", var: "who", who: "world"
+# => Hello world!
+```
+
+Use at your own risk, though, it might lead to a dialect that is difficult to understand and/or use and presents serious injections risks! Otherwise, higher-order constructions provides us with very powerful tools.
