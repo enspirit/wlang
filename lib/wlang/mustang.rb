@@ -1,6 +1,28 @@
 require 'wlang'
 require 'wlang/dummy'
 module WLang
+  #
+  # A WLang dialect mimicing the excellent Mustache.
+  #
+  # This dialect installs the following high-order functions:
+  #
+  # * `${...}` mimics mustache's `{{ ... }}` that is, it evaluates the variable and
+  #    returns the HTML-escaped string
+  # * `+{...}` mimics mustache's `{{{ ... }}}` that is, it evaluates the variable and
+  #   returns its string representation (through `to_s`)
+  # * `#{..1..}{..2..}` mimics mustache's `{{#..1..}}..2..{{/..1..}}`. For false and nil,
+  #   it returns nil. For scopes and ranges, it instantiates the second block in the scope
+  #   of each element in turn and returns the concatenation of instantiation results. For
+  #   a Proc, it calls it, passing a rendering continuation as first argument. Every other
+  #   object is used as a new scope in which the second block is instantiated.
+  # * `^{..1..}{..2..}` mimics mustache's `{{^..1..}}..2..{{/..1..}}`, instantiating the
+  #   second only if the evaluation of the first yields false, nil, an empty list or an
+  #   unbound variable.
+  # * `>{...}` mimics mustache's `{{>...}}`, instantiating the partial denoted by the
+  #    evaluated expression.
+  # * `!{...}` mimics mustache's `{{!...}}`, taking the block content as a comment
+  #   therefore skipping it.
+  #
   class Mustang < WLang::Dialect
 
     module HighOrderFunctions
