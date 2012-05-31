@@ -63,38 +63,41 @@ so called WLang _dialects_, as we've seen before.
 
 ## Higher-order constructs
 
-Higher constructs, a feature that distinguishes WLang from most templating engines, come from the fact that higher-level constructions just work fine. For instance,
+A feature that distinguishes WLang from most templating engines is the fact that higher-level constructions are permitted. In addition to tag functions that accept multiple arguments, thus multiple blocks in the source text, those blocks may be complex templates themselves.
+
+For instance, the following behavior is perfectly implementable:
 
 ```
-Hello ${${var}} !
+HighLevel.render "Hello #{ ${to_iterate} }{ +{self} }{ and } !",
+                 to_iterate: "collection", collection: [ "you", "wlang", "world" ]
+# => "Hello YOU and WLANG and WORLD"
 ```
 
-yields the following abstract function:
-
-```clojure
-(fn (concat "Hello", ($ ($ (fn "var"))), " !"))
-```
-
-Let assume the following implementation of `($ ...)`:
-
+An implementation of `HighLevel` might be as follows:
 
 ```ruby
-class HighLevelDialect < WLang::Dialect
+class HighLevel < WLang::Dialect
 
-  def simple_eval(buf, fn)
+  def iterate(buf, what, main, between)
+    value_of(render(what)).each_with_index |val,i|
+      buf << render(main, val)
+      buf << render(between, val) unless i==0
+    end
+  end
+
+  def varvalue(buf, fn)
     buf << evaluate(fn).to_s
   end
 
-  tag '$', :simple_eval
+  def upcase(buf, fn)
+    buf << evaluate(fn).to_s.upcase
+  end
+
+  tag '#', :iterate
+  tag '$', :varvalue
+  tag '+', :upcase
 
 end
 ```
 
-Then, the following works:
-
-```ruby
-HighLevelDialect.render "Hello ${${var}}!", var: "who", who: "world"
-# => Hello world!
-```
-
-Use at your own risk, though, it might lead to a dialect that is difficult to understand and/or use and presents serious injections risks! Otherwise, higher-order constructions provides us with very powerful tools.
+Use at your own risk, though, as it may lead to dialects that are difficult to understand and/or use and presents serious injections risks! Otherwise, higher-order constructions provides you with very powerful tools.
