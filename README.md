@@ -67,7 +67,7 @@ A feature that distinguishes WLang from most templating engines is the fact that
 
 For instance, the following behavior is perfectly implementable:
 
-```
+```ruby
 HighLevel.render "Hello #{ ${to_iterate} }{ +{self} }{ and } !",
                  to_iterate: "collection", collection: [ "you", "wlang", "world" ]
 # => "Hello YOU and WLANG and WORLD"
