@@ -11,7 +11,7 @@ group :development do
   gem "rake", "~> 0.9.2"
   gem "bundler", "~> 1.0"
   gem "rspec", "~> 2.8.0"
-  gem "epath", "~> 0.0.1"
+  gem "epath", "~> 0.1.0"
   gem "yard", "~> 0.7.2"
   gem "bluecloth", "~> 2.2.0"
 end
