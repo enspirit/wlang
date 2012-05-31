@@ -43,12 +43,6 @@ module WLang
       end
     end
 
-    context "&{...} mimicing {{ ... }}" do
-      it "does escape html" do
-        m('Hello &{who}', :who => "<script>").should eq("Hello &lt;script&gt;")
-      end
-    end
-
     context '#{..1..}{..2..} mimicing {{#..1..}}..2..{{/..1..}} ' do
       it 'skips the section on false' do
         m('Hello #{present}{World}', :present => false).should eq("Hello ")
