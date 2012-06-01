@@ -3,7 +3,7 @@ require 'wlang/command'
 module WLang
   describe "The examples" do
 
-    (root_folder/:examples).glob("**/*.tpl").each do |ex_file|
+    (root_folder/:examples).glob("**/*.*").each do |ex_file|
       describe "the example file #{ex_file}" do
 
         let(:command) do
