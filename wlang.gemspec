@@ -123,17 +123,17 @@ Gem::Specification.new do |s|
   # One call to add_development_dependency('gem_name', 'gem version requirement')
   # for each development dependency. These gems are required for developers
   #
-  s.add_development_dependency("ruby-prof", "~> 0.10.8")
+  s.add_development_dependency("ruby-prof", "~> 0.11.2")
   s.add_development_dependency("mustache", "~> 0.99.4")
   s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
-  s.add_development_dependency("rspec", "~> 2.8.0")
+  s.add_development_dependency("rspec", "~> 2.10.1")
   s.add_development_dependency("epath", "~> 0.1.0")
-  s.add_development_dependency("yard", "~> 0.7.2")
+  s.add_development_dependency("yard", "~> 0.8.1")
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_dependency("citrus", "~> 2.4.1")
   s.add_dependency("temple", "~> 0.3.5")
-  s.add_dependency("backports", "~> 2.3.0")
+  s.add_dependency("backports", "~> 2.6.1")
 
   # The version of ruby required by this gem
   #
