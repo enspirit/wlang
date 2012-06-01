@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'wlang/command'
 module WLang
-  describe "The examples" do
+  describe "The examples", :hash_ordering => true do
 
     (root_folder/:examples).glob("**/*.*").each do |ex_file|
       describe "the example file #{ex_file}" do
