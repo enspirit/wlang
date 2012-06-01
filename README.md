@@ -1,10 +1,12 @@
 # WLang
 
+[![Build Status](https://secure.travis-ci.org/blambeau/wlang.png?branch=wlang2)](http://travis-ci.org/blambeau/wlang)
+
 WLang is a powerful code generation and templating engine.
 
 This is the README of wlang2, a fresh new implementation of the [wlang templating language concept](http://revision-zero.org/wlang), this one implemented on top of [temple](https://github.com/judofyr/temple) and much inspired by the excellent [mustache](http://mustache.github.com/). (For users of wlang 1.0 (formaly 0.10.2), this rewrite cleans most concepts as well as the abstract wlang semantics; it also uses a simple compiler architecture to gain huge perfomance gains in comparison to early wlang days).
 
-**WLang2 is a work in progress so far**.
+**WLang2 is work in progress**. It does not support rubinius so far, due to an incompatibility with the Citrus parser generator.
 
 ## Links
 
