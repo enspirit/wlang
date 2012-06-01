@@ -18,7 +18,7 @@ This is the README of wlang2, a fresh new implementation of the [wlang templatin
 WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mustache or whatever:
 
 ```ruby
-WLang::Html.render "Hello to ${who}!", who: "you & the world"
+WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
 # => "Hello you &amp; the world!"
 ```
 
@@ -27,16 +27,17 @@ To output HTML pages, WLang does not provides you with killer features or extrao
 WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever. WLang helps there because you can create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
 
 ```ruby
-class Upcasing < WLang::Dialect
+class Highlighter < WLang::Dialect
 
   def highlight(buf, fn)
-    buf << render(evaluate(fn)).upcase
+    var_name  = render(fn)
+    var_value = evaluate(var_name)
+    buf << var_value.to_s.upcase
   end
 
   tag '$', :highlight
-
 end
-Upcasing.render("Hello ${who}!"), who: "you & the world"
+Highlighter.render('Hello ${who}!'), who: 'you & the world'
 # => "Hello YOU & THE WORLD !"
 ```
 
@@ -68,9 +69,9 @@ A feature that distinguishes WLang from most templating engines is the fact that
 For instance, the following behavior is perfectly implementable:
 
 ```ruby
-HighLevel.render "Hello #{ ${to_iterate} }{ +{self} }{ and } !",
-                 to_iterate: "collection", collection: [ "you", "wlang", "world" ]
-# => "Hello YOU and WLANG and WORLD"
+HighLevel.render 'Hello *{ ${collection} }{ ${self} }{ and } !',
+                 collection: 'whos', whos: [ "you", "wlang", "world" ]
+# => "Hello you and wlang and world"
 ```
 
 An implementation of `HighLevel` might be as follows:
@@ -78,25 +79,19 @@ An implementation of `HighLevel` might be as follows:
 ```ruby
 class HighLevel < WLang::Dialect
 
-  def iterate(buf, what, main, between)
-    value_of(render(what)).each_with_index |val,i|
-      buf << render(main, val)
+  def join(buf, expr, main, between)
+    evaluate(expr).each_with_index do |val,i|
       buf << render(between, val) unless i==0
+      buf << render(main, val).strip
     end
   end
 
-  def varvalue(buf, fn)
+  def print(buf, fn)
     buf << evaluate(fn).to_s
   end
 
-  def upcase(buf, fn)
-    buf << evaluate(fn).to_s.upcase
-  end
-
-  tag '#', :iterate
-  tag '$', :varvalue
-  tag '+', :upcase
-
+  tag '*', :join
+  tag '$', :print
 end
 ```
 
