@@ -38,6 +38,7 @@ module WLang
 
     def evaluate(expr, *default)
       unfound = lambda{ default.empty? ? throw(:fail) : default.first }
+      expr    = expr.to_s.strip
       if expr.to_s.index('.').nil?
         fetch(expr.to_sym, &unfound)
       else

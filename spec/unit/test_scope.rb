@@ -36,6 +36,11 @@ module WLang
       scope.evaluate("who.upcase").should eq("WORLD")
     end
 
+    it 'strips strings before evaluation' do
+      scope.evaluate("  who  ").should eq("World")
+      scope.evaluate(" who.upcase ").should eq("WORLD")
+    end
+
     it 'fails when not found' do
       lambda{ scope.evaluate(:nosuchone) }.should throw_symbol(:fail)
     end
