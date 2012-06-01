@@ -48,6 +48,9 @@ module WLang
         render(val, nil, buf)
       end
 
+      def slash(buf, fn)
+      end
+
       def question(buf, fn_if, fn_then, fn_else)
         val = value_of(fn_if) ? fn_then : fn_else
         render(val, nil, buf) if val
@@ -90,6 +93,7 @@ module WLang
     tag '+', :plus
     tag '$', :dollar
     tag '&', :ampersand
+    tag '/', :slash
     tag '?', :question
     tag '^', :caret
     tag '*', :star
