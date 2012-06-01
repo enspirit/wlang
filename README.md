@@ -6,7 +6,7 @@ WLang is a powerful code generation and templating engine.
 
 This is the README of wlang2, a fresh new implementation of the [wlang templating language concept](http://revision-zero.org/wlang), this one implemented on top of [temple](https://github.com/judofyr/temple) and much inspired by the excellent [mustache](http://mustache.github.com/). (For users of wlang 1.0 (formaly 0.10.2), this rewrite cleans most concepts as well as the abstract wlang semantics; it also uses a simple compiler architecture to gain huge perfomance gains in comparison to early wlang days).
 
-**WLang2 is work in progress**. It does not support rubinius so far, due to an incompatibility with the Citrus parser generator.
+**WLang2 is work in progress**. It does not support rubinius so far, due to an incompatibility with the Citrus parser generator. It also have some issues with spacing; not a big issue for HTML rendering but might prevent certain generation tasks.
 
 ## Links
 
@@ -24,7 +24,7 @@ WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
 # => "Hello you &amp; the world!"
 ```
 
-To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features.
+To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features. See the examples folder that documents WLang::Html.
 
 WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever text generation task for which other engines quickly become inappropriate. WLang helps there because it allows you to create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
 

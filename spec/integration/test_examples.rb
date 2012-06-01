@@ -4,6 +4,7 @@ module WLang
   describe "The examples", :hash_ordering => true do
 
     (root_folder/:examples).glob("**/*.*").each do |ex_file|
+      next if ex_file.basename.to_s == "README.md"
       describe "the example file #{ex_file}" do
 
         let(:command) do
