@@ -28,9 +28,9 @@ module WLang
         when :static
           who.last =~ /\n/
         when :wlang, :modulo
-          who[2..-1].any?{|s| multiline?(s)}
+          who[2..-1].any?{|s| s && multiline?(s)}
         else
-          who[1..-1].any?{|s| multiline?(s)}
+          who[1..-1].any?{|s| s && multiline?(s)}
         end
       end
 
