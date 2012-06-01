@@ -53,13 +53,17 @@ The slash tag is used for comments. It simply renders nothing at all.
 
 * slash (/) can be used for comments.
 
-For instance, /{this does not appears at all}...
+For instance,
 
-/{
-  Multiline comments of course work as well
+    /{this does not appears in the rendering result}
 
-  Enf of comment.
-}
+And,
+
+    /{
+      Multiline comments of course work as well
+
+      Enf of comment.
+    }
 
 # Modulo to disengage wlang
 

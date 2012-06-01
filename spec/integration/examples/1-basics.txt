@@ -46,7 +46,11 @@ The slash tag is used for comments. It simply renders nothing at all.
 
 * slash (/) can be used for comments.
 
-For instance, ...
+For instance,
+
+    
+
+And,
 
 # Modulo to disengage wlang
 
