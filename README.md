@@ -17,7 +17,7 @@ This is the README of wlang2, a fresh new implementation of the [wlang templatin
 
 ## A user-defined templating engine
 
-WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mustache or whatever:
+WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mustache and the like:
 
 ```ruby
 WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
@@ -26,7 +26,7 @@ WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
 
 To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features.
 
-WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever. WLang helps there because you can create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
+WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever text generation task for which other engines quickly become inappropriate. WLang helps there because it allows you to create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
 
 ```ruby
 class Highlighter < WLang::Dialect
@@ -63,6 +63,8 @@ That is, the compilation of this template yields a function that concatenates th
 string `"Hello"` with the result of the higher-order function `($ )` and then the
 string `" !"`. Providing a concrete semantics to those high-order functions yields
 so called WLang _dialects_, as we've seen before.
+
+Having a well-defined semantics allows wlang to properly compile your user-defined dialect and its instantiation engine so as to preserve decent performances. The WLang architecture is a typical compiler chain. This means that, provided some additional coding, you could even define your own language/syntax and reuse the compilation mechanism, provided that you preserve the semantics above.
 
 ## Higher-order constructs
 
