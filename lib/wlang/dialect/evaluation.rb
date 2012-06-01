@@ -19,7 +19,7 @@ module WLang
           catch(:fail) do
             return scope.evaluate(expr, *default)
           end
-          raise NameError, "Unable to find #{expr} on #{scope}"
+          raise NameError, "Unable to find `#{expr}`"
         else
           evaluate(render(expr), *default)
         end

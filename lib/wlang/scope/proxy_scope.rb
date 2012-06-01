@@ -8,6 +8,11 @@ module WLang
         end
       end
 
+      def inspect
+        subject.inspect
+      end
+      alias :to_s :inspect
+
     end # class ProxyScope
   end # class Scope
 end # module WLang

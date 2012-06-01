@@ -31,7 +31,7 @@ module WLang
             when Template
               fn.call(@scope, buffer)
             else
-              raise ArgumentError, "Unable to render #{fn}"
+              raise ArgumentError, "Unable to render `#{fn}`"
             end
           else
             with_scope(scope){ render(fn, nil, buffer) }

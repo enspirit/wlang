@@ -14,6 +14,11 @@ module WLang
         block_given? ? yield : throw(:fail)
       end
 
+      def inspect
+        "RootScope"
+      end
+      alias :to_s :inspect
+
     end # class RootScope
   end # class Scope
 end # module WLang

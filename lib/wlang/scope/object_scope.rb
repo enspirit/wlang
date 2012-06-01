@@ -15,6 +15,11 @@ module WLang
         parent.fetch(k, &blk)
       end
 
+      def inspect
+        "ObjectScope(#{subject.inspect})"
+      end
+      alias :to_s :inspect
+
     end # class ProxyScope
   end # class Scope
 end # module WLang
