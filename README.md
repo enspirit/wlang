@@ -97,4 +97,4 @@ class HighLevel < WLang::Dialect
 end
 ```
 
-Use at your own risk, though, as it may lead to dialects that are difficult to understand and/or use and presents serious injections risks! Otherwise, higher-order constructions provides you with very powerful tools.
+Use at your own risk, though, as it might lead to dialects that are difficult to understand and/or use and present serious injections risks! Otherwise, higher-order constructions provides you with very powerful tools.
