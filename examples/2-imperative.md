@@ -59,5 +59,5 @@ For instance,
 Renders an HTML list with the authors names. A separator can be specified through the third optional block:
 
     *{authors}{${name}}{, }
-    
+
 Will render 'Bernard, Louis'.
