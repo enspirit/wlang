@@ -8,8 +8,9 @@ module WLang
 
       def with_scope(x)
         @scope = scope.push(x)
-        yield
+        res    = yield
         @scope = scope.pop
+        res
       end
 
       def evaluate(expr, *default)
