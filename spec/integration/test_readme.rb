@@ -18,7 +18,7 @@ module WLang
 
       it 'works as announced' do
         expected = "Hello YOU & THE WORLD!"
-        got      = Highlighter.render "Hello ${who}!", who: "you & the world"
+        got      = Highlighter.render "Hello ${who}!", :who => "you & the world"
         got.should eq(expected)
       end
 
@@ -46,7 +46,7 @@ module WLang
       it 'works as announced' do
         expected = "Hello you and wlang and world !"
         template = 'Hello *{ ${collection} }{ ${self} }{ and } !'
-        context  = {collection: 'whos', whos: [ "you", "wlang", "world" ] }
+        context  = {:collection => 'whos', :whos => [ "you", "wlang", "world" ] }
         got = HighLevel.render template, context
         got.should eq(expected)
       end
