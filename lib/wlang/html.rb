@@ -66,13 +66,10 @@ module WLang
       end
 
       def star(buf, coll_fn, elm_fn, between_fn)
-        collection, first = value_of(coll_fn), true
-        collection.each do |elm|
-          unless first
-            render(between_fn, elm, buf) if between_fn
-          end
+        collection = value_of(coll_fn)
+        collection.each_with_index do |elm,i|
+          render(between_fn, elm, buf) if between_fn and (i > 0)
           render(elm_fn, elm, buf)
-          first = false
         end
       end
 

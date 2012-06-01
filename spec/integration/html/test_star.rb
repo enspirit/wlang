@@ -17,6 +17,12 @@ module WLang
       render("*{numbers}{+{self}}{,}", binding).should eq("1,2,3")
     end
 
+    it 'preserves spacing in the third block' do
+      pending{
+        render("*{numbers}{+{self}}{, }", binding).should eq("1, 2, 3")
+      }
+    end
+
     it 'renders nothing on empty collections' do
       empty = []
       render("*{empty}{+{self}}", binding).should eq("")
