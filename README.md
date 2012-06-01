@@ -60,9 +60,7 @@ The functional semantics of this template is as follows:
 ```
 
 That is, the compilation of this template yields a function that concatenates the
-string `"Hello"` with the result of the higher-order function `($ )` and then the
-string `" !"`. Providing a concrete semantics to those high-order functions yields
-so called WLang _dialects_, as we've seen before.
+string `"Hello"` with the result of the higher-order function `($ )` (that itself takes another function as a parameter, corresponding to the sub-template in its brackets delimited blocks) and then the string `" !"`. Providing a concrete semantics to those high-order functions yields so called WLang _dialects_, as we've seen before.
 
 Having a well-defined semantics allows wlang to properly compile your user-defined dialect and its instantiation engine so as to preserve decent performances. The WLang architecture is a typical compiler chain. This means that, provided some additional coding, you could even define your own language/syntax and reuse the compilation mechanism, provided that you preserve the semantics above.
 
