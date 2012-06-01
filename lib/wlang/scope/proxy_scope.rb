@@ -3,7 +3,7 @@ module WLang
     class ProxyScope < Scope
 
       def fetch(key, &blk)
-        subject.fetch(key) do 
+        subject.fetch(key) do
           parent.fetch(key, &blk)
         end
       end

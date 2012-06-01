@@ -14,7 +14,7 @@ module WLang
             rewrite_trailing_fns(symbols, fns[0...arity], fns[arity..-1])
           elsif argsize < arity
             rewrite_missing_fns(symbols, fns, arity - argsize)
-          else 
+          else
             enforce_sub_dialects(symbols, fns)
           end
         else

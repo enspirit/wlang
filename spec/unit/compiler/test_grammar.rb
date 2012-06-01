@@ -6,11 +6,11 @@ module WLang
 
     context "parsing" do
 
-      subject{ 
+      subject{
         if defined?(trailing)
-          grammar.parse(text, :root => rule, :consume => false) 
+          grammar.parse(text, :root => rule, :consume => false)
         else
-          grammar.parse(text, :root => rule) 
+          grammar.parse(text, :root => rule)
         end
       }
       after { subject.should eq(text) }
@@ -175,9 +175,9 @@ module WLang
         end
         describe "with multiple matches" do
           let(:text){ "Hello ${who}!" }
-          specify{ 
+          specify{
             expected = \
-              [:strconcat, 
+              [:strconcat,
                 [:static, "Hello "],
                 [:wlang, '$', [:fn, [:static, "who"]]],
                 [:static, "!"]]
@@ -189,15 +189,15 @@ module WLang
       describe 'the template rule' do
         let(:rule){ :template       }
         let(:text){ "Hello ${who}!" }
-        specify{ 
+        specify{
           expected = \
             [:template,
               [:fn,
-                [:strconcat, 
+                [:strconcat,
                   [:static, "Hello "],
                   [:wlang, '$', [:fn, [:static, "who"]]],
                   [:static, "!"]]]]
-          subject.should eq(expected) 
+          subject.should eq(expected)
         }
       end
 

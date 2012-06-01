@@ -43,7 +43,7 @@ module WLang
         raise if defined?(@somevar)
         @somevar = "World"
       } }.compile('${who}')
-      2.times do 
+      2.times do
         lambda{ t.call }.should_not raise_error
       end
     end

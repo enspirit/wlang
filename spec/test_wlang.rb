@@ -7,7 +7,7 @@ describe WLang do
 
   let(:d){
     WLang::dialect do
-      tag('$') do |buf, fn| 
+      tag('$') do |buf, fn|
         if x = evaluate(fn)
           buf << x.to_s
         end
@@ -23,7 +23,7 @@ describe WLang do
 
   it 'allows overriding super-dialect tags' do
     e = WLang::dialect(d) do
-      tag('$') do |buf, fn1| 
+      tag('$') do |buf, fn1|
         buf << render(fn1).capitalize
       end
     end

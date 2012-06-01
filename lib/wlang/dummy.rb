@@ -7,7 +7,7 @@ module WLang
   # any wlang tag. This is needed to flush wlang output in certain situations
   # as illustrated by the following template:
   #
-  #     Hello ${who}! This is wlang, a templating language which comes with 
+  #     Hello ${who}! This is wlang, a templating language which comes with
   #     special tags such as %{ ${who}, +{who}, *{authors}{...}, etc }
   #
   # The special tag %{ } might easily be implemented using the Dummy dialect:
@@ -18,7 +18,7 @@ module WLang
   #       def dollar(buf, fn)
   #         buf << evaluate(fn)
   #       end
-  #       
+  #
   #       def no_wlang(buf, fn)
   #         render(fn)
   #       end

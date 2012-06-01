@@ -39,7 +39,7 @@ module WLang
       end
 
       def dollar(buf, fn)
-        val = escape_html(plus("", fn)) 
+        val = escape_html(plus("", fn))
         render(val, nil, buf)
       end
 
@@ -62,7 +62,7 @@ module WLang
         collection, first = value_of(coll_fn), true
         collection.each do |elm|
           unless first
-            render(between_fn, elm, buf) if between_fn 
+            render(between_fn, elm, buf) if between_fn
           end
           render(elm_fn, elm, buf)
           first = false

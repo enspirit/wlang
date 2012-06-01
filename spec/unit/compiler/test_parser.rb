@@ -8,11 +8,11 @@ module WLang
 
     let(:expected) {
       [:template,
-        [:fn, 
+        [:fn,
           [:strconcat,
             [:static, "Hello "],
             [:wlang,  "$",
-              [:fn, 
+              [:fn,
                 [:static, "who"]]],
             [:static, "!"]]]]
     }
@@ -24,11 +24,11 @@ module WLang
     it 'should support high-order wlang' do
       expected = \
       [:template,
-        [:fn, 
+        [:fn,
           [:wlang,  "$",
-            [:fn, 
-              [:wlang, "$", 
-                [:fn, 
+            [:fn,
+              [:wlang, "$",
+                [:fn,
                   [:static, "who"]]]]]]]
       parse("${${who}}").should eq(expected)
     end
@@ -36,7 +36,7 @@ module WLang
     it 'should support mutli-block functions' do
       expected = \
       [:template,
-        [:fn, 
+        [:fn,
           [:wlang,  "$",
             [:fn, [:static, "first" ]],
             [:fn, [:static, "second"]]]]]

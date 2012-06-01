@@ -59,7 +59,7 @@ The functional semantics of this template is as follows:
 
 That is, the compilation of this template yields a function that concatenates the
 string `"Hello"` with the result of the higher-order function `($ )` and then the
-string `" !"`. Providing a concrete semantics to those high-order functions yields 
+string `" !"`. Providing a concrete semantics to those high-order functions yields
 so called WLang _dialects_, as we've seen before.
 
 ## Higher-order constructs

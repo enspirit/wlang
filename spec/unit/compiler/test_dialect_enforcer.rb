@@ -1,13 +1,13 @@
 require 'spec_helper'
 module WLang
   class Compiler
-    class DialectEnforcer 
-      public :find_dispatching_method 
+    class DialectEnforcer
+      public :find_dispatching_method
     end
     describe DialectEnforcer do
 
       let(:dialect){
-        WLang::dialect{ 
+        WLang::dialect{
           tag('$')  do |buf,fn| buf << "$"  end
           tag('!$') do |buf,fn| buf << "!$" end
           tag('*')  do |buf,fn1,fn2|        end
@@ -139,7 +139,7 @@ module WLang
             [:static, '{'],
             hello_fn.last.last,
             [:static, '}']
-          ] 
+          ]
         optimize(source).should eq(expected)
       end
 
@@ -151,7 +151,7 @@ module WLang
             [:static, '{'],
             hello_fn.last.last,
             [:static, '}']
-          ] 
+          ]
         optimize(source).should eq(expected)
       end
 
@@ -159,7 +159,7 @@ module WLang
 
       it 'introduce dialect switching mechanism' do
         source   = [:wlang, '%', hello_fn.first]
-        expected = [:wlang, '%', [:modulo, WLang::Dummy, hello_fn.last]] 
+        expected = [:wlang, '%', [:modulo, WLang::Dummy, hello_fn.last]]
         optimize(source).should eq(expected)
       end
 

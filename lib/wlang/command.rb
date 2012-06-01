@@ -22,7 +22,7 @@ module WLang
         @output = file
       end
       @yaml_front_matter = true
-      opt.on("--[no-]yaml-front-matter", 
+      opt.on("--[no-]yaml-front-matter",
              "Enable/disable YAML front mater (defaults to true)") do |val|
         @yaml_front_matter = val
       end
@@ -74,7 +74,7 @@ module WLang
       @template      = File.read(@tpl_file)
       @context       = {}
 
-      if @yaml_front_matter and 
+      if @yaml_front_matter and
          @template =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
         require 'yaml'
         @context.merge! YAML::load($1)

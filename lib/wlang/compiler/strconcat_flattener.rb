@@ -11,7 +11,7 @@ module WLang
             if child.first == :strconcat
               child[1..-1].each do |subchild|
                 rw << subchild
-              end              
+              end
             else
               rw << child
             end

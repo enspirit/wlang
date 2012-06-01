@@ -13,7 +13,7 @@ People = Struct.new(:name, :score)
 module Helpers
 
   def people
-    @people ||= (1..25000).map{|i| 
+    @people ||= (1..25000).map{|i|
       People.new("People#{i}", rand)
     }
   end
