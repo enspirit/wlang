@@ -1,0 +1,25 @@
+One way to iterate a Hash is as follows:
+
+<table>
+  <tr>
+    <td>name</td>
+    <td>Bernard Lambeau</td>
+  </tr>
+  <tr>
+    <td>hobby</td>
+    <td>Programming</td>
+  </tr>
+</table>
+
+Another way would use wlang higher-level constructions:
+
+<table>
+  <tr>
+    <td>name</td>
+    <td>Bernard Lambeau</td>
+  </tr>
+  <tr>
+    <td>hobby</td>
+    <td>Programming</td>
+  </tr>
+</table>
