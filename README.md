@@ -98,3 +98,20 @@ end
 ```
 
 Use at your own risk, though, as it might lead to dialects that are difficult to understand and/or use and present serious injections risks! Otherwise, higher-order constructions provides you with very powerful tools.
+
+# Tilt integration
+
+WLang 2.0 has built-in support for [Tilt](https://github.com/rtomayko/tilt) facade to templating engines. In order to use that API:
+
+```ruby
+require 'tilt'         # needed in your bundle, not a wlang dependency
+require 'wlang/tilt'   # load wlang integration specifycally
+
+template = Tilt.new("path/to/a/template.wlang")   # suppose 'Hello ${who}!'
+template.render(:who => "world")
+# => Hello world!
+
+template = Tilt.new(hello_path.to_s, :dialect => Highlighter)
+template.render(:who => "world")
+# => Hello WORLD!
+```

@@ -52,5 +52,18 @@ module WLang
       end
     end
 
+    describe 'tilt integration' do
+      it 'works as announced' do
+        require 'tilt'         # needed in your bundle, not a wlang dependency
+        require 'wlang/tilt'   # load wlang integration specifycally
+
+        template = Tilt.new(hello_path.to_s)   # suppose 'Hello ${who}!'
+        template.render(:who => "world").should eq('Hello world!')
+
+        template = Tilt.new(hello_path.to_s, :dialect => Highlighter)
+        template.render(:who => "world").should eq('Hello WORLD!')
+      end
+    end
+
   end
 end
