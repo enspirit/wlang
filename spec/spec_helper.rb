@@ -24,7 +24,7 @@ module Helpers
   end
 
   def tpl_path(what)
-    what = "#{what}.tpl" if what.is_a?(Symbol)
+    what = "#{what}.wlang" if what.is_a?(Symbol)
     fixtures_folder/:templates/what
   end
 
@@ -38,7 +38,7 @@ module Helpers
   end
 
   # Install helper methods for templates
-  fixtures_folder.glob("templates/*.tpl").each do |f|
+  fixtures_folder.glob("templates/*.wlang").each do |f|
     name = f.basename.without_extension
     define_method(:"#{name}_path") do
       fixtures_folder/:templates/f.basename

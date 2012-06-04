@@ -15,6 +15,7 @@ group :profiling do
 end
 
 group :development do
+  gem "tilt", "~> 1.3"
   gem "rake", "~> 0.9.2"
   gem "bundler", "~> 1.0"
   gem "rspec", "~> 2.10.0"
