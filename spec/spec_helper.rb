@@ -59,5 +59,5 @@ include Helpers
 # Configure rspec
 RSpec.configure do |c|
   c.include Helpers
-  c.filter_run_excluding :hash_ordering => true if RUBY_VERSION < "1.9"
+  c.filter_run_excluding :hash_ordering => (RUBY_VERSION < "1.9")
 end
