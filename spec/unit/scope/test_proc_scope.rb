@@ -12,7 +12,7 @@ module WLang
         scope = Scope.coerce(lambda{ nil }, Scope.coerce({:who => "World"}))
         scope.fetch(:who).should eq("World")
       end
-      
+
     end # describe ProcScope
   end # class Scope
 end # module WLang
