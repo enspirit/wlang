@@ -18,6 +18,8 @@ module WLang
         BindingScope
       when Scope
         ProxyScope
+      when Proc
+        ProcScope
       else
         ObjectScope
       end
@@ -55,3 +57,4 @@ require 'wlang/scope/root_scope'
 require 'wlang/scope/proxy_scope'
 require 'wlang/scope/object_scope'
 require 'wlang/scope/binding_scope'
+require 'wlang/scope/proc_scope'

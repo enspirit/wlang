@@ -10,6 +10,10 @@ module WLang
       Scope.coerce(Scope.root).should be_a(Scope::ProxyScope)
     end
 
+    it 'recognizes Procs' do
+      Scope.coerce(lambda{}).should be_a(Scope::ProcScope)
+    end
+
     it 'falls back to ObjectScope on Hash' do
       Scope.coerce({}).should be_a(Scope::ObjectScope)
     end
