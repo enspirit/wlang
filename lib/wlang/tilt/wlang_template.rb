@@ -12,7 +12,12 @@ module Tilt
     protected
 
       def dialect
-        options[:dialect] || WLang::Html
+        options[:dialect] || default_dialect
+      end
+
+      def default_dialect
+        require 'wlang/html' unless defined?(WLang::Html)
+        WLang::Html
       end
 
       def prepare
@@ -20,7 +25,8 @@ module Tilt
       end
 
       def evaluate(scope, locals, &block)
-        @engine.render Scope.coerce(scope).push(locals)
+        locals[:yield] = block if block
+        @engine.render WLang::Scope.coerce(scope).push(locals)
       end
 
   end

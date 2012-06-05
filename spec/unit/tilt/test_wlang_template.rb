@@ -39,4 +39,14 @@ describe Tilt::WLangTemplate do
     template.render.should eq("Hello WHO")
   end
 
+  it 'supports passing a block for yielding' do
+    template = Tilt::WLangTemplate.new{ "Hello ${yield}" }
+    template.render{ "world" }.should eq('Hello world')
+  end
+
+  it 'supports expressions on yield' do
+    template = Tilt::WLangTemplate.new{ "Hello ${yield.upcase}" }
+    template.render{ "world" }.should eq('Hello WORLD')
+  end
+
 end
