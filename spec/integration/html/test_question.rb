@@ -3,11 +3,17 @@ require 'wlang/html'
 module WLang
   describe Html, "?{...}" do
 
+    debug = Module.new{ def inspect; "lambda{ #{call.inspect} }"; end }
+
     def render(tpl, scope = {})
       Html.render(tpl, scope, "")
     end
 
-    [true, "Something", []].each do |test|
+    [ true,
+      "Something",
+      [],
+      lambda{ true }.extend(debug)
+    ].each do |test|
       context "when #{test.inspect}" do
         it 'renders the then block' do
           render("?{test}{hello}", binding).should eq("hello")
@@ -18,7 +24,11 @@ module WLang
       end
     end
 
-    [false, nil].each do |test|
+    [ false,
+      nil,
+      lambda{ false }.extend(debug),
+      lambda{ nil }.extend(debug)
+    ].each do |test|
       context "when #{test.inspect}" do
         it 'do not render the then block' do
           render("?{test}{hello}", binding).should eq("")

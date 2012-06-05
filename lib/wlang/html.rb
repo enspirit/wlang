@@ -56,13 +56,14 @@ module WLang
       end
 
       def question(buf, fn_if, fn_then, fn_else)
-        val = value_of(fn_if) ? fn_then : fn_else
-        render(val, nil, buf) if val
+        val   = value_of(fn_if)
+        val   = val.call if Proc===val
+        block = val ? fn_then : fn_else
+        render(block, nil, buf) if block
       end
 
       def caret(buf, fn_if, fn_then, fn_else)
-        val = value_of(fn_if) ? fn_else : fn_then
-        render(val, nil, buf) if val
+        question(buf, fn_if, fn_else, fn_then)
       end
 
       def star(buf, coll_fn, elm_fn, between_fn)
