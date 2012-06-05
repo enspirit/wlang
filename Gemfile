@@ -11,7 +11,6 @@ end
 group :profiling do
   gem "ruby-prof", "~> 0.11.2"
   gem "mustache", "~> 0.99.4"
-  #gem "viiite", :git => "git://github.com/blambeau/viiite.git"
 end
 
 group :development do
