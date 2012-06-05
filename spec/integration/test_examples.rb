@@ -15,7 +15,7 @@ module WLang
 
         let(:expected) do
           from, to = root_folder, Path.dir
-          (to/(ex_file % from)).sub_ext(".txt")
+          (to/(ex_file % from)).rm_ext
         end
 
         it 'is instantiated as expected with autospacing' do
