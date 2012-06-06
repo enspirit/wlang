@@ -1,23 +1,22 @@
 module WLang
   class Template
 
-    attr_reader :dialect, :inner_proc
+    attr_reader :dialect, :compiled_proc
 
-    def initialize(dialect, inner_proc)
-      @dialect    = dialect
-      @inner_proc = inner_proc
+    def initialize(dialect, compiled_proc)
+      @dialect       = dialect
+      @compiled_proc = compiled_proc
     end
 
+    # def self.new(source, options)
+    #   dialect   = (options[:dialect] || WLang::Html).factor(options)
+    #   compiler  = Compiler.new(dialect)
+    #   ruby_proc = compiler.to_ruby_proc(source)
+    #   super(dialect, ruby_proc)
+    # end
+
     def call(scope = {}, buffer = '')
-      case i = inner_proc
-      when String
-        buffer << i
-      else
-        @dialect.dup.tap do |d|
-          d.send(:render, i, scope, buffer)
-        end
-        buffer
-      end
+      @dialect.dup.render compiled_proc, scope, buffer
     end
     alias :render :call
 

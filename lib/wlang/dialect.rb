@@ -132,7 +132,7 @@ module WLang
     # Is `scope` is specified, the current scope is first branched to use to new one in
     # priority, then rendering applies and the newly created scope if then poped.
     #
-    # Returns the rendered string.
+    # Returns the buffer.
     #
     def render(fn, scope = nil, buffer = "")
       if scope.nil?
@@ -146,6 +146,7 @@ module WLang
         else
           raise ArgumentError, "Unable to render `#{fn}`"
         end
+        buffer
       else
         with_scope(scope){ render(fn, nil, buffer) }
       end
