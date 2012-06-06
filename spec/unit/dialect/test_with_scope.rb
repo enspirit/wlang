@@ -1,18 +1,15 @@
 require 'spec_helper'
 module WLang
-  class Dialect
-    describe Evaluation, "with_scope" do
-      include Evaluation
+  describe Dialect, 'with_scope' do
 
-      let(:struct){ Struct.new(:who) }
+    let(:struct){ Struct.new(:who) }
 
-      it 'returns the block value' do
-        got = with_scope({:who => "World"}) do
-          12
-        end
-        got.should eq(12)
+    it 'returns the block value' do
+      got = Dialect.new.with_scope({:who => "World"}) do
+        12
       end
+      got.should eq(12)
+    end
 
-    end # describe Evaluation, "with_scope"
-  end # class Dialect
+  end # describe Dialect, 'with_scope'
 end # module WLang

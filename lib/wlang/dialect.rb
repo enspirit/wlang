@@ -1,7 +1,5 @@
-require 'wlang/dialect/evaluation'
 module WLang
   class Dialect
-    include Dialect::Evaluation
 
     class << self
 
@@ -151,6 +149,41 @@ module WLang
         end
       else
         with_scope(scope){ render(fn, nil, buffer) }
+      end
+    end
+
+    # evaluation
+
+    # Returns the current rendering scope.
+    def scope
+      @scope ||= Scope.root
+    end
+
+    # Yields the block with a scope branched with a sub-scope `x`.
+    def with_scope(x)
+      @scope = scope.push(x)
+      res    = yield
+      @scope = scope.pop
+      res
+    end
+
+    # Evaluates `expr` in the current scope. `expr` can be either
+    #
+    # * a Symbol or a String, taken as a dot expression to evaluate
+    # * a Proc or a Template, first rendered and then evaluated
+    #
+    # Evaluation is delegated to the scope (@see Scope#evaluate) and the result returned
+    # by this method.
+    #
+    def evaluate(expr, *default)
+      case expr
+      when Symbol, String
+        catch(:fail) do
+          return scope.evaluate(expr, *default)
+        end
+        raise NameError, "Unable to find `#{expr}`"
+      else
+        evaluate(render(expr), *default)
       end
     end
 
