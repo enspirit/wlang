@@ -48,7 +48,7 @@ module WLang
       compiler = @dialect.compiler(@compiling_options)
       if @ast
         require 'awesome_print'
-        ap compiler.ast(@template)
+        ap compiler.to_ast(@template)
       end
 
       with_output do |output|

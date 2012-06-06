@@ -37,22 +37,24 @@ module WLang
       when Proc
         Template.new(@dialect, source)
       else
-        code = to_ruby_code(source)
-        proc = eval(code, TOPLEVEL_BINDING)
-        Template.new(@dialect, proc)
+        Template.new(@dialect, to_ruby_proc(source))
       end
+    end
+
+    def to_ruby_proc(source)
+      eval(to_ruby_code(source), TOPLEVEL_BINDING)
     end
 
     def to_ruby_code(source)
       engine.call(source)
     end
 
-    def ast(source)
+    def to_ast(source)
       parser.new.call(source)
     end
 
-    def parser
-      Class.new(Temple::Engine).tap{|c|
+    def parser(engine = Class.new(Temple::Engine))
+      engine.tap{|c|
         c.use Parser
         c.use DialectEnforcer, :dialect => @dialect
         c.use Autospacing if options[:autospacing]
@@ -61,16 +63,11 @@ module WLang
       }
     end
 
-    def engine(gencode = true)
-      Class.new(Temple::Engine).tap{|c|
-        c.use Parser
-        c.use DialectEnforcer, :dialect => @dialect
-        c.use Autospacing if options[:autospacing]
-        c.use StrconcatFlattener
-        c.use StaticMerger
+    def engine(generate_code = true)
+      parser.tap{|c|
         c.use ProcCallRemoval
         c.use ToRubyAbstraction
-        c.use ToRubyCode if gencode
+        c.use ToRubyCode if generate_code
       }.new
     end
 
