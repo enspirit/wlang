@@ -76,7 +76,7 @@ module WLang
 
       def greater(buf, fn)
         val = value_of(fn)
-        val = Html.compile(val) unless Template === val
+        val = Html.compile(val) if String === val
         render(val, nil, buf)
       end
 
