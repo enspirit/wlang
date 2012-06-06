@@ -15,7 +15,7 @@ module WLang
       end
 
       def compile(source, options = {})
-        return source if Template===source
+        #return source if Template===source
         Template.new source, :dialect => self
       end
 

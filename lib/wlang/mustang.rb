@@ -65,8 +65,10 @@ module WLang
       end
 
       def partial(buf, fn)
-        if x = Mustang.compile(evaluate(fn))
-          render(x, scope, buf)
+        val = evaluate(fn)
+        if val
+          val = Mustang.compile(val) unless Template === val
+          render(val, scope, buf)
         end
       end
 
