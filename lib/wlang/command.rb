@@ -45,15 +45,13 @@ module WLang
     def execute(argv)
       install(argv)
 
-      template = Template.new(@template, @compiling_options)
-
       if @ast
         require 'awesome_print'
-        ap template.to_ast
+        ap @template.to_ast
       end
 
       with_output do |output|
-        template.render(@context, output)
+        @template.render(@context, output)
       end
     end
 
@@ -72,15 +70,8 @@ module WLang
       @dialect       = WLang::Html
 
       # template and context
-      @template      = File.read(@tpl_file)
+      @template      = Template.new(File.read(@tpl_file), @compiling_options)
       @context       = {}
-
-      if @yaml_front_matter and
-         @template =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
-        require 'yaml'
-        @context.merge! YAML::load($1)
-        @template = $'
-      end
     end
 
     def with_output(&proc)

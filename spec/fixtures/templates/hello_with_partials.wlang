@@ -1,0 +1,7 @@
+---
+locals:
+  who_else: wlang
+partials:
+  who: world and ${who_else}
+---
+Hello >{who}!

@@ -14,7 +14,7 @@ For example, assume that you iterate some data and want render a partial in a po
 
     <ul>
       *{data}{
-        <li> >{partials.${shape}} </li>
+        <li> >{${shape}} </li>
       }
     </ul>
 
