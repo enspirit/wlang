@@ -11,17 +11,8 @@ module Tilt
 
     protected
 
-      def dialect
-        options[:dialect] || default_dialect
-      end
-
-      def default_dialect
-        require 'wlang/html' unless defined?(WLang::Html)
-        WLang::Html
-      end
-
       def prepare
-        @engine = dialect.compile(data)
+        @engine = WLang::Template.new(data, options)
       end
 
       def evaluate(scope, locals, &block)
