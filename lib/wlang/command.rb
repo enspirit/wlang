@@ -52,7 +52,7 @@ module WLang
       end
 
       with_output do |output|
-        compiler.compile(@template).render(@context, output)
+        @dialect.render @template, @context, output
       end
     end
 

@@ -20,16 +20,6 @@ module WLang
       end
     end
 
-    it 'supports a no-op' do
-      t = compile(hello_tpl)
-      compile(t).should eq(t)
-    end
-
-    it 'supports a proc' do
-      proc = compile(hello_tpl).inner_proc
-      compile(proc).should be_a(Template)
-    end
-
     specify 'returned template is callable' do
       compile(hello_tpl).call.should eq("Hello WHO!")
     end

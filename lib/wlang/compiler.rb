@@ -30,17 +30,6 @@ module WLang
       dialect.options
     end
 
-    def compile(source)
-      case source
-      when Template
-        source
-      when Proc
-        Template.new(@dialect, source)
-      else
-        Template.new(@dialect, to_ruby_proc(source))
-      end
-    end
-
     def to_ruby_proc(source)
       eval(to_ruby_code(source), TOPLEVEL_BINDING)
     end
