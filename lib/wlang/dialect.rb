@@ -25,10 +25,6 @@ module WLang
         Template.new dialect, compiler.to_ruby_proc(source)
       end
 
-      def to_ruby_code(source, options = {})
-        compiler(options).to_ruby_code(source)
-      end
-
       def render(source, scope = {}, buffer = "")
         compile(source).call(scope, buffer)
       end
