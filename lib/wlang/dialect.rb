@@ -14,10 +14,6 @@ module WLang
         @default_options.merge!(options)
       end
 
-      def compiler(options = {})
-        factor(options).compiler
-      end
-
       def compile(source, options = {})
         return source if Template===source
         Template.new source, :dialect => self

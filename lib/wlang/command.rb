@@ -45,14 +45,15 @@ module WLang
     def execute(argv)
       install(argv)
 
-      compiler = @dialect.compiler(@compiling_options)
+      template = Template.new(@template, @compiling_options)
+
       if @ast
         require 'awesome_print'
-        ap compiler.to_ast(@template)
+        ap template.to_ast
       end
 
       with_output do |output|
-        @dialect.render @template, @context, output
+        template.render(@context, output)
       end
     end
 
