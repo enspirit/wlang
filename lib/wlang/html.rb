@@ -5,8 +5,8 @@ module WLang
 
     module Helpers
 
-      def value_of(fn)
-        evaluate(render(fn).to_s.strip)
+      def value_of(fn, *defaults)
+        evaluate(render(fn).to_s.strip, *defaults)
       end
       private :value_of
 
@@ -81,7 +81,7 @@ module WLang
       end
 
       def sharp(buf, who_fn, then_fn)
-        val = value_of(who_fn)
+        val = value_of(who_fn, nil)
         if val and not(val.respond_to?(:empty?) and val.empty?)
           render(then_fn, val, buf)
         end

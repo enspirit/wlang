@@ -17,5 +17,9 @@ module WLang
       render('Hello #{scope}{${who}}', binding).should eq("Hello ")
     end
 
+    it 'allows undefined variables' do
+      render('Hello #{scope}{${who}}', binding).should eq("Hello ")
+    end
+
   end
 end
