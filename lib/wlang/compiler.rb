@@ -31,7 +31,12 @@ module WLang
     end
 
     def to_ruby_proc(source)
-      eval(to_ruby_code(source), TOPLEVEL_BINDING)
+      source = eval(to_ruby_code(source), TOPLEVEL_BINDING)
+      if String===source
+        Proc.new{|d,buf| buf << source}
+      else
+        source
+      end
     end
 
     def to_ruby_code(source)
