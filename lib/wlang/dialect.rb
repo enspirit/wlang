@@ -20,9 +20,7 @@ module WLang
 
       def compile(source, options = {})
         return source if Template===source
-        dialect  = factor(options)
-        compiler = Compiler.new(dialect)
-        Template.new dialect, compiler.to_ruby_proc(source)
+        Template.new source, :dialect => self
       end
 
       def render(source, scope = {}, buffer = "")
