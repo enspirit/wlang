@@ -1,9 +1,7 @@
 require 'wlang/dialect/evaluation'
-require 'wlang/dialect/tags'
 module WLang
   class Dialect
     include Dialect::Evaluation
-    include Dialect::Tags
 
     class << self
 
@@ -34,7 +32,34 @@ module WLang
         compile(source).call(scope, buffer)
       end
 
-      # dispatching
+      # tag installation and dispatching
+
+      # Install a new tag on the dialect for `symbols`.
+      #
+      # Optional `dialects` can be passed if dialect modulation needs to occur for some
+      # blocks. The source code of the tag can either be passed as a `method` Symbol or
+      # as a block.
+      #
+      # Examples:
+      #
+      #   # A simple tag with explicit code as a block
+      #   tag('$') do |buf,fn| ... end
+      #
+      #   # A simple tag, reusing a method (better for testing the method easily)
+      #   tag('$', :some_existing_method)
+      #
+      #   # Specifying that the first block of #{...}{...} has to be parsed in the same
+      #   # dialect whereas the second has to be parsed in the dummy one.
+      #   tag('#', [self, WLang::Dummy], ::some_existing_method)
+      #
+      def tag(symbols, dialects = nil, method = nil, &block)
+        if block
+          tag(symbols, dialects, block)
+        else
+          dialects, method = nil, dialects if method.nil?
+          define_tag_method(symbols, dialects, method)
+        end
+      end
 
       # Returns the dispatching method name for a given tag symbol and optional prefix
       # (defaults to '_tag').
@@ -89,7 +114,7 @@ module WLang
       @compiler = WLang::Compiler.new(self)
     end
 
-    # dispatching
+    # meta information
 
     # Returns the dialects used to parse the blocks associated with `symbols`, as
     # previously installed by `define_tag_method`.
@@ -97,6 +122,36 @@ module WLang
       info = self.class.tag_dispatching_name(symbols, "_diatag")
       raise ArgumentError, "No tag for #{symbols}" unless respond_to?(info)
       send(info)
+    end
+
+    # rendering
+
+    # Renders `fn` to a `buffer`, optionally extending the current scope.
+    #
+    # `fn` can either be a String (immediately pushed on the buffer), a Proc (taken as a
+    # tag block to render further), or a Template (taken as a partial to render in the
+    # current scope).
+    #
+    # Is `scope` is specified, the current scope is first branched to use to new one in
+    # priority, then rendering applies and the newly created scope if then poped.
+    #
+    # Returns the rendered string.
+    #
+    def render(fn, scope = nil, buffer = "")
+      if scope.nil?
+        case fn
+        when String
+          buffer << fn
+        when Proc
+          fn.call(self, buffer)
+        when Template
+          fn.call(@scope, buffer)
+        else
+          raise ArgumentError, "Unable to render `#{fn}`"
+        end
+      else
+        with_scope(scope){ render(fn, nil, buffer) }
+      end
     end
 
   end # class Dialect
