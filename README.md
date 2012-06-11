@@ -43,7 +43,7 @@ Highlighter.render('Hello ${who}!'), who: 'you & the world'
 # => "Hello YOU & THE WORLD !"
 ```
 
-WLang already provides a few useful dialects, such as WLang::Mustang (mimicing mustache) and WLang::Html (a bit more powerful in my opinion). If they don't match your needs, it is up to you to define you own dialect for making your generation task easy. Have a look at the implementation of WLang's ones, it's pretty simple to get started!
+WLang already provides a few useful dialects, such as WLang::Html (inspired by Mustache but a bit more powerful in my opinion). If they don't match your needs, it is up to you to define you own dialect for making your generation task easy. Have a look at the implementation of WLang's ones, it's pretty simple to get started!
 
 ## Abstract semantics
 

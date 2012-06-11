@@ -1,7 +1,6 @@
 require 'spec_helper'
-require 'wlang/mustang'
 module WLang
-  describe Mustang do
+  describe "Examples in README.md" do
 
     describe "The Highlighter example" do
 
