@@ -15,8 +15,10 @@ module WLang
 
       def on_wlang(symbols, *fns)
         fns.inject [:wlang, symbols] do |rw,fn|
-          fn = Unindent.new.call(fn)
-          fn = RightStrip.new.call(fn)
+          if multiline?(fn)
+            fn = Unindent.new.call(fn)
+            fn = RightStrip.new.call(fn)
+          end
           rw << call(fn)
         end
       end

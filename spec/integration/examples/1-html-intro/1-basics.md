@@ -60,6 +60,6 @@ The last useful tag allows you to simply disable wlang rendering in specific tem
 
 For instance, the following template renders the block text unchanged, even if it contains wlang tags:
 
-     Hello ${struct.name}, how are you?
+     Hello ${struct.name}, how are you? 
 
 This is especially useful for writing blog posts explaining wlang, using wlang itself. Therefore, it is a feature mostly needed by me ;-)
