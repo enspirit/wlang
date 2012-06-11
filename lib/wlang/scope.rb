@@ -12,17 +12,19 @@ module WLang
       @root ||= RootScope.new
     end
 
-    def self.coerce(arg, parent = root)
+    def self.coerce(arg, parent = nil)
+      return arg if Scope===arg && parent.nil?
+      parent ||= root
       clazz = case arg
-      when Binding
-        BindingScope
-      when Scope
-        ProxyScope
-      when Proc
-        ProcScope
-      else
-        ObjectScope
-      end
+              when Binding
+                BindingScope
+              when Scope
+                ProxyScope
+              when Proc
+                ProcScope
+              else
+                ObjectScope
+              end
       clazz.new(arg, parent)
     end
 

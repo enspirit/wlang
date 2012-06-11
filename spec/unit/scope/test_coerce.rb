@@ -6,10 +6,6 @@ module WLang
       Scope.coerce(binding).should be_a(Scope::BindingScope)
     end
 
-    it 'recognizes Scopes' do
-      Scope.coerce(Scope.root).should be_a(Scope::ProxyScope)
-    end
-
     it 'recognizes Procs' do
       Scope.coerce(lambda{}).should be_a(Scope::ProcScope)
     end
@@ -20,6 +16,17 @@ module WLang
 
     it 'falls back to ObjectScope' do
       Scope.coerce(12).should be_a(Scope::ObjectScope)
+    end
+
+    it 'returns the Scope if nothing has to be done' do
+      Scope.coerce(Scope.root).should eq(Scope.root)
+      s = Scope.coerce({})
+      Scope.coerce(s).should eq(s)
+    end
+
+    it 'builds ProxyScope on Scopes' do
+      s = Scope.coerce({})
+      Scope.coerce(s, Scope.root).should be_a(Scope::ProxyScope)
     end
 
   end # describe Scope
