@@ -1,8 +1,24 @@
 module Tilt
   class WLangTemplate < ::Tilt::Template
 
-    def self.engine_initialized?
-      defined? ::WLang
+    class << self
+
+      def engine_initialized?
+        defined? ::WLang
+      end
+
+      def with_options(options)
+        Class.new(WLangTemplate).tap{|c| c.default_options = options }
+      end
+
+      def default_options=(options)
+        @default_options = options
+      end
+
+      def default_options
+        (superclass.default_options rescue {}).merge(@default_options || {})
+      end
+
     end
 
     def initialize_engine
@@ -12,7 +28,8 @@ module Tilt
     protected
 
       def prepare
-        @engine = WLang::Template.new(data, options)
+        opts    = self.class.default_options.merge(self.options)
+        @engine = WLang::Template.new(data, opts)
       end
 
       def evaluate(scope, locals, &block)

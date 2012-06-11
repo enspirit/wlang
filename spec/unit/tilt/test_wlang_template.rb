@@ -34,11 +34,6 @@ describe Tilt::WLangTemplate do
     3.times{|i| template.render(binding).should eq("Hello #{i}") }
   end
 
-  it 'supports passing a dialect as options' do
-    template = Tilt::WLangTemplate.new(:dialect => Upcasing){ "Hello ${who}" }
-    template.render.should eq("Hello WHO")
-  end
-
   it 'supports passing a block for yielding' do
     template = Tilt::WLangTemplate.new{ "Hello ${yield}" }
     template.render{ "world" }.should eq('Hello world')
@@ -47,6 +42,17 @@ describe Tilt::WLangTemplate do
   it 'supports expressions on yield' do
     template = Tilt::WLangTemplate.new{ "Hello ${yield.upcase}" }
     template.render{ "world" }.should eq('Hello WORLD')
+  end
+
+  it 'supports passing a dialect as options' do
+    template = Tilt::WLangTemplate.new(:dialect => Upcasing){ "Hello ${who}" }
+    template.render.should eq("Hello WHO")
+  end
+
+  it 'supports options through inheritance' do
+    tpl_class = Tilt::WLangTemplate.with_options(:dialect => Upcasing)
+    template  = tpl_class.new{ "Hello ${who}" }
+    template.render.should eq("Hello WHO")
   end
 
 end
