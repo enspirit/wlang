@@ -24,7 +24,7 @@ module WLang
       @source   = source
       @options  = options
       @dialect  = (options[:dialect] || WLang::Html)
-      @dialect_instance = @dialect.factor(options)
+      @dialect_instance = @dialect.new(options)
       @compiler = Compiler.new(dialect_instance)
       @locals   = {}
       compile

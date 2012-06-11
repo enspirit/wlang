@@ -12,7 +12,7 @@ module WLang
           tag('!$') do |buf,fn| buf << "!$" end
           tag('*')  do |buf,fn1,fn2|        end
           tag('%', [WLang::Dummy]) do |buf, fn| end
-        }.factor
+        }.new
       }
 
       describe 'find_dispatching_method' do

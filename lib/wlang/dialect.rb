@@ -5,10 +5,6 @@ module WLang
 
       # facade
 
-      def factor(options = {})
-        new(default_options.merge(options))
-      end
-
       def default_options(options = {})
         @default_options ||= (superclass.default_options.dup rescue {})
         @default_options.merge!(options)
@@ -100,7 +96,7 @@ module WLang
     attr_reader :compiler
 
     def initialize(options = {})
-      @options  = options
+      @options  = self.class.default_options.merge(options)
       @compiler = WLang::Compiler.new(self)
     end
 
