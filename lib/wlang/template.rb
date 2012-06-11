@@ -42,9 +42,7 @@ module WLang
     end
 
     def call(locals = {}, buffer = '')
-      scope = WLang::Scope.root
-      scope = scope.push(self.locals) unless self.locals.empty?
-      scope = scope.push(locals)
+      scope = WLang::Scope.chain([self.locals, locals])
       dialect_instance.dup.render @compiled, scope, buffer
     end
     alias :render :call

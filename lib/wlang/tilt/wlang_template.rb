@@ -17,7 +17,7 @@ module Tilt
 
       def evaluate(scope, locals, &block)
         locals[:yield] = block if block
-        @engine.render WLang::Scope.coerce(scope).push(locals)
+        @engine.render WLang::Scope.chain([scope, locals])
       end
 
   end

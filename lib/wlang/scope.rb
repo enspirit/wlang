@@ -28,6 +28,10 @@ module WLang
       clazz.new(arg, parent)
     end
 
+    def self.chain(scopes)
+      scopes.compact.inject(nil){|parent,child| Scope.coerce(child, parent)} || root
+    end
+
     def push(x)
       Scope.coerce(x, self)
     end
