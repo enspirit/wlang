@@ -87,20 +87,24 @@ module WLang
 
     end # class methods
 
+    # Set the default options, '{' and '}' for braces and no autospacing
     default_options :braces      => WLang::BRACES,
                     :autospacing => false
 
+    # All dialect options
     attr_reader :options
-    def braces; options[:braces]; end
 
-    attr_reader :compiler
-
+    # Creates a dialect instance with options
     def initialize(options = {})
       @options  = self.class.default_options.merge(options)
-      @compiler = WLang::Compiler.new(self)
     end
 
     # meta information
+
+    # Returns the braces to use, as set in the options
+    def braces
+      options[:braces]
+    end
 
     # Returns the dialects used to parse the blocks associated with `symbols`, as
     # previously installed by `define_tag_method`.
