@@ -46,3 +46,4 @@ module WLang
 
   end # describe Dialect, 'evaluate'
 end # module WLang
+

@@ -94,8 +94,17 @@ module WLang
     # All dialect options
     attr_reader :options
 
+    # The template that uses this dialect instance to render
+    attr_reader :template
+
     # Creates a dialect instance with options
-    def initialize(options = {})
+    def initialize(*args)
+      template, options = nil, {}
+      args.each do |arg|
+        options  = arg.to_hash if arg.respond_to?(:to_hash)
+        template = arg if Template===arg
+      end
+      @template = template
       @options  = self.class.default_options.merge(options)
     end
 
