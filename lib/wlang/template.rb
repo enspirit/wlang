@@ -7,7 +7,7 @@ module WLang
     # Compilation options for the template, as initially passed to `new`
     attr_reader :options
 
-    # Main dialect of the template
+    # The dialect class to use
     attr_reader :dialect
 
     # The dialect instance used for compilation and rendering
@@ -21,11 +21,10 @@ module WLang
 
     # Creates a template instance
     def initialize(source, options = {})
-      @source   = source
-      @options  = options
-      @dialect  = (options[:dialect] || WLang::Html)
+      @source, @options = source, options
+      @dialect          = @options.delete(:dialect) || WLang::Html
       @dialect_instance = @dialect.new(options)
-      @compiler = Compiler.new(dialect_instance)
+      @compiler         = Compiler.new(dialect_instance)
       compile
     end
 
