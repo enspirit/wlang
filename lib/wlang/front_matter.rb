@@ -6,7 +6,7 @@ module WLang
 
     def initialize(text, compiler)
       @locals      = {}
-      @source_text = text
+      @source_text = text.to_s
       compile(compiler)
     end
 

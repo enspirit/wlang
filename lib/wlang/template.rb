@@ -30,15 +30,15 @@ module WLang
     end
 
     def to_ruby_proc
-      compiler.to_ruby_proc(source)
+      compiler.to_ruby_proc(source_text)
     end
 
     def to_ruby_code
-      compiler.to_ruby_code(source)
+      compiler.to_ruby_code(source_text)
     end
 
     def to_ast
-      compiler.to_ast(source)
+      compiler.to_ast(source_text)
     end
 
     def call(locals = {}, buffer = '')
@@ -68,13 +68,7 @@ module WLang
       end
 
       def source_text
-        if to_path = [:path, :to_path].find{|m| @source.respond_to?(m)}
-          File.read(@source.send(to_path))
-        elsif meth = [:read, :to_str].find{|m| @source.respond_to?(m)}
-          @source.send(meth)
-        else
-          raise ArgumentError, "Invalid template source `#{@source}`"
-        end
+        Source.new(source).raw_text
       end
 
   end # class Template
