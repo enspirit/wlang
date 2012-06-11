@@ -73,6 +73,7 @@ module WLang
         # append explicit locals
         locals.merge!(yaml.delete("locals") || {})
 
+        # compile and append explicit partials
         partials = yaml.delete("partials")
         partials.each_pair do |k,tpl|
           locals[k] = compiler.to_ruby_proc(tpl)
