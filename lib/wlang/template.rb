@@ -26,7 +26,6 @@ module WLang
       @dialect  = (options[:dialect] || WLang::Html)
       @dialect_instance = @dialect.new(options)
       @compiler = Compiler.new(dialect_instance)
-      @locals   = {}
       compile
     end
 
@@ -58,29 +57,14 @@ module WLang
       end
 
       def compile
-        text = source_text
-        if yaml_front_matter? and text =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
-          compile_yaml_front_matter($1)
-          text = $'
+        if yaml_front_matter?
+          front = FrontMatter.new(source_text, compiler)
+          @locals   = front.locals
+          @compiled = compiler.to_ruby_proc(front.source_text)
+        else
+          @locals = {}
+          @compiled = compiler.to_ruby_proc(source_text)
         end
-        @compiled = compiler.to_ruby_proc(text)
-      end
-
-      def compile_yaml_front_matter(yaml)
-        require 'yaml'
-        yaml = YAML::load(yaml)
-
-        # append explicit locals
-        locals.merge!(yaml.delete("locals") || {})
-
-        # compile and append explicit partials
-        partials = yaml.delete("partials")
-        partials.each_pair do |k,tpl|
-          locals[k] = compiler.to_ruby_proc(tpl)
-        end if partials
-
-        # append remaining data
-        locals.merge!(yaml) unless yaml.empty?
       end
 
       def source_text
