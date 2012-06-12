@@ -34,3 +34,4 @@ require 'wlang/template'
 require 'wlang/dialect'
 require 'wlang/scope'
 require 'wlang/html'
+require 'wlang/tilt' if defined?(::Tilt)
