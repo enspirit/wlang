@@ -28,7 +28,8 @@ module Tilt
     protected
 
       def prepare
-        opts    = self.class.default_options.merge(self.options)
+        opts = self.class.default_options.merge(self.options)
+        opts.merge!(:path => file) if file
         @engine = WLang::Template.new(data, opts)
       end
 

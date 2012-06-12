@@ -21,7 +21,7 @@ module WLang
     end
 
     def path
-      @source.path
+      @options[:path] || @source.path
     end
 
     def locals

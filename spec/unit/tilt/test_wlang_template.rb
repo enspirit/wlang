@@ -44,6 +44,13 @@ describe Tilt::WLangTemplate do
     template.render{ "world" }.should eq('Hello WORLD')
   end
 
+  it 'passes :path option to the underlying template' do
+    tpl = Tilt::WLangTemplate.new(hello_path.to_s)
+    tpl = tpl.send(:prepare)
+    tpl.should be_a(WLang::Template)
+    tpl.path.should eq(hello_path.to_s)
+  end
+
   it 'supports passing a dialect as options' do
     template = Tilt::WLangTemplate.new(:dialect => Upcasing){ "Hello ${who}" }
     template.render.should eq("Hello WHO")
