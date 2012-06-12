@@ -127,7 +127,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
   s.add_development_dependency("rspec", "~> 2.10.0")
-  s.add_development_dependency("epath", "~> 0.1.0")
   s.add_development_dependency("yard", "~> 0.8.1")
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_dependency("citrus", "~> 2.4.1")
@@ -135,6 +134,7 @@ Gem::Specification.new do |s|
   s.add_dependency("backports", "~> 2.6.1")
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("awesome_print", "~> 1.0.2")
+  s.add_dependency("epath", ">= 0.2")
 
   # The version of ruby required by this gem
   #
