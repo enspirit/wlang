@@ -30,7 +30,6 @@ module WLang
 end # module WLang
 require 'wlang/compiler'
 require 'wlang/source'
-require 'wlang/front_matter'
 require 'wlang/template'
 require 'wlang/dialect'
 require 'wlang/scope'

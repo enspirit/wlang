@@ -1,71 +1,64 @@
 module WLang
   class Template
 
-    # Source of this template, as initially passed to `new`
-    attr_reader :source
-
     # Compilation options for the template, as initially passed to `new`
     attr_reader :options
 
     # The dialect class to use
     attr_reader :dialect
 
-    # The dialect instance used for compilation and rendering
-    attr_reader :dialect_instance
-
     # The underlying template compiler
     attr_reader :compiler
 
-    # The loaded locals
-    attr_reader :locals
-
     # Creates a template instance
     def initialize(source, options = {})
-      @source, @options = source, options
+      @options          = options
       @dialect          = @options.delete(:dialect) || WLang::Html
       @dialect_instance = @dialect.new(options, self)
       @compiler         = Compiler.new(dialect_instance)
-      compile
+      @source           = build_source(source)
+      @compiled         = to_ruby_proc
     end
 
     def to_ruby_proc
-      compiler.to_ruby_proc(source_text)
+      compiler.to_ruby_proc(template_content)
     end
 
     def to_ruby_code
-      compiler.to_ruby_code(source_text)
+      compiler.to_ruby_code(template_content)
     end
 
     def to_ast
-      compiler.to_ast(source_text)
+      compiler.to_ast(template_content)
     end
 
-    def call(locals = {}, buffer = '')
-      scope = WLang::Scope.chain([self.locals, locals])
-      dialect_instance.dup.render @compiled, scope, buffer
+    def call(locs = {}, buffer = '')
+      scope = WLang::Scope.chain([locals, locs])
+      dialect_instance.dup.render compiled, scope, buffer
     end
     alias :render :call
 
     private
+
+      attr_reader :source, :compiled, :dialect_instance
+
+      def template_content
+        @source.template_content
+      end
+
+      def locals
+        @source.locals
+      end
 
       def yaml_front_matter?
         opt = options[:yaml_front_matter]
         opt.nil? or opt
       end
 
-      def compile
-        if yaml_front_matter?
-          front = FrontMatter.new(source_text, compiler)
-          @locals   = front.locals
-          @compiled = compiler.to_ruby_proc(front.source_text)
-        else
-          @locals = {}
-          @compiled = compiler.to_ruby_proc(source_text)
-        end
-      end
-
-      def source_text
-        Source.new(source).raw_text
+      def build_source(source)
+        source = Source::Raw.new(source)
+        source = Source::FrontMatter.new(source, self) if yaml_front_matter?
+        source
       end
 
   end # class Template
