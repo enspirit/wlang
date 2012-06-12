@@ -8,11 +8,6 @@ group :runtime do
   gem "awesome_print", "~> 1.0.2"
 end
 
-group :profiling do
-  gem "ruby-prof", "~> 0.11.2"
-  gem "mustache", "~> 0.99.4"
-end
-
 group :development do
   gem "tilt", "~> 1.3"
   gem "rake", "~> 0.9.2"

@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "WLang is a general-purpose *code generation*/*templating engine*. It's main aim is to help you generating\nweb pages, sql queries, ruby code (that is, generating code in general) without having to worry too much \nabout html entities encoding, sql back quoting, string escaping and the like. WLang proposes a generic \nengine that you can extend to fit your needs. It also proposes standard instantiations of this engine \nfor common tasks such as creating SQL queries, instantiating web pages, and so on."
+  s.description = "WLang is a general-purpose *code generation*/*templating engine*. It's main aim is to\nhelp you generating web pages, sql queries, ruby code (that is, generating text in\ngeneral) without having to worry too much about html entities encoding, sql back\nquoting, string escaping and the like. WLang proposes a generic engine that you can\neasily extend to fit your needs. It also proposes standard instantiations of this\nengine for common tasks such as rendering HTML web pages."
 
   # The URL of this gem home page (optional)
   s.homepage = "http://github.com/blambeau/wlang"
@@ -123,8 +123,7 @@ Gem::Specification.new do |s|
   # One call to add_development_dependency('gem_name', 'gem version requirement')
   # for each development dependency. These gems are required for developers
   #
-  s.add_development_dependency("ruby-prof", "~> 0.11.2")
-  s.add_development_dependency("mustache", "~> 0.99.4")
+  s.add_development_dependency("tilt", "~> 1.3")
   s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
   s.add_development_dependency("rspec", "~> 2.10.0")
