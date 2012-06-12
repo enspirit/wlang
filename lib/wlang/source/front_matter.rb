@@ -4,8 +4,6 @@ module WLang
 
       def initialize(*args, &block)
         super
-        @locals = {}
-        @template_content = subject.to_str
         compile
       end
 
@@ -24,22 +22,28 @@ module WLang
         end
 
         def compile
-          return unless template_content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
+          raw = raw_content
+          if raw =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
+            @locals, @template_content = {}, $'
 
-          require 'yaml'
-          yaml, @template_content = YAML::load($1), $'
+            require 'yaml'
+            yaml = YAML::load($1)
 
-          # append explicit locals
-          @locals.merge!(yaml.delete("locals") || {})
+            # append explicit locals
+            @locals.merge!(yaml.delete("locals") || {})
 
-          # compile explicit partials
-          partials = yaml.delete("partials") || {}
-          partials.each_pair do |k,tpl|
-            @locals[k] = compiler.to_ruby_proc(tpl)
+            # compile explicit partials
+            partials = yaml.delete("partials") || {}
+            partials.each_pair do |k,tpl|
+              @locals[k] = compiler.to_ruby_proc(tpl)
+            end
+
+            # append remaining data
+            @locals.merge!(yaml) unless yaml.empty?
+          else
+            @locals = {}
+            @template_content = raw
           end
-
-          # append remaining data
-          @locals.merge!(yaml) unless yaml.empty?
         end
 
     end

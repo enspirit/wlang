@@ -16,8 +16,20 @@ module WLang
       @dialect          = @options.delete(:dialect) || WLang::Html
       @dialect_instance = @dialect.new(options, self)
       @compiler         = Compiler.new(dialect_instance)
-      @source           = build_source(source)
+      @source           = Source.new(source, self).with_front_matter(yaml_front_matter?)
       @compiled         = to_ruby_proc
+    end
+
+    def path
+      @source.path
+    end
+
+    def locals
+      @source.locals
+    end
+
+    def template_content
+      @source.template_content
     end
 
     def to_ruby_proc
@@ -42,23 +54,9 @@ module WLang
 
       attr_reader :source, :compiled, :dialect_instance
 
-      def template_content
-        @source.template_content
-      end
-
-      def locals
-        @source.locals
-      end
-
       def yaml_front_matter?
         opt = options[:yaml_front_matter]
         opt.nil? or opt
-      end
-
-      def build_source(source)
-        source = Source::Raw.new(source)
-        source = Source::FrontMatter.new(source, self) if yaml_front_matter?
-        source
       end
 
   end # class Template
