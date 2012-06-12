@@ -19,5 +19,13 @@ module WLang
       it{ should eq(File.read(__FILE__)) }
     end
 
+    it 'is aliased as to_s' do
+      Source.new("raw text").to_s.should eq("raw text")
+    end
+
+    it 'is aliased as to_str' do
+      Source.new("raw text").to_str.should eq("raw text")
+    end
+
   end
 end

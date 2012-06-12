@@ -16,7 +16,8 @@ module WLang
         raise ArgumentError, "Invalid template source `#{@arg}`"
       end
     end
-    alias :to_s :raw_text
+    alias :to_str :raw_text
+    alias :to_s   :raw_text
 
   private
 
