@@ -131,7 +131,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_dependency("citrus", "~> 2.4.1")
   s.add_dependency("temple", "~> 0.4.0")
-  s.add_dependency("backports", "~> 2.6.1")
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("awesome_print", "~> 1.0.2")
   s.add_dependency("epath", ">= 0.2")

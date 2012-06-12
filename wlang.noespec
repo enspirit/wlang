@@ -3,9 +3,6 @@ template-info:
   version: 1.7.4
   links:
     source: https://github.com/blambeau/noe
-  manifest:
-    lib/__lower__/loader.rb:
-      safe-override: false
 variables:
   lower: 
     wlang
@@ -33,7 +30,6 @@ variables:
   dependencies:
     - {name: citrus,        version: "~> 2.4.1",   groups: [runtime]}
     - {name: temple,        version: "~> 0.4.0",   groups: [runtime]}
-    - {name: backports,     version: "~> 2.6.1",   groups: [runtime]}
     - {name: quickl,        version: "~> 0.4.3",   groups: [runtime]}
     - {name: awesome_print, version: "~> 1.0.2",   groups: [runtime]}
     - {name: epath,         version: ">= 0.2",     groups: [runtime]}
