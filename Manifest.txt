@@ -1,6 +1,5 @@
 wlang.gemspec
 wlang.noespec
-.gemtest
 CHANGELOG.md
 Gemfile
 Gemfile.lock
@@ -12,4 +11,3 @@ Rakefile
 README.md
 spec/**/*
 tasks/**/*
-test/**/*
