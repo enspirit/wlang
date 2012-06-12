@@ -9,7 +9,7 @@ variables:
   upper:
     WLang
   version:
-    2.0.0.beta
+    2.0.0
   summary: |-
     WLang is a powerful code generation and templating engine
   description: |-
