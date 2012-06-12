@@ -6,6 +6,7 @@ group :runtime do
   gem "quickl", "~> 0.4.3"
   gem "awesome_print", "~> 1.0.2"
   gem "epath", ">= 0.2"
+  gem "backports", "~> 2.6"
 end
 
 group :development do

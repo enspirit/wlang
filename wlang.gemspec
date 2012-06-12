@@ -134,6 +134,7 @@ Gem::Specification.new do |s|
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("awesome_print", "~> 1.0.2")
   s.add_dependency("epath", ">= 0.2")
+  s.add_dependency("backports", "~> 2.6")
 
   # The version of ruby required by this gem
   #
