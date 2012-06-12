@@ -23,7 +23,7 @@ module WLang
     def initialize(source, options = {})
       @source, @options = source, options
       @dialect          = @options.delete(:dialect) || WLang::Html
-      @dialect_instance = @dialect.new(options)
+      @dialect_instance = @dialect.new(options, self)
       @compiler         = Compiler.new(dialect_instance)
       compile
     end
