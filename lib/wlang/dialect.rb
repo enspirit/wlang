@@ -139,14 +139,11 @@ module WLang
     def render(fn, scope = nil, buffer = "")
       if scope.nil?
         case fn
-        when String
-          buffer << fn
-        when Proc
-          fn.call(self, buffer)
-        when Template
-          fn.call(@scope, buffer)
-        else
-          raise ArgumentError, "Unable to render `#{fn}`"
+          when String   then buffer << fn
+          when Proc     then fn.call(self, buffer)
+          when Template then fn.call(@scope, buffer)
+          else
+            raise ArgumentError, "Unable to render `#{fn}`"
         end
         buffer
       else

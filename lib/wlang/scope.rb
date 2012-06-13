@@ -15,12 +15,12 @@ module WLang
     def self.coerce(arg, parent = nil)
       return arg if Scope===arg && parent.nil?
       clazz = case arg
-              when Binding then BindingScope
-              when Scope   then ProxyScope
-              when Proc    then ProcScope
-              else
-                ObjectScope
-              end
+        when Binding then BindingScope
+        when Scope   then ProxyScope
+        when Proc    then ProcScope
+        else
+          ObjectScope
+      end
       clazz.new(arg, parent)
     end
 
