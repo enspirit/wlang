@@ -6,8 +6,12 @@ module WLang
         super(nil,nil)
       end
 
+      def push(x)
+        Scope.coerce(x)
+      end
+
       def pop
-        raise "Unable to pop from root scope"
+        nil
       end
 
       def fetch(key)

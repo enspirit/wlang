@@ -13,10 +13,19 @@ module WLang
         lambda{ scope.fetch(:self) }.should throw_symbol(:fail)
       end
 
-      it 'raises on pop' do
-        lambda{ scope.pop }.should raise_error
+      it 'returns pushed scope on push' do
+        pushed = ObjectScope.new(12, nil)
+        scope.push(pushed).should eq(pushed)
       end
 
-    end # describe ProxyScope
+      it 'coerces pushed scope on push' do
+        scope.push(12).should be_a(ObjectScope)
+      end
+
+      it 'returns nil on pop' do
+        scope.pop.should be_nil
+      end
+
+    end # describe NullScope
   end # class Scope
 end # module WLang
