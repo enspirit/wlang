@@ -26,4 +26,15 @@ describe "ruby assumptions" do
     lambda{|fn1,fn2|}.arity.should eq(2)
   end
 
+  it 'allows using a Proc usable in a case statement' do
+    proc = lambda{|x| x > 10}
+    [ 17, 3 ].map{|x|
+      case x
+        when proc then x*10
+        else
+          x
+      end
+    }.should eq([170, 3])
+  end
+
 end
