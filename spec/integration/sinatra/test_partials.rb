@@ -7,18 +7,29 @@ describe 'Integration with Sinatra for partials' do
     sinatra_app do
       set :accessible, "world"
       set :views, fixtures_folder/'templates'
+      template :internal_partial do
+        "Hello ${who}!"
+      end
       helpers do
         def accessible; settings.accessible; end
       end
-      get '/' do
-        wlang :hello_from_sinatra, :locals => {:who => "sinatra"}
+      get '/external' do
+        wlang ">{hello}", :locals => {:who => "sinatra"}
+      end
+      get '/internal' do
+        wlang ">{internal_partial}", :locals => {:who => "sinatra"}
       end
     end
   }
 
-  it 'renders partials correcty' do
-    get '/'
-    last_response.body.should eq("Hello Hello sinatra!!\n")
+  it 'renders external partials correcty' do
+    get '/external'
+    last_response.body.should eq("Hello sinatra!")
+  end
+
+  it 'renders internal partials correcty' do
+    get '/internal'
+    last_response.body.should eq("Hello sinatra!")
   end
 
 end

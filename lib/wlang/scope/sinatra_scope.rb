@@ -14,6 +14,15 @@ module WLang
     private
 
       def find_partial(key, app)
+        find_internal_partial(key, app) || find_external_partial(key, app)
+      end
+
+      def find_internal_partial(key, app)
+        return unless app.settings.templates[key]
+        app.send(:compile_template, :wlang, key, {}, app.settings.views)
+      end
+
+      def find_external_partial(key, app)
         views = app.settings.views
         find_files(views, key) do |file|
           if engine = Tilt[file]
