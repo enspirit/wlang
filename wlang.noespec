@@ -44,3 +44,4 @@ variables:
     - {name: yard,          version: "~> 0.8.1",   groups: [development]}
     - {name: bluecloth,     version: "~> 2.2.0",   groups: [development]}
     - {name: sinatra,       version: ">= 1.4",     groups: [development]}
+    - {name: rack-test,     version: "~> 0.6.1",   groups: [development]}

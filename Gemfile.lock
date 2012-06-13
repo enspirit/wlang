@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/sinatra/sinatra
+  revision: 8752085a05c33edd13d3ec8d3187d1406456d404
+  specs:
+    sinatra (1.4.0)
+      rack (~> 1.3, >= 1.3.6)
+      rack-protection (~> 1.2)
+      tilt (~> 1.3, >= 1.3.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -8,6 +17,11 @@ GEM
     diff-lcs (1.1.3)
     epath (0.2.0)
     quickl (0.4.3)
+    rack (1.4.1)
+    rack-protection (1.2.0)
+      rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
     rake (0.9.2.2)
     rspec (2.10.0)
       rspec-core (~> 2.10.0)
@@ -32,8 +46,10 @@ DEPENDENCIES
   citrus (~> 2.4.1)
   epath (>= 0.2)
   quickl (~> 0.4.3)
+  rack-test (~> 0.6.1)
   rake (~> 0.9.2)
   rspec (~> 2.10.0)
+  sinatra!
   temple (~> 0.4.0)
   tilt (~> 1.3)
   yard (~> 0.8.1)
