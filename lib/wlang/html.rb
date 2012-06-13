@@ -5,11 +5,6 @@ module WLang
 
     module Helpers
 
-      def value_of(fn, *defaults)
-        evaluate(render(fn).to_s.strip, *defaults)
-      end
-      private :value_of
-
       def to_html(val)
         val = val.to_html if val.respond_to?(:to_html)
         val = to_html(val.call) if val.is_a?(Proc)
@@ -28,12 +23,12 @@ module WLang
     module HighOrderFunctions
 
       def bang(buf, fn)
-        val = value_of(fn).to_s
+        val = evaluate(fn).to_s
         render(val, nil, buf)
       end
 
       def plus(buf, fn)
-        val = value_of(fn)
+        val = evaluate(fn)
         val = to_html(val) unless val.is_a?(Template)
         render(val, nil, buf)
       end
@@ -56,7 +51,7 @@ module WLang
       end
 
       def question(buf, fn_if, fn_then, fn_else)
-        val   = value_of(fn_if)
+        val   = evaluate(fn_if)
         val   = val.call if Proc===val
         block = val ? fn_then : fn_else
         render(block, nil, buf) if block
@@ -67,7 +62,7 @@ module WLang
       end
 
       def star(buf, coll_fn, elm_fn, between_fn)
-        collection = value_of(coll_fn)
+        collection = evaluate(coll_fn)
         collection.each_with_index do |elm,i|
           render(between_fn, elm, buf) if between_fn and (i > 0)
           render(elm_fn, elm, buf)
@@ -75,13 +70,13 @@ module WLang
       end
 
       def greater(buf, fn)
-        val = value_of(fn)
+        val = evaluate(fn)
         val = Html.compile(val) if String === val
         render(val, nil, buf)
       end
 
       def sharp(buf, who_fn, then_fn)
-        val = value_of(who_fn, nil)
+        val = evaluate(who_fn, nil)
         if val and not(val.respond_to?(:empty?) and val.empty?)
           render(then_fn, val, buf)
         end

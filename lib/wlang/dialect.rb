@@ -190,6 +190,7 @@ module WLang
         evaluate(render(expr), *default)
       end
     end
+    alias :value_of :evaluate
 
   end # class Dialect
 end # module WLang
