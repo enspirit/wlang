@@ -72,7 +72,7 @@ module WLang
       def greater(buf, fn)
         val = evaluate(fn)
         val = Html.compile(val) if String === val
-        val = val.call if Proc === val and val.arity==0
+        val = val.call if Proc === val and val.arity<=0
         render(val, nil, buf)
       end
 
