@@ -1,6 +1,6 @@
 module WLang
   class Scope
-    class RootScope < Scope
+    class NullScope < Scope
 
       def initialize
         super(nil,nil)
@@ -15,10 +15,10 @@ module WLang
       end
 
       def inspect
-        "RootScope"
+        "NullScope"
       end
       alias :to_s :inspect
 
-    end # class RootScope
+    end # class NullScope
   end # class Scope
 end # module WLang

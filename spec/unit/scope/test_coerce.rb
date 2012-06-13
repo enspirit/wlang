@@ -19,14 +19,14 @@ module WLang
     end
 
     it 'returns the Scope if nothing has to be done' do
-      Scope.coerce(Scope.root).should eq(Scope.root)
+      Scope.coerce(Scope.null).should eq(Scope.null)
       s = Scope.coerce({})
       Scope.coerce(s).should eq(s)
     end
 
     it 'builds ProxyScope on Scopes' do
       s = Scope.coerce({})
-      Scope.coerce(s, Scope.root).should be_a(Scope::ProxyScope)
+      Scope.coerce(s, Scope.null).should be_a(Scope::ProxyScope)
     end
 
   end # describe Scope

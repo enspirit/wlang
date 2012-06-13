@@ -8,13 +8,13 @@ module WLang
       @subject, @parent = subject, parent
     end
 
-    def self.root
-      @root ||= RootScope.new
+    def self.null
+      @null ||= NullScope.new
     end
 
     def self.coerce(arg, parent = nil)
       return arg if Scope===arg && parent.nil?
-      parent ||= root
+      parent ||= null
       clazz = case arg
               when Binding
                 BindingScope
@@ -29,7 +29,9 @@ module WLang
     end
 
     def self.chain(scopes)
-      scopes.compact.inject(nil){|parent,child| Scope.coerce(child, parent)} || root
+      scopes.compact.inject(nil){|parent,child|
+        Scope.coerce(child, parent)
+      } || null
     end
 
     def push(x)
@@ -59,7 +61,7 @@ module WLang
 
   end # class Scope
 end # module WLang
-require 'wlang/scope/root_scope'
+require 'wlang/scope/null_scope'
 require 'wlang/scope/proxy_scope'
 require 'wlang/scope/object_scope'
 require 'wlang/scope/binding_scope'

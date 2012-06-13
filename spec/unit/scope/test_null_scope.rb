@@ -1,9 +1,9 @@
 require 'spec_helper'
 module WLang
   class Scope
-    describe RootScope do
+    describe NullScope do
 
-      let(:scope){ RootScope.new }
+      let(:scope){ NullScope.new }
 
       it 'throws on fetch' do
         lambda{ scope.fetch(:who) }.should throw_symbol(:fail)
