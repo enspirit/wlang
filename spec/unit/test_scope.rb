@@ -55,6 +55,11 @@ module WLang
       scope.evaluate(:nosuchone, 12).should eq(12)
     end
 
+    it 'supports a default value through a block instead of fail' do
+      scope.evaluate(:nosuchone){ 12 }.should eq(12)
+      scope.evaluate(:nosuchone){ nil }.should be_nil
+    end
+
     it 'supports nil as default value' do
       scope.evaluate(:nosuchone, nil).should be_nil
     end

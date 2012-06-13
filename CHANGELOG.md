@@ -14,6 +14,9 @@
   is the first argument of Dialect#render and Template#render. In Sinatra/Tilt situation,
   this simply correspond to the `scope`, typically the Sinatra app.
 
+* Scope#evaluate now accepts an optional block for specifying a computed default value
+  instead of failing.
+
 # 2.0.1 / 2012-06-12
 
 * Fix support for 1.8.7 and jruby (undefined method `ord' for String)

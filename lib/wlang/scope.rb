@@ -43,10 +43,16 @@ module WLang
       yield(self.push(x))
     end
 
-    def evaluate(expr, *default)
-      unfound = lambda{ default.empty? ? throw(:fail) : default.first }
-      expr    = expr.to_s.strip
-      if expr.to_s.index('.').nil?
+    def evaluate(expr, *default, &bl)
+      expr = expr.to_s.strip
+      unfound = lambda do
+        if default.empty?
+          bl ? bl.call(expr) : throw(:fail)
+        else
+          default.first
+        end
+      end
+      if expr.index('.').nil?
         fetch(expr.to_sym, &unfound)
       else
         keys = expr.split('.').map(&:to_sym)
