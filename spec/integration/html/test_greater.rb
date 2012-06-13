@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'wlang/html'
 module WLang
   describe Html, ">{...}" do
 
@@ -22,6 +21,11 @@ module WLang
     it 'compiles a String to a Template' do
       who     = "World"
       partial = "${who}"
+      render("Hello >{partial}", binding).should eq("Hello World")
+    end
+
+    it 'call a Proc as +{...} does' do
+      partial = Proc.new{ "World" }
       render("Hello >{partial}", binding).should eq("Hello World")
     end
 

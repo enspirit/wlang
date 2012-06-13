@@ -17,6 +17,9 @@
 * Dialect#evaluate (through Scope#evaluate) now accepts an optional block for specifying
   a computed default value instead of failing.
 
+* WLang::Html partial tag >{...} now recognizes a Proc and simply renders the result of
+  calling it. This allows to use >{yield} in layouts instead of the less idomatic +{yield}.
+
 # 2.0.1 / 2012-06-12
 
 * Fix support for 1.8.7 and jruby (undefined method `ord' for String)
