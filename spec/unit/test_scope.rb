@@ -2,12 +2,11 @@ require 'spec_helper'
 module WLang
   describe Scope do
 
-    let(:scope){ Scope.coerce({:who => "World"}, Scope.null) }
+    let(:scope){ Scope.coerce({:who => "World"}) }
 
     it 'acts like a stack' do
       s = scope
       s.evaluate(:who).should eq("World")
-      lambda{ s.pop.evaluate(:who) }.should throw_symbol(:fail)
       s = scope.push(:who => "World2")
       s.evaluate(:who).should eq("World2")
       s = s.pop
@@ -29,9 +28,9 @@ module WLang
     end
 
     it 'gives access to the root' do
-      scope.root.should eq(Scope.null)
+      scope.root.should eq(scope)
       scope.with(:other => "World2") do |s|
-        s.root.should eq(Scope.null)
+        s.root.should eq(scope)
       end
     end
 

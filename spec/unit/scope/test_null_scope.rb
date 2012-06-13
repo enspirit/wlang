@@ -14,7 +14,7 @@ module WLang
       end
 
       it 'returns pushed scope on push' do
-        pushed = ObjectScope.new(12, nil)
+        pushed = ObjectScope.new(12)
         scope.push(pushed).should eq(pushed)
       end
 

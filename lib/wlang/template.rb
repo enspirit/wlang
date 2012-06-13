@@ -44,8 +44,8 @@ module WLang
       compiler.to_ast(template_content)
     end
 
-    def call(locs = {}, buffer = '')
-      scope = WLang::Scope.chain([locals, locs])
+    def call(locals = {}, buffer = '')
+      scope = WLang::Scope.chain([self.locals, locals])
       dialect_instance.dup.render compiled, scope, buffer
     end
     alias :render :call

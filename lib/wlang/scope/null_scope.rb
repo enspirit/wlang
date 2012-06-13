@@ -3,15 +3,7 @@ module WLang
     class NullScope < Scope
 
       def initialize
-        super(nil,nil)
-      end
-
-      def push(x)
-        Scope.coerce(x)
-      end
-
-      def pop
-        nil
+        super(nil)
       end
 
       def fetch(key)
@@ -22,6 +14,16 @@ module WLang
         "NullScope"
       end
       alias :to_s :inspect
+
+    protected
+
+      def append(x)
+        x
+      end
+
+      def prepend(x)
+        x
+      end
 
     end # class NullScope
   end # class Scope

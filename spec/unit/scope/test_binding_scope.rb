@@ -10,7 +10,7 @@ module WLang
       end
 
       it 'delegates fetch to its parent when not found' do
-        scope = Scope.coerce(binding, Scope.coerce(:who => "World"))
+        scope = Scope.coerce(:who => "World").push(binding)
         scope.fetch(:who).should eq("World")
       end
 

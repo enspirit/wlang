@@ -1,8 +1,8 @@
 module WLang
   describe Scope, '.chain' do
 
-    it 'returns nil on empty chain' do
-      Scope.chain([]).should be_nil
+    it 'returns the NullScope on empty chain' do
+      Scope.chain([]).should eq(Scope.null)
     end
 
     it 'returns a single scope on singleton' do

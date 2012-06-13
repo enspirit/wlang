@@ -4,38 +4,35 @@ module WLang
     attr_reader :subject
     attr_reader :parent
 
-    def initialize(subject, parent)
-      @subject, @parent = subject, parent
+    def initialize(subject)
+      @subject = subject
+      @parent  = nil
     end
 
     def self.null
       @null ||= NullScope.new
     end
 
-    def self.coerce(arg, parent = nil)
-      return arg if Scope===arg && parent.nil?
-      clazz = case arg
-        when Binding then BindingScope
-        when Scope   then ProxyScope
-        when Proc    then ProcScope
+    def self.coerce(arg)
+      case arg
+        when Binding then BindingScope.new(arg)
+        when Scope   then arg
+        when Proc    then ProcScope.new(arg)
         else
-          ObjectScope
+          ObjectScope.new(arg)
       end
-      clazz.new(arg, parent)
     end
 
     def self.chain(scopes)
-      scopes.compact.inject(nil){|parent,child|
-        Scope.coerce(child, parent)
-      }
+      scopes.compact.inject(Scope.null){|p,c| p.push(c)}
     end
 
     def root
-      parent.nil? ? self : parent.root
+      parent ? parent.root : self
     end
 
     def push(x)
-      Scope.coerce(x, self)
+      append(Scope.coerce(x))
     end
 
     def pop
@@ -61,6 +58,20 @@ module WLang
 
     protected
 
+      def append(x)
+        x.prepend(self)
+      end
+
+      def prepend(x)
+        newp = parent ? parent.prepend(x) : x
+        dup.with_parent!(newp)
+      end
+
+      def with_parent!(p)
+        @parent = p
+        self
+      end
+
       def safe_parent
         parent || Scope.null
       end
@@ -68,7 +79,6 @@ module WLang
   end # class Scope
 end # module WLang
 require 'wlang/scope/null_scope'
-require 'wlang/scope/proxy_scope'
 require 'wlang/scope/object_scope'
 require 'wlang/scope/binding_scope'
 require 'wlang/scope/proc_scope'

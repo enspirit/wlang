@@ -24,9 +24,9 @@ module WLang
       Scope.coerce(s).should eq(s)
     end
 
-    it 'builds ProxyScope on Scopes' do
+    it 'returns the Scope on a Scope' do
       s = Scope.coerce({})
-      Scope.coerce(s, Scope.null).should be_a(Scope::ProxyScope)
+      Scope.coerce(s).should eq(s)
     end
 
   end # describe Scope
