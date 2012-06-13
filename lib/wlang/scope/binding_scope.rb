@@ -5,7 +5,7 @@ module WLang
       def fetch(k, &blk)
         subject.eval(k.to_s)
       rescue NameError
-        parent.fetch(k, &blk)
+        safe_parent.fetch(k, &blk)
       end
 
       def inspect

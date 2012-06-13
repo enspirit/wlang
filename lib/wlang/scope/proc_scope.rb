@@ -4,7 +4,7 @@ module WLang
 
       def fetch(key, &blk)
         Scope.coerce(subject.call).fetch(key) do
-          parent.fetch(key, &blk)
+          safe_parent.fetch(key, &blk)
         end
       end
 

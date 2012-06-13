@@ -2,7 +2,7 @@ require 'spec_helper'
 module WLang
   describe Scope do
 
-    let(:scope){ Scope.coerce({:who => "World"}) }
+    let(:scope){ Scope.coerce({:who => "World"}, Scope.null) }
 
     it 'acts like a stack' do
       s = scope

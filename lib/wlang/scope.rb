@@ -14,14 +14,10 @@ module WLang
 
     def self.coerce(arg, parent = nil)
       return arg if Scope===arg && parent.nil?
-      parent ||= null
       clazz = case arg
-              when Binding
-                BindingScope
-              when Scope
-                ProxyScope
-              when Proc
-                ProcScope
+              when Binding then BindingScope
+              when Scope   then ProxyScope
+              when Proc    then ProcScope
               else
                 ObjectScope
               end
@@ -31,7 +27,7 @@ module WLang
     def self.chain(scopes)
       scopes.compact.inject(nil){|parent,child|
         Scope.coerce(child, parent)
-      } || null
+      }
     end
 
     def push(x)
@@ -58,6 +54,12 @@ module WLang
         }.subject
       end
     end
+
+    protected
+
+      def safe_parent
+        parent || Scope.null
+      end
 
   end # class Scope
 end # module WLang

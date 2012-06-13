@@ -4,15 +4,26 @@ module WLang
 
       def fetch(k, &blk)
         s = subject
-        return s if k == :self
+
+        # self special case
+        if k == :self
+          return s
+        end
+
+        # hash indirect access
         if s.respond_to?(:has_key?)
-          return s[k] if s.has_key?(k)
+          return s[k]      if s.has_key?(k)
           return s[k.to_s] if s.has_key?(k.to_s)
         end
-        return s.send(k) if s.respond_to?(k)
-        parent.fetch(k, &blk)
+
+        # getter
+        if s.respond_to?(k)
+          return s.send(k)
+        end
+
+        safe_parent.fetch(k, &blk)
       rescue NameError
-        parent.fetch(k, &blk)
+        safe_parent.fetch(k, &blk)
       end
 
       def inspect
