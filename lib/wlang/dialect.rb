@@ -153,6 +153,11 @@ module WLang
 
     # evaluation
 
+    # Returns the execution context, defined as the subject of the root scope.
+    def context
+      scope.root.subject
+    end
+
     # Returns the current rendering scope.
     def scope
       @scope || Scope.null
