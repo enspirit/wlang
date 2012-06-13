@@ -14,8 +14,8 @@ module WLang
         Template.new source, :dialect => self
       end
 
-      def render(source, scope = {}, buffer = "")
-        compile(source).call(scope, buffer)
+      def render(source, *args)
+        compile(source).call(*args)
       end
 
       # tag installation and dispatching

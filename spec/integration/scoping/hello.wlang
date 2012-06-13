@@ -1,4 +1,0 @@
----
-who: world
----
-Hello ${who}!

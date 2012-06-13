@@ -17,6 +17,10 @@ module WLang
       U.render(hello_tpl, {}).should eq(expected)
     end
 
+    it "accepts multiple scope objects" do
+      U.render(hello_tpl, 12, {}).should eq(expected)
+    end
+
     it 'accepts a :to_path object' do
       U.render(hello_path).should eq(expected)
     end

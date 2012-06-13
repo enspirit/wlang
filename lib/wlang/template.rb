@@ -44,8 +44,8 @@ module WLang
       compiler.to_ast(template_content)
     end
 
-    def call(locals = {}, buffer = '')
-      scope = WLang::Scope.chain([self.locals, locals])
+    def call(*args)
+      scope, buffer = call_args_conventions(args)
       dialect_instance.dup.render compiled, scope, buffer
     end
     alias :render :call
@@ -57,6 +57,14 @@ module WLang
       def yaml_front_matter?
         opt = options[:yaml_front_matter]
         opt.nil? or opt
+      end
+
+      def call_args_conventions(args)
+        args << '' unless args.last.respond_to?(:<<)
+        buffer = args.pop
+        args << self.locals unless self.locals.empty?
+        scope  = WLang::Scope.chain(args)
+        [scope, buffer]
       end
 
   end # class Template
