@@ -2,8 +2,8 @@ module WLang
   module Version
 
     MAJOR = 2
-    MINOR = 0
-    TINY  = 1
+    MINOR = 1
+    TINY  = 0
 
     def self.to_s
       [ MAJOR, MINOR, TINY ].join('.')
