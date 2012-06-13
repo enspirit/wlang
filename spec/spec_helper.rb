@@ -1,6 +1,9 @@
 require 'epath'
 $root_folder ||= Path.backfind('.[Rakefile]')
 
+require 'tilt'
+require 'sinatra/base'
+
 # Require wlang
 $LOAD_PATH.unshift(($root_folder/:lib).to_s)
 require 'wlang'
@@ -54,8 +57,6 @@ module Helpers
   end
 
   def sinatra_app(&block)
-    require 'sinatra/base'
-    require 'wlang/tilt'
     Sinatra.new(Sinatra::Base, &block).new!
   end
 
