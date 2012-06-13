@@ -179,15 +179,15 @@ module WLang
     # Evaluation is delegated to the scope (@see Scope#evaluate) and the result returned
     # by this method.
     #
-    def evaluate(expr, *default)
+    def evaluate(expr, *default, &bl)
       case expr
       when Symbol, String
         catch(:fail) do
-          return scope.evaluate(expr, *default)
+          return scope.evaluate(expr, *default, &bl)
         end
         raise NameError, "Unable to find `#{expr}`"
       else
-        evaluate(render(expr), *default)
+        evaluate(render(expr), *default, &bl)
       end
     end
     alias :value_of :evaluate

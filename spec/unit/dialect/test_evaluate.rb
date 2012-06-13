@@ -40,6 +40,16 @@ module WLang
       end
     end
 
+    it 'supports a default value' do
+      evaluate("who", 12).should eq(12)
+      evaluate("who", nil).should be_nil
+    end
+
+    it 'supports a default value through a Proc' do
+      evaluate("who"){ 12  }.should eq(12)
+      evaluate("who"){ nil }.should be_nil
+    end
+
     it 'raises a NameError when not found' do
       lambda{ evaluate("who") }.should raise_error(NameError)
     end
