@@ -10,6 +10,10 @@ module WLang
         block_given? ? yield : throw(:fail)
       end
 
+      def subjects
+        []
+      end
+
       def inspect
         "NullScope"
       end

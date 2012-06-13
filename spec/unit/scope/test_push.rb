@@ -14,6 +14,7 @@ module WLang
       x_scope.parent.should be_nil
       x_scope.subject.should eq(:x)
       x_scope.root.should eq(x_scope)
+      x_scope.subjects.should eq([:x])
     end
 
     context 'when pushing a simple value' do
@@ -29,6 +30,10 @@ module WLang
 
       it 'returns the correct root scope' do
         subject.root.should eq(x_scope)
+      end
+
+      it 'has the correct subjects' do
+        subject.subjects.should eq([:x, :y])
       end
     end
 
@@ -54,6 +59,10 @@ module WLang
         pushed.parent.subject.should eq(:y)
         pushed.parent.parent.should be_nil
         pushed.root.should eq(pushed.parent)
+      end
+
+      it 'has the correct subjects' do
+        subject.subjects.should eq([:x, :y, :z])
       end
     end
 

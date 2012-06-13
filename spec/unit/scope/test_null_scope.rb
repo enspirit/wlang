@@ -26,6 +26,10 @@ module WLang
         scope.pop.should be_nil
       end
 
+      it 'returns an empty array of subjects' do
+        scope.subjects.should eq([])
+      end
+
     end # describe NullScope
   end # class Scope
 end # module WLang

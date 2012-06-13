@@ -56,7 +56,19 @@ module WLang
       end
     end
 
+    def subjects
+      arr = []
+      visit(:top_down){|s| arr << s.subject}
+      arr
+    end
+
     protected
+
+      def visit(mode = :top_down, &visitor)
+        visitor.call(self) unless mode == :top_down
+        parent.visit(mode, &visitor) if parent
+        visitor.call(self) if mode == :top_down
+      end
 
       def append(x)
         x.prepend(self)
