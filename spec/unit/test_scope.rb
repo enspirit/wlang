@@ -28,6 +28,13 @@ module WLang
       end
     end
 
+    it 'gives access to the root' do
+      scope.root.should eq(Scope.null)
+      scope.with(:other => "World2") do |s|
+        s.root.should eq(Scope.null)
+      end
+    end
+
     it 'evaluates `self` accurately' do
       scope.evaluate(:self).should eq(:who => "World")
     end

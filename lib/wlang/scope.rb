@@ -30,6 +30,10 @@ module WLang
       }
     end
 
+    def root
+      parent.nil? ? self : parent.root
+    end
+
     def push(x)
       Scope.coerce(x, self)
     end
