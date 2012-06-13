@@ -16,5 +16,5 @@ __END__
   Hello from a partial: >{partial}
 
 @@partial
-  yeah, a partial!
+  yeah, a partial saying hello to '${who}'!
 

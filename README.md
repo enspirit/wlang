@@ -99,8 +99,8 @@ As wlang encourages logic-less templates, you should always use locals. However,
       Hello from a partial: >{partial}
 
     @@partial
-      yeah, a partial!
+      yeah, a partial saying hello to '${who}'!
 
-Returned body will be (ignoring carriage returns)
+Returned body will be (ignoring carriage returns):
 
-    <html>Hello from a partial: yeah, a partial!</html>
+    <html>Hello from a partial: yeah, a partial saying hello to 'world'!</html>
