@@ -53,6 +53,12 @@ module Helpers
     end
   end
 
+  def sinatra_app(&block)
+    require 'sinatra/base'
+    require 'wlang/tilt'
+    Sinatra.new(Sinatra::Base, &block).new!
+  end
+
 end
 include Helpers
 

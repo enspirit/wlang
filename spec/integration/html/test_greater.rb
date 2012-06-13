@@ -13,6 +13,12 @@ module WLang
       render("Hello >{partial}", binding).should eq("Hello World")
     end
 
+    it 'recognizes a Tilt::WLangTemplate' do
+      who     = "World"
+      partial = Tilt::WLangTemplate.new{ "${who}" }
+      render("Hello >{partial}", binding).should eq("Hello World")
+    end
+
     it 'compiles a String to a Template' do
       who     = "World"
       partial = "${who}"
