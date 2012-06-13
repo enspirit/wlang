@@ -2,10 +2,10 @@ module WLang
   class Scope
     class BindingScope < Scope
 
-      def fetch(k, &blk)
-        subject.eval(k.to_s)
+      def fetch(key, dialect = nil, unfound = nil)
+        subject.eval(key.to_s)
       rescue NameError
-        safe_parent.fetch(k, &blk)
+        safe_parent.fetch(key, dialect, unfound)
       end
 
       def inspect

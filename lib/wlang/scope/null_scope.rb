@@ -6,8 +6,8 @@ module WLang
         super(nil)
       end
 
-      def fetch(key)
-        block_given? ? yield : throw(:fail)
+      def fetch(key, dialect = nil, unfound = nil)
+        unfound ? unfound.call : throw(:fail)
       end
 
       def subjects

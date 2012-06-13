@@ -43,7 +43,7 @@ module WLang
       yield(self.push(x))
     end
 
-    def evaluate(expr, *default, &bl)
+    def evaluate(expr, dialect, *default, &bl)
       expr = expr.to_s.strip
       unfound = lambda do
         if default.empty?
@@ -53,11 +53,12 @@ module WLang
         end
       end
       if expr.index('.').nil?
-        fetch(expr.to_sym, &unfound)
+        fetch(expr.to_sym, dialect, unfound)
       else
         keys = expr.split('.').map(&:to_sym)
         keys.inject(self){|scope,key|
-          Scope.coerce(scope.fetch(key, &unfound))
+          found = scope.fetch(key, dialect, unfound)
+          Scope.coerce(found)
         }.subject
       end
     end

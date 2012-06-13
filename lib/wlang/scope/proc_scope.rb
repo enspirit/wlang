@@ -2,10 +2,10 @@ module WLang
   class Scope
     class ProcScope < Scope
 
-      def fetch(key, &blk)
-        Scope.coerce(subject.call).fetch(key) do
-          safe_parent.fetch(key, &blk)
-        end
+      def fetch(key, dialect = nil, unfound = nil)
+        scoped = Scope.coerce(subject.call)
+        fallbk = lambda{ safe_parent.fetch(key, dialect, unfound) }
+        scoped.fetch(key, dialect, fallbk)
       end
 
       def inspect

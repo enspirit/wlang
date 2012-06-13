@@ -183,7 +183,7 @@ module WLang
       case expr
       when Symbol, String
         catch(:fail) do
-          return scope.evaluate(expr, *default, &bl)
+          return scope.evaluate(expr, self, *default, &bl)
         end
         raise NameError, "Unable to find `#{expr}`"
       else
