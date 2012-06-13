@@ -23,7 +23,7 @@ WLang is a powerful code generation and templating engine, implemented on top of
 WLang 2.0 also has a few remaining issues.
 
 * It does not support rubinius so far, due to an incompatibility with the Citrus parser generator.
-* It also have some issues with spacing; not a big issue for HTML rendering but might prevent certain generation tasks.
+* It has some issues with spacing; not a big issue for HTML rendering but might prevent certain generation tasks.
 
 ## Tunable templating engine
 
@@ -67,7 +67,7 @@ template = Tilt.new("path/to/a/template.wlang")   # suppose 'Hello ${who}!'
 template.render(:who => "world")
 # => Hello world!
 
-template = Tilt.new(hello_path.to_s, :dialect => Highlighter)
+template = Tilt.new("path/to/a/template.wlang", :dialect => Highlighter)
 template.render(:who => "world")
 # => Hello WORLD!
 ```
