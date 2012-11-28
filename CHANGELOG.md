@@ -1,4 +1,4 @@
-# 2.1.0 / FIX ME
+# 2.1.0 / 2012-11-28
 
 ## Enhancements
 
@@ -19,6 +19,11 @@
 
 * WLang::Html partial tag >{...} now recognizes a Proc and simply renders the result of
   calling it. This allows to use >{yield} in layouts instead of the less idomatic +{yield}.
+
+## Bug fixes
+
+* Fixed a bug when parsing "hello {  ${wlang} }" constructs (typically javascript or java)
+  (wlang inner constructions was not properly parsed)
 
 # 2.0.1 / 2012-06-12
 
