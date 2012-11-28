@@ -158,7 +158,7 @@ module WLang
       describe 'the block rule' do
         let(:rule){ :block }
         let(:text){ "{ world }" }
-        it{ should eq([:static, text]) }
+        it{ should eq([:strconcat, [:static, "{"], [:static, " world "], [:static, "}"]]) }
       end
 
       describe 'the wlang rule' do

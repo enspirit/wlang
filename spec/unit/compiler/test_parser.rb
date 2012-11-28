@@ -43,6 +43,23 @@ module WLang
       parse("${first}{second}").should eq(expected)
     end
 
+    it 'should support wlang tags inside normal { ... }' do
+      expected = \
+      [:template,
+        [:fn,
+          [:strconcat,
+            [:static, "hello "],
+            [:strconcat,
+              [:static, "{"],
+              [:strconcat,
+                [:static, "bar "],
+                [:wlang, "$",
+                  [:fn,
+                    [:static, "second"]]]],
+                [:static, "}"]]]]]
+      parse("hello {bar ${second}}").should eq(expected)
+    end
+
     it 'is idempotent' do
       parse(parse(hello_tpl)).should eq(expected)
     end

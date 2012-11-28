@@ -1,11 +1,11 @@
 grammar WLang::Grammar
-  
+
   rule template
     (strconcat !.){
       [:template, [:fn, strconcat.value]]
     }
   end
-  
+
   rule strconcat
     (non_static | static)* {
       if matches.size == 1
@@ -15,53 +15,56 @@ grammar WLang::Grammar
       end
     }
   end
-  
+
   rule static
-    (!stop_char .)+ { 
-      [:static, to_s] 
-    }
-  end
-  
-  rule non_static
-    block | wlang
-  end
-  
-  rule block
-    (fn_start strconcat fn_stop){
+    (!stop_char .)+ {
       [:static, to_s]
     }
   end
-  
+
+  rule non_static
+    block | wlang
+  end
+
+  rule block
+    (fn_start strconcat fn_stop){
+      [:strconcat,
+        [:static, captures[:fn_start].first.to_s],
+        captures[:strconcat].first.value,
+        [:static, captures[:fn_stop].first.to_s]]
+    }
+  end
+
   rule wlang
     (symbols functions){
       [:wlang, symbols.to_s] + functions.value
     }
   end
-  
+
   rule functions
     function+ { matches.map{|fn| [:fn, fn.value]} }
   end
-  
+
   rule function
     (fn_start strconcat fn_stop){
       strconcat.value
     }
   end
-  
+
   rule stop_char
     fn_start | fn_stop | (symbols fn_start)
   end
-  
+
   rule symbols
     /[!\^%"\$&'\*\+\?@~\#,\-\.\/:;=<>\|_]+/
   end
-  
+
   rule fn_start
     '{'
   end
-  
+
   rule fn_stop
     '}'
   end
-  
+
 end
