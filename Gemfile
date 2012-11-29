@@ -4,9 +4,12 @@ group :runtime do
   gem "citrus", "~> 2.4.1"
   gem "temple", "~> 0.4.0"
   gem "quickl", "~> 0.4.3"
-  gem "awesome_print", "~> 1.0.2"
-  gem "epath", ">= 0.2"
+  gem "path", "~> 1.3"
   gem "backports", "~> 2.6"
+end
+
+group :extra do
+  gem "awesome_print", "~> 1.0.2"
 end
 
 group :development do

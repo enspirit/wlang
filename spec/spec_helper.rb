@@ -1,4 +1,4 @@
-require 'epath'
+require 'path'
 $root_folder ||= Path.backfind('.[Rakefile]')
 
 require 'tilt'

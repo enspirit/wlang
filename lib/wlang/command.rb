@@ -46,8 +46,13 @@ module WLang
       install(argv)
 
       if @ast
-        require 'awesome_print'
-        ap @template.to_ast
+        begin
+          require 'awesome_print'
+          ap @template.to_ast
+        rescue LoadError
+          puts "HINT: install the 'awesome_print' gem for pretty output!"
+          puts @template.to_ast.inspect
+        end
       end
 
       with_output do |output|
