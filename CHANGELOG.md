@@ -1,3 +1,8 @@
+# 2.1.1 / 2012-11-29
+
+* Bump epath to path 1.3.1 (same gem but renamed + bump)
+* Moved awesome_print to extra dependencies (not a proper dependency then!)
+
 # 2.1.0 / 2012-11-28
 
 ## Enhancements
