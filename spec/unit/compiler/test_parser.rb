@@ -60,6 +60,19 @@ module WLang
       parse("hello {bar ${second}}").should eq(expected)
     end
 
+    it 'should parse "Hello `{world}!" as expected' do
+      expected = \
+        [:template,
+          [:fn,
+            [:strconcat,
+              [:static, "Hello "],
+              [:wlang,  "`",
+                [:fn,
+                  [:static, "who"]]],
+              [:static, "!"]]]]
+      parse("Hello `{who}!").should eq(expected)
+    end
+
     it 'is idempotent' do
       parse(parse(hello_tpl)).should eq(expected)
     end

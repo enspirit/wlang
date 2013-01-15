@@ -56,7 +56,7 @@ grammar WLang::Grammar
   end
 
   rule symbols
-    /[!\^%"\$&'\*\+\?@~\#,\-\.\/:;=<>\|_]+/
+    /[!\^%"\$&'\*\+\?@~\#,\-\.\/:;=<>\|_`]+/
   end
 
   rule fn_start

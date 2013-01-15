@@ -1,3 +1,7 @@
+# 2.1.2 / 2012-01-15
+
+* Add backquote as supported tag symbol
+
 # 2.1.1 / 2012-11-29
 
 * Bump epath to path 1.3.1 (same gem but renamed + bump)
