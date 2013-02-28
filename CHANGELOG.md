@@ -1,3 +1,8 @@
+# 2.2.0 / FIX ME
+
+* Added ATTR/VALUE pairs to the wlang command line tool, for passing data to templates
+  in an easy way.
+
 # 2.1.2 / 2012-01-15
 
 * Add backquote as supported tag symbol

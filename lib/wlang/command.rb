@@ -5,32 +5,50 @@ module WLang
   # wlang -- templating engine
   #
   # SYNOPSIS
-  #   Usage: wlang [options] TEMPLATE
+  #   Usage: wlang [options] TEMPLATE [ATTR1 VALUE1 ATTR2 VALUE2]
   #
   # OPTIONS:
   # #{summarized_options}
   #
   # DESCRIPTION
-  #   This command invokes the wlang templating engine on TEMPLATE
-  #   and flushes the rendering result on standard output.
+  #   This command invokes the wlang templating engine on TEMPLATE and flushes the
+  #   rendering result on standard output.
+  #
+  #   Commandline template data can be passed through ATTR and VALUE arguments.
   #
   class Command < Quickl::Command(__FILE__, __LINE__)
 
-    options do |opt|
+    attr_reader :output
+    attr_reader :yaml_front_matter
+    attr_reader :ast
+    attr_reader :compiling_options
+    attr_reader :context
+    attr_reader :dialect
+    attr_reader :tpl_file
+    attr_reader :template
+
+    def initialize(*args)
+      require 'wlang/html'
+      super
       @output = nil
+      @yaml_front_matter = true
+      @ast = false
+      @compiling_options = {}
+      @context = {}
+      @dialect = WLang::Html
+    end
+
+    options do |opt|
       opt.on('--output=FILE', 'Render output in FILE') do |file|
         @output = file
       end
-      @yaml_front_matter = true
       opt.on("--[no-]yaml-front-matter",
              "Enable/disable YAML front mater (defaults to true)") do |val|
         @yaml_front_matter = val
       end
-      @ast = false
       opt.on('--ast', "Debugs the AST") do
         @ast = true
       end
-      @compiling_options = {}
       opt.on('--[no-]auto-spacing') do |val|
         @compiling_options[:autospacing] = val
       end
@@ -63,20 +81,20 @@ module WLang
     private
 
     def install(argv)
-      raise Quickl::Help unless argv.size == 1
+      raise Quickl::Help unless (argv.size % 2) == 1
 
       # template file
-      unless File.file?(@tpl_file = argv.first)
+      unless (@tpl_file = Path(argv.shift)).exist?
         raise Quickl::Exit, "No such template #{tpl_file}"
       end
 
-      # dialect
-      require 'wlang/html'
-      @dialect       = WLang::Html
+      # context
+      argv.each_slice(2) do |(k,v)|
+        @context[k] = v
+      end
 
       # template and context
-      @template      = Template.new(File.read(@tpl_file), @compiling_options)
-      @context       = {}
+      @template = Template.new(@tpl_file, @compiling_options)
     end
 
     def with_output(&proc)
