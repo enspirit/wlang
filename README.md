@@ -4,8 +4,6 @@
 
 WLang is a powerful code generation and templating engine, implemented on top of [temple](https://github.com/judofyr/temple) and much inspired by the excellent [mustache](http://mustache.github.com/).
 
-**WLang2 is still work in progress**.
-
 ## Links
 
 * http://github.com/blambeau/wlang
