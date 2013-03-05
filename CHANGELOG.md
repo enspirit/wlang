@@ -1,4 +1,4 @@
-# 2.2.0 / FIX ME
+# 2.2.0 / 2013-03-05
 
 * Added ATTR/VALUE pairs to the wlang command line tool, for passing data to templates
   in an easy way.
