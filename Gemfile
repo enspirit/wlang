@@ -17,8 +17,6 @@ group :development do
   gem "rake", "~> 0.9.2"
   gem "bundler", "~> 1.0"
   gem "rspec", "~> 2.10.0"
-  gem "yard", "~> 0.8.1"
-  gem "bluecloth", "~> 2.2.0"
   gem "sinatra", :git => "git://github.com/sinatra/sinatra" #">= 1.4"
   gem "rack-test", "~> 0.6.1"
 end
