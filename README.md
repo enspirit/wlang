@@ -74,7 +74,7 @@ Please note that you should require tilt first, then wlang. Otherwise, you'll ha
 
 # Sinatra integration
 
-WLang comes bundled with built-in support for [Sinatra](https://github.com/sinatra/sinatra). As usual in Sinatra, you can simply invoke wlang as follows:
+WLang comes bundled with built-in support for [Sinatra](https://github.com/sinatra/sinatra) >= 1.4 (release still in progress). As usual in Sinatra, you can simply invoke wlang as follows:
 
     get '/' do
       wlang :index, :locals => { ... }
