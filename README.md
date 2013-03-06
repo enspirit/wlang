@@ -29,7 +29,7 @@ WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mu
 
 ```ruby
 WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
-# => "Hello you &amp; the world!"
+# => "Hello to you &amp; the world!"
 ```
 
 To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features. See the examples folder that documents WLang::Html.
