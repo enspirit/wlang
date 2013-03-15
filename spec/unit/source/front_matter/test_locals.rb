@@ -12,6 +12,11 @@ module WLang
         it{ should eq({}) }
       end
 
+      context 'with an empty front matter' do
+        let(:source){ "---\n---\nHello world!" }
+        it{ should eq({}) }
+      end
+
       describe 'with a front matter' do
         let(:source){ "---\nlocals:\n  x: 2\n---\nHello world!" }
         specify 'it decode the YAML data' do

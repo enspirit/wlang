@@ -27,7 +27,7 @@ module WLang
             @locals, @template_content = {}, $'
 
             require 'yaml'
-            yaml = YAML::load($1)
+            yaml = YAML::load($1) || {}
 
             # append explicit locals
             @locals.merge!(yaml.delete("locals") || {})

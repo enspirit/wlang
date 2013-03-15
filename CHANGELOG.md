@@ -1,3 +1,7 @@
+# 2.2.1 / FIX ME
+
+* Fixed a bug when YAML front matter is empty in templates
+
 # 2.2.0 / 2013-03-05
 
 * Added ATTR/VALUE pairs to the wlang command line tool, for passing data to templates
