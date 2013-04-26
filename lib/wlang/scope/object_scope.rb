@@ -26,10 +26,14 @@ module WLang
         safe_parent.fetch(key, dialect, unfound)
       end
 
+      def to_s
+        subj = subject.is_a?(Scope) ? subject.to_s : subject.class
+        "ObjectScope(#{subj})"
+      end
+
       def inspect
         "ObjectScope(#{subject.inspect})"
       end
-      alias :to_s :inspect
 
     end # class ProxyScope
   end # class Scope

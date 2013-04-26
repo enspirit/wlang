@@ -1,6 +1,7 @@
 # 2.2.1 / FIX ME
 
-* Fixed a bug when YAML front matter is empty in templates
+* Enhanced Scope#to_s for readability of error messages.
+* Fixed a bug when YAML front matter is empty in templates.
 
 # 2.2.0 / 2013-03-05
 
