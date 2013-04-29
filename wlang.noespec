@@ -42,4 +42,4 @@ variables:
     - {name: bundler,       version: "~> 1.0",     groups: [development]}
     - {name: rspec,         version: "~> 2.10.0",  groups: [development]}
     - {name: sinatra,       version: ">= 1.4",     groups: [development]}
-    - {name: rack-test,     version: "~> 0.6.1",   groups: [development]}
+    - {name: rack-test,     version: "~> 0.6",     groups: [development]}
