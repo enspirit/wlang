@@ -1,4 +1,4 @@
-# 2.2.1 / FIX ME
+# 2.2.1 / 2013-04-29
 
 * Enhanced Scope#to_s for readability of error messages.
 * Fix >{...} where the Html dialect is subclassed, the partial is not
