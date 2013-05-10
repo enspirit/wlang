@@ -1,3 +1,7 @@
+# 2.2.2 / 2013-05-10
+
+* Avoid creating empty scopes if not necessary (sinatra/tilt integration)
+
 # 2.2.1 / 2013-04-29
 
 * Enhanced Scope#to_s for readability of error messages.

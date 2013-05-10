@@ -35,7 +35,7 @@ module Tilt
 
       def evaluate(scope, locals, &block)
         locals[:yield] = block if block
-        @engine.render(scope, locals)
+        @engine.render(scope, locals.empty? ? nil : locals)
       end
 
   end
