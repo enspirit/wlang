@@ -2,6 +2,8 @@ module WLang
   class Compiler
     class DialectEnforcer < Filter
 
+      define_options :dialect
+
       def dialect; options[:dialect]; end
 
       def on_wlang(symbols, *fns)

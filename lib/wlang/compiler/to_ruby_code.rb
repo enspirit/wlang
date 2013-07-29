@@ -2,6 +2,8 @@ module WLang
   class Compiler
     class ToRubyCode < Temple::Generator
 
+      define_options [:idgen, :myid]
+
       class IdGen
         def initialize; @current = 0;  end
         def next;       @current += 1; end
