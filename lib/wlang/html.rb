@@ -13,7 +13,7 @@ module WLang
       private :to_html
 
       def escape_html(val)
-        Temple::Utils.escape_html(val)
+        Temple::Utils.escape_html(val).gsub(/\//, '&#47;')
       end
       private :escape_html
 
