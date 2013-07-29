@@ -1,3 +1,7 @@
+# 2.2.3 / 2013-07-29
+
+* Bump Temple dependency to "~> 0.6"
+
 # 2.2.2 / 2013-05-10
 
 * Avoid creating empty scopes if not necessary (sinatra/tilt integration)
