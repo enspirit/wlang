@@ -27,7 +27,12 @@ module WLang
         find_files(views, key) do |file|
           if engine = Tilt[file]
             tpl = app.template_cache.fetch(file) do
-              engine.new(file.to_s, 1, {})
+              options = if app.settings.respond_to?(:wlang)
+                          app.settings.wlang
+                        else
+                          {}
+                        end
+              engine.new(file.to_s, 1, options)
             end
             return tpl
           end

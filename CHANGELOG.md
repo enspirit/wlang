@@ -1,3 +1,9 @@
+# 2.2.4 / 2014-07-29
+
+* Birthday of 2.2.3 :-)
+* Under sinatra all partials now use the app.settings base options. Specified
+  dialect is in particular reused accross partials.
+
 # 2.2.3 / 2013-07-29
 
 * Bump Temple dependency to "~> 0.6"
