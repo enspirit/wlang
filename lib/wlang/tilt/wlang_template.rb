@@ -34,8 +34,10 @@ module Tilt
       end
 
       def evaluate(scope, locals, &block)
-        locals[:yield] = block if block
-        @engine.render(scope, locals.empty? ? nil : locals)
+        args = [scope]
+        args << locals if locals && !(locals.respond_to?(:empty?) && locals.empty?)
+        args << { :yield => block } if block
+        @engine.render(*args)
       end
 
   end

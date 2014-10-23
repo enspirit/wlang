@@ -1,3 +1,7 @@
+# 2.3.1 / 2014-10-23
+
+* Fix bug (empty? not defined) when using an object as sinatra's locals
+
 # 2.3.0 / 2014-08-04
 
 * Allowed Citrus to 3.0

@@ -60,9 +60,14 @@ module WLang
       end
 
       def call_args_conventions(args)
+        # Ensure a buffer as lat argument
         args << '' unless args.last.respond_to?(:<<)
         buffer = args.pop
+
+        # puts locals if any
         args << self.locals unless self.locals.empty?
+
+        # create a scope now
         scope  = WLang::Scope.chain(args)
         [scope, buffer]
       end
