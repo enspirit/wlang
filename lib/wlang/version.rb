@@ -3,7 +3,7 @@ module WLang
 
     MAJOR = 2
     MINOR = 3
-    TINY  = 0
+    TINY  = 1
 
     def self.to_s
       [ MAJOR, MINOR, TINY ].join('.')
