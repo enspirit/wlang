@@ -16,7 +16,8 @@ module Tilt
       end
 
       def default_options
-        (superclass.default_options rescue {}).merge(@default_options || {})
+        @default_options ||= {}
+        (superclass.default_options rescue {}).merge(@default_options)
       end
 
     end

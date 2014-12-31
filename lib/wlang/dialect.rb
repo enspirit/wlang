@@ -161,7 +161,7 @@ module WLang
 
     # Returns the current rendering scope.
     def scope
-      @scope || Scope.null
+      @scope ||= Scope.null
     end
 
     # Yields the block with a scope branched with a sub-scope `x`.
