@@ -1,5 +1,5 @@
-require 'wlang'
 require 'wlang/dummy'
+
 module WLang
   class Html < WLang::Dialect
 

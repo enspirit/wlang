@@ -1,4 +1,3 @@
-require 'wlang'
 module WLang
   #
   # The _dummy_ dialect, which has no tag at all.
