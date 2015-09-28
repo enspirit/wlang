@@ -47,7 +47,7 @@ class Highlighter < WLang::Dialect
 
   tag '$', :highlight
 end
-Highlighter.render('Hello ${who}!'), who: 'you & the world'
+Highlighter.render('Hello ${who}!', who: 'you & the world')
 # => "Hello YOU & THE WORLD !"
 ```
 
