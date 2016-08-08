@@ -19,6 +19,9 @@ describe 'Integration with Sinatra for partials' do
       get '/internal' do
         wlang ">{internal_partial}", :locals => {:who => "sinatra"}
       end
+      get '/front-matter' do
+        wlang ">{front_matter}", :locals => {:who => "sinatra"}
+      end
     end
   }
 
@@ -32,4 +35,8 @@ describe 'Integration with Sinatra for partials' do
     last_response.body.should eq("Hello sinatra!")
   end
 
+  it 'renders with front matters correcty' do
+    get '/front-matter'
+    last_response.body.should eq("Hello sinatra bar!")
+  end
 end
