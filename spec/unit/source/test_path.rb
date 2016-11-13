@@ -10,17 +10,17 @@ module WLang
     end
 
     context 'on a Path' do
-      let(:source){ Path.here }
+      let(:source){ Path.file }
       it{ should eq(source.to_s) }
     end
 
     context 'on a File' do
-      let(:source){ File.open(Path.here.to_s) }
+      let(:source){ File.open(Path.file.to_s) }
       it{ should eq(__FILE__) }
     end
 
     it 'is aliased as to_path' do
-      Source.new(Path.here).to_path.should eq(__FILE__)
+      Source.new(Path.file).to_path.should eq(__FILE__)
     end
 
   end
