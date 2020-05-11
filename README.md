@@ -1,6 +1,6 @@
 # WLang
 
-[![Build Status](https://secure.travis-ci.org/blambeau/wlang.png?branch=wlang2)](http://travis-ci.org/blambeau/wlang)
+[![Build Status](https://travis-ci.org/blambeau/wlang.svg?branch=wlang2)](http://travis-ci.org/blambeau/wlang)
 
 WLang is a powerful code generation and templating engine, implemented on top of [temple](https://github.com/judofyr/temple) and much inspired by the excellent [mustache](http://mustache.github.com/).
 
