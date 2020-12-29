@@ -2,7 +2,7 @@ grammar WLang::Grammar
 
   rule template
     (strconcat !.){
-      [:template, [:fn, strconcat.value]]
+      [:template, [:fn, capture(:strconcat).value]]
     }
   end
 
@@ -29,15 +29,15 @@ grammar WLang::Grammar
   rule block
     (fn_start strconcat fn_stop){
       [:strconcat,
-        [:static, captures[:fn_start].first.to_s],
-        captures[:strconcat].first.value,
-        [:static, captures[:fn_stop].first.to_s]]
+        [:static, capture(:fn_start).to_s],
+        capture(:strconcat).value,
+        [:static, capture(:fn_stop).to_s]]
     }
   end
 
   rule wlang
     (symbols functions){
-      [:wlang, symbols.to_s] + functions.value
+      [:wlang, capture(:symbols).to_s] + capture(:functions).value
     }
   end
 
@@ -47,7 +47,7 @@ grammar WLang::Grammar
 
   rule function
     (fn_start strconcat fn_stop){
-      strconcat.value
+      capture(:strconcat).value
     }
   end
 

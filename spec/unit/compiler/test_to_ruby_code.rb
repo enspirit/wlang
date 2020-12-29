@@ -9,13 +9,13 @@ module WLang
 
       it 'compiles [:proc, ...]' do
         source   = [:proc, [:static, "Hello world"]]
-        expected = %q{Proc.new{|d1,b1| b1 << ("Hello world") }}
+        expected = %q{Proc.new{|d1,b1| b1 << ("Hello world".freeze) }}
         generate(source).should eq(expected)
       end
 
       it 'compiles [:dispatch, ...]' do
         source   = [:dispatch, :_tag_36, [:proc, [:static, "Hello world"]]]
-        expected = %q{d0._tag_36(b0, Proc.new{|d1,b1| b1 << ("Hello world") })}
+        expected = %q{d0._tag_36(b0, Proc.new{|d1,b1| b1 << ("Hello world".freeze) })}
         generate(source).should eq(expected)
       end
 

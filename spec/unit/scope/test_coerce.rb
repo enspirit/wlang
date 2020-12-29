@@ -10,10 +10,6 @@ module WLang
       Scope.coerce(lambda{}).should be_a(Scope::ProcScope)
     end
 
-    it 'recognizes Sinatra applications' do
-      Scope.coerce(sinatra_app).should be_a(Scope::SinatraScope)
-    end
-
     it 'falls back to ObjectScope on Hash' do
       Scope.coerce({}).should be_a(Scope::ObjectScope)
     end
