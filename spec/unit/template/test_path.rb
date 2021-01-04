@@ -10,7 +10,7 @@ module WLang
     end
 
     context 'when a Path and no option' do
-      let(:template){ Template.new(Path.here) }
+      let(:template){ Template.new(Path.file) }
       it{ should eq(__FILE__) }
     end
 
@@ -20,7 +20,7 @@ module WLang
     end
 
     context 'when a path an an option' do
-      let(:template){ Template.new(Path.here, :path => __FILE__) }
+      let(:template){ Template.new(Path.file, :path => __FILE__) }
       it{ should eq(__FILE__) }
     end
 

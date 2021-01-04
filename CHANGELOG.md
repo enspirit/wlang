@@ -1,3 +1,8 @@
+# 3.0.0 / 2020-12-29
+
+* Clean project to use a standard ruby-2.7 stack
+* Upgrade citrus to 3.x
+
 # 2.2.4 / 2014-07-29
 
 * Birthday of 2.2.3 :-)

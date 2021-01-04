@@ -3,7 +3,7 @@ require 'wlang/tilt'
 describe Tilt::WLangTemplate do
 
   it 'is registered for .wlang files' do
-    Tilt.mappings['wlang'].should include(Tilt::WLangTemplate)
+    Tilt.default_mapping['wlang'].should eq(Tilt::WLangTemplate)
   end
 
   it 'supports basic rendering with no scope no locals' do

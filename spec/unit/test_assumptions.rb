@@ -22,7 +22,7 @@ describe "ruby assumptions" do
 
   it "lambda arity" do
     lambda{|| }.arity.should eq(0)
-    (lambda{ }.arity <= 0).should be_true
+    (lambda{ }.arity <= 0).should be_truthy
     lambda{|fn|}.arity.should eq(1)
     lambda{|fn1,fn2|}.arity.should eq(2)
   end

@@ -1,40 +1,49 @@
 # WLang
 
-[![Build Status](https://secure.travis-ci.org/blambeau/wlang.png?branch=wlang2)](http://travis-ci.org/blambeau/wlang)
-
-WLang is a powerful code generation and templating engine, implemented on top of [temple](https://github.com/judofyr/temple) and much inspired by the excellent [mustache](http://mustache.github.com/).
+WLang is a powerful code generation and templating engine, implemented on top o
+[temple](https://github.com/judofyr/temple) and much inspired by the excellent
+[mustache](http://mustache.github.com/).
 
 ## Links
 
 * http://github.com/blambeau/wlang
-* http://blambeau.github.com/wlang
 * http://rubygems.org/gems/wlang
 * http://revision-zero.org/wlang
 
 ## Features
 
 * Tunable templating engine. You can define your own tags, and their behavior.
-* Powerful logic-less HTML concretization to render web pages à la Mustache with extra.
+* Powerful logic-less HTML concretization to render web pages à la Mustache
+  with extra.
 * Compiled templates for speedy generation.
 * [Tilt](https://github.com/rtomayko/tilt) and [Sinatra](https://github.com/sinatra/sinatra) integration.
 
-WLang 2.0 also has a few remaining issues.
+WLang 3.0 also has a few remaining issues.
 
-* It does not support rubinius so far, due to an incompatibility with the Citrus parser generator.
-* It has some issues with spacing; not a big issue for HTML rendering but might prevent certain generation tasks.
+* It has some issues with spacing; not a big issue for HTML rendering but might
+  prevent certain generation tasks.
 
 ## Tunable templating engine
 
-WLang is a templating engine, written in ruby. In that, it is similar to ERB, Mustache and the like:
+WLang is a templating engine, written in ruby. In that, it is similar to ERB,
+Mustache and the like:
 
 ```ruby
 WLang::Html.render 'Hello to ${who}!', who: 'you & the world'
 # => "Hello to you &amp; the world!"
 ```
 
-To output HTML pages, WLang does not provides you with killer features or extraordinary shortcus. It supports escaping, as shown above, but many other templating engines do. For such HTML tasks, WLang does a pretty good job but many other engines perform faster and have nicer features. See the examples folder that documents WLang::Html.
+To output HTML pages, WLang does not provides you with killer features or
+extraordinary shortcus. It supports escaping, as shown above, but many other
+templating engines do. For such HTML tasks, WLang does a pretty good job but
+many other engines perform faster and have nicer features. See the examples
+folder that documents WLang::Html.
 
-WLang is designed to help you for other uses cases, user-defined ones in particular, such as generating code or whatever text generation task for which other engines quickly become inappropriate. WLang helps there because it allows you to create your own _dialect_, that is, you can define your own tags and their behavior. For instance,
+WLang is designed to help you for other uses cases, user-defined ones in
+particular, such as generating code or whatever text generation task for
+which other engines quickly become inappropriate. WLang helps there because
+it allows you to create your own _dialect_, that is, you can define your own
+tags and their behavior. For instance,
 
 ```ruby
 class Highlighter < WLang::Dialect
@@ -51,7 +60,11 @@ Highlighter.render('Hello ${who}!', who: 'you & the world')
 # => "Hello YOU & THE WORLD !"
 ```
 
-WLang already provides a few useful dialects, such as WLang::Html (inspired by Mustache but a bit more powerful in my opinion). If they don't match your needs, it is up to you to define you own dialect for making your generation task easy. Have a look at the implementation of WLang's ones, it's pretty simple to get started!
+WLang already provides a few useful dialects, such as WLang::Html
+(inspired by Mustache but a bit more powerful in my opinion). If they don't
+match your needs, it is up to you to define you own dialect for making your
+generation task easy. Have a look at the implementation of WLang's ones, it's
+pretty simple to get started!
 
 # Tilt integration
 

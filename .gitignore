@@ -6,3 +6,4 @@ doc/api
 .bundle
 .rbx
 benchmarks/.cache
+Gemfile.lock
