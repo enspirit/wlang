@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency("rake", "~> 13.0")
   s.add_development_dependency("rspec", "~> 3.0")
+  s.add_development_dependency("sinatra", "~> 2.1")
+  s.add_development_dependency("tilt", "~> 2.0", ">= 2.0.10")
 
   s.add_dependency("citrus", "~> 3.0")
   s.add_dependency("quickl", "~> 0.4.3")

@@ -17,6 +17,7 @@ module WLang
       case arg
         when Hash       then ObjectScope.new(arg)
         when Scope      then arg
+        when SinatraApp then SinatraScope.new(arg)
         when Binding    then BindingScope.new(arg)
         when Proc       then ProcScope.new(arg)
         else
@@ -102,3 +103,4 @@ require 'wlang/scope/null_scope'
 require 'wlang/scope/object_scope'
 require 'wlang/scope/binding_scope'
 require 'wlang/scope/proc_scope'
+require 'wlang/scope/sinatra_scope'
