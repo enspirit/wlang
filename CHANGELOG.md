@@ -1,3 +1,7 @@
+# 3.0.1 / 2020-01-07
+
+* Resurect Tilt/Sinatra support 
+
 # 3.0.0 / 2020-12-29
 
 * Clean project to use a standard ruby-2.7 stack

@@ -27,6 +27,14 @@ module WLang
   end
   module_function :dialect
 
+  SinatraApp = proc{|arg|
+    defined?(Sinatra::Base) && Sinatra::Base===arg
+  }
+
+  TiltTemplate = proc{|arg|
+    defined?(Tilt::Template) && Tilt::Template===arg
+  }
+
 end # module WLang
 require 'wlang/compiler'
 require 'wlang/source'
@@ -34,3 +42,4 @@ require 'wlang/template'
 require 'wlang/dialect'
 require 'wlang/scope'
 require 'wlang/html'
+require 'wlang/tilt' if defined?(::Tilt)

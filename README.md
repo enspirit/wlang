@@ -1,5 +1,7 @@
 # WLang
 
+![](https://travis-ci.org/blambeau/wlang.svg?branch=master)
+
 WLang is a powerful code generation and templating engine, implemented on top o
 [temple](https://github.com/judofyr/temple) and much inspired by the excellent
 [mustache](http://mustache.github.com/).
@@ -64,3 +66,57 @@ WLang already provides a few useful dialects, such as WLang::Html
 match your needs, it is up to you to define you own dialect for making your
 generation task easy. Have a look at the implementation of WLang's ones, it's
 pretty simple to get started!
+
+# Tilt integration
+
+WLang has built-in support for [Tilt](https://github.com/rtomayko/tilt) facade to templating engines. In order to use that API:
+
+```ruby
+require 'tilt'         # needed in your bundle, not a wlang dependency
+require 'wlang'        # loads Tilt support provided Tilt has already been required
+
+template = Tilt.new("path/to/a/template.wlang")   # suppose 'Hello ${who}!'
+template.render(:who => "world")
+# => Hello world!
+
+template = Tilt.new("path/to/a/template.wlang", :dialect => Highlighter)
+template.render(:who => "world")
+# => Hello WORLD!
+```
+
+Please note that you should require tilt first, then wlang. Otherwise, you'll have to require `wlang/tilt` explicitely.
+
+# Sinatra integration
+
+WLang comes bundled with built-in support for [Sinatra](https://github.com/sinatra/sinatra) >= 1.4 (release still in progress). As usual in Sinatra, you can simply invoke wlang as follows:
+
+```ruby
+get '/' do
+  wlang :index, :locals => { ... }
+end
+```
+
+As wlang encourages logic-less templates, you should always use locals. However, there is specific support for layouts and partials, as the following example demonstrates:
+
+```ruby
+get '/' do
+  wlang :index, :locals => {:who => "world"}
+end
+
+__END__
+
+@@layout
+  <html>
+    >{yield}
+  </html>
+
+@@index
+  Hello from a partial: >{partial}
+
+@@partial
+  yeah, a partial saying hello to '${who}'!
+
+Returned body will be (ignoring carriage returns):
+
+<html>Hello from a partial: yeah, a partial saying hello to 'world'!</html>
+```
