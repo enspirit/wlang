@@ -1,6 +1,6 @@
 # WLang
 
-![](https://travis-ci.org/blambeau/wlang.svg?branch=master)
+[![Run Tests](https://github.com/enspirit/wlang/actions/workflows/integration.yml/badge.svg?branch=master)](https://github.com/enspirit/wlang/actions/workflows/integration.yml)
 
 WLang is a powerful code generation and templating engine, implemented on top o
 [temple](https://github.com/judofyr/temple) and much inspired by the excellent
